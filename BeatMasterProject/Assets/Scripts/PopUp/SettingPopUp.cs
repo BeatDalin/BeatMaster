@@ -8,7 +8,7 @@ public class SettingPopUp : MonoBehaviour
 
     private void Start()
     {
-        _exitBtn.onClick.AddListener((() =>
+        _exitBtn.onClick.AddListener(() =>
         {
             UIManager.instance.popUpStack.Pop();
             
@@ -16,6 +16,6 @@ public class SettingPopUp : MonoBehaviour
             {
                 Destroy(gameObject);
             };
-        }));
+        });
     }
 }

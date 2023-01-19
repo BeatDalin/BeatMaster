@@ -22,8 +22,8 @@ public class ButtonScale : MonoBehaviour
     [SerializeField] private DOTweenAnimation[] _doTweenAnimations;
     [SerializeField] private Button[] _buttons;
     
-    [SerializeField] private GameObject SettingPopUp;
-    
+    [SerializeField] private GameObject _settingPopUp;
+
     private int _objectIdx = 0;
 
     private void Awake()
@@ -35,10 +35,10 @@ public class ButtonScale : MonoBehaviour
     {
         Koreographer.Instance.RegisterForEvents("MenuBGMTrack", ChangeScale);
 
-        _buttons[(int)ButtonName.Stage].onClick.AddListener((() => SceneMoveBtn("Stage")));
-        _buttons[(int)ButtonName.Store].onClick.AddListener((() => OpenPopUp("Store")));
-        _buttons[(int)ButtonName.Setting].onClick.AddListener((() => OpenPopUp("Setting")));
-        _buttons[(int)ButtonName.ShutDown].onClick.AddListener((() => OpenPopUp("ShutDown")));
+        _buttons[(int)ButtonName.Stage].onClick.AddListener(() => SceneMoveBtn("Stage"));
+        _buttons[(int)ButtonName.Store].onClick.AddListener(() => OpenPopUp("Store"));
+        _buttons[(int)ButtonName.Setting].onClick.AddListener(() => OpenPopUp("Setting"));
+        _buttons[(int)ButtonName.ShutDown].onClick.AddListener(() => OpenPopUp("ShutDown"));
     }
 
     private void OpenPopUp(string PopUpName)
@@ -51,7 +51,7 @@ public class ButtonScale : MonoBehaviour
                 break;
             
             case "Setting":
-                GameObject popUp = Instantiate(SettingPopUp, UIManager.instance.canvas.transform);
+                GameObject popUp = Instantiate(_settingPopUp, UIManager.instance.canvas.transform);
                 popUp.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
                 
                 UIManager.instance.popUpStack.Push(popUp);
