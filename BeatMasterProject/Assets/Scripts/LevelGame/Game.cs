@@ -28,14 +28,14 @@ public abstract class Game : MonoBehaviour
 
     [Header("Result Check")]
     public BeatResult[] longResult;
-    public BeatResult[] shortResult;
+    public BeatResult[] shortResult;    
 
     // long notes
-    protected int longIdx = 0;
+    protected int longIdx=0;
     protected bool isLongPressed = false;
     protected bool isLongKeyCorrect = false;
     // short notes
-    protected int shortIdx = 0;
+    protected int shortIdx=0;
     //protected bool isShortKeyPressed = false; // To prevent double check...
     protected bool isShortKeyCorrect = false;
 
@@ -62,7 +62,7 @@ public abstract class Game : MonoBehaviour
         isLongKeyCorrect = false;
     }
 
-    public abstract void CheckBeatResult(BeatResult[] resultArr, BeatResult tempResult, int idx, bool isKeyCorrect);
+    public abstract void CheckBeatResult(BeatResult[] resultArr, BeatResult tempResult, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange);
 
     protected void StartWithDelay()
     {
@@ -81,7 +81,7 @@ public abstract class Game : MonoBehaviour
     protected bool CheckFinish()
     {
         // If index becomes the length of Arrays (or length -1), the game has been ended.
-        if (shortIdx >= shortResult.Length - 1 && longIdx >= longResult.Length - 1)
+        if(shortIdx >= shortResult.Length-1 && longIdx >= longResult.Length-1)
         {
             return true;
         }
