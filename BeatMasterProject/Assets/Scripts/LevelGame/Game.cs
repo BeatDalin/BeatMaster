@@ -13,17 +13,15 @@ public enum BeatResult
 }
 public abstract class Game : MonoBehaviour
 {
-    //protected Koreography playingKoreo;
-    //protected SimpleMusicPlayer musicPlayer;
+    protected Koreography playingKoreo;
+    protected SimpleMusicPlayer musicPlayer;
 
-    public Koreography playingKoreo;
-    public SimpleMusicPlayer musicPlayer;
     /// <summary>
     /// To use sample time of event tracks, this should be written first. Used for KoreographyEventCallbackWithTime.
     /// </summary>
     /// <param name="koreoEvent">Each KoreographyEvent</param>
     /// <param name="sampleTime">The current time for this KoreographyEvent.</param>
-    /// <param name="sampleDelta">The number of samples that were played back since the previous frame. You can get the previous frame¡¯s sampleTimewith(sampleTime-sampleDelta).</param>
+    /// <param name="sampleDelta">The number of samples that were played back since the previous frame. You can get the previous frameâ€™s sampleTimewith(sampleTime-sampleDelta).</param>
     /// <param name="deltaSlice">Extra timing information required for simulation stability when the callback is called multiple times in a frame.</param>
     public delegate void KoreographyEventCallbackWithTime(KoreographyEvent koreoEvent, int sampleTime, int sampleDelta, DeltaSlice deltaSlice);
 
@@ -64,7 +62,7 @@ public abstract class Game : MonoBehaviour
         isLongKeyCorrect = false;
     }
 
-    public abstract void CheckBeatResult(bool isLongNote);
+    public abstract void CheckBeatResult(BeatResult[] resultArr, BeatResult tempResult, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange);
 
     protected void StartWithDelay()
     {
@@ -72,7 +70,7 @@ public abstract class Game : MonoBehaviour
     }
     IEnumerator CoStartWithDelay()
     {
-        // UI ¾÷µ¥ÀÌÆ® ÇÒ °Å¶ó¸é ÀÌÂÊ¿¡¼­ È£Ãâ °¡´É
+        // UI ì—…ë°ì´íŠ¸ í•  ê±°ë¼ë©´ ì´ìª½ì—ì„œ í˜¸ì¶œ ê°€ëŠ¥
         Debug.Log("wait for playing...");
         yield return new WaitForSeconds(3);
         Debug.Log("Start...!");
@@ -82,8 +80,8 @@ public abstract class Game : MonoBehaviour
 
     protected bool CheckFinish()
     {
-        // If index becomes the length of Arrays, the game has been ended.
-        if(shortIdx == shortResult.Length && longIdx == longResult.Length && !musicPlayer.IsPlaying)
+        // If index becomes the length of Arrays (or length -1), the game has been ended.
+        if(shortIdx >= shortResult.Length-1 && longIdx >= longResult.Length-1)
         {
             return true;
         }
