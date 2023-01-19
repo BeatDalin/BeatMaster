@@ -5,39 +5,88 @@ using DG.Tweening;
 using SonicBloom.Koreo;
 using SonicBloom.Koreo.Players;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+enum ButtonName
+{
+    Stage = 0,
+    Store,
+    Setting,
+    ShutDown
+}
 
 public class ButtonScale : MonoBehaviour
 {
-    [SerializeField] private GameObject[] _objects;
+    [SerializeField] private DOTweenAnimation[] _doTweenAnimations;
+    [SerializeField] private Button[] _buttons;
     
-    private int objectIdx = 0;
+    [SerializeField] private GameObject _settingPopUp;
+
+    private int _objectIdx = 0;
 
     private void Awake()
     {
         Koreographer.Instance.GetKoreographyAtIndex(0);
     }
+
     private void Start()
     {
         Koreographer.Instance.RegisterForEvents("MenuBGMTrack", ChangeScale);
+
+        _buttons[(int)ButtonName.Stage].onClick.AddListener(() => SceneMoveBtn("Stage"));
+        _buttons[(int)ButtonName.Store].onClick.AddListener(() => OpenPopUp("Store"));
+        _buttons[(int)ButtonName.Setting].onClick.AddListener(() => OpenPopUp("Setting"));
+        _buttons[(int)ButtonName.ShutDown].onClick.AddListener(() => OpenPopUp("ShutDown"));
     }
 
-    void ChangeScale(KoreographyEvent evt)
+    private void OpenPopUp(string PopUpName)
     {
-        if (objectIdx == _objects.Length)
+        SoundManager.instance.PlaySFX("Touch");
+
+        switch (PopUpName)
         {
-            objectIdx = 0;
+            case "Store":
+                break;
+            
+            case "Setting":
+                GameObject popUp = Instantiate(_settingPopUp, UIManager.instance.canvas.transform);
+                popUp.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
+                
+                UIManager.instance.popUpStack.Push(popUp);
+                break;
+            
+            case "ShutDown":
+                break;
         }
-        if (objectIdx == 0)
+    }
+
+    private void SceneMoveBtn(string SceneName)
+    {
+        SoundManager.instance.PlaySFX("Touch");
+
+        //SceneManager.LoadScene(SceneName); 씬 로드(씬매니저 없어서 임시로 해둠)
+    }
+
+    private void ChangeScale(KoreographyEvent evt)
+    {
+        if (_objectIdx == _doTweenAnimations.Length)
         {
-            _objects[objectIdx].GetComponent<DOTweenAnimation>().DOPlay();
-            objectIdx++;
+            _objectIdx = 0;
+        }
+
+        if (_objectIdx == 0)
+        {
+            _doTweenAnimations[_doTweenAnimations.Length - 1].DORewind();
+            _doTweenAnimations[_objectIdx].DOPlay();
+            _objectIdx++;
         }
         else
         {
-            _objects[objectIdx - 1].GetComponent<DOTweenAnimation>().DORewind();
-            _objects[objectIdx].GetComponent<DOTweenAnimation>().DOPlay();
-            objectIdx++;
+            _doTweenAnimations[_objectIdx - 1].DORewind();
+            _doTweenAnimations[_objectIdx].DOPlay();
+            _objectIdx++;
         }
-        
     }
 }
