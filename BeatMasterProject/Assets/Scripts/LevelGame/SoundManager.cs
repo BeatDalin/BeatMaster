@@ -72,4 +72,5 @@ public class SoundManager : MonoBehaviour
         }
         // Debug.Log(sfxName + "이름의 효과음이 없습니다.");
     }
+    
 }
