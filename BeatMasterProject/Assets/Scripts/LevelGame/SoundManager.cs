@@ -18,8 +18,8 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private Sound[] _bgm;   // BGM 클립들
     [SerializeField] private Sound[] _sfx;   // SFX 클립들
     
-    public AudioSource _bgmPlayer;    // BGM 플레이어
-    public AudioSource[] _sfxPlayer;  // SFX 플레이어. 여러 개 재생될 수 있게 배열로 선언
+    [SerializeField] private AudioSource _bgmPlayer;    // BGM 플레이어
+    [SerializeField] private AudioSource[] _sfxPlayer;  // SFX 플레이어. 여러 개 재생될 수 있게 배열로 선언
     
     private void Awake()
     {
