@@ -96,4 +96,25 @@ public class DataCenter : MonoBehaviour
         }
         SaveData();
     }
+    
+    public void AddStageData()
+    {
+        // Call AddStageData() when new stage is opened or previous stage's boss level has been cleared.
+        var old = _gameData.stageData.ToList(); // convert the old array into a List
+        StageData newStage = new StageData(); // create new StageData
+        
+        // push initial values to the new StageData
+        newStage.stage = old.Count + 1;
+        newStage.levelData = new LevelData[5];
+        
+        LevelData temp = new LevelData();
+        for (int i = 0; i < 5; i++)
+        {
+            temp.level = i + 1;
+            newStage.levelData[i] = temp;
+        }
+        old.Add(newStage);
+        _gameData.stageData = old.ToArray();
+        SaveData();
+    }
 }
