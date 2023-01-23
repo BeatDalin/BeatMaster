@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+
 using SonicBloom.Koreo;
 using SonicBloom.Koreo.Players;
 using System.Collections;
@@ -60,6 +62,7 @@ public abstract class Game : MonoBehaviour
         playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
         musicPlayer = FindObjectOfType<SimpleMusicPlayer>();// Find ui manager
         uiExp = FindObjectOfType<UIExperiment>(); // temporal use of ui experiment class
+        DataCenter.Instance.LoadData();
     }
 
     protected virtual void Start()
@@ -105,6 +108,14 @@ public abstract class Game : MonoBehaviour
             Debug.Log("Game Ended");
             SummarizeResult();
             uiExp.ShowFinalResult(_finalSummary, _totalNoteCount); // for testing purpose ...
+
+            LevelData curData = DataCenter.Instance.GetLevelData(0, 0);
+            curData.fastCount = _finalSummary[1];
+            curData.perfectCount = _finalSummary[2];
+            curData.slowCount = _finalSummary[3];
+            curData.levelClear = true;
+            curData.alpha = 0.1f;
+            DataCenter.Instance.SaveData(curData, 0,0);
         }
     }
     protected void StartWithDelay()
