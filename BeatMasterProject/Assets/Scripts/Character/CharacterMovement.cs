@@ -51,7 +51,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void GetInput()
     {
-        // Á¡ÇÁ ÀÔ·Â
+        // ì í”„ ì…ë ¥
         if (Input.GetButtonDown("Jump") && _canJump)
         {
             if (++_jumpCount >= _maxJumpCount)
@@ -82,24 +82,24 @@ public class CharacterMovement : MonoBehaviour
         _canGroundCheck = true;
     }
 
-    // Ä³¸¯ÅÍÀÇ ¿òÁ÷ÀÓÀ» °áÁ¤ÇÏ´Â ¸Ş¼Òµå
-    // Ä³¸¯ÅÍÀÇ x°ªÀº ³ë·¡ÀÇ ºñÆ®¿¡ ¸ÂÃß¾î ÀÚµ¿À¸·Î °áÁ¤µÇ°í, y°ªÀº Ä³¸¯ÅÍÀÇ Çàµ¿ÀÌ³ª Á¶°Ç¿¡ µû¶ó °áÁ¤
+    // ìºë¦­í„°ì˜ ì›€ì§ì„ì„ ê²°ì •í•˜ëŠ” ë©”ì†Œë“œ
+    // ìºë¦­í„°ì˜ xê°’ì€ ë…¸ë˜ì˜ ë¹„íŠ¸ì— ë§ì¶”ì–´ ìë™ìœ¼ë¡œ ê²°ì •ë˜ê³ , yê°’ì€ ìºë¦­í„°ì˜ í–‰ë™ì´ë‚˜ ì¡°ê±´ì— ë”°ë¼ ê²°ì •
     private void Move()
     {
         float x = Koreographer.GetBeatTime(musicName, 1) * beatTimeScale;
         float y = 0f;
 
-        // Á¡ÇÁ ÁßÀÌ ¾Æ´Ò ¶§ Ä³¸¯ÅÍÀÇ y°ª ¼³Á¤
+        // ì í”„ ì¤‘ì´ ì•„ë‹ ë•Œ ìºë¦­í„°ì˜ yê°’ ì„¤ì •
         RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
 
-        // ¶¥ À§¿¡ ÀÖÀ» ¶§
+        // ë•… ìœ„ì— ìˆì„ ë•Œ
         if (positionCheckHit)
         {
             y = positionCheckHit.point.y + _positionOffsetY;
         }
         else
         {
-            // Á¡ÇÁ ÁßÀÌ ¾Æ´Ï°í ¹ß ¹Ø¿¡ ¾Æ¹«°Íµµ ¾øÀ» ¶§
+            // ì í”„ ì¤‘ì´ ì•„ë‹ˆê³  ë°œ ë°‘ì— ì•„ë¬´ê²ƒë„ ì—†ì„ ë•Œ
             if (!_isJumping)
             {
                 _canJump = false;
@@ -108,7 +108,7 @@ public class CharacterMovement : MonoBehaviour
             }
         }
 
-        // Á¡ÇÁÇÏ°í ³ª¼­ ´Ù½Ã ¶¥¿¡ ´Ù´Ù¶ú´ÂÁö Ã¼Å©
+        // ì í”„í•˜ê³  ë‚˜ì„œ ë‹¤ì‹œ ë•…ì— ë‹¤ë‹¤ëëŠ”ì§€ ì²´í¬
         if (_canGroundCheck)
         {
             RaycastHit2D groundCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
@@ -122,19 +122,19 @@ public class CharacterMovement : MonoBehaviour
             }
         }
 
-        // Á¡ÇÁ ÁßÀÏ ¶§ Ä³¸¯ÅÍ y°ª ¼³Á¤
+        // ì í”„ ì¤‘ì¼ ë•Œ ìºë¦­í„° yê°’ ì„¤ì •
         if (_isJumping)
         {
             y = GetJumpingY(_rigidbody.position.x - _jumpStartPosition.x, _jumpTileCount) + _jumpStartPosition.y;
         }
 
-        // ÃÖÁ¾ÀûÀ¸·Î °è»êµÈ x, y·Î Ä³¸¯ÅÍ ÀÌµ¿
+        // ìµœì¢…ì ìœ¼ë¡œ ê³„ì‚°ëœ x, yë¡œ ìºë¦­í„° ì´ë™
         _rigidbody.MovePosition(new Vector2(x, y));
     }
 
-    // Á¡ÇÁ ½Ã Ä³¸¯ÅÍÀÇ y°ªÀ» °è»êÇÏ´Â ¸Ş¼Òµå
-    // ÀÌÂ÷ÇÔ¼ö Æ÷¹°¼±À» µû¸§(y = ax^2 + bx)
-    // jumpTileCount·Î x·Î ¸î Ä­¸¸Å­À» Á¡ÇÁÇÒÁö ÁöÁ¤
+    // ì í”„ ì‹œ ìºë¦­í„°ì˜ yê°’ì„ ê³„ì‚°í•˜ëŠ” ë©”ì†Œë“œ
+    // ì´ì°¨í•¨ìˆ˜ í¬ë¬¼ì„ ì„ ë”°ë¦„(y = ax^2 + bx)
+    // jumpTileCountë¡œ xë¡œ ëª‡ ì¹¸ë§Œí¼ì„ ì í”„í• ì§€ ì§€ì •
     private float GetJumpingY(float x, int jumpTileCount)
     {
         float a;
