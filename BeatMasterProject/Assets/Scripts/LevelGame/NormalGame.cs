@@ -3,21 +3,20 @@ using SonicBloom.Koreo;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class NormalGame : Game
 {
-    private BeatResult _tempLResult;
-    private BeatResult _tempSResult;
+    [Header("Event Check")]
     private List<KoreographyEvent> _events;
     private int[,] _eventRangeShort;
     private int[,] _eventRangeLong;
 
     private int _pressedTime;
     private int _pressedTimeLong;
-    static public int count;
+    
     private bool _isChecked; // to prevent double check
-
-
     protected override void Awake()
     {
         base.Awake();
@@ -30,6 +29,7 @@ public class NormalGame : Game
         Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckStart", CheckLongStart);
         Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckEnd", CheckLongEnd);
     }
+
     protected override void Start()
     {
         base.Start();
@@ -42,10 +42,11 @@ public class NormalGame : Game
         _eventRangeShort = CalculateRange(_events);
         _events = playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
-        count = 0;
+        itemCount = 0;
+        uiExp.InitUI();
     }
 
-    int[,] CalculateRange(List<KoreographyEvent> koreographyEvents)
+    private int[,] CalculateRange(List<KoreographyEvent> koreographyEvents)
     {
         int[,] sampleRange = new int[koreographyEvents.Count, 2];
         for (int i = 0; i < koreographyEvents.Count; i++)
@@ -59,7 +60,7 @@ public class NormalGame : Game
         return sampleRange;
     }
 
-    void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
+    private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     { 
         if(_isChecked && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
         {
@@ -68,56 +69,66 @@ public class NormalGame : Game
         if (!isShortKeyCorrect && Input.GetKeyDown(KeyCode.LeftArrow))
         {
             isShortKeyCorrect = true;
+            IncreaseItem();
+            uiExp.ShowItemCount(itemCount);
             _pressedTime = sampleTime; // record the sample time when the button was pressed
         }
 
         // The end of checking event range
-        if(evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isChecked)
+        if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isChecked)
         {
             _isChecked= true;
-            CheckBeatResult(shortResult, _tempSResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
+            CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             shortIdx++;
-
-            isShortKeyCorrect = false;
-
-            if (_tempSResult == BeatResult.Fail)
+            if (!isShortKeyCorrect)
             {
                 // ================Rewind 자리================
+                Rewind(Vector2.zero, sampleTime-50000);
             }
-
+            isShortKeyCorrect = false;
         }
     }
 
-    void CheckLongStart(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
+    private void CheckLongStart(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
         if (_isChecked && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
         {
             _isChecked = false; // initialize before a curve value becomes 1
+            isLongFailed = false;
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isLongPressed = true;
         }
 
-        if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isChecked)
+        if (evt.GetValueOfCurveAtTime(sampleTime) >= 1f && !_isChecked)
         {
             _isChecked = true;
             if (!isLongPressed) // Failed to press at the start of the long note
             {
                 //=======Rewind 자리=========
+                isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
+                Rewind(Vector2.zero, sampleTime); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
+                Debug.Log("long first rewind");
             }
         }
     }
-    void CheckLongMiddle(KoreographyEvent evt)
+    private void CheckLongMiddle(KoreographyEvent evt)
     {
         // if space key is released during long note
         if (isLongPressed && Input.GetKeyUp(KeyCode.Space))
         {
             isLongPressed = false;
             //==============Rewind 자리==============
+            if (!isLongFailed) 
+            {
+                Debug.Log("long middle rewind");
+                Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
+                isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
+            }
         }
     }
-    void CheckLongEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
+    private void CheckLongEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
         if (_isChecked && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
         {
@@ -130,6 +141,8 @@ public class NormalGame : Game
                 // correct!
                 isLongKeyCorrect = true;
                 IncreaseItem();
+                uiExp.ShowItemCount(itemCount);
+
                 _pressedTimeLong = sampleTime;
             }
         }
@@ -138,66 +151,98 @@ public class NormalGame : Game
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1f && !_isChecked)
         {
             _isChecked = true;
-            CheckBeatResult(longResult, _tempLResult, longIdx, isLongKeyCorrect,_pressedTimeLong, _eventRangeLong); // Record Result
+            CheckBeatResult(longResult, longIdx, isLongKeyCorrect,_pressedTimeLong, _eventRangeLong); // Record Result
             longIdx++;
+            if (!isLongKeyCorrect)
+            {
+                // ===============Rewind==============
+                if (!isLongFailed)
+                {
+                    Debug.Log("long last rewind");
+                    Rewind(Vector2.zero, sampleTime); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
+                }
+            }
+            
             isLongPressed = false;
             isLongKeyCorrect = false;
         }
     }
 
-    void Rewind(Vector2 goBackPos, int musicSampleTime)
+    private void Rewind(Vector2 goBackPos, int musicSampleTime) //, bool isShort
     {
-        // music stop, character move stop
-        // longIdx, shortIdx 체크 포인트 다음 노트로 돌려놓음 -> longResult 새로 기록할 수 있게
-        // Player 위치 돌려놓음
-        // 체크 포인트 이후로 획득한 아이템 개수 계산, 만큼 decrease item
-        //DecreaseItem()
+        // musicPlayer.Stop();
+        // character move stop
         
-        // music 다시 시작
+        // index update: longIdx, shortIdx 체크 포인트 다음 노트로 돌려놓음 -> longResult 새로 기록할 수 있게
+        // if (isShort)
+        // {
+        //     shortIdx--;
+        // }
+        // else
+        // {
+        //     longIdx--;
+        // }
+        // Player 위치 돌려놓음
+        
+        // 체크 포인트 이후로 획득한 아이템 개수 계산
+        DecreaseItem(1); // for testing purpose ... 
+        int death = IncreaseDeath(); // increase death count
+        uiExp.ShowDeathCount(death);
+        
+        
+        //StartCoroutine(CoStartWithDelay(musicSampleTime)); // plays music after delay, at a certain point
     }
 
-
-    void IncreaseItem()
+    private void Rewind()
     {
-        count++;
+        DecreaseItem(1);
+        int death = IncreaseDeath(); // increase death count
+        uiExp.ShowDeathCount(death);
     }
 
-    void DecreaseItem(int amount)
+
+    private void IncreaseItem()
     {
-        count -= amount;
-        if(count < 0)
-        {
-            count = 0;
-        }
+        itemCount++;
     }
 
-    public override void CheckBeatResult(BeatResult[] resultArr, BeatResult tempResult, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange)
+    private void DecreaseItem(int amount)
     {
-        if (isKeyCorrect)
+        itemCount -= amount;
+        if(itemCount < 0)
         {
-            if (pressedTime <= eventRange[idx, 0])
-            {
-                tempResult = BeatResult.Fast;
-            }
-            else if (pressedTime <= eventRange[idx, 1])
-            {
-                tempResult = BeatResult.Perfect;
-            }
-            else
-            {
-                tempResult = BeatResult.Slow;
-            }
-        }
-        else
-        {
-            tempResult = BeatResult.Fail;
-        }
-        resultArr[idx] = tempResult;
-
-        if( CheckFinish() )
-        {
-            Debug.Log("Game Ended");
+            itemCount = 0;
         }
     }
 
+
+    // public override void CheckBeatResult(BeatResult[] resultArr, BeatResult tempResult, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange)
+    // {
+    //     if (isKeyCorrect)
+    //     {
+    //         if (pressedTime <= eventRange[idx, 0])
+    //         {
+    //             tempResult = BeatResult.Fast;
+    //         }
+    //         else if (pressedTime <= eventRange[idx, 1])
+    //         {
+    //             tempResult = BeatResult.Perfect;
+    //         }
+    //         else
+    //         {
+    //             tempResult = BeatResult.Slow;
+    //         }
+    //     }
+    //     else
+    //     {
+    //         tempResult = BeatResult.Fail;
+    //     }
+    //     resultArr[idx] = tempResult;
+    //
+    //     if ( CheckFinish() )
+    //     {
+    //         Debug.Log("Game Ended");
+    //     }
+    // }
+    
 }

@@ -56,7 +56,7 @@ public class TileCreator : MonoBehaviour
     }
     
     // 노트 생성 (이벤트 오브젝트)
-    void MakeObstacles()
+    private void MakeObstacles()
     {
         for (int i = 0; i < _obstacles.Length; i++)
         {
