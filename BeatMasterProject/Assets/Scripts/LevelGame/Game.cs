@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 
 using SonicBloom.Koreo;
@@ -45,8 +46,12 @@ public abstract class Game : MonoBehaviour
     // death
     [SerializeField] protected int deathCount = 0;
     protected bool isLongFailed = false; // for testing purpose ....
-    
+
     [Header("Data")]
+    [SerializeField] private int _stageIdx; // Stage number-1 : This is an index!!!
+    [SerializeField] private int _levelIdx; // Level number-1 : This is an index!!!
+    public int itemCount;
+    
     [SerializeField] private int[] _longSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from short notes
     [SerializeField] private int[] _shortSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from long notes
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
@@ -69,7 +74,7 @@ public abstract class Game : MonoBehaviour
     {
         StartWithDelay();
     }
-
+    
     protected virtual void Init()
     {
         musicPlayer.LoadSong(playingKoreo, 0, false);
@@ -103,19 +108,12 @@ public abstract class Game : MonoBehaviour
         }
         resultArr[idx] = tempResult;
 
-        if ( CheckFinish() )
+        if (CheckFinish())
         {
             Debug.Log("Game Ended");
             SummarizeResult();
             uiExp.ShowFinalResult(_finalSummary, _totalNoteCount); // for testing purpose ...
-
-            LevelData curData = DataCenter.Instance.GetLevelData(0, 0);
-            curData.fastCount = _finalSummary[1];
-            curData.perfectCount = _finalSummary[2];
-            curData.slowCount = _finalSummary[3];
-            curData.levelClear = true;
-            curData.alpha = 0.1f;
-            DataCenter.Instance.SaveData(curData, 0,0);
+            RateResult(_stageIdx, _levelIdx);
         }
     }
     protected void StartWithDelay()
@@ -198,9 +196,50 @@ public abstract class Game : MonoBehaviour
             }
         }
 
-        _finalSummary[0] = _shortSummary[0] + _longSummary[0];
-        _finalSummary[1] = _shortSummary[1] + _longSummary[1];
-        _finalSummary[2] = _shortSummary[2] + _longSummary[2];
-        _finalSummary[3] = _shortSummary[3] + _longSummary[3];
+        _finalSummary[0] = _shortSummary[0] + _longSummary[0]; // Fail
+        _finalSummary[1] = _shortSummary[1] + _longSummary[1]; // Fast
+        _finalSummary[2] = _shortSummary[2] + _longSummary[2]; // Perfect
+        _finalSummary[3] = _shortSummary[3] + _longSummary[3]; // Slow
+    }
+
+    private void RateResult(int stageIdx, int levelIdx)
+    {
+        // Load current level's data
+        LevelData curLevelData = DataCenter.Instance.GetLevelData(stageIdx, levelIdx);
+        curLevelData.fastCount = _finalSummary[1];
+        curLevelData.perfectCount = _finalSummary[2];
+        curLevelData.slowCount = _finalSummary[3];
+        curLevelData.levelClear = true;
+        // Push data into current level's data
+        if (_finalSummary[2] == _totalNoteCount)
+        {
+            curLevelData.star = 3;
+            curLevelData.alpha = 1f;
+        }
+        else if (_finalSummary[2] >= _totalNoteCount / 3 * 2)
+        {
+            curLevelData.star = 2;
+            curLevelData.alpha = 2 / 3f;
+        }
+        else
+        {
+            curLevelData.star = 1;
+            curLevelData.alpha = 1 / 3f;
+        }
+        // Save updated level data into json file
+        DataCenter.Instance.SaveData(curLevelData, stageIdx, levelIdx);
+
+        if (levelIdx == 4)
+        {
+            // boss game clear
+            DataCenter.Instance.UpdateStageData(stageIdx);
+            DataCenter.Instance.AddStageData();
+            DataCenter.Instance.UpdatePlayerData(stageIdx + 2, 1, itemCount);
+        }
+        else
+        {
+            // normal game clear
+            DataCenter.Instance.UpdatePlayerData(stageIdx+1, levelIdx+1, itemCount);
+        }
     }
 }

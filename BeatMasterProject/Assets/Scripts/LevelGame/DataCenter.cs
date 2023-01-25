@@ -61,7 +61,6 @@ public class DataCenter : MonoBehaviour
     public void SaveData(LevelData levelData, int stageIdx, int levelIdx)
     {
         _gameData.stageData[stageIdx].levelData[levelIdx] = levelData;
-        //Debug.Log($"Level {GetLevelData(stageIdx, levelIdx).level}'s data has been saved.");
         SaveData();
     }
     
@@ -81,7 +80,7 @@ public class DataCenter : MonoBehaviour
         _gameData = new Data();
         _gameData.playerLv = 1;
         _gameData.playerStage = 1;
-        _gameData.stageData = new StageData[2]; // temporally, set array size as 2
+        _gameData.stageData = new StageData[1]; // temporally, set array size as 2
         LevelData temp = new LevelData();
         for (int i = 0; i < _gameData.stageData.Length; i++)
         {
@@ -94,9 +93,13 @@ public class DataCenter : MonoBehaviour
                 _gameData.stageData[i].levelData[j] = temp;
             }
         }
+
         SaveData();
     }
     
+    /// <summary>
+    /// Add new StageData when a boss level is cleared.
+    /// </summary>
     public void AddStageData()
     {
         // Call AddStageData() when new stage is opened or previous stage's boss level has been cleared.
@@ -115,6 +118,25 @@ public class DataCenter : MonoBehaviour
         }
         old.Add(newStage);
         _gameData.stageData = old.ToArray();
+        SaveData();
+    }
+
+    public void UpdateStageData(int stageIdx)
+    {
+        StageData curStageData = _gameData.stageData[stageIdx];
+        curStageData.bossClear = true;
+    }
+    /// <summary>
+    /// Update Data and save updated content to json file.
+    /// </summary>
+    /// <param name="stageNum">Stage number (not an index) to be saved into Data </param>
+    /// <param name="levelNum">Level number (not an index) to be save into Data</param>
+    /// <param name="playerItem">Add this number to player's current item count</param>
+    public void UpdatePlayerData(int stageNum, int levelNum, int playerItem = 0)
+    {
+        _gameData.playerStage = stageNum;
+        _gameData.playerLv = levelNum;
+        _gameData.playerItem += playerItem;
         SaveData();
     }
 }

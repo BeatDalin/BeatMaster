@@ -17,9 +17,6 @@ public class NormalGame : Game
     private int _pressedTimeLong;
     
     private bool _isChecked; // to prevent double check
-    
-    [Header("Data")]
-    public int itemCount;
     protected override void Awake()
     {
         base.Awake();

@@ -3,9 +3,9 @@ using System;
 [Serializable]
 public struct Data
 {
-    public int playerStage; // player's current  max stage number
-    public int playerLv; // player's current max level in playerStage number
-
+    public int playerStage; // Player's current max stage number
+    public int playerLv; // Player's current max level in playerStage number
+    public int playerItem; // Player's item count
     public StageData[] stageData;
 } 
 
