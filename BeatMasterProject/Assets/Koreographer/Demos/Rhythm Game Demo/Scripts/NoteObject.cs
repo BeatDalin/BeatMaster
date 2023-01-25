@@ -1,4 +1,5 @@
-﻿//----------------------------------------------
+
+//----------------------------------------------
 //            	   Koreographer                 
 //    Copyright © 2014-2016 Sonic Bloom, LLC    
 //----------------------------------------------
@@ -7,142 +8,160 @@ using UnityEngine;
 
 namespace SonicBloom.Koreo.Demos
 {
-	[AddComponentMenu("Koreographer/Demos/Rhythm Game/Note Object")]
-	public class NoteObject : MonoBehaviour
-	{
-		#region Fields
+    [AddComponentMenu("Koreographer/Demos/Rhythm Game/Note Object")]
+    public class NoteObject : MonoBehaviour
+    {
+        #region Fields
 
-		[Tooltip("The visual to use for this Note Object.")]
-		public SpriteRenderer visuals;
+        [Tooltip("The visual to use for this Note Object.")]
+        public SpriteRenderer visuals;
 
-		// If active, the KoreographyEvent that this Note Object wraps.  Contains the relevant timing information.
-		KoreographyEvent trackedEvent;
+        // If active, the KoreographyEvent that this Note Object wraps.  Contains the relevant timing information.
+        KoreographyEvent trackedEvent;
 
-		// If active, the Lane Controller that this Note Object is contained by.
-		LaneController laneController;
+        // If active, the Lane Controller that this Note Object is contained by.
+        LaneController laneController;
 
-		// If active, the Rhythm Game Controller that controls the game this Note Object is found within.
-		RhythmGameController gameController;
+        // If active, the Rhythm Game Controller that controls the game this Note Object is found within.
+        //RhythmGameController gameController;
+        RhythmGameController gameController;
 
-		#endregion
-		#region Static Methods
-		
-		// Unclamped Lerp.  Same as Vector3.Lerp without the [0.0-1.0] clamping.
-		static Vector3 Lerp(Vector3 from, Vector3 to, float t)
-		{
-			return new Vector3 (from.x + (to.x - from.x) * t, from.y + (to.y - from.y) * t, from.z + (to.z - from.z) * t);
-		}
+        #endregion
+        #region Static Methods
 
-		#endregion
-		#region Methods
+        // Unclamped Lerp.  Same as Vector3.Lerp without the [0.0-1.0] clamping.
+        static Vector3 Lerp(Vector3 from, Vector3 to, float t)
+        {
+            return new Vector3(from.x + (to.x - from.x) * t, from.y + (to.y - from.y) * t, from.z + (to.z - from.z) * t);
+        }
 
-		// Prepares the Note Object for use.
-		public void Initialize(KoreographyEvent evt, Color color, LaneController laneCont, RhythmGameController gameCont)
-		{
-			trackedEvent = evt;
-			visuals.color = color;
-			laneController = laneCont;
-			gameController = gameCont;
+        [SerializeField]
+        private GameObject player;
+        [SerializeField]
+        private Hammer hammer;
 
-			UpdatePosition();
-		}
+        #endregion
+        #region Methods
 
-		// Resets the Note Object to its default state.
-		void Reset()
-		{
-			trackedEvent = null;
-			laneController = null;
-			gameController = null;
-		}
+        // Prepares the Note Object for use.
+        public void Initialize(KoreographyEvent evt, Color color, LaneController laneCont, RhythmGameController gameCont)
+        {
+            trackedEvent = evt;
+            visuals.color = color;
+            laneController = laneCont;
+            gameController = gameCont;
 
-		void Update()
-		{
-			UpdateHeight();
+            UpdatePosition();
+        }
 
-			UpdatePosition();
+        // Resets the Note Object to its default state.
+        private void Reset()
+        {
+            trackedEvent = null;
+            laneController = null;
+            gameController = null;
+        }
 
-			if (transform.position.y <= laneController.DespawnY)
-			{
-				gameController.ReturnNoteObjectToPool(this);
-				Reset();
-			}
-		}
+        private void Update()
+        {
+            UpdateWidth();
 
-		// Updates the height of the Note Object.  This is relative to the speed at which the notes fall and 
-		//  the specified Hit Window range.
-		void UpdateHeight()
-		{
-			float baseUnitHeight = visuals.sprite.rect.height / visuals.sprite.pixelsPerUnit;
-			float targetUnitHeight = gameController.WindowSizeInUnits * 2f;	// Double it for before/after.
+            UpdatePosition();
 
-			Vector3 scale = transform.localScale;
-			scale.y = targetUnitHeight / baseUnitHeight;	
-			transform.localScale = scale;
-		}
+            if (transform.position.x <= laneController.DespawnX)
+            {
+                gameController.ReturnNoteObjectToPool(this);
+                Reset();
+            }
+        }
 
-		// Updates the position of the Note Object along the Lane based on current audio position.
-		void UpdatePosition()
-		{
-			// Get the number of samples we traverse given the current speed in Units-Per-Second.
-			float samplesPerUnit = gameController.SampleRate / gameController.noteSpeed;
+        // Updates the height of the Note Object.  This is relative to the speed at which the notes fall and 
+        //  the specified Hit Window range.
+        private void UpdateHeight()
+        {
+            float baseUnitHeight = visuals.sprite.rect.height / visuals.sprite.pixelsPerUnit;
+            float targetUnitHeight = gameController.WindowSizeInUnits * 2f; // Double it for before/after.
 
-			// Our position is offset by the distance from the target in world coordinates.  This depends on
-			//  the distance from "perfect time" in samples (the time of the Koreography Event!).
-			Vector3 pos = laneController.TargetPosition;
-			pos.y -= (gameController.DelayedSampleTime - trackedEvent.StartSample) / samplesPerUnit;
-			transform.position = pos;
-		}
+            Vector3 scale = transform.localScale;
+            scale.y = targetUnitHeight / baseUnitHeight;
+            transform.localScale = scale;
+        }
 
-		// Checks to see if the Note Object is currently hittable or not based on current audio sample
-		//  position and the configured hit window width in samples (this window used during checks for both
-		//  before/after the specific sample time of the Note Object).
-		public bool IsNoteHittable()
-		{
-			int noteTime = trackedEvent.StartSample;
-			int curTime = gameController.DelayedSampleTime;
-			int hitWindow = gameController.HitWindowSampleWidth;
+        //추가
+        private void UpdateWidth()
+        {
+            float baseUnitWidth = visuals.sprite.rect.width / visuals.sprite.pixelsPerUnit;
+            float targetUnitWidth = gameController.WindowSizeInUnits * 2f;
 
-			return (Mathf.Abs(noteTime - curTime) <= hitWindow);
-		}
+            Vector3 scale = transform.localScale;
+            scale.x = targetUnitWidth / baseUnitWidth;
+            transform.localScale = scale;
+        }
 
-		// Checks to see if the note is no longer hittable based on the configured hit window width in
-		//  samples.
-		public bool IsNoteMissed()
-		{
-			bool bMissed = true;
+        // Updates the position of the Note Object along the Lane based on current audio position.
+        void UpdatePosition()
+        {
+            // Get the number of samples we traverse given the current speed in Units-Per-Second.
+            float samplesPerUnit = gameController.SampleRate / gameController.noteSpeed;
 
-			if (enabled)
-			{
-				int noteTime = trackedEvent.StartSample;
-				int curTime = gameController.DelayedSampleTime;
-				int hitWindow = gameController.HitWindowSampleWidth;
+            // Our position is offset by the distance from the target in world coordinates.  This depends on
+            //  the distance from "perfect time" in samples (the time of the Koreography Event!).
+            Vector3 pos = laneController.TargetPosition;
+            pos.x -= (gameController.DelayedSampleTime - trackedEvent.StartSample) / samplesPerUnit;
+            transform.position = pos;
+        }
 
-				bMissed = (curTime - noteTime > hitWindow);
-			}
-			
-			return bMissed;
-		}
+        // Checks to see if the Note Object is currently hittable or not based on current audio sample
+        //  position and the configured hit window width in samples (this window used during checks for both
+        //  before/after the specific sample time of the Note Object).
+        public bool IsNoteHittable()
+        {
+            int noteTime = trackedEvent.StartSample;
+            int curTime = gameController.DelayedSampleTime;
+            int hitWindow = gameController.HitWindowSampleWidth;
 
-		// Returns this Note Object to the pool which is controlled by the Rhythm Game Controller.  This
-		//  helps reduce runtime allocations.
-		void ReturnToPool()
-		{
-			gameController.ReturnNoteObjectToPool(this);
-			Reset();
-		}
+            return (Mathf.Abs(noteTime - curTime) <= hitWindow);
+        }
 
-		// Performs actions when the Note Object is hit.
-		public void OnHit()
-		{
-			ReturnToPool();
-		}
+        // Checks to see if the note is no longer hittable based on the configured hit window width in
+        //  samples.
+        public bool IsNoteMissed()
+        {
+            bool bMissed = true;
 
-		// Performs actions when the Note Object is cleared.
-		public void OnClear()
-		{
-			ReturnToPool();
-		}
+            if (enabled)
+            {
+                int noteTime = trackedEvent.StartSample;
+                int curTime = gameController.DelayedSampleTime;
+                int hitWindow = gameController.HitWindowSampleWidth;
 
-		#endregion
-	}
+                bMissed = (curTime - noteTime > hitWindow);
+            }
+
+            return bMissed;
+        }
+
+        // Returns this Note Object to the pool which is controlled by the Rhythm Game Controller.  This
+        //  helps reduce runtime allocations.
+        void ReturnToPool()
+        {
+            gameController.ReturnNoteObjectToPool(this);
+            Reset();
+        }
+
+        // Performs actions when the Note Object is hit.
+        public void OnHit()
+        {
+            PlayterStatus.instance.ChangeStatus(Status.Attack);
+            ReturnToPool();
+        }
+
+        // Performs actions when the Note Object is cleared.
+        public void OnClear()
+        {
+            ReturnToPool();
+        }
+
+        #endregion
+    }
 }
