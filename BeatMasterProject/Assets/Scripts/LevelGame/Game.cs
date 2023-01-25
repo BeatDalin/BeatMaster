@@ -1,12 +1,8 @@
-using System;
-using Unity.VisualScripting;
-
 using SonicBloom.Koreo;
 using SonicBloom.Koreo.Players;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public enum BeatResult
 {
@@ -52,8 +48,8 @@ public abstract class Game : MonoBehaviour
     [SerializeField] private int _levelIdx; // Level number-1 : This is an index!!!
     public int itemCount;
     
-    [SerializeField] private int[] _longSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from short notes
-    [SerializeField] private int[] _shortSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from long notes
+    private int[] _longSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from short notes
+    private int[] _shortSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from long notes
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
     private static int _totalNoteCount = 0;
 
@@ -239,7 +235,7 @@ public abstract class Game : MonoBehaviour
         else
         {
             // normal game clear
-            DataCenter.Instance.UpdatePlayerData(stageIdx+1, levelIdx+1, itemCount);
+            DataCenter.Instance.UpdatePlayerData(stageIdx + 1, levelIdx + 2, itemCount);
         }
     }
 }
