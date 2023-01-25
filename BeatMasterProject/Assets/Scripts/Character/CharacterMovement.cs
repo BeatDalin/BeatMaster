@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SonicBloom.Koreo;
+using SonicBloom.MIDI;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
@@ -10,7 +11,7 @@ public class CharacterMovement : MonoBehaviour
 
     [Header("Music")]
     public string musicName;
-    public float beatTimeScale;
+    public int musicBPM;
     public float gravityScale;
     public float startGravityAccel;
     private float _gravityAccel;
@@ -83,12 +84,12 @@ public class CharacterMovement : MonoBehaviour
     }
 
     // 캐릭터의 움직임을 결정하는 메소드
-    // 캐릭터의 x값은 노래의 비트에 맞추어 자동으로 결정되고, y값은 캐릭터의 행동이나 조건에 따라 결정
+    // 캐릭터의 x값은 노래에 맞추어 결정되고, y값은 캐릭터의 행동이나 조건에 따라 결정
     private void Move()
     {
-        float x = Koreographer.GetBeatTime(musicName, 1) * beatTimeScale;
+        float x = (float)Koreographer.GetSampleTime(musicName) / Koreographer.GetSampleRate(musicName) * (musicBPM / 60f);
         float y = 0f;
-
+        
         // 점프 중이 아닐 때 캐릭터의 y값 설정
         RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
 
