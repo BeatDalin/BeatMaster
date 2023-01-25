@@ -17,12 +17,16 @@ enum ButtonName
     ShutDown
 }
 
-public class ButtonScale : MonoBehaviour
+public class MenuTitleButton : MonoBehaviour
 {
     [SerializeField] private DOTweenAnimation[] _doTweenAnimations;
     [SerializeField] private Button[] _buttons;
     
     [SerializeField] private GameObject _settingPopUp;
+    [SerializeField] private GameObject _storePopUp;
+    [SerializeField] private CanvasGroup _loadingPanelGroup;
+
+    [SerializeField] private SimpleMusicPlayer _simpleMusicPlayer;
 
     private int _objectIdx = 0;
 
@@ -41,6 +45,17 @@ public class ButtonScale : MonoBehaviour
         _buttons[(int)ButtonName.ShutDown].onClick.AddListener(() => OpenPopUp("ShutDown"));
     }
 
+    private void Update()
+    {
+        if (_loadingPanelGroup.alpha == 0)
+        {
+            if (!_simpleMusicPlayer.IsPlaying)
+            {
+                _simpleMusicPlayer.Play();
+            }
+        }
+    }
+
     private void OpenPopUp(string PopUpName)
     {
         SoundManager.instance.PlaySFX("Touch");
@@ -48,16 +63,21 @@ public class ButtonScale : MonoBehaviour
         switch (PopUpName)
         {
             case "Store":
+                _storePopUp.SetActive(true);
+                _settingPopUp.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
+                
+                UIManager.instance.popUpStack.Push(_settingPopUp);
                 break;
             
             case "Setting":
-                GameObject popUp = Instantiate(_settingPopUp, UIManager.instance.canvas.transform);
-                popUp.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
+                _settingPopUp.SetActive(true);
+                _settingPopUp.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
                 
-                UIManager.instance.popUpStack.Push(popUp);
+                UIManager.instance.popUpStack.Push(_settingPopUp);
                 break;
             
             case "ShutDown":
+                Application.Quit();
                 break;
         }
     }
@@ -65,10 +85,11 @@ public class ButtonScale : MonoBehaviour
     private void SceneMoveBtn(string SceneName)
     {
         SoundManager.instance.PlaySFX("Touch");
-
+        
         //SceneManager.LoadScene(SceneName); 씬 로드(씬매니저 없어서 임시로 해둠)
     }
 
+    
     private void ChangeScale(KoreographyEvent evt)
     {
         if (_objectIdx == _doTweenAnimations.Length)

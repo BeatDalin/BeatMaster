@@ -14,7 +14,7 @@ public class SettingPopUp : MonoBehaviour
             
             gameObject.GetComponent<RectTransform>().DOLocalMove(new Vector3(Screen.width, 0, 0), 0.4f).onComplete += () =>
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             };
         });
     }
