@@ -9,7 +9,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     public SceneType Scene { get; private set; }
     [SerializeField] private float _loadingTime = 2f;
     private float _fadeMod = 1f;
-    float _timer = 0f;
+    private float _timer = 0f;
 
     private GameObject _loadingCanvas;
     private List<Image> _loadingCanvasImages = new List<Image>();
