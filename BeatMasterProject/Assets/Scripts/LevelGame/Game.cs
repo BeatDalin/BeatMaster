@@ -144,7 +144,7 @@ public abstract class Game : MonoBehaviour
         deathCount++;
         return deathCount;
     }
-
+    
     private void SummarizeResult()
     {
         // Count each result type in shortResult and longResult array

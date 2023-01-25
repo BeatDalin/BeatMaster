@@ -30,7 +30,7 @@ public class DataCenter : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Start()
     {
         // if you want to find where the json file is located...
         // Debug.Log(Application.persistentDataPath);
@@ -80,7 +80,7 @@ public class DataCenter : MonoBehaviour
         _gameData = new Data();
         _gameData.playerLv = 1;
         _gameData.playerStage = 1;
-        _gameData.stageData = new StageData[1]; // temporally, set array size as 2
+        _gameData.stageData = new StageData[1]; // temporally, set array size as 1
         LevelData temp = new LevelData();
         for (int i = 0; i < _gameData.stageData.Length; i++)
         {
