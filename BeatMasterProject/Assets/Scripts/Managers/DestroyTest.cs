@@ -6,9 +6,14 @@ public class DestroyTest : MonoBehaviour
 {
     void Start()
     {
-        //SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.BossGame);
+        StartCoroutine(LoadTest());
     }
 
+    private IEnumerator LoadTest()
+    {
+        yield return new WaitForSeconds(1f);
+        SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.BossGame);
+    }
     void Update()
     {
         
