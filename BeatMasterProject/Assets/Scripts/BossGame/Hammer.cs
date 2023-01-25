@@ -20,7 +20,7 @@ namespace SonicBloom.Koreo.Demos
             StartCoroutine("CoHammerMove");
         }
 
-        private static Vector3 Parabola(Vector3 start, Vector3 end, float height, float t)
+        private static Vector3 CreateParabola(Vector3 start, Vector3 end, float height, float t)
         {
             Func<float, float> f = x => -4 * height * x * x + 4 * height * x;
 
@@ -35,7 +35,7 @@ namespace SonicBloom.Koreo.Demos
             while (transform.position.y >= _startPos.y)
             {
                 _timer += Time.deltaTime;
-                Vector3 tempPos = Parabola(_startPos, _endPos, 5, _timer);
+                Vector3 tempPos = CreateParabola(_startPos, _endPos, 5, _timer);
                 transform.position = tempPos;
                 yield return new WaitForEndOfFrame();
             }

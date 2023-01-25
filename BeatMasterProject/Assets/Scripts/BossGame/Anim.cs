@@ -18,13 +18,13 @@ public class Anim : MonoBehaviour
     private GameObject _hammer;
     private Animator _anim;
 
-    private RhythmGameController gameController;
-    private LaneController laneController;
+    private RhythmGameController _gameController;
+    private LaneController _laneController;
 
     // Start is called before the first frame update
     void Start()
     {
-        _anim=GetComponentInChildren<Animator>();
+        _anim = GetComponentInChildren<Animator>();
         StatusJudge(Status.Run);
     }
 
@@ -60,7 +60,6 @@ public class Anim : MonoBehaviour
         GameObject hammerClone = Instantiate(_hammer, _hammer.transform.position, _hammer.transform.rotation);
         _anim.SetTrigger("Attack");
         hammerClone.GetComponent<Animator>().SetTrigger("Attack");
-
     }
 
     public void Jump()

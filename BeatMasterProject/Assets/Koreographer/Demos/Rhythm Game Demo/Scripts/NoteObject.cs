@@ -36,9 +36,9 @@ namespace SonicBloom.Koreo.Demos
         }
 
         [SerializeField]
-        private GameObject player;
+        private GameObject _player;
         [SerializeField]
-        private Hammer hammer;
+        private Hammer _hammer;
 
         #endregion
         #region Methods
@@ -152,7 +152,7 @@ namespace SonicBloom.Koreo.Demos
         // Performs actions when the Note Object is hit.
         public void OnHit()
         {
-            PlayterStatus.instance.ChangeStatus(Status.Attack);
+            PlayerStatus.Instance.ChangeStatus(Status.Attack);
             ReturnToPool();
         }
 

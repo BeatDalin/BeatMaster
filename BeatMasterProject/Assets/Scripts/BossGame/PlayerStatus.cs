@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayterStatus : MonoBehaviour
+public class PlayerStatus : MonoBehaviour
 {
-    public static PlayterStatus instance { get; private set; }
+    public static PlayerStatus Instance { get; private set; }
     public Status playerStatus = Status.Run;
 
-    private float _hp=100;
-    private float _damage
+    private float _hp = 100;
+    private float Damage
     {
         get { return _hp; }
         set
@@ -18,20 +18,20 @@ public class PlayterStatus : MonoBehaviour
     }
     private Anim _animation;
     private float _speed;
-    private float _colorValue=1f;
+    private float _colorValue = 1f;
     private Vector4 _color;
     private Vector4 _hairColor;
     private SPUM_SpriteList _spumSpriteList;
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
     }
     // Start is called before the first frame update
     private void Start()
     {
-        _animation=GetComponent<Anim>();
-        _spumSpriteList=GetComponentInChildren<SPUM_SpriteList>();
+        _animation = GetComponent<Anim>();
+        _spumSpriteList = GetComponentInChildren<SPUM_SpriteList>();
         _hairColor = (Color.white - _spumSpriteList._itemList[0].color) / 10;
     }
 
@@ -52,7 +52,7 @@ public class PlayterStatus : MonoBehaviour
 
     private void DecreaseHP()
     {
-        _damage = 10;
+        Damage = 10;
         ChangeCharacterColor();
 
         if (_hp <= 0)
