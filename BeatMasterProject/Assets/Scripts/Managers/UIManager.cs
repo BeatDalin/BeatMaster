@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using SonicBloom.Koreo;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,6 +26,11 @@ public class UIManager : MonoBehaviour
         InitCanvas(SceneManager.GetActiveScene().name);
     }
 
+    private void Start()
+    {
+      
+    }
+
     public void InitCanvas(string SceneName)
     {
         string canvasName = SceneName + "Canvas";
@@ -43,7 +50,7 @@ public class UIManager : MonoBehaviour
             GameObject g = popUpStack.Pop();
             g.GetComponent<RectTransform>().DOLocalMove(new Vector3(Screen.width, 0, 0), 0.4f).onComplete += () =>
             {
-                Destroy(g);
+                g.SetActive(false);
             };
         }
     }
