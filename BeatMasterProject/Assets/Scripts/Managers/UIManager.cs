@@ -26,11 +26,6 @@ public class UIManager : MonoBehaviour
         InitCanvas(SceneManager.GetActiveScene().name);
     }
 
-    private void Start()
-    {
-      
-    }
-
     public void InitCanvas(string SceneName)
     {
         string canvasName = SceneName + "Canvas";
