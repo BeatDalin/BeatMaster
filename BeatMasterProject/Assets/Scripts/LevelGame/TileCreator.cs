@@ -37,7 +37,13 @@ public class TileCreator : MonoBehaviour
     (임시) 2번 쳐야하는 몬스터라면 밀리는 것 계산해서 배치
     (임시) 점프 타일이면 이동하는 것 생각해서 배치
     */
-    private string _obstacles = "#... .... ..1. ..1. ..1. ..1." +
+    private string _obstacles = ".... .... .... ...." +
+                                ".... .... .... ....";
+
+    private string _height = ".... .... .... ...." +
+                             ".... .... .... ....";
+
+    /*private string _obstacles = "#... .... ..1. ..1. ..1. ..1." +
                                 "#.^. ..^. ..^. ..^^" +
                                 "#.-- ..11 ..-- ..1." +
                                 ".... .... .... ....";
@@ -45,8 +51,8 @@ public class TileCreator : MonoBehaviour
     private string _height = ".... .... .... .... .... ...." +
                              ".... .... .... ...." +
                              ".... .... .... ...." +
-                             ".c.. .c.. .C.. CCCC";
-
+                             ".c.. .c.. .C.. CCCC";*/
+    
     private void Start()
     {
         _obstacles = _obstacles.Replace(" ", string.Empty);
@@ -56,7 +62,7 @@ public class TileCreator : MonoBehaviour
     }
     
     // 노트 생성 (이벤트 오브젝트)
-    void MakeObstacles()
+    private void MakeObstacles()
     {
         for (int i = 0; i < _obstacles.Length; i++)
         {
