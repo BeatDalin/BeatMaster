@@ -21,7 +21,7 @@ public enum GameState
 
 public abstract class Game : MonoBehaviour
 {
-    protected LevelGameUI gameUI;
+    [SerializeField] protected LevelGameUI gameUI;
     protected Koreography playingKoreo;
     protected SimpleMusicPlayer musicPlayer;
 
@@ -74,7 +74,7 @@ public abstract class Game : MonoBehaviour
     {
         playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
         musicPlayer = FindObjectOfType<SimpleMusicPlayer>();// Find ui manager
-        gameUI = FindObjectOfType<LevelGameUI>(); // temporal use of ui experiment class
+        // gameUI = FindObjectOfType<LevelGameUI>(); // temporal use of ui experiment class
         DataCenter.Instance.LoadData();
     }
 
@@ -122,6 +122,7 @@ public abstract class Game : MonoBehaviour
             SummarizeResult();
             gameUI.ShowFinalResult(_finalSummary, _totalNoteCount); // for testing purpose ...
             RateResult(_stageIdx, _levelIdx);
+            gameUI.ShowStar(DataCenter.Instance.GetLevelData(_stageIdx, _levelIdx).star);
         }
     }
     protected void StartWithDelay(int startSample = 0)
@@ -230,7 +231,7 @@ public abstract class Game : MonoBehaviour
         // Push data into current level's data
         if (_finalSummary[2] == _totalNoteCount)
         {
-            curLevelData.star = 3;
+            gameUI.ShowStar(3);
             curLevelData.alpha = 1f;
         }
         else if (_finalSummary[2] >= _totalNoteCount / 3 * 2)

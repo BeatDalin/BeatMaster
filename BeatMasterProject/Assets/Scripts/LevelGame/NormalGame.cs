@@ -18,12 +18,11 @@ public class NormalGame : Game
     protected override void Awake()
     {
         base.Awake();
-        Init();
         // Short Note Event Track
         Koreographer.Instance.RegisterForEventsWithTime("JumpCheck", CheckShortEnd);
         
-        // Long Note Event Track
-        Koreographer.Instance.RegisterForEvents("LongJump", CheckLongMiddle);
+        // Long Note Event Track1
+        Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
         Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckStart", CheckLongStart);
         Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckEnd", CheckLongEnd);
     }
@@ -31,6 +30,7 @@ public class NormalGame : Game
     protected override void Start()
     {
         base.Start();
+        Init();
     }
 
     protected override void Init()
@@ -149,7 +149,7 @@ public class NormalGame : Game
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1f && !_isChecked)
         {
             _isChecked = true;
-            CheckBeatResult(longResult, longIdx, isLongKeyCorrect,_pressedTimeLong, _eventRangeLong); // Record Result
+            CheckBeatResult(longResult, longIdx, isLongKeyCorrect, _pressedTimeLong, _eventRangeLong); // Record Result
             longIdx++;
             if (!isLongKeyCorrect)
             {
@@ -192,6 +192,7 @@ public class NormalGame : Game
     private void Rewind()
     {
         DecreaseItem(1);
+        gameUI.UpdateText(TextType.Item, itemCount);
         int death = IncreaseDeath(); // increase death count
         gameUI.UpdateText(TextType.Death, death);
     }
