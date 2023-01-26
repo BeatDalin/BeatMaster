@@ -5,7 +5,13 @@ using UnityEngine;
 
 public class AudioTest : MonoBehaviour
 {
-    public string bgmName = "";
+    public string bgmName;
+
+    public void Start()
+    {
+        Time.timeScale = 0;
+    }
+
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
@@ -17,11 +23,13 @@ public class AudioTest : MonoBehaviour
         {
             SoundManager.instance.PlaySFX("Attack");
         }
-    }
 
-    public void PlayBGMButton()
-    {
-        SoundManager.instance.PlayBGM(bgmName);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Time.timeScale = 1;
+            SoundManager.instance.PlayBGM(bgmName);
+
+        }
     }
 
     // public void PlaySFXButton()
