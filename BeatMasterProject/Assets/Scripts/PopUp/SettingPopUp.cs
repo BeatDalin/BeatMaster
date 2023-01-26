@@ -12,9 +12,15 @@ public class SettingPopUp : MonoBehaviour
         {
             UIManager.instance.popUpStack.Pop();
             
-            gameObject.GetComponent<RectTransform>().DOLocalMove(new Vector3(Screen.width, 0, 0), 0.4f).onComplete += () =>
+            _exitBtn.transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete += () =>
             {
-                gameObject.SetActive(false);
+                _exitBtn.transform.DORewind();
+                
+                gameObject.GetComponent<RectTransform>().DOLocalMove(new Vector3(Screen.width, 0, 0), 0.4f).onComplete += () =>
+                {
+                    gameObject.SetActive(false);
+                    
+                };
             };
         });
     }

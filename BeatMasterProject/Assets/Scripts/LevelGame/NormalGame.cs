@@ -3,8 +3,6 @@ using SonicBloom.Koreo;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 public class NormalGame : Game
 {
@@ -20,12 +18,11 @@ public class NormalGame : Game
     protected override void Awake()
     {
         base.Awake();
-        Init();
         // Short Note Event Track
         Koreographer.Instance.RegisterForEventsWithTime("JumpCheck", CheckShortEnd);
         
-        // Long Note Event Track
-        Koreographer.Instance.RegisterForEvents("LongJump", CheckLongMiddle);
+        // Long Note Event Track1
+        Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
         Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckStart", CheckLongStart);
         Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckEnd", CheckLongEnd);
     }
@@ -33,6 +30,7 @@ public class NormalGame : Game
     protected override void Start()
     {
         base.Start();
+        Init();
     }
 
     protected override void Init()
@@ -43,7 +41,7 @@ public class NormalGame : Game
         _events = playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
         itemCount = 0;
-        uiExp.InitUI();
+        gameUI.InitUI();
     }
 
     private int[,] CalculateRange(List<KoreographyEvent> koreographyEvents)
@@ -70,7 +68,7 @@ public class NormalGame : Game
         {
             isShortKeyCorrect = true;
             IncreaseItem();
-            uiExp.ShowItemCount(itemCount);
+            gameUI.UpdateText(TextType.Item, itemCount);
             _pressedTime = sampleTime; // record the sample time when the button was pressed
         }
 
@@ -141,7 +139,7 @@ public class NormalGame : Game
                 // correct!
                 isLongKeyCorrect = true;
                 IncreaseItem();
-                uiExp.ShowItemCount(itemCount);
+                gameUI.UpdateText(TextType.Item, itemCount);
 
                 _pressedTimeLong = sampleTime;
             }
@@ -151,7 +149,7 @@ public class NormalGame : Game
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1f && !_isChecked)
         {
             _isChecked = true;
-            CheckBeatResult(longResult, longIdx, isLongKeyCorrect,_pressedTimeLong, _eventRangeLong); // Record Result
+            CheckBeatResult(longResult, longIdx, isLongKeyCorrect, _pressedTimeLong, _eventRangeLong); // Record Result
             longIdx++;
             if (!isLongKeyCorrect)
             {
@@ -187,19 +185,17 @@ public class NormalGame : Game
         // 체크 포인트 이후로 획득한 아이템 개수 계산
         DecreaseItem(1); // for testing purpose ... 
         int death = IncreaseDeath(); // increase death count
-        uiExp.ShowDeathCount(death);
-        
-        
+        gameUI.UpdateText(TextType.Death, death);
         //StartCoroutine(CoStartWithDelay(musicSampleTime)); // plays music after delay, at a certain point
     }
 
     private void Rewind()
     {
         DecreaseItem(1);
+        gameUI.UpdateText(TextType.Item, itemCount);
         int death = IncreaseDeath(); // increase death count
-        uiExp.ShowDeathCount(death);
+        gameUI.UpdateText(TextType.Death, death);
     }
-
 
     private void IncreaseItem()
     {
