@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class MoveTile : MonoBehaviour
 {
-
-    public float speed = 1f;
+    public float speed = 4f;
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        transform.position += new Vector3(-1 * speed *  Time.deltaTime, 0, 0);
+        transform.Translate(new Vector3(speed *  Time.deltaTime, 0, 0));
     }
 }
