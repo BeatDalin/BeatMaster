@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro.EditorUtilities;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public enum TextType
@@ -25,6 +22,8 @@ public class LevelGameUI : MonoBehaviour
     [SerializeField] private Text _finalFast;
     [SerializeField] private Text _finalPerfect;
     [SerializeField] private Text _finalSlow;
+    [SerializeField] private GameObject[] _star;
+    [SerializeField] private Color _successColor;
     [Header("Time Count UI")]
     [SerializeField] public GameObject timePanel;
     [SerializeField] public Text timeCount;
@@ -103,6 +102,56 @@ public class LevelGameUI : MonoBehaviour
     {
         UIManager.instance.OpenPopUp(_pausePanel);
         levelGame.PauseGame();
+    }
+    
+    public void ShowStar(int starCount)
+    {
+        if (starCount == 3)
+        {
+            _star[0].SetActive(true);
+            _star[0].GetComponent<Image>().color = _successColor;
+            _star[0].transform.DORotate(new Vector3(0, 180, 0), 0.5f).onComplete += () =>
+            {
+                _star[1].SetActive(true);
+                _star[1].GetComponent<Image>().color = _successColor;
+                _star[1].transform.DORotate(new Vector3(0, 180, 0), 0.5f).onComplete += () =>
+                {
+                    _star[2].SetActive(true);
+                    _star[2].GetComponent<Image>().color = _successColor;
+                    _star[2].transform.DORotate(new Vector3(0, 180, 0), 0.5f);
+                };
+            };
+        }
+        else if (starCount == 2)
+        {
+            _star[0].SetActive(true);
+            _star[0].GetComponent<Image>().color = _successColor;
+            _star[0].transform.DORotate(new Vector3(0, 180, 0), 0.5f).onComplete += () =>
+            {
+                _star[1].SetActive(true);
+                _star[1].GetComponent<Image>().color = _successColor;
+                _star[1].transform.DORotate(new Vector3(0, 180, 0), 0.5f).onComplete += () =>
+                {
+                    _star[2].SetActive(true);
+                    _star[2].transform.DORotate(new Vector3(0, 180, 0), 0.5f);
+                };
+            };
+        }
+        else
+        {
+            _star[0].SetActive(true);
+            _star[0].GetComponent<Image>().color = _successColor;
+            _star[0].transform.DORotate(new Vector3(0, 180, 0), 0.5f).onComplete += () =>
+            {
+                _star[1].SetActive(true);
+                _star[1].transform.DORotate(new Vector3(0, 180, 0), 0.5f).onComplete += () =>
+                {
+                    _star[2].SetActive(true);
+                    _star[2].transform.DORotate(new Vector3(0, 180, 0), 0.5f);
+                };
+            };
+        }
+        
     }
 
     
