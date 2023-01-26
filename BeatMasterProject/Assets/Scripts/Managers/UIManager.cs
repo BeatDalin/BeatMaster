@@ -39,18 +39,17 @@ public class UIManager : MonoBehaviour
         panel.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
         popUpStack.Push(panel);
     }
-
     public void ClosePopUp()
     {
         if (popUpStack.Count == 0)
         {
             return;
         }
-        
         GameObject g = popUpStack.Pop();
         g.GetComponent<RectTransform>().DOLocalMove(new Vector3(Screen.width, 0, 0), 0.4f).onComplete += () =>
         {
             g.SetActive(false);
         };
     }
+    
 }
