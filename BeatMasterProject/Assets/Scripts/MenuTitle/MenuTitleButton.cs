@@ -56,11 +56,11 @@ public class MenuTitleButton : MonoBehaviour
         }
     }
 
-    private void OpenPopUp(string PopUpName)
+    private void OpenPopUp(string popUpName)
     {
         SoundManager.instance.PlaySFX("Touch");
 
-        switch (PopUpName)
+        switch (popUpName)
         {
             case "Store":
                 _storePopUp.SetActive(true);
@@ -82,7 +82,7 @@ public class MenuTitleButton : MonoBehaviour
         }
     }
 
-    private void SceneMoveBtn(string SceneName)
+    private void SceneMoveBtn(string sceneName)
     {
         SoundManager.instance.PlaySFX("Touch");
         
