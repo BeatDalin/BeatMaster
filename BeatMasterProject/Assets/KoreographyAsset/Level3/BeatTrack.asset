@@ -1,0 +1,1091 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1223223985, guid: aa81bbec85a3f423193272a7c6154986, type: 3}
+  m_Name: BeatTrack
+  m_EditorClassIdentifier: 
+  mEventID: BeatTrack
+  mEventList:
+  - mStartSample: 0
+    mEndSample: 0
+  - mStartSample: 18248
+    mEndSample: 18248
+  - mStartSample: 36496
+    mEndSample: 36496
+  - mStartSample: 54744
+    mEndSample: 54744
+  - mStartSample: 72993
+    mEndSample: 72993
+  - mStartSample: 91241
+    mEndSample: 91241
+  - mStartSample: 109489
+    mEndSample: 109489
+  - mStartSample: 127737
+    mEndSample: 127737
+  - mStartSample: 145986
+    mEndSample: 145986
+  - mStartSample: 164234
+    mEndSample: 164234
+  - mStartSample: 182482
+    mEndSample: 182482
+  - mStartSample: 200731
+    mEndSample: 200731
+  - mStartSample: 218979
+    mEndSample: 218979
+  - mStartSample: 237227
+    mEndSample: 237227
+  - mStartSample: 255475
+    mEndSample: 255475
+  - mStartSample: 273724
+    mEndSample: 273724
+  - mStartSample: 291972
+    mEndSample: 291972
+  - mStartSample: 310220
+    mEndSample: 310220
+  - mStartSample: 328468
+    mEndSample: 328468
+  - mStartSample: 346717
+    mEndSample: 346717
+  - mStartSample: 364965
+    mEndSample: 364965
+  - mStartSample: 383213
+    mEndSample: 383213
+  - mStartSample: 401462
+    mEndSample: 401462
+  - mStartSample: 419710
+    mEndSample: 419710
+  - mStartSample: 437958
+    mEndSample: 437958
+  - mStartSample: 456206
+    mEndSample: 456206
+  - mStartSample: 474455
+    mEndSample: 474455
+  - mStartSample: 492703
+    mEndSample: 492703
+  - mStartSample: 510951
+    mEndSample: 510951
+  - mStartSample: 529200
+    mEndSample: 529200
+  - mStartSample: 547448
+    mEndSample: 547448
+  - mStartSample: 565696
+    mEndSample: 565696
+  - mStartSample: 583944
+    mEndSample: 583944
+  - mStartSample: 602193
+    mEndSample: 602193
+  - mStartSample: 620441
+    mEndSample: 620441
+  - mStartSample: 638689
+    mEndSample: 638689
+  - mStartSample: 656937
+    mEndSample: 656937
+  - mStartSample: 675186
+    mEndSample: 675186
+  - mStartSample: 693434
+    mEndSample: 693434
+  - mStartSample: 711682
+    mEndSample: 711682
+  - mStartSample: 729931
+    mEndSample: 729931
+  - mStartSample: 748179
+    mEndSample: 748179
+  - mStartSample: 766427
+    mEndSample: 766427
+  - mStartSample: 784675
+    mEndSample: 784675
+  - mStartSample: 802924
+    mEndSample: 802924
+  - mStartSample: 821172
+    mEndSample: 821172
+  - mStartSample: 839420
+    mEndSample: 839420
+  - mStartSample: 857668
+    mEndSample: 857668
+  - mStartSample: 875917
+    mEndSample: 875917
+  - mStartSample: 894165
+    mEndSample: 894165
+  - mStartSample: 912413
+    mEndSample: 912413
+  - mStartSample: 930662
+    mEndSample: 930662
+  - mStartSample: 948910
+    mEndSample: 948910
+  - mStartSample: 967158
+    mEndSample: 967158
+  - mStartSample: 985406
+    mEndSample: 985406
+  - mStartSample: 1003655
+    mEndSample: 1003655
+  - mStartSample: 1021903
+    mEndSample: 1021903
+  - mStartSample: 1040151
+    mEndSample: 1040151
+  - mStartSample: 1058400
+    mEndSample: 1058400
+  - mStartSample: 1076648
+    mEndSample: 1076648
+  - mStartSample: 1094896
+    mEndSample: 1094896
+  - mStartSample: 1113144
+    mEndSample: 1113144
+  - mStartSample: 1131393
+    mEndSample: 1131393
+  - mStartSample: 1149641
+    mEndSample: 1149641
+  - mStartSample: 1167889
+    mEndSample: 1167889
+  - mStartSample: 1186137
+    mEndSample: 1186137
+  - mStartSample: 1204386
+    mEndSample: 1204386
+  - mStartSample: 1222634
+    mEndSample: 1222634
+  - mStartSample: 1240882
+    mEndSample: 1240882
+  - mStartSample: 1259131
+    mEndSample: 1259131
+  - mStartSample: 1277379
+    mEndSample: 1277379
+  - mStartSample: 1295627
+    mEndSample: 1295627
+  - mStartSample: 1313875
+    mEndSample: 1313875
+  - mStartSample: 1332124
+    mEndSample: 1332124
+  - mStartSample: 1350372
+    mEndSample: 1350372
+  - mStartSample: 1368620
+    mEndSample: 1368620
+  - mStartSample: 1386868
+    mEndSample: 1386868
+  - mStartSample: 1405117
+    mEndSample: 1405117
+  - mStartSample: 1423365
+    mEndSample: 1423365
+  - mStartSample: 1441613
+    mEndSample: 1441613
+  - mStartSample: 1459862
+    mEndSample: 1459862
+  - mStartSample: 1478110
+    mEndSample: 1478110
+  - mStartSample: 1496358
+    mEndSample: 1496358
+  - mStartSample: 1514606
+    mEndSample: 1514606
+  - mStartSample: 1532855
+    mEndSample: 1532855
+  - mStartSample: 1551103
+    mEndSample: 1551103
+  - mStartSample: 1569351
+    mEndSample: 1569351
+  - mStartSample: 1587600
+    mEndSample: 1587600
+  - mStartSample: 1605848
+    mEndSample: 1605848
+  - mStartSample: 1624096
+    mEndSample: 1624096
+  - mStartSample: 1642344
+    mEndSample: 1642344
+  - mStartSample: 1660593
+    mEndSample: 1660593
+  - mStartSample: 1678841
+    mEndSample: 1678841
+  - mStartSample: 1697089
+    mEndSample: 1697089
+  - mStartSample: 1715337
+    mEndSample: 1715337
+  - mStartSample: 1733586
+    mEndSample: 1733586
+  - mStartSample: 1751834
+    mEndSample: 1751834
+  - mStartSample: 1770082
+    mEndSample: 1770082
+  - mStartSample: 1788331
+    mEndSample: 1788331
+  - mStartSample: 1806579
+    mEndSample: 1806579
+  - mStartSample: 1824827
+    mEndSample: 1824827
+  - mStartSample: 1843075
+    mEndSample: 1843075
+  - mStartSample: 1861324
+    mEndSample: 1861324
+  - mStartSample: 1879572
+    mEndSample: 1879572
+  - mStartSample: 1897820
+    mEndSample: 1897820
+  - mStartSample: 1916068
+    mEndSample: 1916068
+  - mStartSample: 1934317
+    mEndSample: 1934317
+  - mStartSample: 1952565
+    mEndSample: 1952565
+  - mStartSample: 1970813
+    mEndSample: 1970813
+  - mStartSample: 1989062
+    mEndSample: 1989062
+  - mStartSample: 2007310
+    mEndSample: 2007310
+  - mStartSample: 2025558
+    mEndSample: 2025558
+  - mStartSample: 2043806
+    mEndSample: 2043806
+  - mStartSample: 2062055
+    mEndSample: 2062055
+  - mStartSample: 2080303
+    mEndSample: 2080303
+  - mStartSample: 2098551
+    mEndSample: 2098551
+  - mStartSample: 2116800
+    mEndSample: 2116800
+  - mStartSample: 2135048
+    mEndSample: 2135048
+  - mStartSample: 2153296
+    mEndSample: 2153296
+  - mStartSample: 2171544
+    mEndSample: 2171544
+  - mStartSample: 2189793
+    mEndSample: 2189793
+  - mStartSample: 2208041
+    mEndSample: 2208041
+  - mStartSample: 2226289
+    mEndSample: 2226289
+  - mStartSample: 2244537
+    mEndSample: 2244537
+  - mStartSample: 2262786
+    mEndSample: 2262786
+  - mStartSample: 2281034
+    mEndSample: 2281034
+  - mStartSample: 2299282
+    mEndSample: 2299282
+  - mStartSample: 2317531
+    mEndSample: 2317531
+  - mStartSample: 2335779
+    mEndSample: 2335779
+  - mStartSample: 2354027
+    mEndSample: 2354027
+  - mStartSample: 2372275
+    mEndSample: 2372275
+  - mStartSample: 2390524
+    mEndSample: 2390524
+  - mStartSample: 2408772
+    mEndSample: 2408772
+  - mStartSample: 2427020
+    mEndSample: 2427020
+  - mStartSample: 2445268
+    mEndSample: 2445268
+  - mStartSample: 2463517
+    mEndSample: 2463517
+  - mStartSample: 2481765
+    mEndSample: 2481765
+  - mStartSample: 2500013
+    mEndSample: 2500013
+  - mStartSample: 2518262
+    mEndSample: 2518262
+  - mStartSample: 2536510
+    mEndSample: 2536510
+  - mStartSample: 2554758
+    mEndSample: 2554758
+  - mStartSample: 2573006
+    mEndSample: 2573006
+  - mStartSample: 2591255
+    mEndSample: 2591255
+  - mStartSample: 2609503
+    mEndSample: 2609503
+  - mStartSample: 2627751
+    mEndSample: 2627751
+  - mStartSample: 2646000
+    mEndSample: 2646000
+  - mStartSample: 2664248
+    mEndSample: 2664248
+  - mStartSample: 2682496
+    mEndSample: 2682496
+  - mStartSample: 2700744
+    mEndSample: 2700744
+  - mStartSample: 2718993
+    mEndSample: 2718993
+  - mStartSample: 2737241
+    mEndSample: 2737241
+  - mStartSample: 2755489
+    mEndSample: 2755489
+  - mStartSample: 2773737
+    mEndSample: 2773737
+  - mStartSample: 2791986
+    mEndSample: 2791986
+  - mStartSample: 2810234
+    mEndSample: 2810234
+  - mStartSample: 2828482
+    mEndSample: 2828482
+  - mStartSample: 2846731
+    mEndSample: 2846731
+  - mStartSample: 2864979
+    mEndSample: 2864979
+  - mStartSample: 2883227
+    mEndSample: 2883227
+  - mStartSample: 2901475
+    mEndSample: 2901475
+  - mStartSample: 2919724
+    mEndSample: 2919724
+  - mStartSample: 2937972
+    mEndSample: 2937972
+  - mStartSample: 2956220
+    mEndSample: 2956220
+  - mStartSample: 2974468
+    mEndSample: 2974468
+  - mStartSample: 2992717
+    mEndSample: 2992717
+  - mStartSample: 3010965
+    mEndSample: 3010965
+  - mStartSample: 3029213
+    mEndSample: 3029213
+  - mStartSample: 3047462
+    mEndSample: 3047462
+  - mStartSample: 3065710
+    mEndSample: 3065710
+  - mStartSample: 3083958
+    mEndSample: 3083958
+  - mStartSample: 3102206
+    mEndSample: 3102206
+  - mStartSample: 3120455
+    mEndSample: 3120455
+  - mStartSample: 3138703
+    mEndSample: 3138703
+  - mStartSample: 3156951
+    mEndSample: 3156951
+  - mStartSample: 3175200
+    mEndSample: 3175200
+  - mStartSample: 3193448
+    mEndSample: 3193448
+  - mStartSample: 3211696
+    mEndSample: 3211696
+  - mStartSample: 3229944
+    mEndSample: 3229944
+  - mStartSample: 3248193
+    mEndSample: 3248193
+  - mStartSample: 3266441
+    mEndSample: 3266441
+  - mStartSample: 3284689
+    mEndSample: 3284689
+  - mStartSample: 3302937
+    mEndSample: 3302937
+  - mStartSample: 3321186
+    mEndSample: 3321186
+  - mStartSample: 3339434
+    mEndSample: 3339434
+  - mStartSample: 3357682
+    mEndSample: 3357682
+  - mStartSample: 3375931
+    mEndSample: 3375931
+  - mStartSample: 3394179
+    mEndSample: 3394179
+  - mStartSample: 3412427
+    mEndSample: 3412427
+  - mStartSample: 3430675
+    mEndSample: 3430675
+  - mStartSample: 3448924
+    mEndSample: 3448924
+  - mStartSample: 3467172
+    mEndSample: 3467172
+  - mStartSample: 3485420
+    mEndSample: 3485420
+  - mStartSample: 3503668
+    mEndSample: 3503668
+  - mStartSample: 3521917
+    mEndSample: 3521917
+  - mStartSample: 3540165
+    mEndSample: 3540165
+  - mStartSample: 3558413
+    mEndSample: 3558413
+  - mStartSample: 3576662
+    mEndSample: 3576662
+  - mStartSample: 3594910
+    mEndSample: 3594910
+  - mStartSample: 3613158
+    mEndSample: 3613158
+  - mStartSample: 3631406
+    mEndSample: 3631406
+  - mStartSample: 3649655
+    mEndSample: 3649655
+  - mStartSample: 3667903
+    mEndSample: 3667903
+  - mStartSample: 3686151
+    mEndSample: 3686151
+  - mStartSample: 3704400
+    mEndSample: 3704400
+  - mStartSample: 3722648
+    mEndSample: 3722648
+  - mStartSample: 3740896
+    mEndSample: 3740896
+  - mStartSample: 3759144
+    mEndSample: 3759144
+  - mStartSample: 3777393
+    mEndSample: 3777393
+  - mStartSample: 3795641
+    mEndSample: 3795641
+  - mStartSample: 3813889
+    mEndSample: 3813889
+  - mStartSample: 3832137
+    mEndSample: 3832137
+  - mStartSample: 3850386
+    mEndSample: 3850386
+  - mStartSample: 3868634
+    mEndSample: 3868634
+  - mStartSample: 3886882
+    mEndSample: 3886882
+  - mStartSample: 3905131
+    mEndSample: 3905131
+  - mStartSample: 3923379
+    mEndSample: 3923379
+  - mStartSample: 3941627
+    mEndSample: 3941627
+  - mStartSample: 3959875
+    mEndSample: 3959875
+  - mStartSample: 3978124
+    mEndSample: 3978124
+  - mStartSample: 3996372
+    mEndSample: 3996372
+  - mStartSample: 4014620
+    mEndSample: 4014620
+  - mStartSample: 4032868
+    mEndSample: 4032868
+  - mStartSample: 4051117
+    mEndSample: 4051117
+  - mStartSample: 4069365
+    mEndSample: 4069365
+  - mStartSample: 4087613
+    mEndSample: 4087613
+  - mStartSample: 4105862
+    mEndSample: 4105862
+  - mStartSample: 4124110
+    mEndSample: 4124110
+  - mStartSample: 4142358
+    mEndSample: 4142358
+  - mStartSample: 4160606
+    mEndSample: 4160606
+  - mStartSample: 4178855
+    mEndSample: 4178855
+  - mStartSample: 4197103
+    mEndSample: 4197103
+  - mStartSample: 4215351
+    mEndSample: 4215351
+  - mStartSample: 4233600
+    mEndSample: 4233600
+  - mStartSample: 4251848
+    mEndSample: 4251848
+  - mStartSample: 4270096
+    mEndSample: 4270096
+  - mStartSample: 4288344
+    mEndSample: 4288344
+  - mStartSample: 4306593
+    mEndSample: 4306593
+  - mStartSample: 4324841
+    mEndSample: 4324841
+  - mStartSample: 4343089
+    mEndSample: 4343089
+  - mStartSample: 4361337
+    mEndSample: 4361337
+  - mStartSample: 4379586
+    mEndSample: 4379586
+  - mStartSample: 4397834
+    mEndSample: 4397834
+  - mStartSample: 4416082
+    mEndSample: 4416082
+  - mStartSample: 4434331
+    mEndSample: 4434331
+  - mStartSample: 4452579
+    mEndSample: 4452579
+  - mStartSample: 4470827
+    mEndSample: 4470827
+  - mStartSample: 4489075
+    mEndSample: 4489075
+  - mStartSample: 4507324
+    mEndSample: 4507324
+  - mStartSample: 4525572
+    mEndSample: 4525572
+  - mStartSample: 4543820
+    mEndSample: 4543820
+  - mStartSample: 4562068
+    mEndSample: 4562068
+  - mStartSample: 4580317
+    mEndSample: 4580317
+  - mStartSample: 4598565
+    mEndSample: 4598565
+  - mStartSample: 4616813
+    mEndSample: 4616813
+  - mStartSample: 4635062
+    mEndSample: 4635062
+  - mStartSample: 4653310
+    mEndSample: 4653310
+  - mStartSample: 4671558
+    mEndSample: 4671558
+  - mStartSample: 4689806
+    mEndSample: 4689806
+  - mStartSample: 4708055
+    mEndSample: 4708055
+  - mStartSample: 4726303
+    mEndSample: 4726303
+  - mStartSample: 4744551
+    mEndSample: 4744551
+  - mStartSample: 4762800
+    mEndSample: 4762800
+  - mStartSample: 4781048
+    mEndSample: 4781048
+  - mStartSample: 4799296
+    mEndSample: 4799296
+  - mStartSample: 4817544
+    mEndSample: 4817544
+  - mStartSample: 4835793
+    mEndSample: 4835793
+  - mStartSample: 4854041
+    mEndSample: 4854041
+  - mStartSample: 4872289
+    mEndSample: 4872289
+  - mStartSample: 4890537
+    mEndSample: 4890537
+  - mStartSample: 4908786
+    mEndSample: 4908786
+  - mStartSample: 4927034
+    mEndSample: 4927034
+  - mStartSample: 4945282
+    mEndSample: 4945282
+  - mStartSample: 4963531
+    mEndSample: 4963531
+  - mStartSample: 4981779
+    mEndSample: 4981779
+  - mStartSample: 5000027
+    mEndSample: 5000027
+  - mStartSample: 5018275
+    mEndSample: 5018275
+  - mStartSample: 5036524
+    mEndSample: 5036524
+  - mStartSample: 5054772
+    mEndSample: 5054772
+  - mStartSample: 5073020
+    mEndSample: 5073020
+  - mStartSample: 5091268
+    mEndSample: 5091268
+  - mStartSample: 5109517
+    mEndSample: 5109517
+  - mStartSample: 5127765
+    mEndSample: 5127765
+  - mStartSample: 5146013
+    mEndSample: 5146013
+  - mStartSample: 5164262
+    mEndSample: 5164262
+  - mStartSample: 5182510
+    mEndSample: 5182510
+  - mStartSample: 5200758
+    mEndSample: 5200758
+  - mStartSample: 5219006
+    mEndSample: 5219006
+  - mStartSample: 5237255
+    mEndSample: 5237255
+  - mStartSample: 5255503
+    mEndSample: 5255503
+  - mStartSample: 5273751
+    mEndSample: 5273751
+  - mStartSample: 5292000
+    mEndSample: 5292000
+  - mStartSample: 5310248
+    mEndSample: 5310248
+  - mStartSample: 5328496
+    mEndSample: 5328496
+  - mStartSample: 5346744
+    mEndSample: 5346744
+  - mStartSample: 5364993
+    mEndSample: 5364993
+  - mStartSample: 5383241
+    mEndSample: 5383241
+  - mStartSample: 5401489
+    mEndSample: 5401489
+  - mStartSample: 5419737
+    mEndSample: 5419737
+  - mStartSample: 5437986
+    mEndSample: 5437986
+  - mStartSample: 5456234
+    mEndSample: 5456234
+  - mStartSample: 5474482
+    mEndSample: 5474482
+  - mStartSample: 5492731
+    mEndSample: 5492731
+  - mStartSample: 5510979
+    mEndSample: 5510979
+  - mStartSample: 5529227
+    mEndSample: 5529227
+  - mStartSample: 5547475
+    mEndSample: 5547475
+  - mStartSample: 5565724
+    mEndSample: 5565724
+  - mStartSample: 5583972
+    mEndSample: 5583972
+  - mStartSample: 5602220
+    mEndSample: 5602220
+  - mStartSample: 5620468
+    mEndSample: 5620468
+  - mStartSample: 5638717
+    mEndSample: 5638717
+  - mStartSample: 5656965
+    mEndSample: 5656965
+  - mStartSample: 5675213
+    mEndSample: 5675213
+  - mStartSample: 5693462
+    mEndSample: 5693462
+  - mStartSample: 5711710
+    mEndSample: 5711710
+  - mStartSample: 5729958
+    mEndSample: 5729958
+  - mStartSample: 5748206
+    mEndSample: 5748206
+  - mStartSample: 5766455
+    mEndSample: 5766455
+  - mStartSample: 5784703
+    mEndSample: 5784703
+  - mStartSample: 5802951
+    mEndSample: 5802951
+  - mStartSample: 5821200
+    mEndSample: 5821200
+  - mStartSample: 5839448
+    mEndSample: 5839448
+  - mStartSample: 5857696
+    mEndSample: 5857696
+  - mStartSample: 5875944
+    mEndSample: 5875944
+  - mStartSample: 5894193
+    mEndSample: 5894193
+  - mStartSample: 5912441
+    mEndSample: 5912441
+  - mStartSample: 5930689
+    mEndSample: 5930689
+  - mStartSample: 5948937
+    mEndSample: 5948937
+  - mStartSample: 5967186
+    mEndSample: 5967186
+  - mStartSample: 5985434
+    mEndSample: 5985434
+  - mStartSample: 6003682
+    mEndSample: 6003682
+  - mStartSample: 6021931
+    mEndSample: 6021931
+  - mStartSample: 6040179
+    mEndSample: 6040179
+  - mStartSample: 6058427
+    mEndSample: 6058427
+  - mStartSample: 6076675
+    mEndSample: 6076675
+  - mStartSample: 6094924
+    mEndSample: 6094924
+  - mStartSample: 6113172
+    mEndSample: 6113172
+  - mStartSample: 6131420
+    mEndSample: 6131420
+  - mStartSample: 6149668
+    mEndSample: 6149668
+  - mStartSample: 6167917
+    mEndSample: 6167917
+  - mStartSample: 6186165
+    mEndSample: 6186165
+  - mStartSample: 6204413
+    mEndSample: 6204413
+  - mStartSample: 6222662
+    mEndSample: 6222662
+  - mStartSample: 6240910
+    mEndSample: 6240910
+  - mStartSample: 6259158
+    mEndSample: 6259158
+  - mStartSample: 6277406
+    mEndSample: 6277406
+  - mStartSample: 6295655
+    mEndSample: 6295655
+  - mStartSample: 6313903
+    mEndSample: 6313903
+  - mStartSample: 6332151
+    mEndSample: 6332151
+  - mStartSample: 6350400
+    mEndSample: 6350400
+  - mStartSample: 6368648
+    mEndSample: 6368648
+  - mStartSample: 6386896
+    mEndSample: 6386896
+  - mStartSample: 6405144
+    mEndSample: 6405144
+  - mStartSample: 6423393
+    mEndSample: 6423393
+  _SerializedPayloadTypes:
+  - SonicBloom.Koreo.TextPayload
+  _ColorPayloads: []
+  _ColorPayloadIdxs: 
+  _CurvePayloads: []
+  _CurvePayloadIdxs: 
+  _FloatPayloads: []
+  _FloatPayloadIdxs: 
+  _GradientPayloads: []
+  _GradientPayloadIdxs: 
+  _IntPayloads: []
+  _IntPayloadIdxs: 
+  _SpectrumPayloads: []
+  _SpectrumPayloadIdxs: 
+  _TextPayloads:
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  - mTextVal: 
+  _TextPayloadIdxs: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f000000200000002100000022000000230000002400000025000000260000002700000028000000290000002a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000390000003a0000003b0000003c0000003d0000003e0000003f000000400000004100000042000000430000004400000045000000460000004700000048000000490000004a0000004b0000004c0000004d0000004e0000004f000000500000005100000052000000530000005400000055000000560000005700000058000000590000005a0000005b0000005c0000005d0000005e0000005f000000600000006100000062000000630000006400000065000000660000006700000068000000690000006a0000006b0000006c0000006d0000006e0000006f000000700000007100000072000000730000007400000075000000760000007700000078000000790000007a0000007b0000007c0000007d0000007e0000007f000000800000008100000082000000830000008400000085000000860000008700000088000000890000008a0000008b0000008c0000008d0000008e0000008f000000900000009100000092000000930000009400000095000000960000009700000098000000990000009a0000009b0000009c0000009d0000009e0000009f000000a0000000a1000000a2000000a3000000a4000000a5000000a6000000a7000000a8000000a9000000aa000000ab000000ac000000ad000000ae000000af000000b0000000b1000000b2000000b3000000b4000000b5000000b6000000b7000000b8000000b9000000ba000000bb000000bc000000bd000000be000000bf000000c0000000c1000000c2000000c3000000c4000000c5000000c6000000c7000000c8000000c9000000ca000000cb000000cc000000cd000000ce000000cf000000d0000000d1000000d2000000d3000000d4000000d5000000d6000000d7000000d8000000d9000000da000000db000000dc000000dd000000de000000df000000e0000000e1000000e2000000e3000000e4000000e5000000e6000000e7000000e8000000e9000000ea000000eb000000ec000000ed000000ee000000ef000000f0000000f1000000f2000000f3000000f4000000f5000000f6000000f7000000f8000000f9000000fa000000fb000000fc000000fd000000fe000000ff000000000100000101000002010000030100000401000005010000060100000701000008010000090100000a0100000b0100000c0100000d0100000e0100000f010000100100001101000012010000130100001401000015010000160100001701000018010000190100001a0100001b0100001c0100001d0100001e0100001f010000200100002101000022010000230100002401000025010000260100002701000028010000290100002a0100002b0100002c0100002d0100002e0100002f010000300100003101000032010000330100003401000035010000360100003701000038010000390100003a0100003b0100003c0100003d0100003e0100003f010000400100004101000042010000430100004401000045010000460100004701000048010000490100004a0100004b0100004c0100004d0100004e0100004f010000500100005101000052010000530100005401000055010000560100005701000058010000590100005a0100005b0100005c0100005d0100005e0100005f01000060010000

@@ -6,7 +6,7 @@ public class MouseClick : MonoBehaviour
 {
     [SerializeField] private GameObject _touchEffect;
 
-    public float defaultTime = 0.05f;
+    public float defaultTime = 0.01f;
     
     private float _spawnTime;
     
@@ -24,11 +24,12 @@ public class MouseClick : MonoBehaviour
 
     private void InitTouchEffect()
     {
-        Vector3 mPosition = Camera.main.WorldToScreenPoint(Input.mousePosition);
-
-        mPosition.z = 20f;
+        Vector3 mouse = Input.mousePosition;
+        mouse.z = 20f;
+        
+        Vector3 mPosition = Camera.main.ScreenToWorldPoint(mouse);
+        //mPosition.z = 20f;
 
         Instantiate(_touchEffect, mPosition, Quaternion.identity);
-        
     }
 }
