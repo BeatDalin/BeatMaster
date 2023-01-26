@@ -43,11 +43,21 @@ namespace SonicBloom.Koreo.Demos
         #endregion
         #region Methods
 
-        // Prepares the Note Object for use.
+/*        // Prepares the Note Object for use. 수정
         public void Initialize(KoreographyEvent evt, Color color, LaneController laneCont, RhythmGameController gameCont)
         {
             trackedEvent = evt;
             visuals.color = color;
+            laneController = laneCont;
+            gameController = gameCont;
+
+            UpdatePosition();
+        }*/
+
+        public void Initialize(KoreographyEvent evt, Sprite sprite, LaneController laneCont, RhythmGameController gameCont)
+        {
+            trackedEvent = evt;
+            visuals.sprite = sprite;
             laneController = laneCont;
             gameController = gameCont;
 
@@ -64,6 +74,7 @@ namespace SonicBloom.Koreo.Demos
 
         private void Update()
         {
+            UpdateHeight();
             UpdateWidth();
 
             UpdatePosition();

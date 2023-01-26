@@ -5,6 +5,7 @@
 //----------------------------------------------
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 namespace SonicBloom.Koreo.Demos
@@ -15,7 +16,8 @@ namespace SonicBloom.Koreo.Demos
         #region Fields
 
         [Tooltip("The Color of Note Objects and Buttons in this Lane.")]
-        public Color color = Color.blue;
+        //public Color color = Color.blue; 수정
+        public Sprite sprite;
 
         [Tooltip("A reference to the visuals for the \"target\" location.")]
         public SpriteRenderer targetVisuals;
@@ -24,7 +26,8 @@ namespace SonicBloom.Koreo.Demos
         public KeyCode keyboardButton;
 
         [Tooltip("A list of Payload strings that Koreography Events will contain for this Lane.")]
-        public List<string> matchedPayloads = new List<string>();
+        //public List<string> matchedPayloads = new List<string>();
+        public List<int> matchedPayloads = new List<int>();
 
         // The list that will contain all events in this lane.  These are added by the Rhythm Game Controller.
         List<KoreographyEvent> laneEvents = new List<KoreographyEvent>();
@@ -142,6 +145,36 @@ namespace SonicBloom.Koreo.Demos
             {
                 SetScaleDefault();
             }
+            /*            if (Application.platform == RuntimePlatform.Android)
+                        {
+                            Vector3 pos = Input.GetTouch(0).position;
+                            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                                return;
+                            if (pos.x >= Screen.width / 2) //touch point에 따라 왼쪽인지 오른쪽인지 설정
+                            {
+
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        else
+                        {
+                            if (Input.GetKeyDown(keyboardButton))
+                            {
+                                CheckNoteHit();
+                                SetScalePress();
+                            }
+                            else if (Input.GetKey(keyboardButton))
+                            {
+                                SetScaleHold();
+                            }
+                            else if (Input.GetKeyUp(keyboardButton))
+                            {
+                                SetScaleDefault();
+                            }
+                        }*/
         }
 
         // Adjusts the scale with a multiplier against the default scale.
@@ -157,7 +190,6 @@ namespace SonicBloom.Koreo.Demos
         {
             // Given the current speed, what is the sample offset of our current.
             float spawnDistToTarget = spawnX - transform.position.x;
-
             // At the current speed, what is the time to the location?
             double spawnSecsToTarget = (double)spawnDistToTarget / (double)gameController.noteSpeed;
 
@@ -194,7 +226,8 @@ namespace SonicBloom.Koreo.Demos
                 KoreographyEvent evt = laneEvents[pendingEventIdx];
 
                 NoteObject newObj = gameController.GetFreshNoteObject();
-                newObj.Initialize(evt, color, this, gameController);
+                //newObj.Initialize(evt, color, this, gameController); 수정
+                newObj.Initialize(evt, sprite, this, gameController);
 
                 trackedNotes.Enqueue(newObj);
 
@@ -211,7 +244,24 @@ namespace SonicBloom.Koreo.Demos
 
         // Checks to see if the string value passed in matches any of the configured values specified
         //  in the matchedPayloads List.
-        public bool DoesMatchPayload(string payload)
+        /*        public bool DoesMatchPayload(string payload)
+                {
+                    bool bMatched = false;
+
+                    for (int i = 0; i < matchedPayloads.Count; ++i)
+                    {
+                        if (payload == matchedPayloads[i])
+                        {
+                            bMatched = true;
+
+                            break;
+                        }
+                    }
+
+                    return bMatched;
+                }*/
+
+        public bool DoesMatchPayload(int payload)
         {
             bool bMatched = false;
 
