@@ -32,7 +32,7 @@ namespace SonicBloom.Koreo.Demos
         private IEnumerator CoHammerMove()
         {
             _timer = 0;
-            while (transform.position.y >= _startPos.y||transform.position.x<_endPos.x)
+            while (transform.position.y >= _startPos.y || transform.position.x < _endPos.x)
             {
                 _timer += Time.deltaTime;
                 Vector3 tempPos = CreateParabola(_startPos, _endPos, 5, _timer);

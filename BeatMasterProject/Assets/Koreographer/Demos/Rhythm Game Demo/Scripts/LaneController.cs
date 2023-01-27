@@ -146,11 +146,13 @@ namespace SonicBloom.Koreo.Demos
                         }*/
             string _input = "";
             //if (Application.platform == RuntimePlatform.Android)
-            if(Input.touchCount>0) //수정 필요
+            if (Input.touchCount > 0) //수정 필요
             {
                 Vector3 pos = Input.GetTouch(0).position;
                 if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                {
                     return;
+                }
                 if (pos.x >= Screen.width / 2)
                 {
                     _input = "RightArrow";
@@ -165,16 +167,16 @@ namespace SonicBloom.Koreo.Demos
 
         private void CheckInput(string input)
         {
-            if (Input.GetKeyDown(keyboardButton)||keyboardButton.ToString()==input)
+            if (Input.GetKeyDown(keyboardButton) || keyboardButton.ToString() == input)
             {
                 CheckNoteHit();
                 SetScalePress();
             }
-            else if (Input.GetKey(keyboardButton)|| keyboardButton.ToString() == input)
+            else if (Input.GetKey(keyboardButton) || keyboardButton.ToString() == input)
             {
                 SetScaleHold();
             }
-            else if (Input.GetKeyUp(keyboardButton)|| keyboardButton.ToString() == input)
+            else if (Input.GetKeyUp(keyboardButton) || keyboardButton.ToString() == input)
             {
                 SetScaleDefault();
             }
