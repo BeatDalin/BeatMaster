@@ -32,9 +32,9 @@ public class Note : MonoBehaviour
         float samplePerUnit = _noteCreator.SampleRate;
         // 목표 위치
         Vector3 pos = _noteCreator.transform.localPosition;
-        Debug.Log(_spawnPos);
         // pos.x -= (_noteCreator.CurrentSampleTime - _myEvent.StartSample) / samplePerUnit;
         pos.x -= (_noteCreator.CurrentSampleTime - _myEvent.StartSample) / samplePerUnit * Screen.width;
         transform.localPosition = pos;
+        
     }
 }
