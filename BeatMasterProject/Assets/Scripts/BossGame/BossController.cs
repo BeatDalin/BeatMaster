@@ -9,7 +9,7 @@ public class BossController : MonoBehaviour
     private BossState _myState;
     public BossState MyState
     {
-        get { return _myState;}
+        get { return _myState; }
         set
         {
             _myState = value;

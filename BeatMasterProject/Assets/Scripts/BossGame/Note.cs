@@ -9,15 +9,17 @@ public class Note : MonoBehaviour
     private BossController _bossController;
     private NoteCreator _noteCreator;
     private KoreographyEvent _myEvent;
+    private Vector3 _spawnPos;
     void Awake()
     {
-         _bossController = FindObjectOfType<BossController>();
          _noteCreator = FindObjectOfType<NoteCreator>();
+         _spawnPos = GameObject.Find("SpawnPos").transform.localPosition;
     }
 
     private void OnEnable()
     {
         _myEvent = _noteCreator.CurrentEvent;
+         
     }
 
     void Update()
@@ -28,8 +30,11 @@ public class Note : MonoBehaviour
     private void MovePosition()
     {
         float samplePerUnit = _noteCreator.SampleRate;
-        Vector3 pos = _bossController.transform.position;
-        pos.x -= (_noteCreator.CurrentSampleTime - _myEvent.StartSample) / samplePerUnit;
-        transform.position = pos;
+        // 목표 위치
+        Vector3 pos = _noteCreator.transform.localPosition;
+        // pos.x -= (_noteCreator.CurrentSampleTime - _myEvent.StartSample) / samplePerUnit;
+        pos.x -= (_noteCreator.CurrentSampleTime - _myEvent.StartSample) / samplePerUnit * Screen.width;
+        transform.localPosition = pos;
+        
     }
 }
