@@ -68,11 +68,11 @@ namespace SonicBloom.Koreo.Demos
         }
 
         // Access to the current hit window size in Unity units.
-        public float WindowSizeInUnits
+        public float WindowSizeInUnits //수정
         {
             get
             {
-                return noteSpeed * (hitWindowRangeInMS * 0.001f);
+                return noteSpeed * (hitWindowRangeInMS * 0.005f);
             }
         }
 
@@ -112,13 +112,14 @@ namespace SonicBloom.Koreo.Demos
             playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
 
             // Grab all the events out of the Koreography.
-            KoreographyTrack rhythmTrack = playingKoreo.GetTrackByID(eventID);
+            KoreographyTrack rhythmTrack = playingKoreo.GetTrackByID(eventID); //수정필요
             List<KoreographyEvent> rawEvents = rhythmTrack.GetAllEvents();
 
             for (int i = 0; i < rawEvents.Count; ++i)
             {
                 KoreographyEvent evt = rawEvents[i];
-                string payload = evt.GetTextValue();
+
+                int payload = evt.GetIntValue();
 
                 // Find the right lane.
                 for (int j = 0; j < noteLanes.Count; ++j)
