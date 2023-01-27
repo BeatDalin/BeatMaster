@@ -16,7 +16,6 @@ namespace SonicBloom.Koreo.Demos
         #region Fields
 
         [Tooltip("The Color of Note Objects and Buttons in this Lane.")]
-        //public Color color = Color.blue; 수정
         public Sprite sprite;
 
         [Tooltip("A reference to the visuals for the \"target\" location.")]
@@ -132,49 +131,53 @@ namespace SonicBloom.Koreo.Demos
             //  configured within the Inspector on the buttons themselves, using the same functions as
             //  what is found here.  Touch input does not have a built-in concept of "Held", so it is not
             //  currently supported.
-            if (Input.GetKeyDown(keyboardButton))
+            /*            if (Input.GetKeyDown(keyboardButton))
+                        {
+                            CheckNoteHit();
+                            SetScalePress();
+                        }
+                        else if (Input.GetKey(keyboardButton))
+                        {
+                            SetScaleHold();
+                        }
+                        else if (Input.GetKeyUp(keyboardButton))
+                        {
+                            SetScaleDefault();
+                        }*/
+            string _input = "";
+            //if (Application.platform == RuntimePlatform.Android)
+            if(Input.touchCount>0) //수정 필요
+            {
+                Vector3 pos = Input.GetTouch(0).position;
+                if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                    return;
+                if (pos.x >= Screen.width / 2)
+                {
+                    _input = "RightArrow";
+                }
+                else
+                {
+                    _input = "LeftArrow";
+                }
+            }
+            CheckInput(_input);
+        }
+
+        private void CheckInput(string input)
+        {
+            if (Input.GetKeyDown(keyboardButton)||keyboardButton.ToString()==input)
             {
                 CheckNoteHit();
                 SetScalePress();
             }
-            else if (Input.GetKey(keyboardButton))
+            else if (Input.GetKey(keyboardButton)|| keyboardButton.ToString() == input)
             {
                 SetScaleHold();
             }
-            else if (Input.GetKeyUp(keyboardButton))
+            else if (Input.GetKeyUp(keyboardButton)|| keyboardButton.ToString() == input)
             {
                 SetScaleDefault();
             }
-            /*            if (Application.platform == RuntimePlatform.Android)
-                        {
-                            Vector3 pos = Input.GetTouch(0).position;
-                            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
-                                return;
-                            if (pos.x >= Screen.width / 2) //touch point에 따라 왼쪽인지 오른쪽인지 설정
-                            {
-
-                            }
-                            else
-                            {
-
-                            }
-                        }
-                        else
-                        {
-                            if (Input.GetKeyDown(keyboardButton))
-                            {
-                                CheckNoteHit();
-                                SetScalePress();
-                            }
-                            else if (Input.GetKey(keyboardButton))
-                            {
-                                SetScaleHold();
-                            }
-                            else if (Input.GetKeyUp(keyboardButton))
-                            {
-                                SetScaleDefault();
-                            }
-                        }*/
         }
 
         // Adjusts the scale with a multiplier against the default scale.
@@ -226,7 +229,6 @@ namespace SonicBloom.Koreo.Demos
                 KoreographyEvent evt = laneEvents[pendingEventIdx];
 
                 NoteObject newObj = gameController.GetFreshNoteObject();
-                //newObj.Initialize(evt, color, this, gameController); 수정
                 newObj.Initialize(evt, sprite, this, gameController);
 
                 trackedNotes.Enqueue(newObj);
