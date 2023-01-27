@@ -15,7 +15,7 @@ namespace SonicBloom.Koreo.Demos
         private void Start()
         {
             _startPos = GameObject.Find("Start").transform.position;
-            _endPos = GameObject.Find("hahwe").transform.position;
+            _endPos = GameObject.Find("Hawhe").transform.position;
             GetComponent<Animator>().SetTrigger("Attack");
             StartCoroutine("CoHammerMove");
         }
@@ -32,21 +32,14 @@ namespace SonicBloom.Koreo.Demos
         private IEnumerator CoHammerMove()
         {
             _timer = 0;
-            while (transform.position.y >= _startPos.y)
+            while (transform.position.y >= _startPos.y || transform.position.x < _endPos.x)
             {
                 _timer += Time.deltaTime;
                 Vector3 tempPos = CreateParabola(_startPos, _endPos, 5, _timer);
                 transform.position = tempPos;
                 yield return new WaitForEndOfFrame();
             }
-        }
-
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            if (collision.gameObject.tag == "hahwe")
-            {
-                Destroy(this.gameObject);
-            }
+            Destroy(this.gameObject);
         }
     }
 }
