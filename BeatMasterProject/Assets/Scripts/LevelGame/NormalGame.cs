@@ -192,7 +192,7 @@ public class NormalGame : Game
     private void Rewind()
     {
         DecreaseItem(1);
-        gameUI.UpdateText(TextType.Item, itemCount);
+        //gameUI.UpdateText(TextType.Item, itemCount);
         int death = IncreaseDeath(); // increase death count
         // gameUI.UpdateText(TextType.Death, death);
     }

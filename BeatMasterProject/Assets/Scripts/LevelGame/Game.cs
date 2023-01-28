@@ -120,9 +120,9 @@ public abstract class Game : MonoBehaviour
         {
             Debug.Log("Game Ended");
             SummarizeResult();
-            gameUI.ShowFinalResult(_finalSummary, _totalNoteCount); // for testing purpose ...
+            //gameUI.ShowFinalResult(_finalSummary, _totalNoteCount); // for testing purpose ...
             RateResult(_stageIdx, _levelIdx);
-            gameUI.ShowStar(DataCenter.Instance.GetLevelData(_stageIdx, _levelIdx).star);
+            //gameUI.ShowStar(DataCenter.Instance.GetLevelData(_stageIdx, _levelIdx).star);
         }
     }
     protected void StartWithDelay(int startSample = 0)
@@ -133,15 +133,15 @@ public abstract class Game : MonoBehaviour
     protected IEnumerator CoStartWithDelay(int startSample = 0)
     {
         // UI Timer
-        gameUI.timePanel.SetActive(true);
+        //gameUI.timePanel.SetActive(true);
         int waitTime = 3;
         while (waitTime > 0)
         {
-            gameUI.UpdateText(TextType.Time, waitTime);
+            //gameUI.UpdateText(TextType.Time, waitTime);
             waitTime--;
             yield return new WaitForSeconds(1);
         }
-        gameUI.timePanel.SetActive(false);
+        //gameUI.timePanel.SetActive(false);
         // Music Play & Game Start
         startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
 
@@ -231,7 +231,7 @@ public abstract class Game : MonoBehaviour
         // Push data into current level's data
         if (_finalSummary[2] == _totalNoteCount)
         {
-            gameUI.ShowStar(3);
+            //gameUI.ShowStar(3);
             curLevelData.alpha = 1f;
         }
         else if (_finalSummary[2] >= _totalNoteCount / 3 * 2)
