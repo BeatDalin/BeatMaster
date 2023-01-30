@@ -120,9 +120,9 @@ public abstract class Game : MonoBehaviour
         {
             Debug.Log("Game Ended");
             SummarizeResult();
-            gameUI.ShowFinalResult(_finalSummary, _totalNoteCount); // for testing purpose ...
             RateResult(_stageIdx, _levelIdx);
-            gameUI.ShowStar(DataCenter.Instance.GetLevelData(_stageIdx, _levelIdx).star);
+            gameUI.ShowFinalResult(_finalSummary, _totalNoteCount, _stageIdx, _levelIdx); // for testing purpose ...
+            //gameUI.ShowStar(DataCenter.Instance.GetLevelData(_stageIdx, _levelIdx).star);
         }
     }
     protected void StartWithDelay(int startSample = 0)
