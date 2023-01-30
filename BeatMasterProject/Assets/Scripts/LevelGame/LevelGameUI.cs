@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public enum TextType
@@ -14,15 +15,19 @@ public enum TextType
 public class LevelGameUI : MonoBehaviour
 {
     public NormalGame levelGame;
+    [FormerlySerializedAs("itemText")]
     [Header("Base UI")]
-    [SerializeField] private Text itemText;
-    [SerializeField] private Text deathText;
+    [SerializeField] private Text _itemText;
+    [FormerlySerializedAs("deathText")] [SerializeField] private Text _deathText;
     [Header("Result UI")] 
     [SerializeField] private GameObject _finalPanel;
     [SerializeField] private Text _finalFast;
     [SerializeField] private Text _finalPerfect;
     [SerializeField] private Text _finalSlow;
     [SerializeField] private GameObject[] _star;
+    [SerializeField] private GameObject _starPrefab;
+    [SerializeField] private RectTransform _target;
+    [SerializeField] private GameObject _startPos;
     [SerializeField] private Color _successColor;
     [Header("Time Count UI")]
     [SerializeField] public GameObject timePanel;
@@ -37,6 +42,7 @@ public class LevelGameUI : MonoBehaviour
     [SerializeField] private GameObject _settingsPanel;
     [SerializeField] private Button _settingsCloseBtn;
 
+    private float _delay = 0f;
     private void Awake()
     {
         levelGame = FindObjectOfType<NormalGame>();
@@ -58,7 +64,7 @@ public class LevelGameUI : MonoBehaviour
 
     public void InitUI()
     {
-        itemText.text = "0";
+        _itemText.text = "0";
         timePanel.SetActive(true);
         _finalPanel.SetActive(false);
         _pausePanel.SetActive(false);
@@ -80,10 +86,10 @@ public class LevelGameUI : MonoBehaviour
         switch (type)
         {
             case TextType.Item:
-                itemText.text = number.ToString();
+                _itemText.text = number.ToString();
                 break;
             case TextType.Death:
-                deathText.text = number.ToString();
+                _deathText.text = number.ToString();
                 break;
             case TextType.Time:
                 timeCount.text = number.ToString();
@@ -91,14 +97,57 @@ public class LevelGameUI : MonoBehaviour
         }
     }
     
-    public void ShowFinalResult(int[] finalResultSummary, int total)
+    public void ShowFinalResult(int[] finalResultSummary, int total, int stageIdx, int levelIdx)
     {
-        _finalFast.text = $"{finalResultSummary[1]}/{total}";
-        _finalPerfect.text = $"{finalResultSummary[2]}/{total}";
-        _finalSlow.text = $"{finalResultSummary[3]}/{total}";
         _finalPanel.SetActive(true);
+        
+        _finalFast.DOCounter(0, finalResultSummary[1], 1).onComplete += () =>
+        {
+            _finalFast.text = $"{finalResultSummary[1]}/{total}";
+            
+            _finalSlow.DOCounter(0, finalResultSummary[3], 1).onComplete += () =>
+            {
+                _finalSlow.text = $"{finalResultSummary[3]}/{total}";
+                
+                _finalPerfect.DOCounter(0, finalResultSummary[2], 1).onComplete += () =>
+                {
+                    _finalPerfect.text = $"{finalResultSummary[2]}/{total}";
+
+                    for (int i = 0; i < 30; i++)
+                    {
+                        GameObject g = Instantiate(_starPrefab);
+                        g.SetActive(true);
+                        
+                        g.transform.SetParent(_startPos.transform);
+                        g.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+
+                        g.transform.localScale = new Vector3(0, 0, 0);
+            
+                        g.transform.DOScale(new Vector3(1, 1, 1), 1f).SetDelay(_delay).SetEase(Ease.OutBack);
+            
+                        g.GetComponent<RectTransform>()
+                            .DOAnchorPos(_target.anchoredPosition, 1f)
+                            .SetDelay(_delay + 0.5f)
+                            .SetEase(Ease.InBack).onComplete += () =>
+                        {
+                            g.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.Flash);
+                        };
+
+                        _delay += 0.2f;
+                    }
+                    
+                    ShowStar(DataCenter.Instance.GetLevelData(stageIdx, levelIdx).star);
+                };
+            };
+        };
+        //_finalFast.text = $"{finalResultSummary[1]}/{total}";
+        //_finalPerfect.DOCounter(0, finalResultSummary[2], 1);
+        //_finalPerfect.text = $"{finalResultSummary[2]}/{total}";
+        //_finalSlow.DOCounter(0, finalResultSummary[3], 1);
+        //_finalSlow.text = $"{finalResultSummary[3]}/{total}";
+        
     }
-    
+
     private void OpenPause()
     {
         UIManager.instance.OpenPopUp(_pausePanel);

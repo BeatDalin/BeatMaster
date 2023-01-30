@@ -15,7 +15,7 @@ namespace SonicBloom.Koreo.Demos
 
         [Tooltip("The Event ID of the track to use for target generation.")]
         [EventID]
-        public string eventID;
+        public string[] eventID;
 
         [Tooltip("The number of milliseconds (both early and late) within which input will be detected as a Hit.")]
         [Range(8f, 150f)]
@@ -54,6 +54,9 @@ namespace SonicBloom.Koreo.Demos
         private Stack<Hammer> hammerObjectPool = new Stack<Hammer>(); //추가
 
         public Hammer hammerObj;
+
+        private KoreographyTrack _rhythmTrackShort, _rhythmTrackLong;
+        private List<KoreographyEvent> _rawShortEvents, _rawLongEvents;
 
         #endregion
         #region Properties
@@ -109,15 +112,38 @@ namespace SonicBloom.Koreo.Demos
             }
 
             // Initialize events.
+            //playingKoreo = SoundManager.instance.playingKoreo; //지은님코드 올리시면 이걸로 수정
             playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
-
             // Grab all the events out of the Koreography.
-            KoreographyTrack rhythmTrack = playingKoreo.GetTrackByID(eventID); //수정필요
-            List<KoreographyEvent> rawEvents = rhythmTrack.GetAllEvents();
+            _rhythmTrackShort = playingKoreo.GetTrackByID(eventID[0]);
+            _rawShortEvents = _rhythmTrackShort.GetAllEvents();
 
-            for (int i = 0; i < rawEvents.Count; ++i)
+            _rhythmTrackLong = playingKoreo.GetTrackByID(eventID[1]);
+            _rawLongEvents = _rhythmTrackLong.GetAllEvents();
+
+            for (int i = 0; i < _rawShortEvents.Count; ++i)
             {
-                KoreographyEvent evt = rawEvents[i];
+                KoreographyEvent evt = _rawShortEvents[i];
+
+                int payload = evt.GetIntValue();
+
+                // Find the right lane.
+                for (int j = 0; j < noteLanes.Count; ++j)
+                {
+                    LaneController lane = noteLanes[j];
+                    if (lane.DoesMatchPayload(payload))
+                    {
+                        // Add the object for input tracking.
+                        lane.AddEventToLane(evt);
+
+                        // Break out of the lane searching loop.
+                        break;
+                    }
+                }
+            }
+            for (int i = 0; i < _rawLongEvents.Count; ++i)
+            {
+                KoreographyEvent evt = _rawLongEvents[i];
 
                 int payload = evt.GetIntValue();
 
@@ -152,7 +178,6 @@ namespace SonicBloom.Koreo.Demos
                 // Play immediately and handle offsetting into the song.  Negative zero is the same as
                 //  zero so this is not an issue.
                 audioCom.time = -leadInTime;
-                audioCom.Play();
             }
         }
 
@@ -176,8 +201,6 @@ namespace SonicBloom.Koreo.Demos
                 if (timeLeftToPlay <= 0f)
                 {
                     audioCom.time = -timeLeftToPlay;
-                    audioCom.Play();
-
                     timeLeftToPlay = 0f;
                 }
             }

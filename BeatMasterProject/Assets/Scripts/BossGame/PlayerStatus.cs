@@ -35,29 +35,20 @@ public class PlayerStatus : MonoBehaviour
         _hairColor = (Color.white - _spumSpriteList._itemList[0].color) / 10;
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            DecreaseHP();
-        }
-    }
-
     public void ChangeStatus(Status status)
     {
         playerStatus = status;
         _animation.StatusJudge(playerStatus);
     }
 
-    private void DecreaseHP()
+    public void DecreaseHP()
     {
         Damage = 10;
         ChangeCharacterColor();
 
-        if (_hp <= 0)
+        if (_hp == 0)
         {
-            ChangeStatus(Status.Die );
+            ChangeStatus(Status.Die);
         }
     }
 

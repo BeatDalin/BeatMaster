@@ -22,8 +22,6 @@ public enum GameState
 public abstract class Game : MonoBehaviour
 {
     [SerializeField] protected LevelGameUI gameUI;
-    // protected Koreography playingKoreo;
-    // protected SimpleMusicPlayer musicPlayer;
 
     /// <summary>
     /// To use sample time of event tracks, this should be written first. Used for KoreographyEventCallbackWithTime.
@@ -36,11 +34,11 @@ public abstract class Game : MonoBehaviour
 
     [Header("Game Play")]
     public GameState curState = GameState.Idle;
-    private int _curSample;
+    public int curSample;
+
     [Header("Result Check")]
     public BeatResult[] longResult;
     public BeatResult[] shortResult;
- 
     // long notes
     protected int longIdx = 0;
     protected bool isLongPressed = false;
@@ -64,16 +62,9 @@ public abstract class Game : MonoBehaviour
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
     private static int _totalNoteCount = 0;
 
-    #region Abstract Method
-    //public abstract void CheckBeatResult(BeatResult[] resultArr, BeatResult tempResult, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange);
-    //protected abstract void CalculateScore();
-    #endregion
-
     protected virtual void Awake()
     {
-        // playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
-        // musicPlayer = FindObjectOfType<SimpleMusicPlayer>();// Find ui manager
-        // gameUI = FindObjectOfType<LevelGameUI>(); // temporal use of ui experiment class
+        gameUI = FindObjectOfType<LevelGameUI>();
         DataCenter.Instance.LoadData();
     }
 
@@ -84,7 +75,7 @@ public abstract class Game : MonoBehaviour
     
     protected virtual void Init()
     {
-        SoundManager.instance.PlayBGM(false);
+        SoundManager.instance.PlayBGM(true);
         longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Jump").GetAllEvents().Count];
         longIdx = 0;
@@ -117,9 +108,8 @@ public abstract class Game : MonoBehaviour
         if (CheckFinish())
         {
             SummarizeResult();
-            //gameUI.ShowFinalResult(_finalSummary, _totalNoteCount); // for testing purpose ...
             RateResult(_stageIdx, _levelIdx);
-            //gameUI.ShowStar(DataCenter.Instance.GetLevelData(_stageIdx, _levelIdx).star);
+            gameUI.ShowFinalResult(_finalSummary, _totalNoteCount, _stageIdx, _levelIdx); // for testing purpose ...
         }
     }
     protected void StartWithDelay(int startSample = 0)
@@ -130,15 +120,15 @@ public abstract class Game : MonoBehaviour
     protected IEnumerator CoStartWithDelay(int startSample = 0)
     {
         // UI Timer
-        //gameUI.timePanel.SetActive(true);
+        gameUI.timePanel.SetActive(true);
         int waitTime = 3;
         while (waitTime > 0)
         {
-            //gameUI.UpdateText(TextType.Time, waitTime);
+            gameUI.UpdateText(TextType.Time, waitTime);
             waitTime--;
             yield return new WaitForSeconds(1);
         }
-        //gameUI.timePanel.SetActive(false);
+        gameUI.timePanel.SetActive(false);
         // Music Play & Game Start
         startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
 
@@ -226,7 +216,7 @@ public abstract class Game : MonoBehaviour
         // Push data into current level's data
         if (_finalSummary[2] == _totalNoteCount)
         {
-            //gameUI.ShowStar(3);
+            gameUI.ShowStar(3);
             curLevelData.alpha = 1f;
         }
         else if (_finalSummary[2] >= _totalNoteCount / 3 * 2)
@@ -261,12 +251,12 @@ public abstract class Game : MonoBehaviour
         SoundManager.instance.PlayBGM(false);
         curState = GameState.Pause;
         // Get current sample for RestartGame()
-        _curSample = SoundManager.instance.musicPlayer.GetSampleTimeForClip(SoundManager.instance.clipName);
+        curSample = SoundManager.instance.musicPlayer.GetSampleTimeForClip(SoundManager.instance.clipName);
         // stop character moving
     }
 
     public void ContinueGame()
     {
-        StartWithDelay(_curSample);
+        StartWithDelay(curSample);
     }
 }
