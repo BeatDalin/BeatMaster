@@ -12,12 +12,10 @@ public class NormalGame : Game
     private List<KoreographyEvent> _events;
     private int[,] _eventRangeShort;
     private int[,] _eventRangeLong;
-
     private int _pressedTime;
     private int _pressedTimeLong;
-    
     private bool _isChecked; // to prevent double check
-    
+    [Header("Result Visualize")]
     [SerializeField] private RectTransform _maskImage;
     [SerializeField] private RectTransform _outLine;
     [SerializeField] private Image _outLineColor;
@@ -56,7 +54,7 @@ public class NormalGame : Game
         _outLine.sizeDelta = new Vector2(Screen.width, Screen.height);
         _maskImage.sizeDelta = new Vector2(Screen.width - 60f, Screen.height - 60f);
         itemCount = 0;
-        // gameUI.InitUI();
+        gameUI.InitUI();
     }
 
     private int[,] CalculateRange(List<KoreographyEvent> koreographyEvents)
@@ -83,7 +81,7 @@ public class NormalGame : Game
         {
             isShortKeyCorrect = true;
             IncreaseItem();
-            // gameUI.UpdateText(TextType.Item, itemCount);
+            gameUI.UpdateText(TextType.Item, itemCount);
             _pressedTime = sampleTime; // record the sample time when the button was pressed
         }
 
@@ -217,7 +215,7 @@ public class NormalGame : Game
 
     private void Rewind(Vector2 goBackPos, int musicSampleTime) //, bool isShort
     {
-        // musicPlayer.Stop();
+        // SoundManager.instance.PlayBGM(false, musicSampleTime);
         // character move stop
         
         // index update: longIdx, shortIdx 체크 포인트 다음 노트로 돌려놓음 -> longResult 새로 기록할 수 있게
@@ -233,17 +231,18 @@ public class NormalGame : Game
         
         // 체크 포인트 이후로 획득한 아이템 개수 계산
         DecreaseItem(1); // for testing purpose ... 
+        gameUI.UpdateText(TextType.Item, itemCount);
         int death = IncreaseDeath(); // increase death count
-        // gameUI.UpdateText(TextType.Death, death);
-        //StartCoroutine(CoStartWithDelay(musicSampleTime)); // plays music after delay, at a certain point
+        gameUI.UpdateText(TextType.Death, death);
+        // StartCoroutine(CoStartWithDelay(musicSampleTime)); // plays music after delay, at a certain point
     }
 
     private void Rewind()
     {
         DecreaseItem(1);
-        //gameUI.UpdateText(TextType.Item, itemCount);
+        gameUI.UpdateText(TextType.Item, itemCount);
         int death = IncreaseDeath(); // increase death count
-        // gameUI.UpdateText(TextType.Death, death);
+        gameUI.UpdateText(TextType.Death, death);
     }
 
     private void IncreaseItem()
