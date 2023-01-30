@@ -79,6 +79,12 @@ public class MapGenerator : MonoBehaviour
 
                 _interactionTilemap.SetTile(tileChangeData, false);
             }
+
+            // 체크포인트
+            if (checkPoint == 1)
+            {
+                _interactionTilemap.SetTile(new Vector3Int(_tileX, _tileY + 1, 0), _interactionTileList[1]);
+            }
         }
     }
 }
