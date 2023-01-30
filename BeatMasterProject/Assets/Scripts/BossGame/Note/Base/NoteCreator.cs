@@ -40,7 +40,7 @@ public abstract class NoteCreator : MonoBehaviour
 
     protected abstract void Init();
 
-    public virtual GameObject GetObject()
+    protected GameObject GetObject()
     {
         if (poolStack.Count > 0)
         {
@@ -49,6 +49,7 @@ public abstract class NoteCreator : MonoBehaviour
             go.transform.SetParent(_backgroundPanel);
             activeObjects.Add(go);
             noteIndex++;
+            Debug.Log(noteIndex);
             return go;
         }
         else
@@ -72,10 +73,10 @@ public abstract class NoteCreator : MonoBehaviour
         return go;
     }
 
-    public virtual void ReturnObject(GameObject go)
+    public void ReturnObject(GameObject go)
     {
-        activeObjects.Remove(go);
         go.SetActive(false);
+        activeObjects.Remove(go);
         go.transform.SetParent(transform);
         poolStack.Push(go);
         if (noteIndex < noteMaxCount)

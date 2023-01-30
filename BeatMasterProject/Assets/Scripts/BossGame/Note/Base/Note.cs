@@ -43,7 +43,6 @@ public abstract class Note : MonoBehaviour
         samplePerUnit = noteCreator.SampleRate;
         // 목표 위치
         Vector3 pos = noteCreator.transform.localPosition;
-        // pos.x -= (_noteCreator.CurrentSampleTime - _myEvent.StartSample) / samplePerUnit;
         pos.x -= (noteCreator.CurrentSampleTime - myEvent.StartSample) / samplePerUnit * Screen.width;
         transform.localPosition = pos;
         

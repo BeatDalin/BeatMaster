@@ -9,7 +9,6 @@ public class ShortNote : Note
     protected override void Init()
     {
         noteCreator = FindObjectOfType<ShortNoteCreater>();
-        // _spawnPos = GameObject.Find("SpawnPos").transform.localPosition;
         destroyPos = GameObject.Find("DestroyPos").transform.localPosition;
     }
 }

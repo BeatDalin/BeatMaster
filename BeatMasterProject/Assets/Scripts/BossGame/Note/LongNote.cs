@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,8 @@ public class LongNote : Note
     private int _startSample;
     private int _endSample;
     private RectTransform _myRect;
-    private Vector3 initPos;
+    private Vector3 _initPos;
+    private float _offsetX;
     
 
     protected override void OnEnable()
@@ -21,14 +23,31 @@ public class LongNote : Note
 
         Vector2 tempRectVec = _myRect.sizeDelta;
         float sizeX = (_endSample - _startSample) / samplePerUnit * Screen.width;
-        tempRectVec.x += sizeX;
+        tempRectVec.x = sizeX;
         _myRect.sizeDelta = tempRectVec;
 
-        Debug.Log($"transform.localPosition : {transform.localPosition}");
+        _offsetX = transform.localPosition.x;
+
+        Vector2 pivotVec = new Vector2(0f, 0.5f);
+        _myRect.pivot = pivotVec;
+
         
-        initPos = transform.localPosition;
-        initPos.x += sizeX / 2f;
-        Debug.Log($"after => transform.localPosition : {transform.localPosition}");
+        _initPos = transform.localPosition;
+        _initPos.y = 0f;
+        _initPos.x = _myRect.sizeDelta.x;
+    }
+
+    // 기준위치를 정하기 위함
+    private void OnDisable()
+    {
+        CoSetOffsetPos();
+    }
+
+    private void CoSetOffsetPos()
+    {
+        Vector3 tempPos = transform.localPosition;
+        tempPos.x = _offsetX;
+        transform.localPosition = tempPos;
     }
 
     protected override void Init()
@@ -40,7 +59,7 @@ public class LongNote : Note
 
     protected override void CrossEndLine()
     {
-        if (destroyPos.x < transform.localPosition.x + initPos.x)
+        if (destroyPos.x < transform.localPosition.x + _initPos.x)
         {
             return;
         }
@@ -49,11 +68,10 @@ public class LongNote : Note
 
     protected override void MovePosition()
     {
-        base.MovePosition();
+        samplePerUnit = noteCreator.SampleRate;
         // 목표 위치
         
-        Vector3 pos = noteCreator.transform.localPosition + initPos;
-        // pos.x -= (_noteCreator.CurrentSampleTime - _myEvent.StartSample) / samplePerUnit;
+        Vector3 pos = noteCreator.transform.localPosition;
         pos.x -= (noteCreator.CurrentSampleTime - myEvent.StartSample) / samplePerUnit * Screen.width;
         transform.localPosition = pos;
     }

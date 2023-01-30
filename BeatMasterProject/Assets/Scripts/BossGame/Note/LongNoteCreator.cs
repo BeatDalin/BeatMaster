@@ -30,4 +30,5 @@ public class LongNoteCreator : NoteCreator
         go.AddComponent<LongNote>();
         return go;
     }
+
 }
