@@ -8,11 +8,20 @@ public class Building : MonoBehaviour
     [SerializeField] private GameObject _flat;
     [SerializeField] private GameObject _model;
     [SerializeField] private GameObject _starCanvas;
-    [SerializeField] private Image[] _starImg;
 
+    private Image[] _starImg = new Image[3];
+
+    private void Start()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            _starImg[i] = _starCanvas.transform.GetChild(i).GetComponent<Image>();
+        }
+    }
     public void ShowBuilding(bool isClear)
     {
         Instantiate(this);
+        
         _flat.GetComponent<MeshRenderer>().enabled = true;
         _flat.GetComponent<BoxCollider>().enabled = !isClear;
         _model.GetComponent<MeshRenderer>().enabled = isClear;
