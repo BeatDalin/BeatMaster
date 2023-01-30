@@ -16,14 +16,14 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
 
     public enum SceneType
     {
-        MainMenu,
-        LevelMenu,
-        NormalGame,
+        MenuTitle,
+        MenuLevelSelect,
+        LevelGame,
         BossGame,
     }
 
     public void Init()
-    { 
+    {
         _loadingCanvas = Instantiate(ResourceManager.Instance.LoadingUI, transform);
         Debug.Log(_loadingCanvas);
         _loadingCanvas.SetActive(false);
@@ -75,19 +75,6 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         }
         
         _loadingCanvas.SetActive(true);
-        
-        /*while (_timer < 1f)
-        {
-            foreach (Image image in _loadingCanvasImages)
-            {
-                Color color = image.color;
-                color.a = _timer;
-                image.color = color;
-            }
-
-            _timer += Time.deltaTime * _fadeMod;
-            yield return new WaitForEndOfFrame();
-        }*/
         
     }
     

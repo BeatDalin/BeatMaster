@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SonicBloom.Koreo;
-using SonicBloom.MIDI;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
@@ -10,11 +9,12 @@ public class CharacterMovement : MonoBehaviour
     private Rigidbody2D _rigidbody;
 
     [Header("Music")]
-    public string musicName;
-    public int musicBPM;
+    [EventID] public string speedEventID;
+    public float moveSpeed;
     public float gravityScale;
     public float startGravityAccel;
     private float _gravityAccel;
+    private float _previousBeatTime = 0;
 
     [Header("Jump")]
     [SerializeField] private float _jumpHeight = 3f;
@@ -38,6 +38,8 @@ public class CharacterMovement : MonoBehaviour
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+
+        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
     }
 
     private void Update()
@@ -87,9 +89,11 @@ public class CharacterMovement : MonoBehaviour
     // 캐릭터의 x값은 노래에 맞추어 결정되고, y값은 캐릭터의 행동이나 조건에 따라 결정
     private void Move()
     {
-        float x = (float)Koreographer.GetSampleTime(musicName) / Koreographer.GetSampleRate(musicName) * (musicBPM / 60f);
+        float currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
+        float x = transform.position.x + (currentBeatTime - _previousBeatTime) * moveSpeed;
         float y = 0f;
-        
+        _previousBeatTime = currentBeatTime;
+
         // 점프 중이 아닐 때 캐릭터의 y값 설정
         RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
 
@@ -159,5 +163,10 @@ public class CharacterMovement : MonoBehaviour
         }
 
         return (a * x * x) + (b * x);
+    }
+
+    private void ChangeMoveSpeed(KoreographyEvent evt)
+    {
+        moveSpeed = evt.GetFloatValue();
     }
 }
