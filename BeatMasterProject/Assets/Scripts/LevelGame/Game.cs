@@ -116,7 +116,6 @@ public abstract class Game : MonoBehaviour
 
         if (CheckFinish())
         {
-            Debug.Log("Game Ended");
             SummarizeResult();
             gameUI.ShowFinalResult(_finalSummary, _totalNoteCount); // for testing purpose ...
             RateResult(_stageIdx, _levelIdx);

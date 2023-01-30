@@ -111,7 +111,6 @@ public class NormalGame : Game
                 //=======Rewind 자리=========
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
                 Rewind(Vector2.zero, sampleTime); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
-                Debug.Log("long first rewind");
             }
         }
     }
@@ -124,7 +123,6 @@ public class NormalGame : Game
             //==============Rewind 자리==============
             if (!isLongFailed) 
             {
-                Debug.Log("long middle rewind");
                 Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
             }
@@ -160,7 +158,6 @@ public class NormalGame : Game
                 // ===============Rewind==============
                 if (!isLongFailed)
                 {
-                    Debug.Log("long last rewind");
                     Rewind(Vector2.zero, sampleTime); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
                 }
             }

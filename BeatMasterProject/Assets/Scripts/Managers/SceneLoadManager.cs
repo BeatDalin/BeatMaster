@@ -16,14 +16,14 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
 
     public enum SceneType
     {
-        MainMenu,
+        MenuTitle,
         MenuLevelSelect,
         LevelGame,
         BossGame,
     }
 
     public void Init()
-    { 
+    {
         _loadingCanvas = Instantiate(ResourceManager.Instance.LoadingUI, transform);
         Debug.Log(_loadingCanvas);
         _loadingCanvas.SetActive(false);
