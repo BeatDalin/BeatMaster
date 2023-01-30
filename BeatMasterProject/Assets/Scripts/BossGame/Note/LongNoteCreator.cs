@@ -17,7 +17,7 @@ public class LongNoteCreator : NoteCreator
 
     protected override void Init()
     {
-        for (int i = 0; i < _poolAmount; i++)
+        for (int i = 0; i < poolAmount; i++)
         {
             CreateNewObject();
         }
