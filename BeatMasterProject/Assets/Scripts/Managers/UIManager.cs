@@ -26,11 +26,6 @@ public class UIManager : MonoBehaviour
         InitCanvas(SceneManager.GetActiveScene().name);
     }
 
-    private void Start()
-    {
-      
-    }
-
     public void InitCanvas(string SceneName)
     {
         string canvasName = SceneName + "Canvas";
@@ -38,20 +33,23 @@ public class UIManager : MonoBehaviour
         canvas = GameObject.Find(canvasName);
     }
 
-    private void Update()
+    public void OpenPopUp(GameObject panel)
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (popUpStack.Count == 0)
-            {
-                return;
-            }
-            
-            GameObject g = popUpStack.Pop();
-            g.GetComponent<RectTransform>().DOLocalMove(new Vector3(Screen.width, 0, 0), 0.4f).onComplete += () =>
-            {
-                g.SetActive(false);
-            };
-        }
+        panel.SetActive(true);
+        panel.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
+        popUpStack.Push(panel);
     }
+    public void ClosePopUp()
+    {
+        if (popUpStack.Count == 0)
+        {
+            return;
+        }
+        GameObject g = popUpStack.Pop();
+        g.GetComponent<RectTransform>().DOLocalMove(new Vector3(Screen.width, 0, 0), 0.4f).onComplete += () =>
+        {
+            g.SetActive(false);
+        };
+    }
+    
 }

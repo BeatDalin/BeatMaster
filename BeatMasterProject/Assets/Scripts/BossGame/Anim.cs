@@ -58,7 +58,8 @@ public class Anim : MonoBehaviour
     public void Attack()
     {
         GameObject hammerClone = Instantiate(_hammer, _hammer.transform.position, _hammer.transform.rotation);
-        _anim.SetTrigger("Attack");
+        //_anim.SetTrigger("Attack");
+        _anim.Play("2_Attack_Normal", -1, 0f);
         hammerClone.GetComponent<Animator>().SetTrigger("Attack");
     }
 

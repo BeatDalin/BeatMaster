@@ -11,9 +11,17 @@ public enum BeatResult
     Perfect,
     Slow,
 }
+
+public enum GameState
+{
+    Idle,
+    Play,
+    Pause,
+}
+
 public abstract class Game : MonoBehaviour
 {
-    protected UIExperiment uiExp;
+    [SerializeField] protected LevelGameUI gameUI;
     protected Koreography playingKoreo;
     protected SimpleMusicPlayer musicPlayer;
 
@@ -25,7 +33,11 @@ public abstract class Game : MonoBehaviour
     /// <param name="sampleDelta">The number of samples that were played back since the previous frame. You can get the previous frame’s sampleTimewith(sampleTime-sampleDelta).</param>
     /// <param name="deltaSlice">Extra timing information required for simulation stability when the callback is called multiple times in a frame.</param>
     public delegate void KoreographyEventCallbackWithTime(KoreographyEvent koreoEvent, int sampleTime, int sampleDelta, DeltaSlice deltaSlice);
-    
+
+    [Header("Game Play")]
+    public GameState curState = GameState.Idle;
+    public int curSample;
+    private string _clipName;
     [Header("Result Check")]
     public BeatResult[] longResult;
     public BeatResult[] shortResult;
@@ -62,7 +74,7 @@ public abstract class Game : MonoBehaviour
     {
         playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
         musicPlayer = FindObjectOfType<SimpleMusicPlayer>();// Find ui manager
-        uiExp = FindObjectOfType<UIExperiment>(); // temporal use of ui experiment class
+        // gameUI = FindObjectOfType<LevelGameUI>(); // temporal use of ui experiment class
         DataCenter.Instance.LoadData();
     }
 
@@ -74,6 +86,7 @@ public abstract class Game : MonoBehaviour
     protected virtual void Init()
     {
         musicPlayer.LoadSong(playingKoreo, 0, false);
+        _clipName = musicPlayer.GetCurrentClipName();
         longResult = new BeatResult[playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
         shortResult = new BeatResult[playingKoreo.GetTrackByID("Jump").GetAllEvents().Count];
         longIdx = 0;
@@ -83,7 +96,6 @@ public abstract class Game : MonoBehaviour
         _totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
     }
 
-    
     protected void CheckBeatResult(BeatResult[] resultArr, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange)
     {
         BeatResult tempResult = BeatResult.Fail; 
@@ -108,25 +120,35 @@ public abstract class Game : MonoBehaviour
         {
             Debug.Log("Game Ended");
             SummarizeResult();
-            uiExp.ShowFinalResult(_finalSummary, _totalNoteCount); // for testing purpose ...
+            gameUI.ShowFinalResult(_finalSummary, _totalNoteCount); // for testing purpose ...
             RateResult(_stageIdx, _levelIdx);
+            gameUI.ShowStar(DataCenter.Instance.GetLevelData(_stageIdx, _levelIdx).star);
         }
     }
-    protected void StartWithDelay()
+    protected void StartWithDelay(int startSample = 0)
     {
-        StartCoroutine(CoStartWithDelay());
+        StartCoroutine(CoStartWithDelay(startSample));
     }
 
     protected IEnumerator CoStartWithDelay(int startSample = 0)
     {
-        // UI 업데이트 할 거라면 이쪽에서 호출 가능
-        Debug.Log("wait for playing...");
-        yield return new WaitForSeconds(3);
+        // UI Timer
+        gameUI.timePanel.SetActive(true);
+        int waitTime = 3;
+        while (waitTime > 0)
+        {
+            gameUI.UpdateText(TextType.Time, waitTime);
+            waitTime--;
+            yield return new WaitForSeconds(1);
+        }
+        gameUI.timePanel.SetActive(false);
+        // Music Play & Game Start
         startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
 
-        Debug.Log("Start...!");
+        Debug.Log("Music Play...!");
         musicPlayer.LoadSong(playingKoreo, startSample);
         musicPlayer.Play();
+        curState = GameState.Play;
     }
 
     protected bool CheckFinish()
@@ -209,7 +231,7 @@ public abstract class Game : MonoBehaviour
         // Push data into current level's data
         if (_finalSummary[2] == _totalNoteCount)
         {
-            curLevelData.star = 3;
+            gameUI.ShowStar(3);
             curLevelData.alpha = 1f;
         }
         else if (_finalSummary[2] >= _totalNoteCount / 3 * 2)
@@ -237,5 +259,19 @@ public abstract class Game : MonoBehaviour
             // normal game clear
             DataCenter.Instance.UpdatePlayerData(stageIdx + 1, levelIdx + 2, itemCount);
         }
+    }
+
+    public void PauseGame()
+    {
+        musicPlayer.Pause();
+        curState = GameState.Pause;
+        // Get current sample for RestartGame()
+        curSample = musicPlayer.GetSampleTimeForClip(_clipName);
+        // stop character moving
+    }
+
+    public void ContinueGame()
+    {
+        StartWithDelay(curSample);
     }
 }
