@@ -18,9 +18,6 @@ public class Anim : MonoBehaviour
     private GameObject _hammer;
     private Animator _anim;
 
-    private RhythmGameController _gameController;
-    private LaneController _laneController;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -58,7 +55,6 @@ public class Anim : MonoBehaviour
     public void Attack()
     {
         GameObject hammerClone = Instantiate(_hammer, _hammer.transform.position, _hammer.transform.rotation);
-        //_anim.SetTrigger("Attack");
         _anim.Play("2_Attack_Normal", -1, 0f);
         hammerClone.GetComponent<Animator>().SetTrigger("Attack");
     }
@@ -72,16 +68,19 @@ public class Anim : MonoBehaviour
     {
         _anim.SetTrigger("Die");
         _anim.SetBool("Run", false);
+        _anim.SetBool("Idle", false);
     }
 
     public void Run()
     {
         _anim.SetBool("Run", true);
+        _anim.SetBool("Idle", false);
     }
 
     public void Idle()
     {
         _anim.SetBool("Attack", false);
         _anim.SetBool("Run", false);
+        _anim.SetBool("Idle", true);
     }
 }
