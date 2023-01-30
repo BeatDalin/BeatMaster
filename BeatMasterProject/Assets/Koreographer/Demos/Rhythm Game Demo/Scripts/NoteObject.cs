@@ -26,6 +26,8 @@ namespace SonicBloom.Koreo.Demos
         //RhythmGameController gameController;
         RhythmGameController gameController;
 
+        public SPUM_SpriteList spumSpriteList;
+
         #endregion
         #region Static Methods
 
@@ -39,14 +41,14 @@ namespace SonicBloom.Koreo.Demos
         private GameObject _player;
         [SerializeField]
         private Hammer _hammer;
-
+        private Animator _animator;
         #endregion
         #region Methods
 
-        public void Initialize(KoreographyEvent evt, Sprite sprite, LaneController laneCont, RhythmGameController gameCont)
+        public void Initialize(KoreographyEvent evt, SpriteRenderer sprite, LaneController laneCont, RhythmGameController gameCont)
         {
             trackedEvent = evt;
-            visuals.sprite = sprite;
+            visuals.sprite = sprite.sprite;
             laneController = laneCont;
             gameController = gameCont;
 
@@ -61,6 +63,11 @@ namespace SonicBloom.Koreo.Demos
             gameController = null;
         }
 
+        private void Start()
+        {
+            _animator = GetComponent<Animator>();
+        }
+
         private void Update()
         {
             UpdateHeight();
@@ -68,10 +75,14 @@ namespace SonicBloom.Koreo.Demos
 
             UpdatePosition();
 
-            if (transform.position.x <= laneController.DespawnX)
+            if (transform.position.x < laneController.DespawnX - 1f)
             {
                 gameController.ReturnNoteObjectToPool(this);
                 Reset();
+            }
+            else if (transform.position.x <= laneController.DespawnX - spumSpriteList._bodyList[0].bounds.size.x / 2)
+            {
+                _animator.Play("Crash", -1, 0f);
             }
         }
 

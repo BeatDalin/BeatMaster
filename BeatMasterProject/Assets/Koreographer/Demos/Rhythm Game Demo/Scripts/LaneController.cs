@@ -16,7 +16,8 @@ namespace SonicBloom.Koreo.Demos
         #region Fields
 
         [Tooltip("The Color of Note Objects and Buttons in this Lane.")]
-        public Sprite sprite;
+        //public Sprite sprite; 수정
+        public GameObject FireBall;
 
         [Tooltip("A reference to the visuals for the \"target\" location.")]
         public SpriteRenderer targetVisuals;
@@ -106,8 +107,10 @@ namespace SonicBloom.Koreo.Demos
         {
             // Get the vertical bounds of the camera.  Offset by a bit to allow for offscreen spawning/removal.
             float cameraOffsetZ = -Camera.main.transform.position.z;
-            spawnX = Camera.main.ViewportToWorldPoint(new Vector3(1f, 0f, cameraOffsetZ)).x + 1f;
-            despawnX = Camera.main.ViewportToWorldPoint(new Vector3(0f, 0f, cameraOffsetZ)).x - 1f;
+            //spawnX = Camera.main.ViewportToWorldPoint(new Vector3(1f, 0f, cameraOffsetZ)).x + 1f;
+            //despawnX = Camera.main.ViewportToWorldPoint(new Vector3(0f, 0f, cameraOffsetZ)).x - 1f;
+            spawnX = GameObject.Find("Hawhe").transform.position.x;
+            despawnX = targetVisuals.gameObject.transform.position.x;
 
             // Update our visual color.
             //targetVisuals.color = color;
@@ -130,20 +133,8 @@ namespace SonicBloom.Koreo.Demos
             // Check for input.  Note that touch controls are handled by the Event System, which is all
             //  configured within the Inspector on the buttons themselves, using the same functions as
             //  what is found here.  Touch input does not have a built-in concept of "Held", so it is not
-            //  currently supported.
-            /*            if (Input.GetKeyDown(keyboardButton))
-                        {
-                            CheckNoteHit();
-                            SetScalePress();
-                        }
-                        else if (Input.GetKey(keyboardButton))
-                        {
-                            SetScaleHold();
-                        }
-                        else if (Input.GetKeyUp(keyboardButton))
-                        {
-                            SetScaleDefault();
-                        }*/
+            //  currently supported
+
             string _input = "";
             //if (Application.platform == RuntimePlatform.Android)
             if (Input.touchCount > 0) //수정 필요
@@ -231,7 +222,7 @@ namespace SonicBloom.Koreo.Demos
                 KoreographyEvent evt = laneEvents[pendingEventIdx];
 
                 NoteObject newObj = gameController.GetFreshNoteObject();
-                newObj.Initialize(evt, sprite, this, gameController);
+                newObj.Initialize(evt, FireBall.transform.GetChild(0).GetComponent<SpriteRenderer>(), this, gameController);
 
                 trackedNotes.Enqueue(newObj);
 
@@ -245,25 +236,6 @@ namespace SonicBloom.Koreo.Demos
         {
             laneEvents.Add(evt);
         }
-
-        // Checks to see if the string value passed in matches any of the configured values specified
-        //  in the matchedPayloads List.
-        /*        public bool DoesMatchPayload(string payload)
-                {
-                    bool bMatched = false;
-
-                    for (int i = 0; i < matchedPayloads.Count; ++i)
-                    {
-                        if (payload == matchedPayloads[i])
-                        {
-                            bMatched = true;
-
-                            break;
-                        }
-                    }
-
-                    return bMatched;
-                }*/
 
         public bool DoesMatchPayload(int payload)
         {
