@@ -9,7 +9,7 @@ public class Building : MonoBehaviour
     [SerializeField] private GameObject _flat;
     [SerializeField] private GameObject _model;
     [SerializeField] private GameObject _starCanvas;
-    [SerializeField] private Image[] starImg;
+    [SerializeField] private Image[] _starImg;
 
     public void ShowBuilding(bool isClear)
     {
@@ -24,7 +24,7 @@ public class Building : MonoBehaviour
     {
         for (int i = 0; i < star; i++)
         {
-            starImg[i].enabled = true;
+            _starImg[i].enabled = true;
         }
     }
 }

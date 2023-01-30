@@ -6,10 +6,10 @@ public class BuildingManager : MonoBehaviour
 {
     public int currStage = 1;
     public int currMaxLevel; // 현재 Clear한 레벨 중 가장 높은 레벨
-    //[SerializeField] GameObject levelIndicator;
+    //[SerializeField] GameObject levelIndicator; //향후 Waypoint 완성 시 활성화 예정..
 
     // 현재 Stage의 LevelData들
-    public LevelData[] currStageData = new LevelData[5];
+    public LevelData[] currStageData;
     
     // 현재 Stage의 Building들
     [SerializeField] private GameObject[] _buildings;
@@ -19,7 +19,6 @@ public class BuildingManager : MonoBehaviour
         DataCenter.Instance.LoadData();
         
         currMaxLevel = GetMaxLevelInStage(currMaxLevel);
-        Debug.Log(currMaxLevel);
         
         // 현재 레벨의 모델을 보여준다.
         for (int i = 0; i < currMaxLevel + 1; i++)
@@ -60,16 +59,8 @@ public class BuildingManager : MonoBehaviour
     {
         int maxLevel;
         
-        if (currMaxLevel == null)
-        {
-            maxLevel = 0;
-        }
-        
-        else
-        {
-            maxLevel = currMaxLevel;
-        }
-        
+        maxLevel = currMaxLevel;
+
         for (int i = 4; i >= 0; i--)
         {
             if (currStageData[i].levelClear)

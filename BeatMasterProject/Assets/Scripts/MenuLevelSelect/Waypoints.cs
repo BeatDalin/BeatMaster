@@ -8,6 +8,8 @@ public class Waypoints : MonoBehaviour
 {
     [Range(0f, 2f)] 
     [SerializeField] private float _waypointSize = 0.5f;
+    
+    // Scene Tab에 경로 기즈모 그리는 함수
     private void OnDrawGizmos()
     {
         foreach (Transform t in transform)
@@ -24,7 +26,8 @@ public class Waypoints : MonoBehaviour
         
         Gizmos.DrawLine(transform.GetChild(transform.childCount-1).position, transform.GetChild(0).position);
     }
-
+    
+    // 다음 경로를 반환하는 함수
     public Transform GetNextWaypoint(Transform currentWaypoint)
     {
         if (currentWaypoint != null && currentWaypoint.GetSiblingIndex() < transform.childCount - 1)
