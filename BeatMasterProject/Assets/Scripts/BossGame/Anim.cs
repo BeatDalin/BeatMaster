@@ -1,3 +1,4 @@
+using System;
 using SonicBloom.Koreo.Demos;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,14 +15,17 @@ public enum Status
 
 public class Anim : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _hammer;
+    [SerializeField] private GameObject _hammer;
     private Animator _anim;
 
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         _anim = GetComponentInChildren<Animator>();
+    }
+
+    void Start()
+    {
         StatusJudge(Status.Run);
     }
 

@@ -12,9 +12,9 @@ public abstract class NoteCreator : MonoBehaviour
 
     [EventID] [SerializeField] protected string eventID;
 
-    [SerializeField] protected int _poolAmount = 10;
-    [SerializeField] protected GameObject _notePrefab;
-    [SerializeField] protected Transform _backgroundPanel;
+    [SerializeField] protected int poolAmount = 10;
+    [SerializeField] protected GameObject notePrefab;
+    [SerializeField] protected Transform backgroundPanel;
 
     protected int noteMaxCount;
     protected int noteIndex;
@@ -33,8 +33,6 @@ public abstract class NoteCreator : MonoBehaviour
         
         noteMaxCount = rawEvents.Count;
 
-        Debug.Log($"{name} : {noteMaxCount}");
-
         Init();
     }
 
@@ -46,14 +44,14 @@ public abstract class NoteCreator : MonoBehaviour
         {
             GameObject go = poolStack.Pop();
             go.SetActive(true);
-            go.transform.SetParent(_backgroundPanel);
+            go.transform.SetParent(backgroundPanel);
             activeObjects.Add(go);
             noteIndex++;
             return go;
         }
         else
         {
-            if (_poolAmount >= noteMaxCount)
+            if (poolAmount >= noteMaxCount)
             {
                 return null;
             }
@@ -65,7 +63,7 @@ public abstract class NoteCreator : MonoBehaviour
 
     protected virtual GameObject CreateNewObject()
     {
-        GameObject go = Instantiate(_notePrefab);
+        GameObject go = Instantiate(notePrefab);
         go.SetActive(false);
         go.transform.SetParent(transform);
         poolStack.Push(go);
