@@ -10,30 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -1223223985, guid: aa81bbec85a3f423193272a7c6154986, type: 3}
-  m_Name: Level3Track
+  m_Name: Level1_Spd
   m_EditorClassIdentifier: 
-  mEventID: Level3_Map
+  mEventID: Level1_Spd
   mEventList:
   - mStartSample: 0
     mEndSample: 0
-  - mStartSample: 0
-    mEndSample: 218979
   _SerializedPayloadTypes:
-  - SonicBloom.Koreo.TextPayload
-  - SonicBloom.Koreo.IntPayload
+  - SonicBloom.Koreo.FloatPayload
   _ColorPayloads: []
   _ColorPayloadIdxs: 
   _CurvePayloads: []
   _CurvePayloadIdxs: 
-  _FloatPayloads: []
-  _FloatPayloadIdxs: 
+  _FloatPayloads:
+  - mFloatVal: 2
+  _FloatPayloadIdxs: 00000000
   _GradientPayloads: []
   _GradientPayloadIdxs: 
-  _IntPayloads:
-  - mIntVal: 0
-  _IntPayloadIdxs: 01000000
+  _IntPayloads: []
+  _IntPayloadIdxs: 
   _SpectrumPayloads: []
   _SpectrumPayloadIdxs: 
-  _TextPayloads:
-  - mTextVal: Start
-  _TextPayloadIdxs: 00000000
+  _TextPayloads: []
+  _TextPayloadIdxs: 
