@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Waypoints : MonoBehaviour
 {
-    [Range(0f, 2f)] 
+    [Range(0f, 2f)]
     [SerializeField] private float _waypointSize = 0.5f;
-    
+
     // Scene Tab에 경로 기즈모 그리는 함수
     private void OnDrawGizmos()
     {

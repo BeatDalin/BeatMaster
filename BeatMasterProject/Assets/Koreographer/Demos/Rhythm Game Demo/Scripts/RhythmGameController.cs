@@ -118,15 +118,15 @@ namespace SonicBloom.Koreo.Demos
             _rhythmTrackShort = playingKoreo.GetTrackByID(eventID[0]);
             _rawShortEvents = _rhythmTrackShort.GetAllEvents();
 
-            _rhythmTrackLong = playingKoreo.GetTrackByID(eventID[1]);
-            _rawLongEvents = _rhythmTrackLong.GetAllEvents();
+            /*_rhythmTrackLong = playingKoreo.GetTrackByID(eventID[1]);
+            _rawLongEvents = _rhythmTrackLong.GetAllEvents();*/
 
             for (int i = 0; i < _rawShortEvents.Count; ++i)
             {
                 KoreographyEvent evt = _rawShortEvents[i];
 
                 int payload = evt.GetIntValue();
-
+                Debug.Log(payload);
                 // Find the right lane.
                 for (int j = 0; j < noteLanes.Count; ++j)
                 {
@@ -141,7 +141,7 @@ namespace SonicBloom.Koreo.Demos
                     }
                 }
             }
-            for (int i = 0; i < _rawLongEvents.Count; ++i)
+            /*for (int i = 0; i < _rawLongEvents.Count; ++i)
             {
                 KoreographyEvent evt = _rawLongEvents[i];
 
@@ -160,7 +160,7 @@ namespace SonicBloom.Koreo.Demos
                         break;
                     }
                 }
-            }
+            }*/
         }
 
         // Sets up the lead-in-time.  Begins audio playback immediately if the specified lead-in-time is zero.
