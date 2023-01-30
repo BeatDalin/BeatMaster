@@ -980,6 +980,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &512957732
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 512957734}
+  - component: {fileID: 512957733}
+  m_Layer: 0
+  m_Name: Test
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &512957733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512957732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80496cb18434954469e4eeb1d27d8183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  track: {fileID: 11400000, guid: 99ff6d4bc47fb99408faf277f757543a, type: 2}
+--- !u!4 &512957734
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512957732}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.28, y: -2.22, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &535108870
 GameObject:
   m_ObjectHideFlags: 0
@@ -1077,8 +1122,7 @@ GameObject:
   - component: {fileID: 564013982}
   - component: {fileID: 564013986}
   - component: {fileID: 564013985}
-  - component: {fileID: 564013988}
-  - component: {fileID: 564013987}
+  - component: {fileID: 564013989}
   m_Layer: 5
   m_Name: NoteCreator
   m_TagString: Untagged
@@ -1144,23 +1188,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 564013981}
   m_CullTransparentMesh: 1
---- !u!114 &564013987
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564013981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee1c221e1484e6840a99769023af0842, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eventID: LongJump
-  poolAmount: 10
-  notePrefab: {fileID: 460992977723358697, guid: 685e87385f64d0f41821f5a32ef58ab5, type: 3}
-  backgroundPanel: {fileID: 248491048}
---- !u!114 &564013988
+--- !u!114 &564013989
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1172,7 +1200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e2b305279c05614aa51881dc9466317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventID: Jump
+  eventID: Boss
   poolAmount: 10
   notePrefab: {fileID: 4409802704433096675, guid: 319bf764f6d5d2740a354382fdaa0746, type: 3}
   backgroundPanel: {fileID: 248491048}
@@ -3766,7 +3794,7 @@ MonoBehaviour:
   fireBall: {fileID: 5944770761191395910, guid: 04bc52ae7c72fbf4c89a1405a3cedb17, type: 3}
   targetVisuals: {fileID: 1319781692}
   keyboardButton: 275
-  matchedPayloads: 00000000
+  matchedPayloads: 01000000
 --- !u!114 &1319781691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3782,7 +3810,7 @@ MonoBehaviour:
   fireBall: {fileID: 5944770761191395910, guid: 04bc52ae7c72fbf4c89a1405a3cedb17, type: 3}
   targetVisuals: {fileID: 1319781692}
   keyboardButton: 276
-  matchedPayloads: 01000000
+  matchedPayloads: 00000000
 --- !u!212 &1319781692
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4146,7 +4174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadedKoreography:
-  - {fileID: 11400000, guid: e7012a7bdbebdb94abe348c79dd52cf2, type: 2}
+  - {fileID: 11400000, guid: d5463fb9a49b5f24a91bde00937d705e, type: 2}
   eventDelayInSeconds: 0
 --- !u!4 &1460717650
 Transform:
@@ -4156,7 +4184,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1460717645}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.303972, y: 2.8417358, z: -6.5006065}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4197,8 +4225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventID:
-  - Jump
-  - LongJump
+  - Boss
   hitWindowRangeInMS: 80
   noteSpeed: 1
   noteObjectArchetype: {fileID: 855271053}
