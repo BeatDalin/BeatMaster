@@ -19,16 +19,13 @@ public class BuildingManager : MonoBehaviour
         DataCenter.Instance.LoadData();
         
         currMaxLevel = GetMaxLevelInStage(currMaxLevel);
+
+        // Level 5까지 Clear했을 경우 다음 Level은 보여줄 필요가 없으니 break
+        int limitMaxLevel = currMaxLevel + 1 > 4 ? 4 : currMaxLevel + 1;
         
         // 현재 레벨의 모델을 보여준다.
-        for (int i = 0; i < currMaxLevel + 1; i++)
+        for (int i = 0; i < limitMaxLevel; i++)
         {
-            // Level 5까지 Clear했을 경우 다음 Level은 보여줄 필요가 없으니 break
-            if (i > 4)
-            {
-                break;
-            }
-            
             // Clear한 레벨 정보를 저장
             currStageData[i] = 
                 DataCenter.Instance.GetLevelData(currStage - 1, i);
@@ -65,7 +62,7 @@ public class BuildingManager : MonoBehaviour
         {
             if (currStageData[i].levelClear)
             {
-                maxLevel =  i;
+                maxLevel = i;
                 break;
             }
         }

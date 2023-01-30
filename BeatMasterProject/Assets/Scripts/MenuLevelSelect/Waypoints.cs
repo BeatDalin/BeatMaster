@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Waypoints : MonoBehaviour
@@ -32,7 +31,6 @@ public class Waypoints : MonoBehaviour
     {
         if (currentWaypoint != null && currentWaypoint.GetSiblingIndex() < transform.childCount - 1)
         {
-            Debug.Log(currentWaypoint.GetSiblingIndex()+1);
             return transform.GetChild(currentWaypoint.GetSiblingIndex() + 1);
         }
 

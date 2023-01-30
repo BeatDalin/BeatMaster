@@ -22,7 +22,6 @@ public class WaypointMover : MonoBehaviour
         // 현재 레벨 위치로 초기화
         _currWaypoint = _waypoints.transform.GetChild(_currLevel);
         transform.position = _currWaypoint.position;
-        
     }
 
     public void UpdatePosition()
@@ -38,6 +37,5 @@ public class WaypointMover : MonoBehaviour
     {
         _currWaypoint = _transform;
         transform.position = _transform.position;
-
     }
 }

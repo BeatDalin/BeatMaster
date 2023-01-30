@@ -17,7 +17,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     public enum SceneType
     {
         MainMenu,
-        LevelMenu,
+        MenuLevelSelect,
         LevelGame,
         BossGame,
     }
