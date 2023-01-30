@@ -18,7 +18,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     {
         MainMenu,
         LevelMenu,
-        NormalGame,
+        LevelGame,
         BossGame,
     }
 
