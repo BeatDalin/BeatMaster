@@ -15,13 +15,17 @@ public class NormalGame : Game
     private int _pressedTimeLong;
     
     private bool _isChecked; // to prevent double check
+    
+    [Header("Input KeyCode")]
+    private KeyCode _shortNoteKey = KeyCode.LeftArrow;
+    private KeyCode _longNoteKey = KeyCode.RightArrow;
     protected override void Awake()
     {
         base.Awake();
         // Short Note Event Track
         Koreographer.Instance.RegisterForEventsWithTime("JumpCheck", CheckShortEnd);
         
-        // Long Note Event Track1
+        // Long Note Event Track
         Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
         Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckStart", CheckLongStart);
         Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckEnd", CheckLongEnd);
@@ -36,9 +40,9 @@ public class NormalGame : Game
     protected override void Init()
     {
         base.Init();
-        _events = playingKoreo.GetTrackByID("JumpCheck").GetAllEvents();
+        _events = SoundManager.instance.playingKoreo.GetTrackByID("JumpCheck").GetAllEvents();
         _eventRangeShort = CalculateRange(_events);
-        _events = playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
+        _events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
         itemCount = 0;
         // gameUI.InitUI();
@@ -64,7 +68,7 @@ public class NormalGame : Game
         {
             _isChecked = false; // initialize before a curve value becomes 1
         }
-        if (!isShortKeyCorrect && Input.GetKeyDown(KeyCode.LeftArrow))
+        if (!isShortKeyCorrect && Input.GetKeyDown(_shortNoteKey))
         {
             isShortKeyCorrect = true;
             IncreaseItem();
@@ -94,7 +98,7 @@ public class NormalGame : Game
             _isChecked = false; // initialize before a curve value becomes 1
             isLongFailed = false;
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(_longNoteKey))
         {
             isLongPressed = true;
         }
@@ -107,20 +111,18 @@ public class NormalGame : Game
                 //=======Rewind 자리=========
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
                 Rewind(Vector2.zero, sampleTime); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
-                Debug.Log("long first rewind");
             }
         }
     }
     private void CheckLongMiddle(KoreographyEvent evt)
     {
         // if space key is released during long note
-        if (isLongPressed && Input.GetKeyUp(KeyCode.Space))
+        if (isLongPressed && Input.GetKeyUp(_longNoteKey))
         {
             isLongPressed = false;
             //==============Rewind 자리==============
             if (!isLongFailed) 
             {
-                Debug.Log("long middle rewind");
                 Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
             }
@@ -132,7 +134,7 @@ public class NormalGame : Game
         {
             _isChecked = false; // initialize before a curve value becomes 1
         }
-        if (isLongPressed && Input.GetKeyUp(KeyCode.Space))
+        if (isLongPressed && Input.GetKeyUp(_longNoteKey))
         {
             if (!isLongKeyCorrect) // increase item only once
             {
@@ -156,7 +158,6 @@ public class NormalGame : Game
                 // ===============Rewind==============
                 if (!isLongFailed)
                 {
-                    Debug.Log("long last rewind");
                     Rewind(Vector2.zero, sampleTime); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
                 }
             }

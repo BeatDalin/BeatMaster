@@ -22,8 +22,8 @@ public enum GameState
 public abstract class Game : MonoBehaviour
 {
     [SerializeField] protected LevelGameUI gameUI;
-    protected Koreography playingKoreo;
-    protected SimpleMusicPlayer musicPlayer;
+    // protected Koreography playingKoreo;
+    // protected SimpleMusicPlayer musicPlayer;
 
     /// <summary>
     /// To use sample time of event tracks, this should be written first. Used for KoreographyEventCallbackWithTime.
@@ -36,8 +36,7 @@ public abstract class Game : MonoBehaviour
 
     [Header("Game Play")]
     public GameState curState = GameState.Idle;
-    public int curSample;
-    private string _clipName;
+    private int _curSample;
     [Header("Result Check")]
     public BeatResult[] longResult;
     public BeatResult[] shortResult;
@@ -72,8 +71,8 @@ public abstract class Game : MonoBehaviour
 
     protected virtual void Awake()
     {
-        playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
-        musicPlayer = FindObjectOfType<SimpleMusicPlayer>();// Find ui manager
+        // playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
+        // musicPlayer = FindObjectOfType<SimpleMusicPlayer>();// Find ui manager
         // gameUI = FindObjectOfType<LevelGameUI>(); // temporal use of ui experiment class
         DataCenter.Instance.LoadData();
     }
@@ -85,10 +84,9 @@ public abstract class Game : MonoBehaviour
     
     protected virtual void Init()
     {
-        musicPlayer.LoadSong(playingKoreo, 0, false);
-        _clipName = musicPlayer.GetCurrentClipName();
-        longResult = new BeatResult[playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
-        shortResult = new BeatResult[playingKoreo.GetTrackByID("Jump").GetAllEvents().Count];
+        SoundManager.instance.PlayBGM(false);
+        longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
+        shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Jump").GetAllEvents().Count];
         longIdx = 0;
         shortIdx = 0;
         isLongPressed = false;
@@ -118,7 +116,6 @@ public abstract class Game : MonoBehaviour
 
         if (CheckFinish())
         {
-            Debug.Log("Game Ended");
             SummarizeResult();
             //gameUI.ShowFinalResult(_finalSummary, _totalNoteCount); // for testing purpose ...
             RateResult(_stageIdx, _levelIdx);
@@ -145,9 +142,7 @@ public abstract class Game : MonoBehaviour
         // Music Play & Game Start
         startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
 
-        Debug.Log("Music Play...!");
-        musicPlayer.LoadSong(playingKoreo, startSample);
-        musicPlayer.Play();
+        SoundManager.instance.PlayBGM(true, startSample);
         curState = GameState.Play;
     }
 
@@ -263,15 +258,15 @@ public abstract class Game : MonoBehaviour
 
     public void PauseGame()
     {
-        musicPlayer.Pause();
+        SoundManager.instance.PlayBGM(false);
         curState = GameState.Pause;
         // Get current sample for RestartGame()
-        curSample = musicPlayer.GetSampleTimeForClip(_clipName);
+        _curSample = SoundManager.instance.musicPlayer.GetSampleTimeForClip(SoundManager.instance.clipName);
         // stop character moving
     }
 
     public void ContinueGame()
     {
-        StartWithDelay(curSample);
+        StartWithDelay(_curSample);
     }
 }
