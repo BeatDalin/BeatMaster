@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class LevelMenuManager : MonoBehaviour
 {
+    [SerializeField] private GameObject _waypointIndicator;
     [SerializeField] private GameObject _cam;
     [SerializeField] private GameObject _camPosOrigin;
     
@@ -70,8 +70,9 @@ public class LevelMenuManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                Debug.Log(hit.collider.name);
-                //Load GameScene
+                // Load GameScene
+                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelGame);
+                // 추후 레벨 별로 구분해야 함
             }
         }
 

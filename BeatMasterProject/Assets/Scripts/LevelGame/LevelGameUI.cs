@@ -32,7 +32,7 @@ public class LevelGameUI : MonoBehaviour
     [SerializeField] private Button _continueBtn;
     [SerializeField] private Button _restartBtn;
     [SerializeField] private Button _goSettingsBtn;
-    [SerializeField] private Button _goMenuBtn;
+    [SerializeField] private Button _goLevelMenuBtn;
     [Header("Settings UI")]
     [SerializeField] private GameObject _settingsPanel;
     [SerializeField] private Button _settingsCloseBtn;
@@ -69,6 +69,7 @@ public class LevelGameUI : MonoBehaviour
             UIManager.instance.ClosePopUp();
             levelGame.ContinueGame();
         });
+        _goLevelMenuBtn.onClick.AddListener(() => SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect));
         //settings
         _goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPopUp(_settingsPanel));
         _settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePopUp(); });

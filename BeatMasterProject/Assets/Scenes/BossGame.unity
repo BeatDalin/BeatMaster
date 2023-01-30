@@ -250,6 +250,7 @@ RectTransform:
   - {fileID: 2075902397}
   - {fileID: 1894836182}
   - {fileID: 564013982}
+  - {fileID: 660518166}
   m_Father: {fileID: 2018079500}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -365,9 +366,10 @@ GameObject:
   - component: {fileID: 564013982}
   - component: {fileID: 564013986}
   - component: {fileID: 564013985}
-  - component: {fileID: 564013983}
+  - component: {fileID: 564013988}
+  - component: {fileID: 564013987}
   m_Layer: 5
-  m_Name: NoteCreater
+  m_Name: NoteCreator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -393,22 +395,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0, y: 0.5}
---- !u!114 &564013983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564013981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aaa55448ff504a547b4801f9c98b5229, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eventID: Jump
-  _poolAmount: 10
-  _notePrefab: {fileID: 4409802704433096675, guid: 319bf764f6d5d2740a354382fdaa0746, type: 3}
-  _backgroundPanel: {fileID: 248491048}
 --- !u!114 &564013985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -447,6 +433,74 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 564013981}
   m_CullTransparentMesh: 1
+--- !u!114 &564013987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564013981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee1c221e1484e6840a99769023af0842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventID: LongJump
+  _poolAmount: 10
+  _notePrefab: {fileID: 460992977723358697, guid: 685e87385f64d0f41821f5a32ef58ab5, type: 3}
+  _backgroundPanel: {fileID: 248491048}
+--- !u!114 &564013988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564013981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2b305279c05614aa51881dc9466317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventID: Jump
+  _poolAmount: 10
+  _notePrefab: {fileID: 4409802704433096675, guid: 319bf764f6d5d2740a354382fdaa0746, type: 3}
+  _backgroundPanel: {fileID: 248491048}
+--- !u!1 &660518165
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 660518166}
+  m_Layer: 5
+  m_Name: DestroyPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &660518166
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 660518165}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 248491048}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: -100, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &690114329
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -858,12 +912,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -6
-  m_Sprite: {fileID: 21300000, guid: c899701e6ad92784e87950785d7a820b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5323fbb9e90232a47b778f442ab763ae, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 5.12, y: 2.56}
+  m_Size: {x: 6, y: 3.61}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1042,6 +1096,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10920fea13857a7418d1bbe6bbd17a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameUI: {fileID: 0}
   curState: 0
   curSample: 0
   longResult: 
