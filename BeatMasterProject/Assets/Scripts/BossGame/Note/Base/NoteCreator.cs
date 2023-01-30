@@ -49,7 +49,6 @@ public abstract class NoteCreator : MonoBehaviour
             go.transform.SetParent(_backgroundPanel);
             activeObjects.Add(go);
             noteIndex++;
-            Debug.Log(noteIndex);
             return go;
         }
         else
