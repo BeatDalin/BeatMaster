@@ -40,6 +40,7 @@ public class CharacterMovement : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
 
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
+        SoundManager.instance.PlayBGM(false);
     }
 
     private void Update()
@@ -55,7 +56,7 @@ public class CharacterMovement : MonoBehaviour
     private void GetInput()
     {
         // 점프 입력
-        if (Input.GetButtonDown("Jump") && _canJump)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
             if (++_jumpCount >= _maxJumpCount)
             {

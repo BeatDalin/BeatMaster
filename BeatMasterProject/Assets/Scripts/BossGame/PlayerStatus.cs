@@ -8,14 +8,7 @@ public class PlayerStatus : MonoBehaviour
     public Status playerStatus = Status.Run;
 
     private float _hp = 100;
-    private float Damage
-    {
-        get { return _hp; }
-        set
-        {
-            _hp -= value > _hp ? 0 : value;
-        }
-    }
+    private float Damage { get { return _hp; } set { _hp -= value > _hp ? 0 : value; } }
     private Anim _animation;
     private float _speed;
     private float _colorValue = 1f;
@@ -26,11 +19,12 @@ public class PlayerStatus : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        _animation = GetComponent<Anim>();
     }
+
     // Start is called before the first frame update
     private void Start()
     {
-        _animation = GetComponent<Anim>();
         _spumSpriteList = GetComponentInChildren<SPUM_SpriteList>();
         _hairColor = (Color.white - _spumSpriteList._itemList[0].color) / 10;
     }
@@ -65,13 +59,13 @@ public class PlayerStatus : MonoBehaviour
                 Vector4 temp = _spumSpriteList._itemList[0].color;
                 temp -= _hairColor;
                 _spumSpriteList._itemList[0].color = temp;
-
             }
             else
             {
                 _spumSpriteList._itemList[i].color = _color;
             }
         }
+
         for (var i = 0; i < _spumSpriteList._bodyList.Count; i++)
         {
             _spumSpriteList._bodyList[i].color = _color;
