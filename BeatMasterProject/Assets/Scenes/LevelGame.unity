@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4709,7 +4709,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!224 &1819510388
 RectTransform:
@@ -4758,30 +4758,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273789f4cb803e046b56bce86e9c72be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelGame: {fileID: 612035089}
-  _itemText: {fileID: 465278377}
-  _deathText: {fileID: 807727887}
-  _finalPanel: {fileID: 912021797}
-  _finalFast: {fileID: 1368446041}
-  _finalPerfect: {fileID: 36298870}
-  _finalSlow: {fileID: 1880648994}
-  _star:
+  finalPanel: {fileID: 912021797}
+  finalFast: {fileID: 1368446041}
+  finalPerfect: {fileID: 36298870}
+  finalSlow: {fileID: 1880648994}
+  star:
   - {fileID: 1529523383}
   - {fileID: 311976132}
   - {fileID: 916203458}
-  _starPrefab: {fileID: 6894169135177945391, guid: 8616b69a768114632a773562203b0002, type: 3}
-  _target: {fileID: 870899399}
-  _startPos: {fileID: 102637268}
-  _successColor: {r: 1, g: 0.85882354, b: 0, a: 1}
+  starPrefab: {fileID: 6894169135177945391, guid: 8616b69a768114632a773562203b0002, type: 3}
+  target: {fileID: 870899399}
+  startPos: {fileID: 102637268}
+  successColor: {r: 1, g: 0.85882354, b: 0, a: 1}
   timePanel: {fileID: 1326746036}
   timeCount: {fileID: 364923811}
-  _pausePanel: {fileID: 1986035473}
-  _continueBtn: {fileID: 1090179624}
-  _restartBtn: {fileID: 505286703}
-  _goSettingsBtn: {fileID: 660655490}
-  _goLevelMenuBtn: {fileID: 4399992}
-  _settingsPanel: {fileID: 264213134}
-  _settingsCloseBtn: {fileID: 1841679767}
+  pausePanel: {fileID: 1986035473}
+  continueBtn: {fileID: 1090179624}
+  restartBtn: {fileID: 505286703}
+  goSettingsBtn: {fileID: 660655490}
+  goLevelMenuBtn: {fileID: 4399992}
+  settingsPanel: {fileID: 264213134}
+  settingsCloseBtn: {fileID: 1841679767}
+  levelGame: {fileID: 612035089}
+  _itemText: {fileID: 465278377}
+  _deathText: {fileID: 807727887}
 --- !u!1 &1820111829
 GameObject:
   m_ObjectHideFlags: 0
@@ -5200,7 +5200,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ede440cb146fd64eac4904e5006b692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _koreography: {fileID: 11400000, guid: d4409b15bfa180b4aa0b862e67b8924e, type: 2}
   _mapEventID: Level1_Map
   _mapEventList: []
   _groundTilemap: {fileID: 1828062194}
@@ -5217,7 +5216,6 @@ MonoBehaviour:
   _interactionTileList:
   - {fileID: 11400000, guid: 7e877a6e4b306d5419d1825d9c61dc20, type: 2}
   - {fileID: 11400000, guid: 55a4e7756a2f3d14093d6eb3c9695761, type: 2}
-  track: {fileID: 11400000, guid: ee69883678a1a6f458c1b179b356654c, type: 2}
 --- !u!4 &1860435642
 Transform:
   m_ObjectHideFlags: 0
