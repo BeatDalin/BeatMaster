@@ -447,8 +447,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventID: LongJump
   poolAmount: 10
-  notePrefab: {fileID: 0}
-  backgroundPanel: {fileID: 0}
+  notePrefab: {fileID: 460992977723358697, guid: 685e87385f64d0f41821f5a32ef58ab5, type: 3}
+  backgroundPanel: {fileID: 248491048}
 --- !u!114 &564013988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -463,8 +463,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventID: Jump
   poolAmount: 10
-  notePrefab: {fileID: 0}
-  backgroundPanel: {fileID: 0}
+  notePrefab: {fileID: 4409802704433096675, guid: 319bf764f6d5d2740a354382fdaa0746, type: 3}
+  backgroundPanel: {fileID: 248491048}
 --- !u!1 &660518165
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,12 +1115,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1460717650}
-  - component: {fileID: 1460717649}
   - component: {fileID: 1460717648}
   - component: {fileID: 1460717647}
   - component: {fileID: 1460717646}
+  - component: {fileID: 1460717651}
   m_Layer: 0
-  m_Name: NormalGame
+  m_Name: BossGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1252,26 +1252,6 @@ MonoBehaviour:
   loadedKoreography:
   - {fileID: 11400000, guid: e7012a7bdbebdb94abe348c79dd52cf2, type: 2}
   eventDelayInSeconds: 0
---- !u!114 &1460717649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1460717645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10920fea13857a7418d1bbe6bbd17a55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameUI: {fileID: 0}
-  curState: 0
-  longResult: 
-  shortResult: 
-  deathCount: 0
-  _stageIdx: 0
-  _levelIdx: 0
-  itemCount: 0
 --- !u!4 &1460717650
 Transform:
   m_ObjectHideFlags: 0
@@ -1280,13 +1260,34 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1460717645}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.303972, y: 2.8417358, z: -6.5006065}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1460717651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460717645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f5276d72704cc4181db806b234ec85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameUI: {fileID: 0}
+  curState: 0
+  curSample: 0
+  longResult: 
+  shortResult: 
+  deathCount: 0
+  _stageIdx: 0
+  _levelIdx: 0
+  itemCount: 0
 --- !u!1839735485 &1466359269 stripped
 Tilemap:
   m_CorrespondingSourceObject: {fileID: 3946881576888618842, guid: abf8f49f32d83784d8d805df8cce68c7, type: 3}
