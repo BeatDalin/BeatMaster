@@ -1,18 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AudioTest : MonoBehaviour
 {
     public string bgmName;
 
-    public void Start()
+    private void Start()
     {
         Time.timeScale = 0;
     }
 
-    public void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
@@ -28,9 +29,9 @@ public class AudioTest : MonoBehaviour
         {
             Time.timeScale = 1;
             SoundManager.instance.PlayBGM(bgmName);
-
         }
     }
+    
 
     // public void PlaySFXButton()
     // {
