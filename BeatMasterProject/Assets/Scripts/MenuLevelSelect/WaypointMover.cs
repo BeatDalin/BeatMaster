@@ -17,25 +17,19 @@ public class WaypointMover : MonoBehaviour
     void Start()
     {
         _buildingManager = FindObjectOfType<BuildingManager>();
-        _currLevel = _buildingManager.currMaxLevel;
+        _currLevel = _buildingManager.currMaxLevel < 0 ? 0 : _buildingManager.currMaxLevel;
         
         // 현재 레벨 위치로 초기화
         _currWaypoint = _waypoints.transform.GetChild(_currLevel);
         transform.position = _currWaypoint.position;
     }
 
-    public void UpdatePosition()
+    public void UpdateWaypointPosition()
     {
         // 다음으로 이동할 위치
         _currWaypoint = _waypoints.GetNextWaypoint(_currWaypoint);
         
         transform.position =
             Vector3.MoveTowards(transform.position, _currWaypoint.position, _moveSpeed * Time.deltaTime);
-    }
-
-    public void MovePosition(Transform _transform)
-    {
-        _currWaypoint = _transform;
-        transform.position = _transform.position;
     }
 }
