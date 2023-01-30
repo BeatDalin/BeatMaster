@@ -40,10 +40,10 @@ public class LongNote : Note
     // 기준위치를 정하기 위함
     private void OnDisable()
     {
-        CoSetOffsetPos();
+        SetOffsetPos();
     }
 
-    private void CoSetOffsetPos()
+    private void SetOffsetPos()
     {
         Vector3 tempPos = transform.localPosition;
         tempPos.x = _offsetX;
