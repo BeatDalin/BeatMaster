@@ -1832,6 +1832,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visuals: {fileID: 887109965}
+  spumSpriteList: {fileID: 1673335619}
   _player: {fileID: 1050557997}
   _hammer: {fileID: 137346710}
 --- !u!212 &887109965
@@ -2194,7 +2195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40e7ae7f4e5664a02863fb0d23d42e1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FireBall: {fileID: 5944770761191395910, guid: 04bc52ae7c72fbf4c89a1405a3cedb17, type: 3}
+  fireBall: {fileID: 5944770761191395910, guid: 04bc52ae7c72fbf4c89a1405a3cedb17, type: 3}
   targetVisuals: {fileID: 1146996547}
   keyboardButton: 276
   matchedPayloads: 01000000
@@ -2210,7 +2211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40e7ae7f4e5664a02863fb0d23d42e1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FireBall: {fileID: 5944770761191395910, guid: 04bc52ae7c72fbf4c89a1405a3cedb17, type: 3}
+  fireBall: {fileID: 5944770761191395910, guid: 04bc52ae7c72fbf4c89a1405a3cedb17, type: 3}
   targetVisuals: {fileID: 1146996547}
   keyboardButton: 275
   matchedPayloads: 00000000
@@ -3574,14 +3575,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f5276d72704cc4181db806b234ec85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameUI: {fileID: 0}
   curState: 0
-  curSample: 0
   longResult: 
   shortResult: 
   deathCount: 0
   _stageIdx: 0
   _levelIdx: 0
   itemCount: 0
+--- !u!114 &1673335619 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6204392508877914964, guid: 28c56ff943a07a9468296de369142635, type: 3}
+  m_PrefabInstance: {fileID: 1459271271}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baea2e9758e554909b2367e396d9c5a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1719972474 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6963700646629090193, guid: 28c56ff943a07a9468296de369142635, type: 3}

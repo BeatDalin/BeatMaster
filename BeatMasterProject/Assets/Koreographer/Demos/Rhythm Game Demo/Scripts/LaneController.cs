@@ -17,7 +17,7 @@ namespace SonicBloom.Koreo.Demos
 
         [Tooltip("The Color of Note Objects and Buttons in this Lane.")]
         //public Sprite sprite; 수정
-        public GameObject FireBall;
+        public GameObject fireBall;
 
         [Tooltip("A reference to the visuals for the \"target\" location.")]
         public SpriteRenderer targetVisuals;
@@ -106,14 +106,8 @@ namespace SonicBloom.Koreo.Demos
         void Start()
         {
             // Get the vertical bounds of the camera.  Offset by a bit to allow for offscreen spawning/removal.
-            float cameraOffsetZ = -Camera.main.transform.position.z;
-            //spawnX = Camera.main.ViewportToWorldPoint(new Vector3(1f, 0f, cameraOffsetZ)).x + 1f;
-            //despawnX = Camera.main.ViewportToWorldPoint(new Vector3(0f, 0f, cameraOffsetZ)).x - 1f;
             spawnX = GameObject.Find("Hawhe").transform.position.x;
             despawnX = targetVisuals.gameObject.transform.position.x;
-
-            // Update our visual color.
-            //targetVisuals.color = color;
 
             // Capture the default scale set in the Inspector.
             defaultScale = targetVisuals.transform.localScale;
@@ -222,7 +216,8 @@ namespace SonicBloom.Koreo.Demos
                 KoreographyEvent evt = laneEvents[pendingEventIdx];
 
                 NoteObject newObj = gameController.GetFreshNoteObject();
-                newObj.Initialize(evt, FireBall.transform.GetChild(0).GetComponent<SpriteRenderer>(), this, gameController);
+                Sprite _fireBallSprite = fireBall.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
+                newObj.Initialize(evt, _fireBallSprite, this, gameController);
 
                 trackedNotes.Enqueue(newObj);
 

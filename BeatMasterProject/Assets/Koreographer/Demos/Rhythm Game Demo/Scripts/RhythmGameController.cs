@@ -55,6 +55,9 @@ namespace SonicBloom.Koreo.Demos
 
         public Hammer hammerObj;
 
+        private KoreographyTrack _rhythmTrackShort, _rhythmTrackLong;
+        private List<KoreographyEvent> _rawShortEvents, _rawLongEvents;
+
         #endregion
         #region Properties
 
@@ -112,15 +115,15 @@ namespace SonicBloom.Koreo.Demos
             //playingKoreo = SoundManager.instance.playingKoreo; //지은님코드 올리시면 이걸로 수정
             playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
             // Grab all the events out of the Koreography.
-            KoreographyTrack rhythmTrackShort = playingKoreo.GetTrackByID(eventID[0]);
-            List<KoreographyEvent> rawShortEvents = rhythmTrackShort.GetAllEvents();
+            _rhythmTrackShort = playingKoreo.GetTrackByID(eventID[0]);
+            _rawShortEvents = _rhythmTrackShort.GetAllEvents();
 
-            KoreographyTrack rhythmTrackLong = playingKoreo.GetTrackByID(eventID[1]);
-            List<KoreographyEvent> rawLongEvents = rhythmTrackLong.GetAllEvents();
+            _rhythmTrackLong = playingKoreo.GetTrackByID(eventID[1]);
+            _rawLongEvents = _rhythmTrackLong.GetAllEvents();
 
-            for (int i = 0; i < rawShortEvents.Count; ++i)
+            for (int i = 0; i < _rawShortEvents.Count; ++i)
             {
-                KoreographyEvent evt = rawShortEvents[i];
+                KoreographyEvent evt = _rawShortEvents[i];
 
                 int payload = evt.GetIntValue();
 
@@ -138,9 +141,9 @@ namespace SonicBloom.Koreo.Demos
                     }
                 }
             }
-            for (int i = 0; i < rawLongEvents.Count; ++i)
+            for (int i = 0; i < _rawLongEvents.Count; ++i)
             {
-                KoreographyEvent evt = rawLongEvents[i];
+                KoreographyEvent evt = _rawLongEvents[i];
 
                 int payload = evt.GetIntValue();
 

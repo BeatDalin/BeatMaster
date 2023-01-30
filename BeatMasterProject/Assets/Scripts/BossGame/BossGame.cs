@@ -34,8 +34,10 @@ public class BossGame : Game
     protected override void Start()
     {
         base.Start();
+
         _rhythmGameController = GetComponent<RhythmGameController>();
         StartCoroutine(CoCheckStart());
+        PlayerStatus.Instance.ChangeStatus(Status.Idle);
         Init();
     }
 
@@ -58,14 +60,15 @@ public class BossGame : Game
         {
             lanes.enabled = true;
         }
+        PlayerStatus.Instance.ChangeStatus(Status.Run);
     }
 
     protected override void Init()
     {
         base.Init();
-        _events = playingKoreo.GetTrackByID("JumpCheck").GetAllEvents();
+        _events = SoundManager.instance.playingKoreo.GetTrackByID("JumpCheck").GetAllEvents();
         _eventRangeShort = CalculateRange(_events);
-        _events = playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
+        _events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
         itemCount = 0;
         // gameUI.InitUI();
@@ -119,7 +122,7 @@ public class BossGame : Game
             _isChecked = false; // initialize before a curve value becomes 1
             isLongFailed = false;
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             isLongPressed = true;
         }
@@ -136,8 +139,7 @@ public class BossGame : Game
     }
     private void CheckLongMiddle(KoreographyEvent evt)
     {
-        // if space key is released during long note
-        if (isLongPressed && Input.GetKeyUp(KeyCode.Space))
+        if (isLongPressed && Input.GetKeyUp(KeyCode.RightArrow))
         {
             isLongPressed = false;
             if (!isLongFailed)
@@ -153,7 +155,7 @@ public class BossGame : Game
         {
             _isChecked = false; // initialize before a curve value becomes 1
         }
-        if (isLongPressed && Input.GetKeyUp(KeyCode.Space))
+        if (isLongPressed && Input.GetKeyUp(KeyCode.RightArrow))
         {
             if (!isLongKeyCorrect) // increase item only once
             {

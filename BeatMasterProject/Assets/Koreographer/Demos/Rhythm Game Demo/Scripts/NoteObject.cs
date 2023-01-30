@@ -24,7 +24,7 @@ namespace SonicBloom.Koreo.Demos
 
         // If active, the Rhythm Game Controller that controls the game this Note Object is found within.
         //RhythmGameController gameController;
-        RhythmGameController gameController;
+        private RhythmGameController _gameController;
 
         public SPUM_SpriteList spumSpriteList;
 
@@ -45,12 +45,12 @@ namespace SonicBloom.Koreo.Demos
         #endregion
         #region Methods
 
-        public void Initialize(KoreographyEvent evt, SpriteRenderer sprite, LaneController laneCont, RhythmGameController gameCont)
+        public void Initialize(KoreographyEvent evt, Sprite sprite, LaneController laneCont, RhythmGameController gameCont)
         {
             trackedEvent = evt;
-            visuals.sprite = sprite.sprite;
+            visuals.sprite = sprite;
             laneController = laneCont;
-            gameController = gameCont;
+            _gameController = gameCont;
 
             UpdatePosition();
         }
@@ -60,7 +60,7 @@ namespace SonicBloom.Koreo.Demos
         {
             trackedEvent = null;
             laneController = null;
-            gameController = null;
+            _gameController = null;
         }
 
         private void Start()
@@ -77,7 +77,7 @@ namespace SonicBloom.Koreo.Demos
 
             if (transform.position.x < laneController.DespawnX - 1f)
             {
-                gameController.ReturnNoteObjectToPool(this);
+                _gameController.ReturnNoteObjectToPool(this);
                 Reset();
             }
             else if (transform.position.x <= laneController.DespawnX - spumSpriteList._bodyList[0].bounds.size.x / 2)
@@ -91,7 +91,7 @@ namespace SonicBloom.Koreo.Demos
         private void UpdateHeight()
         {
             float baseUnitHeight = visuals.sprite.rect.height / visuals.sprite.pixelsPerUnit;
-            float targetUnitHeight = gameController.WindowSizeInUnits * 2f; // Double it for before/after.
+            float targetUnitHeight = _gameController.WindowSizeInUnits * 2f; // Double it for before/after.
 
             Vector3 scale = transform.localScale;
             scale.y = targetUnitHeight / baseUnitHeight;
@@ -102,7 +102,7 @@ namespace SonicBloom.Koreo.Demos
         private void UpdateWidth()
         {
             float baseUnitWidth = visuals.sprite.rect.width / visuals.sprite.pixelsPerUnit;
-            float targetUnitWidth = gameController.WindowSizeInUnits * 2f;
+            float targetUnitWidth = _gameController.WindowSizeInUnits * 2f;
 
             Vector3 scale = transform.localScale;
             scale.x = targetUnitWidth / baseUnitWidth;
@@ -113,12 +113,12 @@ namespace SonicBloom.Koreo.Demos
         void UpdatePosition()
         {
             // Get the number of samples we traverse given the current speed in Units-Per-Second.
-            float samplesPerUnit = gameController.SampleRate / gameController.noteSpeed;
+            float samplesPerUnit = _gameController.SampleRate / _gameController.noteSpeed;
 
             // Our position is offset by the distance from the target in world coordinates.  This depends on
             //  the distance from "perfect time" in samples (the time of the Koreography Event!).
             Vector3 pos = laneController.TargetPosition;
-            pos.x -= (gameController.DelayedSampleTime - trackedEvent.StartSample) / samplesPerUnit;
+            pos.x -= (_gameController.DelayedSampleTime - trackedEvent.StartSample) / samplesPerUnit;
             transform.position = pos;
         }
 
@@ -128,8 +128,8 @@ namespace SonicBloom.Koreo.Demos
         public bool IsNoteHittable()
         {
             int noteTime = trackedEvent.StartSample;
-            int curTime = gameController.DelayedSampleTime;
-            int hitWindow = gameController.HitWindowSampleWidth;
+            int curTime = _gameController.DelayedSampleTime;
+            int hitWindow = _gameController.HitWindowSampleWidth;
 
             return (Mathf.Abs(noteTime - curTime) <= hitWindow);
         }
@@ -143,8 +143,8 @@ namespace SonicBloom.Koreo.Demos
             if (enabled)
             {
                 int noteTime = trackedEvent.StartSample;
-                int curTime = gameController.DelayedSampleTime;
-                int hitWindow = gameController.HitWindowSampleWidth;
+                int curTime = _gameController.DelayedSampleTime;
+                int hitWindow = _gameController.HitWindowSampleWidth;
 
                 bMissed = (curTime - noteTime > hitWindow);
             }
@@ -156,7 +156,7 @@ namespace SonicBloom.Koreo.Demos
         //  helps reduce runtime allocations.
         void ReturnToPool()
         {
-            gameController.ReturnNoteObjectToPool(this);
+            _gameController.ReturnNoteObjectToPool(this);
             Reset();
         }
 
