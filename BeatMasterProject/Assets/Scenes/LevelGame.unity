@@ -674,7 +674,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &241056708
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3391,6 +3391,10 @@ PrefabInstance:
       propertyPath: _bgmPlayer
       value: 
       objectReference: {fileID: 612035087}
+    - target: {fileID: 1448129277279769350, guid: cae8134d38f5dcf49a9d45b9c53a6fda, type: 3}
+      propertyPath: musicPlayer
+      value: 
+      objectReference: {fileID: 612035086}
     - target: {fileID: 1448129277279769368, guid: cae8134d38f5dcf49a9d45b9c53a6fda, type: 3}
       propertyPath: m_Name
       value: SoundManager
