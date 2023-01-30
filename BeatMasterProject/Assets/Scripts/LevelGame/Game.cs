@@ -76,7 +76,7 @@ public abstract class Game : MonoBehaviour
     protected virtual void Init()
     {
         longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
-        shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Jump").GetAllEvents().Count];
+        shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("NewJumpCheck").GetAllEvents().Count];
         longIdx = 0;
         shortIdx = 0;
         isLongPressed = false;

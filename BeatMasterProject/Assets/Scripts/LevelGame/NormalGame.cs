@@ -30,8 +30,8 @@ public class NormalGame : Game
     {
         base.Awake();
         // Short Note Event Track
-        Koreographer.Instance.RegisterForEventsWithTime("JumpCheck", CheckShortEnd);
-        
+        Koreographer.Instance.RegisterForEventsWithTime("NewJumpCheck", CheckShortEnd);
+
         // Long Note Event Track
         Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
         Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckStart", CheckLongStart);
@@ -47,7 +47,7 @@ public class NormalGame : Game
     protected override void Init()
     {
         base.Init();
-        _events = SoundManager.instance.playingKoreo.GetTrackByID("JumpCheck").GetAllEvents();
+        _events = SoundManager.instance.playingKoreo.GetTrackByID("NewJumpCheck").GetAllEvents();
         _eventRangeShort = CalculateRange(_events);
         _events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
