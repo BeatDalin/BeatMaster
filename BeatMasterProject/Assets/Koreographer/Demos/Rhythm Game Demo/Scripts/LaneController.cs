@@ -208,6 +208,7 @@ namespace SonicBloom.Koreo.Demos
             int samplesToTarget = GetSpawnSampleOffset();
 
             int currentTime = gameController.DelayedSampleTime;
+            Debug.Log($"pendingEventIdx : {pendingEventIdx}, laneEvents.Count : {laneEvents.Count}");
 
             // Spawn for all events within range.
             while (pendingEventIdx < laneEvents.Count &&
