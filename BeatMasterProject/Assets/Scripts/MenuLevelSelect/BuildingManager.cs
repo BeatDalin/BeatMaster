@@ -46,18 +46,14 @@ public class BuildingManager : MonoBehaviour
             // 레벨 Clear여부에 따라 건축물과 별을 보여준다.
             Building building = _buildings[i].GetComponent<Building>();
             bool isClear = currStageData[i].levelClear;
-
-            building.ShowBuilding(isClear);
-
+            
             if (isClear)
             {
+                Debug.Log(currStageData[i].star);
                 building.ShowStar(currStageData[i].star);
             }
             
-            else
-            {
-                break;
-            }
+            building.ShowBuilding(isClear);
         }
     }
 

@@ -9,15 +9,8 @@ public class Building : MonoBehaviour
     [SerializeField] private GameObject _model;
     [SerializeField] private GameObject _starCanvas;
 
-    private Image[] _starImg = new Image[3];
+    //public GameObject[] _starImg;
 
-    private void Start()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            _starImg[i] = _starCanvas.transform.GetChild(i).GetComponent<Image>();
-        }
-    }
     public void ShowBuilding(bool isClear)
     {
         _flat.GetComponent<MeshRenderer>().enabled = true;
@@ -30,9 +23,17 @@ public class Building : MonoBehaviour
 
     public void ShowStar(int star)
     {
-        for (int i = 0; i < star; i++)
+        for (int i = 0; i < 3; i++)
         {
-            _starImg[i].enabled = true;
+            if (i < star)
+            {
+                _starCanvas.transform.GetChild(i).GetComponent<Image>().enabled = true;
+            }
+            else
+            {
+                _starCanvas.transform.GetChild(i).GetComponent<Image>().enabled = false;
+
+            }
         }
     }
 }
