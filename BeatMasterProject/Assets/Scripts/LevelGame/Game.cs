@@ -75,7 +75,6 @@ public abstract class Game : MonoBehaviour
     
     protected virtual void Init()
     {
-        SoundManager.instance.PlayBGM(true);
         longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Jump").GetAllEvents().Count];
         longIdx = 0;

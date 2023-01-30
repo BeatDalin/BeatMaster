@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public enum TextType
@@ -15,10 +14,9 @@ public enum TextType
 public class LevelGameUI : MonoBehaviour
 {
     public NormalGame levelGame;
-    [FormerlySerializedAs("itemText")]
     [Header("Base UI")]
     [SerializeField] private Text _itemText;
-    [FormerlySerializedAs("deathText")] [SerializeField] private Text _deathText;
+    [SerializeField] private Text _deathText;
     [Header("Result UI")] 
     [SerializeField] private GameObject _finalPanel;
     [SerializeField] private Text _finalFast;
