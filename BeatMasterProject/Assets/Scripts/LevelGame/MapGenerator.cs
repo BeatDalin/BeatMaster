@@ -7,7 +7,7 @@ using SonicBloom.Koreo;
 
 public class MapGenerator : MonoBehaviour
 {
-    [SerializeField] private Koreography _koreography;
+    //[SerializeField] private Koreography _koreography;
 
     [Header("Event")]
     [SerializeField] [EventID] private string _mapEventID;
@@ -23,16 +23,17 @@ public class MapGenerator : MonoBehaviour
 
     private int _tileX = -1, _tileY;
 
-    private void Start()
+    private void Awake()
     {
-        _koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
+        //_koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
 
         GenerateMap();
     }
 
     private void GenerateMap()
     {
-        _mapEventList = _koreography.GetTrackByID(_mapEventID).GetAllEvents();
+        //_mapEventList = _koreography.GetTrackByID(_mapEventID).GetAllEvents();
+        _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
 
         for (int i = 0; i < _mapEventList.Count; i++)
         {
