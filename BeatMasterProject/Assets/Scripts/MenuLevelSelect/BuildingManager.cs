@@ -48,7 +48,6 @@ public class BuildingManager : MonoBehaviour
             bool isClear = currStageData[i].levelClear;
 
             building.ShowBuilding(isClear);
-            Debug.Log(i);
 
             if (isClear)
             {

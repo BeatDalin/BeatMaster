@@ -20,12 +20,12 @@ public class Building : MonoBehaviour
     }
     public void ShowBuilding(bool isClear)
     {
-        Instantiate(this);
-        
         _flat.GetComponent<MeshRenderer>().enabled = true;
         _flat.GetComponent<BoxCollider>().enabled = !isClear;
         _model.GetComponent<MeshRenderer>().enabled = isClear;
         _starCanvas.GetComponent<Canvas>().enabled = isClear;
+        
+        Instantiate(this);
     }
 
     public void ShowStar(int star)
