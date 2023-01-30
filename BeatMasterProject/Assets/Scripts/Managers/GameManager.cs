@@ -11,12 +11,4 @@ public class GameManager : Singleton<GameManager>
         SceneLoadManager.Instance.Init();
     }
 
-    private void Start()
-    {
-    }
-
-    void Update()
-    {
-        
-    }
 }

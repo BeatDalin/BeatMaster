@@ -23,6 +23,9 @@ public class LevelGameUI : MonoBehaviour
     [SerializeField] private Text _finalPerfect;
     [SerializeField] private Text _finalSlow;
     [SerializeField] private GameObject[] _star;
+    [SerializeField] private GameObject _starPrefab;
+    [SerializeField] private RectTransform _target;
+    [SerializeField] private GameObject _startPos;
     [SerializeField] private Color _successColor;
     [Header("Time Count UI")]
     [SerializeField] public GameObject timePanel;
@@ -32,11 +35,12 @@ public class LevelGameUI : MonoBehaviour
     [SerializeField] private Button _continueBtn;
     [SerializeField] private Button _restartBtn;
     [SerializeField] private Button _goSettingsBtn;
-    [SerializeField] private Button _goMenuBtn;
+    [SerializeField] private Button _goLevelMenuBtn;
     [Header("Settings UI")]
     [SerializeField] private GameObject _settingsPanel;
     [SerializeField] private Button _settingsCloseBtn;
 
+    private float delay = 0f;
     private void Awake()
     {
         levelGame = FindObjectOfType<NormalGame>();
@@ -69,6 +73,7 @@ public class LevelGameUI : MonoBehaviour
             UIManager.instance.ClosePopUp();
             levelGame.ContinueGame();
         });
+        _goLevelMenuBtn.onClick.AddListener(() => SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect));
         //settings
         _goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPopUp(_settingsPanel));
         _settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePopUp(); });
@@ -90,14 +95,57 @@ public class LevelGameUI : MonoBehaviour
         }
     }
     
-    public void ShowFinalResult(int[] finalResultSummary, int total)
+    public void ShowFinalResult(int[] finalResultSummary, int total, int stageIdx, int levelIdx)
     {
-        _finalFast.text = $"{finalResultSummary[1]}/{total}";
-        _finalPerfect.text = $"{finalResultSummary[2]}/{total}";
-        _finalSlow.text = $"{finalResultSummary[3]}/{total}";
         _finalPanel.SetActive(true);
+        
+        _finalFast.DOCounter(0, finalResultSummary[1], 1).onComplete += () =>
+        {
+            _finalFast.text = $"{finalResultSummary[1]}/{total}";
+            
+            _finalSlow.DOCounter(0, finalResultSummary[3], 1).onComplete += () =>
+            {
+                _finalSlow.text = $"{finalResultSummary[3]}/{total}";
+                
+                _finalPerfect.DOCounter(0, finalResultSummary[2], 1).onComplete += () =>
+                {
+                    _finalPerfect.text = $"{finalResultSummary[2]}/{total}";
+
+                    for (int i = 0; i < 30; i++)
+                    {
+                        GameObject g = Instantiate(_starPrefab);
+                        g.SetActive(true);
+                        
+                        g.transform.SetParent(_startPos.transform);
+                        g.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+
+                        g.transform.localScale = new Vector3(0, 0, 0);
+            
+                        g.transform.DOScale(new Vector3(1, 1, 1), 1f).SetDelay(delay).SetEase(Ease.OutBack);
+            
+                        g.GetComponent<RectTransform>()
+                            .DOAnchorPos(_target.anchoredPosition, 1f)
+                            .SetDelay(delay + 0.5f)
+                            .SetEase(Ease.InBack).onComplete += () =>
+                        {
+                            g.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.Flash);
+                        };
+
+                        delay += 0.2f;
+                    }
+                    
+                    ShowStar(DataCenter.Instance.GetLevelData(stageIdx, levelIdx).star);
+                };
+            };
+        };
+        //_finalFast.text = $"{finalResultSummary[1]}/{total}";
+        //_finalPerfect.DOCounter(0, finalResultSummary[2], 1);
+        //_finalPerfect.text = $"{finalResultSummary[2]}/{total}";
+        //_finalSlow.DOCounter(0, finalResultSummary[3], 1);
+        //_finalSlow.text = $"{finalResultSummary[3]}/{total}";
+        
     }
-    
+
     private void OpenPause()
     {
         UIManager.instance.OpenPopUp(_pausePanel);

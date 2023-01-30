@@ -20,12 +20,8 @@ public class TouchEffect : MonoBehaviour
     void Start()
     {
         _sprite = GetComponent<SpriteRenderer>();
-        _direction = new Vector2(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
-        float size = Random.Range(minSize, maxSize);
-
-        transform.localScale = new Vector2(size, size);
-
-        _sprite.color = colors[Random.Range(0, colors.Length)];
+        
+        InitEffect();
     }
 
     // Update is called once per frame
@@ -43,7 +39,20 @@ public class TouchEffect : MonoBehaviour
 
         if (_sprite.color.a < 0.1f)
         {
-            Destroy(gameObject);
+            InitEffect();
+            
+            ObjectPooling.ReturnObject(gameObject);
         }
+    }
+
+    private void InitEffect()
+    {
+        _direction = new Vector2(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
+
+        float size = Random.Range(minSize, maxSize);
+
+        transform.localScale = new Vector2(size, size);
+        
+        _sprite.color = colors[Random.Range(0, colors.Length)];
     }
 }

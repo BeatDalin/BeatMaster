@@ -30,6 +30,7 @@ public class MouseClick : MonoBehaviour
         Vector3 mPosition = Camera.main.ScreenToWorldPoint(mouse);
         //mPosition.z = 20f;
 
-        Instantiate(_touchEffect, mPosition, Quaternion.identity);
+        ObjectPooling.GetObject(mPosition);
+        //Instantiate(_touchEffect, mPosition, Quaternion.identity);
     }
 }

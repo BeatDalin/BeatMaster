@@ -2,7 +2,9 @@ using System;
 using SonicBloom.Koreo;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NormalGame : Game
 {
@@ -16,6 +18,13 @@ public class NormalGame : Game
     
     private bool _isChecked; // to prevent double check
     
+    [SerializeField] private RectTransform _maskImage;
+    [SerializeField] private RectTransform _outLine;
+    [SerializeField] private Image _outLineColor;
+    [SerializeField] private Color _perfectColor;
+    [SerializeField] private Color _fastColor;
+    [SerializeField] private Color _slowColor;
+    [SerializeField] private Color _failColor;
     [Header("Input KeyCode")]
     private KeyCode _shortNoteKey = KeyCode.LeftArrow;
     private KeyCode _longNoteKey = KeyCode.RightArrow;
@@ -44,6 +53,8 @@ public class NormalGame : Game
         _eventRangeShort = CalculateRange(_events);
         _events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
+        _outLine.sizeDelta = new Vector2(Screen.width, Screen.height);
+        _maskImage.sizeDelta = new Vector2(Screen.width - 60f, Screen.height - 60f);
         itemCount = 0;
         // gameUI.InitUI();
     }
@@ -81,6 +92,7 @@ public class NormalGame : Game
         {
             _isChecked= true;
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
+            ChangeOutLineColor();
             shortIdx++;
             if (!isShortKeyCorrect)
             {
@@ -88,6 +100,38 @@ public class NormalGame : Game
                 Rewind(Vector2.zero, sampleTime-50000);
             }
             isShortKeyCorrect = false;
+        }
+    }
+
+    private void ChangeOutLineColor()
+    {
+        if (shortResult[shortIdx] == BeatResult.Perfect)
+        {
+            _outLineColor.DOColor(_perfectColor, 0.1f).onComplete += () =>
+            {
+                _outLineColor.DOColor(Color.white, 0.1f);
+            };
+        }
+        else if (shortResult[shortIdx] == BeatResult.Fast)
+        {
+            _outLineColor.DOColor(_fastColor, 0.1f).onComplete += () =>
+            {
+                _outLineColor.DOColor(Color.white, 0.1f);
+            };
+        }
+        else if (shortResult[shortIdx] == BeatResult.Slow)
+        {
+            _outLineColor.DOColor(_slowColor, 0.1f).onComplete += () =>
+            {
+                _outLineColor.DOColor(Color.white, 0.1f);
+            };
+        }
+        else
+        {
+            _outLineColor.DOColor(_failColor, 0.1f).onComplete += () =>
+            {
+                _outLineColor.DOColor(Color.white, 0.1f);
+            };
         }
     }
 
@@ -111,7 +155,6 @@ public class NormalGame : Game
                 //=======Rewind 자리=========
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
                 Rewind(Vector2.zero, sampleTime); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
-                Debug.Log("long first rewind");
             }
         }
     }
@@ -124,7 +167,6 @@ public class NormalGame : Game
             //==============Rewind 자리==============
             if (!isLongFailed) 
             {
-                Debug.Log("long middle rewind");
                 Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
             }
@@ -141,6 +183,10 @@ public class NormalGame : Game
             if (!isLongKeyCorrect) // increase item only once
             {
                 // correct!
+                _outLineColor.DOColor(_perfectColor, 1f).onComplete += () =>
+                {
+                    _outLineColor.DOColor(Color.white, 1f);
+                };
                 isLongKeyCorrect = true;
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, itemCount);
@@ -160,7 +206,6 @@ public class NormalGame : Game
                 // ===============Rewind==============
                 if (!isLongFailed)
                 {
-                    Debug.Log("long last rewind");
                     Rewind(Vector2.zero, sampleTime); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
                 }
             }
@@ -196,7 +241,7 @@ public class NormalGame : Game
     private void Rewind()
     {
         DecreaseItem(1);
-        gameUI.UpdateText(TextType.Item, itemCount);
+        //gameUI.UpdateText(TextType.Item, itemCount);
         int death = IncreaseDeath(); // increase death count
         // gameUI.UpdateText(TextType.Death, death);
     }
