@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public enum TextType
@@ -14,9 +15,10 @@ public enum TextType
 public class LevelGameUI : MonoBehaviour
 {
     public NormalGame levelGame;
+    [FormerlySerializedAs("itemText")]
     [Header("Base UI")]
-    [SerializeField] private Text itemText;
-    [SerializeField] private Text deathText;
+    [SerializeField] private Text _itemText;
+    [FormerlySerializedAs("deathText")] [SerializeField] private Text _deathText;
     [Header("Result UI")] 
     [SerializeField] private GameObject _finalPanel;
     [SerializeField] private Text _finalFast;
@@ -40,7 +42,7 @@ public class LevelGameUI : MonoBehaviour
     [SerializeField] private GameObject _settingsPanel;
     [SerializeField] private Button _settingsCloseBtn;
 
-    private float delay = 0f;
+    private float _delay = 0f;
     private void Awake()
     {
         levelGame = FindObjectOfType<NormalGame>();
@@ -62,7 +64,7 @@ public class LevelGameUI : MonoBehaviour
 
     public void InitUI()
     {
-        itemText.text = "0";
+        _itemText.text = "0";
         timePanel.SetActive(true);
         _finalPanel.SetActive(false);
         _pausePanel.SetActive(false);
@@ -84,10 +86,10 @@ public class LevelGameUI : MonoBehaviour
         switch (type)
         {
             case TextType.Item:
-                itemText.text = number.ToString();
+                _itemText.text = number.ToString();
                 break;
             case TextType.Death:
-                deathText.text = number.ToString();
+                _deathText.text = number.ToString();
                 break;
             case TextType.Time:
                 timeCount.text = number.ToString();
@@ -121,17 +123,17 @@ public class LevelGameUI : MonoBehaviour
 
                         g.transform.localScale = new Vector3(0, 0, 0);
             
-                        g.transform.DOScale(new Vector3(1, 1, 1), 1f).SetDelay(delay).SetEase(Ease.OutBack);
+                        g.transform.DOScale(new Vector3(1, 1, 1), 1f).SetDelay(_delay).SetEase(Ease.OutBack);
             
                         g.GetComponent<RectTransform>()
                             .DOAnchorPos(_target.anchoredPosition, 1f)
-                            .SetDelay(delay + 0.5f)
+                            .SetDelay(_delay + 0.5f)
                             .SetEase(Ease.InBack).onComplete += () =>
                         {
                             g.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.Flash);
                         };
 
-                        delay += 0.2f;
+                        _delay += 0.2f;
                     }
                     
                     ShowStar(DataCenter.Instance.GetLevelData(stageIdx, levelIdx).star);
