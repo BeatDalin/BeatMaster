@@ -126,7 +126,6 @@ namespace SonicBloom.Koreo.Demos
                 KoreographyEvent evt = _rawShortEvents[i];
 
                 int payload = evt.GetIntValue();
-                Debug.Log(payload);
                 // Find the right lane.
                 for (int j = 0; j < noteLanes.Count; ++j)
                 {
