@@ -59,7 +59,7 @@ public class NormalGame : Game
         _outLine.sizeDelta = new Vector2(Screen.width, Screen.height);
         _maskImage.sizeDelta = new Vector2(Screen.width - 60f, Screen.height - 60f);
         itemCount = 0;
-        //gameUI.InitUI();
+        gameUI.InitUI();
     }
 
     private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
@@ -72,7 +72,7 @@ public class NormalGame : Game
         {
             isShortKeyCorrect = true;
             IncreaseItem();
-            //gameUI.UpdateText(TextType.Item, itemCount);
+            gameUI.UpdateText(TextType.Item, itemCount);
             _pressedTime = sampleTime; // record the sample time when the button was pressed
         }
 
@@ -178,7 +178,7 @@ public class NormalGame : Game
                 };
                 isLongKeyCorrect = true;
                 IncreaseItem();
-                //gameUI.UpdateText(TextType.Item, itemCount);
+                gameUI.UpdateText(TextType.Item, itemCount);
 
                 _pressedTimeLong = sampleTime;
             }
@@ -222,18 +222,18 @@ public class NormalGame : Game
         
         // 체크 포인트 이후로 획득한 아이템 개수 계산
         DecreaseItem(1); // for testing purpose ... 
-        //gameUI.UpdateText(TextType.Item, itemCount);
+        gameUI.UpdateText(TextType.Item, itemCount);
         int death = IncreaseDeath(); // increase death count
-        //gameUI.UpdateText(TextType.Death, death);
+        gameUI.UpdateText(TextType.Death, death);
         // StartCoroutine(CoStartWithDelay(musicSampleTime)); // plays music after delay, at a certain point
     }
 
     private void Rewind()
     {
         DecreaseItem(1);
-        //gameUI.UpdateText(TextType.Item, itemCount);
+        gameUI.UpdateText(TextType.Item, itemCount);
         int death = IncreaseDeath(); // increase death count
-        //gameUI.UpdateText(TextType.Death, death);
+        gameUI.UpdateText(TextType.Death, death);
     }
 
     private void IncreaseItem()

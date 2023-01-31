@@ -1009,7 +1009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80496cb18434954469e4eeb1d27d8183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  track: {fileID: 11400000, guid: db39f412ad54877409bad249d4bde94c, type: 2}
+  track: {fileID: 11400000, guid: 99ff6d4bc47fb99408faf277f757543a, type: 2}
 --- !u!4 &512957734
 Transform:
   m_ObjectHideFlags: 0
@@ -1200,7 +1200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e2b305279c05614aa51881dc9466317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventID: BossTrack_1
+  eventID: Boss
   poolAmount: 10
   notePrefab: {fileID: 4409802704433096675, guid: 319bf764f6d5d2740a354382fdaa0746, type: 3}
   backgroundPanel: {fileID: 248491048}
@@ -4225,7 +4225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventID:
-  - BossTrack_1
+  - Boss
   hitWindowRangeInMS: 80
   noteSpeed: 1
   noteObjectArchetype: {fileID: 855271053}
