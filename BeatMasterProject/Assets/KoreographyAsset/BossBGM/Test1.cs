@@ -11,15 +11,13 @@ public class Test1 : MonoBehaviour
         var evt = track.GetAllEvents();
         for (int i = 0; i < track.GetAllEvents().Count; i++)
         {
+            var start = evt[i].StartSample - 5000;
+            var end = evt[i].StartSample + 5000;
 
-                var start = evt[i].StartSample - 5000;
-                var end = evt[i].StartSample + 5000;
-
-                var trackEvent = evt[i];
-                trackEvent.Payload = new CurvePayload();
-                Debug.Log(trackEvent.HasCurvePayload());
-                trackEvent.StartSample = start;
-                trackEvent.EndSample = end;
+            var trackEvent = evt[i];
+            trackEvent.Payload = new CurvePayload();
+            trackEvent.StartSample = start;
+            trackEvent.EndSample = end;
         }
     }
 
