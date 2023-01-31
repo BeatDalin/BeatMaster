@@ -37,23 +37,23 @@ public class BuildingManager : MonoBehaviour
 
     private void SetBuildings()
     {
-        // Level 5까지 Clear했을 경우 다음 Level 보여줄 필요 없어 분기 처리
+        // Level 5 Clear 시 Stage Clear
+        bool isStageClear = currMaxLevel == 4 ? true : false;
+        
+        // Level 5 Clear 시 보여줄 level 없으니 for문 범위 제한
         int limitMaxLevel = currMaxLevel + 1 > 4 ? 4 : currMaxLevel + 1;
-
-        // 현재 레벨의 모델을 보여준다.
+        
+        // 현재 Clear한 레벨과 그 다음 레벨 모델을 보여준다.
         for (int i = 0; i <= limitMaxLevel; i++)
         {
             // 레벨 Clear여부에 따라 건축물과 별을 보여준다.
             Building building = _buildings[i].GetComponent<Building>();
+            
             bool isClear = currStageData[i].levelClear;
-            
-            if (isClear)
-            {
-                Debug.Log(currStageData[i].star);
-                building.ShowStar(currStageData[i].star);
-            }
-            
-            building.ShowBuilding(isClear);
+            float alpha = currStageData[i].alpha;
+            int star = currStageData[i].star;
+
+            building.ShowBuilding(isStageClear, isClear, alpha, star);
         }
     }
 
