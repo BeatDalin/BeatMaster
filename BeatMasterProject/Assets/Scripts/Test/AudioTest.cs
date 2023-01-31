@@ -15,17 +15,17 @@ public class AudioTest : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            SoundManager.instance.PlaySFX("Jump");
-        }
+        // if (Input.GetKeyDown(KeyCode.F))
+        // {
+        //     SoundManager.instance.PlaySFX("Jump");
+        // }
+        //
+        // if (Input.GetKeyDown(KeyCode.J))
+        // {
+        //     SoundManager.instance.PlaySFX("Attack");
+        // }
 
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            SoundManager.instance.PlaySFX("Attack");
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             Time.timeScale = 1;
             SoundManager.instance.PlayBGM(bgmName);
