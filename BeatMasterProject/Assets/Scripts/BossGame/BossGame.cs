@@ -25,7 +25,7 @@ public class BossGame : Game
     {
         base.Awake();
         // Short Note Event Track
-        Koreographer.Instance.RegisterForEventsWithTime("BossCheck", CheckShortEnd);
+        Koreographer.Instance.RegisterForEventsWithTime("BossEventCheck", CheckShortEnd);
 
         // Long Note Event Track
         /*Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
@@ -33,7 +33,7 @@ public class BossGame : Game
         Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckEnd", CheckLongEnd);*/
         
         // Result Array
-        shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("BossCheck").GetAllEvents().Count];
+        shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("BossEventCheck").GetAllEvents().Count];
         //longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
     }
@@ -72,7 +72,7 @@ public class BossGame : Game
     protected override void Init()
     {
         base.Init();
-        _events = SoundManager.instance.playingKoreo.GetTrackByID("BossCheck").GetAllEvents();
+        _events = SoundManager.instance.playingKoreo.GetTrackByID("BossEventCheck").GetAllEvents();
         _eventRangeShort = CalculateRange(_events);
         /*_events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);*/
