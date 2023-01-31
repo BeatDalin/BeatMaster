@@ -164,7 +164,11 @@ public class MenuTitleButton : MonoBehaviour
     {
         SoundManager.instance.PlaySFX("Touch");
         
-        //SceneManager.LoadScene(SceneName); 씬 로드(씬매니저 없어서 임시로 해둠)
+        //temp
+        if (sceneName == "Stage")
+        {
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect);
+        }
     }
 
     
