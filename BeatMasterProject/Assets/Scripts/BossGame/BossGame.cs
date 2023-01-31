@@ -63,10 +63,7 @@ public class BossGame : Game
             CheckGameState();
             yield return null;
         }
-        foreach (var lanes in _rhythmGameController.noteLanes)
-        {
-            lanes.enabled = true;
-        }
+        _rhythmGameController.noteLane.enabled = true;
         PlayerStatus.Instance.ChangeStatus(Status.Run);
     }
 
@@ -92,7 +89,7 @@ public class BossGame : Game
             isShortKeyCorrect = true;
             // gameUI.UpdateText(TextType.Item, itemCount);
             _pressedTime = sampleTime; // record the sample time when the button was pressed
-            _laneController.trackedNotes.Peek().CorrectHit();
+            _laneController.trackedNotes.Peek().OnHit();
             _noteCreator.ReturnLastObject();
         }
 

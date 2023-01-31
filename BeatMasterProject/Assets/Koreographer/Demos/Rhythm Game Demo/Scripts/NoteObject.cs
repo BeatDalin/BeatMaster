@@ -76,7 +76,7 @@ namespace SonicBloom.Koreo.Demos
             UpdatePosition();
         }
 
-        public void CorrectHit()
+        void ReturnToPool()
         {
             _gameController.ReturnNoteObjectToPool(this);
             Reset();
@@ -85,6 +85,12 @@ namespace SonicBloom.Koreo.Demos
         public void Missed()
         {
             _animator.Play("Crash", -1, 0f);
+            ReturnToPool();
+        }
+
+        public void OnHit()
+        {
+            PlayerStatus.Instance.ChangeStatus(Status.Attack);
             ReturnToPool();
         }
 
@@ -156,18 +162,10 @@ namespace SonicBloom.Koreo.Demos
 
         // Returns this Note Object to the pool which is controlled by the Rhythm Game Controller.  This
         //  helps reduce runtime allocations.
-        void ReturnToPool()
-        {
-            _gameController.ReturnNoteObjectToPool(this);
-            Reset();
-        }
+
 
         // Performs actions when the Note Object is hit.
-        public void OnHit()
-        {
-            PlayerStatus.Instance.ChangeStatus(Status.Attack);
-            ReturnToPool();
-        }
+
 
         // Performs actions when the Note Object is cleared.
         public void OnClear()

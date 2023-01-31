@@ -28,7 +28,8 @@ namespace SonicBloom.Koreo.Demos
         public NoteObject noteObjectArchetype;
 
         [Tooltip("The list of Lane Controller objects that represent a lane for an event to travel down.")]
-        public List<LaneController> noteLanes = new List<LaneController>();
+        //public List<LaneController> noteLanes = new List<LaneController>();
+        public LaneController noteLane;
 
         [Tooltip("The amount of time in seconds to provide before playback of the audio begins.  Changes to this value are not immediately handled during the lead-in phase while playing in the Editor.")]
         public float leadInTime;
@@ -104,12 +105,7 @@ namespace SonicBloom.Koreo.Demos
         void Start()
         {
             InitializeLeadIn();
-
-            // Initialize all the Lanes.
-            for (int i = 0; i < noteLanes.Count; ++i)
-            {
-                noteLanes[i].Initialize(this);
-            }
+            noteLane.Initialize(this);
 
             // Initialize events.
             //playingKoreo = SoundManager.instance.playingKoreo; //지은님코드 올리시면 이걸로 수정
@@ -126,19 +122,8 @@ namespace SonicBloom.Koreo.Demos
                 KoreographyEvent evt = _rawShortEvents[i];
 
                 int payload = evt.GetIntValue();
-                // Find the right lane.
-                for (int j = 0; j < noteLanes.Count; ++j)
-                {
-                    LaneController lane = noteLanes[j];
-                    if (lane.DoesMatchPayload(payload))
-                    {
-                        // Add the object for input tracking.
-                        lane.AddEventToLane(evt);
 
-                        // Break out of the lane searching loop.
-                        break;
-                    }
-                }
+                noteLane.AddEventToLane(evt);
             }
             /*for (int i = 0; i < _rawLongEvents.Count; ++i)
             {
@@ -301,10 +286,10 @@ namespace SonicBloom.Koreo.Demos
             playingKoreo.ResetTimings();
 
             // Reset all the lanes so that tracking starts over.
-            for (int i = 0; i < noteLanes.Count; ++i)
+/*            for (int i = 0; i < noteLanes.Count; ++i)
             {
                 noteLanes[i].Restart();
-            }
+            }*/
 
             // Reinitialize the lead-in-timing.
             InitializeLeadIn();
