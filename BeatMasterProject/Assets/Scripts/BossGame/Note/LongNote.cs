@@ -10,14 +10,14 @@ public class LongNote : Note
     private RectTransform _myRect;
     private Vector3 _initPos;
     private float _offsetX;
-    
+
 
     protected override void OnEnable()
     {
         base.OnEnable();
-        
+
         float samplePerUnit = noteCreator.SampleRate;
-        
+
         _startSample = myEvent.StartSample;
         _endSample = myEvent.EndSample;
 
@@ -31,7 +31,7 @@ public class LongNote : Note
         Vector2 pivotVec = new Vector2(0f, 0.5f);
         _myRect.pivot = pivotVec;
 
-        
+
         _initPos = transform.localPosition;
         _initPos.y = 0f;
         _initPos.x = _myRect.sizeDelta.x;
@@ -59,10 +59,6 @@ public class LongNote : Note
 
     protected override void CrossEndLine()
     {
-        if (destroyPos.x < transform.localPosition.x + _initPos.x)
-        {
-            return;
-        }
         noteCreator.ReturnObject(gameObject);
     }
 
@@ -70,11 +66,9 @@ public class LongNote : Note
     {
         samplePerUnit = noteCreator.SampleRate;
         // 목표 위치
-        
+
         Vector3 pos = noteCreator.transform.localPosition;
         pos.x -= (noteCreator.CurrentSampleTime - myEvent.StartSample) / samplePerUnit * Screen.width;
         transform.localPosition = pos;
     }
-    
-    
 }

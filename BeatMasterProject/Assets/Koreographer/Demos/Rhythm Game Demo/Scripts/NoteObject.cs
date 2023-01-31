@@ -74,16 +74,24 @@ namespace SonicBloom.Koreo.Demos
             UpdateWidth();
 
             UpdatePosition();
+        }
 
-            if (transform.position.x < laneController.DespawnX - 1f)
-            {
-                _gameController.ReturnNoteObjectToPool(this);
-                Reset();
-            }
-            else if (transform.position.x <= laneController.DespawnX - spumSpriteList._bodyList[0].bounds.size.x / 2)
-            {
-                _animator.Play("Crash", -1, 0f);
-            }
+        private void ReturnToPool()
+        {
+            _gameController.ReturnNoteObjectToPool(this);
+            Reset();
+        }
+
+        public void Missed()
+        {
+            _animator.Play("Crash", -1, 0f);
+            ReturnToPool();
+        }
+
+        public void OnHit()
+        {
+            PlayerStatus.Instance.ChangeStatus(Status.Attack);
+            ReturnToPool();
         }
 
         // Updates the height of the Note Object.  This is relative to the speed at which the notes fall and 
@@ -154,18 +162,10 @@ namespace SonicBloom.Koreo.Demos
 
         // Returns this Note Object to the pool which is controlled by the Rhythm Game Controller.  This
         //  helps reduce runtime allocations.
-        void ReturnToPool()
-        {
-            _gameController.ReturnNoteObjectToPool(this);
-            Reset();
-        }
+
 
         // Performs actions when the Note Object is hit.
-        public void OnHit()
-        {
-            PlayerStatus.Instance.ChangeStatus(Status.Attack);
-            ReturnToPool();
-        }
+
 
         // Performs actions when the Note Object is cleared.
         public void OnClear()
