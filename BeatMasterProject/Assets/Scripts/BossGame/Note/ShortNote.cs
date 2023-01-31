@@ -9,6 +9,7 @@ public class ShortNote : Note
     protected override void Init()
     {
         noteCreator = FindObjectOfType<ShortNoteCreater>();
+        noteCreatorTransform = noteCreator.GetComponent<RectTransform>();
         destroyPos = GameObject.Find("DestroyPos").transform.localPosition;
     }
 }
