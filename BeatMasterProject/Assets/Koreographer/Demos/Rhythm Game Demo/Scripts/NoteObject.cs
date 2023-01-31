@@ -76,7 +76,7 @@ namespace SonicBloom.Koreo.Demos
             UpdatePosition();
         }
 
-        void ReturnToPool()
+        private void ReturnToPool()
         {
             _gameController.ReturnNoteObjectToPool(this);
             Reset();
