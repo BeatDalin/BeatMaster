@@ -30,7 +30,7 @@ public abstract class Game : MonoBehaviour
     [Header("Result Check")]
     public BeatResult[] longResult;
     public BeatResult[] shortResult;
-    protected static int _totalNoteCount = 0;
+    protected static int totalNoteCount = 0;
     // long notes
     protected int longIdx = 0;
     protected bool isLongPressed = false;
@@ -96,7 +96,7 @@ public abstract class Game : MonoBehaviour
         {
             SummarizeResult();
             RateResult(_stageIdx, _levelIdx);
-            gameUI.ShowFinalResult(_finalSummary, _totalNoteCount, _stageIdx, _levelIdx); // for testing purpose ...
+            gameUI.ShowFinalResult(_finalSummary, totalNoteCount, _stageIdx, _levelIdx); // for testing purpose ...
         }
     }
     protected void StartWithDelay(int startSample = 0)
@@ -215,12 +215,12 @@ public abstract class Game : MonoBehaviour
         curLevelData.slowCount = _finalSummary[3];
         curLevelData.levelClear = true;
         // Push data into current level's data
-        if (_finalSummary[2] == _totalNoteCount)
+        if (_finalSummary[2] == totalNoteCount)
         {
             gameUI.ShowStar(3);
             curLevelData.alpha = 1f;
         }
-        else if (_finalSummary[2] >= _totalNoteCount / 3 * 2)
+        else if (_finalSummary[2] >= totalNoteCount / 3 * 2)
         {
             curLevelData.star = 2;
             curLevelData.alpha = 2 / 3f;
