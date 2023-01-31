@@ -6,7 +6,7 @@ public class BuildingManager : MonoBehaviour
 {
     public int currStage = 1;
     public int currMaxLevel; // 현재 Clear한 레벨 중 가장 높은 레벨
-    //[SerializeField] GameObject levelIndicator; //향후 Waypoint 완성 시 활성화 예정..
+    private WaypointMover _levelIndicator; //향후 Waypoint 완성 시 활성화 예정..
 
     // 현재 Stage의 LevelData들
     public LevelData[] currStageData;
@@ -16,49 +16,68 @@ public class BuildingManager : MonoBehaviour
     
     private void Start()
     {
+        // Debug용 Data 초기화
+        //DataCenter.Instance.InitializeAllData();
+        
         DataCenter.Instance.LoadData();
         
-        currMaxLevel = GetMaxLevelInStage(currMaxLevel);
+        // Level 정보 저장
+        for (int i = 0; i < 5; i++)
+        {
+            currStageData[i] =
+                DataCenter.Instance.GetLevelData(currStage - 1, i);
+        }
+        
+        _levelIndicator = FindObjectOfType<WaypointMover>();
 
-        // Level 5까지 Clear했을 경우 다음 Level은 보여줄 필요가 없으니 break
+        currMaxLevel = GetMaxLevelInStage();
+
+        SetBuildings();
+    }
+
+    private void SetBuildings()
+    {
+        // Level 5 Clear 시 Stage Clear
+        bool isStageClear = currMaxLevel == 4 ? true : false;
+        
+        // Level 5 Clear 시 보여줄 level 없으니 for문 범위 제한
         int limitMaxLevel = currMaxLevel + 1 > 4 ? 4 : currMaxLevel + 1;
         
-        // 현재 레벨의 모델을 보여준다.
-        for (int i = 0; i < limitMaxLevel; i++)
+        // 현재 Clear한 레벨과 그 다음 레벨 모델을 보여준다.
+        for (int i = 0; i <= limitMaxLevel; i++)
         {
-            // Clear한 레벨 정보를 저장
-            currStageData[i] = 
-                DataCenter.Instance.GetLevelData(currStage - 1, i);
-            
             // 레벨 Clear여부에 따라 건축물과 별을 보여준다.
             Building building = _buildings[i].GetComponent<Building>();
+            
             bool isClear = currStageData[i].levelClear;
-            
-            building.ShowBuilding(isClear);
-            
-            if (isClear)
-            {
-                building.ShowStar(currStageData[i].star);
-            }
+            float alpha = currStageData[i].alpha;
+            int star = currStageData[i].star;
 
-            else
-            {
-                break;
-            }
+            building.ShowBuilding(isStageClear, isClear, alpha, star);
+        }
+    }
+
+    private void Update()
+    {
+        if (currMaxLevel < GetMaxLevelInStage())
+        {
+            currMaxLevel = GetMaxLevelInStage();
+            
+            _levelIndicator.UpdateWaypointPosition();
         }
     }
 
     /// <summary>
     /// 현재 Stage 내에서 클리어한 최대 level을 반환하는 함수
     /// </summary>
-    /// <returns>return 값 0 == level 1 Clear여부 알 수 없음, 값 4 == level 5 Clear</returns>
-    public int GetMaxLevelInStage(int currMaxLevel)
+    /// <returns>return 값 -1 == level 1 Clear X, 값 0 = level 1 Clear, 값 4 == level 5 Clear</returns>
+    public int GetMaxLevelInStage()
     {
         int maxLevel;
         
-        maxLevel = currMaxLevel;
+        maxLevel = -1;
 
-        for (int i = 4; i >= 0; i--)
+        for (int i = 4; i >= 0; --i)
         {
             if (currStageData[i].levelClear)
             {

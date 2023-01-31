@@ -1,31 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Building : MonoBehaviour
 {
     [SerializeField] private GameObject _flat;
-    [SerializeField] private GameObject _model;
     [SerializeField] private GameObject _starCanvas;
-    [SerializeField] private Image[] _starImg;
-
-    public void ShowBuilding(bool isClear)
+    [SerializeField] private Material[] _materials; //index 0 == black, index 1 == color
+    public void ShowBuilding(bool isStageClear, bool isClear, float alpha, int star)
     {
+        GameObject model = gameObject.transform.GetChild(1).gameObject;
+
+        Canvas stars = _starCanvas.GetComponent<Canvas>();
+
+        if (isClear)
+        {
+            MeshRenderer mesh = model.GetComponent<MeshRenderer>();
+
+            Material currMat = isStageClear ? _materials[1] : _materials[0];
+            
+            currMat.color = new Color(currMat.color.r, currMat.color.g, currMat.color.b, alpha);
+            mesh.material = currMat;
+            
+            ShowStar(star);
+            
+            stars.enabled = true;
+            
+            model.SetActive(true);
+        }
+        
+        else
+        {
+            stars.enabled = false;
+            
+            model.SetActive(false);
+        }
+        
+        _flat.SetActive(true);
+        
         Instantiate(this);
-        _flat.GetComponent<MeshRenderer>().enabled = true;
-        _flat.GetComponent<BoxCollider>().enabled = !isClear;
-        _model.GetComponent<MeshRenderer>().enabled = isClear;
-        _starCanvas.GetComponent<Canvas>().enabled = isClear;
     }
 
-    public void ShowStar(int star)
+    private void ShowStar(int star)
     {
-        for (int i = 0; i < star; i++)
+        for (int i = 0; i < 3; i++)
         {
-            _starImg[i].enabled = true;
+            Image starImg = _starCanvas.transform.GetChild(i).GetComponent<Image>();
+
+            if (i < star)
+            {
+                starImg.enabled = true;
+            }
+            else
+            {
+                starImg.enabled = false;
+            }
         }
     }
+    
 }
    
     

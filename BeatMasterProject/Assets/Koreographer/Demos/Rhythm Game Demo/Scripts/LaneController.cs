@@ -34,7 +34,7 @@ namespace SonicBloom.Koreo.Demos
 
         // A Queue that contains all of the Note Objects currently active (on-screen) within this lane.  Input and
         //  lifetime validity checks are tracked with operations on this Queue.
-        Queue<NoteObject> trackedNotes = new Queue<NoteObject>();
+        public Queue<NoteObject> trackedNotes = new Queue<NoteObject>();
 
         // A reference to the Rythm Game Controller.  Provides access to the NoteObject pool and other parameters.
         RhythmGameController gameController;
@@ -116,10 +116,10 @@ namespace SonicBloom.Koreo.Demos
         void Update()
         {
             // Clear out invalid entries.
-            while (trackedNotes.Count > 0 && trackedNotes.Peek().IsNoteMissed())
-            {
-                trackedNotes.Dequeue();
-            }
+            /*            while (trackedNotes.Count > 0 && trackedNotes.Peek().IsNoteMissed())
+                        {
+                            trackedNotes.Dequeue();
+                        }*/
 
             // Check for new spawns.
             CheckSpawnNext();
@@ -150,11 +150,10 @@ namespace SonicBloom.Koreo.Demos
             CheckInput(_input);
         }
 
-        private void CheckInput(string input)
+        private void CheckInput(string input) //수정예정
         {
             if (Input.GetKeyDown(keyboardButton) || keyboardButton.ToString() == input)
             {
-                CheckNoteHit();
                 SetScalePress();
             }
             else if (Input.GetKey(keyboardButton) || keyboardButton.ToString() == input)
@@ -195,8 +194,6 @@ namespace SonicBloom.Koreo.Demos
             if (trackedNotes.Count > 0 && trackedNotes.Peek().IsNoteHittable())
             {
                 NoteObject hitNote = trackedNotes.Dequeue();
-                //trackedHammer.Dequeue();//추가
-
                 hitNote.OnHit();
             }
         }

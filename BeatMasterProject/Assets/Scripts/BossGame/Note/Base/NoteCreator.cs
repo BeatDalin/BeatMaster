@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SonicBloom.Koreo;
 using UnityEngine;
+using System.Linq;
 
 public abstract class NoteCreator : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public abstract class NoteCreator : MonoBehaviour
     public int CurrentSampleTime { get => playingKoreo.GetLatestSampleTime(); }
     public KoreographyEvent CurrentEvent { get => rawEvents[noteIndex]; }
 
-    [EventID] [SerializeField] protected string eventID;
+    [EventID][SerializeField] protected string eventID;
 
     [SerializeField] protected int poolAmount = 10;
     [SerializeField] protected GameObject notePrefab;
@@ -30,7 +31,7 @@ public abstract class NoteCreator : MonoBehaviour
 
         KoreographyTrack rhythmTrack = playingKoreo.GetTrackByID(eventID);
         rawEvents = rhythmTrack.GetAllEvents();
-        
+
         noteMaxCount = rawEvents.Count;
 
         Init();
@@ -80,5 +81,10 @@ public abstract class NoteCreator : MonoBehaviour
         {
             GetObject();
         }
+    }
+
+    public void ReturnLastObject()
+    {
+        activeObjects.First().GetComponent<Note>().EndLine();
     }
 }

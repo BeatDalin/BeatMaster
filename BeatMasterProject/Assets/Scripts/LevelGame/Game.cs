@@ -21,17 +21,8 @@ public enum GameState
 
 public abstract class Game : MonoBehaviour
 {
-    [SerializeField] protected LevelGameUI gameUI;
-
-    /// <summary>
-    /// To use sample time of event tracks, this should be written first. Used for KoreographyEventCallbackWithTime.
-    /// </summary>
-    /// <param name="koreoEvent">Each KoreographyEvent</param>
-    /// <param name="sampleTime">The current time for this KoreographyEvent.</param>
-    /// <param name="sampleDelta">The number of samples that were played back since the previous frame. You can get the previous frame’s sampleTimewith(sampleTime-sampleDelta).</param>
-    /// <param name="deltaSlice">Extra timing information required for simulation stability when the callback is called multiple times in a frame.</param>
-    public delegate void KoreographyEventCallbackWithTime(KoreographyEvent koreoEvent, int sampleTime, int sampleDelta, DeltaSlice deltaSlice);
-
+    [SerializeField] protected GameUI gameUI; // LevelGameUI or BossGameUI will come in.
+    
     [Header("Game Play")]
     public GameState curState = GameState.Idle;
     public int curSample;
@@ -39,6 +30,7 @@ public abstract class Game : MonoBehaviour
     [Header("Result Check")]
     public BeatResult[] longResult;
     public BeatResult[] shortResult;
+    protected static int totalNoteCount = 0;
     // long notes
     protected int longIdx = 0;
     protected bool isLongPressed = false;
@@ -60,11 +52,12 @@ public abstract class Game : MonoBehaviour
     private int[] _longSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from short notes
     private int[] _shortSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from long notes
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
-    private static int _totalNoteCount = 0;
 
     protected virtual void Awake()
     {
-        gameUI = FindObjectOfType<LevelGameUI>();
+        gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
+        gameUI.InitUI();
+        itemCount = 0;
         DataCenter.Instance.LoadData();
     }
 
@@ -75,14 +68,10 @@ public abstract class Game : MonoBehaviour
     
     protected virtual void Init()
     {
-        SoundManager.instance.PlayBGM(true);
-        longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
-        shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("NewJumpCheck").GetAllEvents().Count];
         longIdx = 0;
         shortIdx = 0;
         isLongPressed = false;
-        isLongKeyCorrect = false;
-        _totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
+        isLongKeyCorrect = false; 
     }
 
     protected void CheckBeatResult(BeatResult[] resultArr, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange)
@@ -109,7 +98,7 @@ public abstract class Game : MonoBehaviour
         {
             SummarizeResult();
             RateResult(_stageIdx, _levelIdx);
-            gameUI.ShowFinalResult(_finalSummary, _totalNoteCount, _stageIdx, _levelIdx); // for testing purpose ...
+            gameUI.ShowFinalResult(_finalSummary, totalNoteCount, _stageIdx, _levelIdx); // for testing purpose ...
         }
     }
     protected void StartWithDelay(int startSample = 0)
@@ -136,6 +125,20 @@ public abstract class Game : MonoBehaviour
         curState = GameState.Play;
     }
 
+    protected int[,] CalculateRange(List<KoreographyEvent> koreographyEvents)
+    {
+        int[,] sampleRange = new int[koreographyEvents.Count, 2];
+        for (int i = 0; i < koreographyEvents.Count; i++)
+        {
+            KoreographyEvent curEvent = koreographyEvents[i];
+            int eventLength = curEvent.EndSample - curEvent.StartSample;
+            sampleRange[i, 0] = curEvent.StartSample + eventLength / 5;
+            sampleRange[i, 1] = curEvent.StartSample + eventLength / 5 * 4;
+            
+        }
+        return sampleRange;
+    }
+    
     protected bool CheckFinish()
     {
         // If index becomes the length of Arrays (or length -1), the game has been ended.
@@ -214,12 +217,12 @@ public abstract class Game : MonoBehaviour
         curLevelData.slowCount = _finalSummary[3];
         curLevelData.levelClear = true;
         // Push data into current level's data
-        if (_finalSummary[2] == _totalNoteCount)
+        if (_finalSummary[2] == totalNoteCount)
         {
             gameUI.ShowStar(3);
             curLevelData.alpha = 1f;
         }
-        else if (_finalSummary[2] >= _totalNoteCount / 3 * 2)
+        else if (_finalSummary[2] >= totalNoteCount / 3 * 2)
         {
             curLevelData.star = 2;
             curLevelData.alpha = 2 / 3f;
@@ -248,11 +251,10 @@ public abstract class Game : MonoBehaviour
 
     public void PauseGame()
     {
-        SoundManager.instance.PlayBGM(false);
-        curState = GameState.Pause;
         // Get current sample for RestartGame()
         curSample = SoundManager.instance.musicPlayer.GetSampleTimeForClip(SoundManager.instance.clipName);
-        // stop character moving
+        SoundManager.instance.PlayBGM(false);
+        curState = GameState.Pause;
     }
 
     public void ContinueGame()

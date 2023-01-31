@@ -22,7 +22,8 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioSource _bgmPlayer; // BGM 플레이어
     [SerializeField] private AudioSource[] _sfxPlayer; // SFX 플레이어. 여러 개 재생될 수 있게 배열로 선언
 
-    [Header("Koreography")] public Koreography playingKoreo;
+    [Header("Koreography")]
+    public Koreography playingKoreo;
     public SimpleMusicPlayer musicPlayer;
     public string clipName;
 
@@ -31,7 +32,6 @@ public class SoundManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {

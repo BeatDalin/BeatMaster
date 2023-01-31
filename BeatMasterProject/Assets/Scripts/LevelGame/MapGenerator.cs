@@ -26,10 +26,10 @@ public class MapGenerator : MonoBehaviour
     private void Awake()
     {
         //_koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
-
+    
         GenerateMap();
     }
-
+    
     private void GenerateMap()
     {
         //_mapEventList = _koreography.GetTrackByID(_mapEventID).GetAllEvents();

@@ -7,6 +7,7 @@ using UnityEngine;
 public abstract class Note : MonoBehaviour
 {
     protected NoteCreator noteCreator;
+    protected RectTransform noteCreatorTransform;
     protected KoreographyEvent myEvent;
     protected Vector3 destroyPos;
     protected float samplePerUnit;
@@ -24,17 +25,12 @@ public abstract class Note : MonoBehaviour
     void Update()
     {
         MovePosition();
-        CrossEndLine();
     }
 
     protected abstract void Init();
 
     protected virtual void CrossEndLine()
     {
-        if (destroyPos.x < transform.localPosition.x)
-        {
-            return;
-        }
         noteCreator.ReturnObject(gameObject);
     }
 
@@ -43,8 +39,14 @@ public abstract class Note : MonoBehaviour
         samplePerUnit = noteCreator.SampleRate;
         // 목표 위치
         Vector3 pos = noteCreator.transform.localPosition;
+        pos.x += noteCreatorTransform.rect.width / 2f;
+        Debug.Log(pos);
         pos.x -= (noteCreator.CurrentSampleTime - myEvent.StartSample) / samplePerUnit * Screen.width;
         transform.localPosition = pos;
-        
+    }
+
+    public void EndLine()
+    {
+        CrossEndLine();
     }
 }
