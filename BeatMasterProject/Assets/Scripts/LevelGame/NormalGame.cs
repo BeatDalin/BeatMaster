@@ -36,6 +36,11 @@ public class NormalGame : Game
         Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
         Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckStart", CheckLongStart);
         Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckEnd", CheckLongEnd);
+        
+        // Result Array
+        shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("NewJumpCheck").GetAllEvents().Count];
+        longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
+        _totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
     }
 
     protected override void Start()
@@ -55,20 +60,6 @@ public class NormalGame : Game
         _maskImage.sizeDelta = new Vector2(Screen.width - 60f, Screen.height - 60f);
         itemCount = 0;
         //gameUI.InitUI();
-    }
-
-    private int[,] CalculateRange(List<KoreographyEvent> koreographyEvents)
-    {
-        int[,] sampleRange = new int[koreographyEvents.Count, 2];
-        for (int i = 0; i < koreographyEvents.Count; i++)
-        {
-            KoreographyEvent curEvent = koreographyEvents[i];
-            int eventLength = curEvent.EndSample - curEvent.StartSample;
-            sampleRange[i, 0] = curEvent.StartSample + eventLength / 5;
-            sampleRange[i, 1] = curEvent.StartSample + eventLength / 5 * 4;
-            
-        }
-        return sampleRange;
     }
 
     private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
