@@ -15,14 +15,14 @@ public class NormalGame : Game
     private int _pressedTime;
     private int _pressedTimeLong;
     private bool _isChecked; // to prevent double check
-    [Header("Result Visualize")]
-    [SerializeField] private RectTransform _maskImage;
-    [SerializeField] private RectTransform _outLine;
-    [SerializeField] private Image _outLineColor;
-    [SerializeField] private Color _perfectColor;
-    [SerializeField] private Color _fastColor;
-    [SerializeField] private Color _slowColor;
-    [SerializeField] private Color _failColor;
+    // [Header("Result Visualize")]
+    // [SerializeField] private RectTransform _maskImage;
+    // [SerializeField] private RectTransform _outLine;
+    // [SerializeField] private Image _outLineColor;
+    // [SerializeField] private Color _perfectColor;
+    // [SerializeField] private Color _fastColor;
+    // [SerializeField] private Color _slowColor;
+    // [SerializeField] private Color _failColor;
     [Header("Input KeyCode")]
     private KeyCode _shortNoteKey = KeyCode.LeftArrow;
     private KeyCode _longNoteKey = KeyCode.RightArrow;
@@ -33,13 +33,13 @@ public class NormalGame : Game
         Koreographer.Instance.RegisterForEventsWithTime("NewJumpCheck", CheckShortEnd);
 
         // Long Note Event Track
-        Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
-        Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckStart", CheckLongStart);
-        Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckEnd", CheckLongEnd);
+        // Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
+        // Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckStart", CheckLongStart);
+        // Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckEnd", CheckLongEnd);
         
         // Result Array
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("NewJumpCheck").GetAllEvents().Count];
-        longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
+        // longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
         _totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
     }
 
@@ -56,8 +56,8 @@ public class NormalGame : Game
         _eventRangeShort = CalculateRange(_events);
         _events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
-        _outLine.sizeDelta = new Vector2(Screen.width, Screen.height);
-        _maskImage.sizeDelta = new Vector2(Screen.width - 60f, Screen.height - 60f);
+        // _outLine.sizeDelta = new Vector2(Screen.width, Screen.height);
+        // _maskImage.sizeDelta = new Vector2(Screen.width - 60f, Screen.height - 60f);
         itemCount = 0;
         gameUI.InitUI();
     }
@@ -81,7 +81,7 @@ public class NormalGame : Game
         {
             _isChecked= true;
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
-            ChangeOutLineColor();
+            gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             shortIdx++;
             if (!isShortKeyCorrect)
             {
@@ -89,38 +89,6 @@ public class NormalGame : Game
                 Rewind(Vector2.zero, sampleTime-50000);
             }
             isShortKeyCorrect = false;
-        }
-    }
-
-    private void ChangeOutLineColor()
-    {
-        if (shortResult[shortIdx] == BeatResult.Perfect)
-        {
-            _outLineColor.DOColor(_perfectColor, 0.1f).onComplete += () =>
-            {
-                _outLineColor.DOColor(Color.white, 0.1f);
-            };
-        }
-        else if (shortResult[shortIdx] == BeatResult.Fast)
-        {
-            _outLineColor.DOColor(_fastColor, 0.1f).onComplete += () =>
-            {
-                _outLineColor.DOColor(Color.white, 0.1f);
-            };
-        }
-        else if (shortResult[shortIdx] == BeatResult.Slow)
-        {
-            _outLineColor.DOColor(_slowColor, 0.1f).onComplete += () =>
-            {
-                _outLineColor.DOColor(Color.white, 0.1f);
-            };
-        }
-        else
-        {
-            _outLineColor.DOColor(_failColor, 0.1f).onComplete += () =>
-            {
-                _outLineColor.DOColor(Color.white, 0.1f);
-            };
         }
     }
 
@@ -172,10 +140,10 @@ public class NormalGame : Game
             if (!isLongKeyCorrect) // increase item only once
             {
                 // correct!
-                _outLineColor.DOColor(_perfectColor, 1f).onComplete += () =>
-                {
-                    _outLineColor.DOColor(Color.white, 1f);
-                };
+                // _outLineColor.DOColor(_perfectColor, 1f).onComplete += () =>
+                // {
+                //     _outLineColor.DOColor(Color.white, 1f);
+                // };
                 isLongKeyCorrect = true;
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, itemCount);
