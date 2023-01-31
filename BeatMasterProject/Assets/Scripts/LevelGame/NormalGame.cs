@@ -15,14 +15,6 @@ public class NormalGame : Game
     private int _pressedTime;
     private int _pressedTimeLong;
     private bool _isChecked; // to prevent double check
-    // [Header("Result Visualize")]
-    // [SerializeField] private RectTransform _maskImage;
-    // [SerializeField] private RectTransform _outLine;
-    // [SerializeField] private Image _outLineColor;
-    // [SerializeField] private Color _perfectColor;
-    // [SerializeField] private Color _fastColor;
-    // [SerializeField] private Color _slowColor;
-    // [SerializeField] private Color _failColor;
     [Header("Input KeyCode")]
     private KeyCode _shortNoteKey = KeyCode.LeftArrow;
     private KeyCode _longNoteKey = KeyCode.RightArrow;
@@ -40,7 +32,7 @@ public class NormalGame : Game
         // Result Array
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("NewJumpCheck").GetAllEvents().Count];
         // longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
-        _totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
+        totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
     }
 
     protected override void Start()
@@ -56,8 +48,6 @@ public class NormalGame : Game
         _eventRangeShort = CalculateRange(_events);
         _events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
-        // _outLine.sizeDelta = new Vector2(Screen.width, Screen.height);
-        // _maskImage.sizeDelta = new Vector2(Screen.width - 60f, Screen.height - 60f);
         itemCount = 0;
         gameUI.InitUI();
     }
@@ -139,11 +129,6 @@ public class NormalGame : Game
         {
             if (!isLongKeyCorrect) // increase item only once
             {
-                // correct!
-                // _outLineColor.DOColor(_perfectColor, 1f).onComplete += () =>
-                // {
-                //     _outLineColor.DOColor(Color.white, 1f);
-                // };
                 isLongKeyCorrect = true;
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, itemCount);
@@ -217,7 +202,6 @@ public class NormalGame : Game
             itemCount = 0;
         }
     }
-
 
     // public override void CheckBeatResult(BeatResult[] resultArr, BeatResult tempResult, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange)
     // {
