@@ -55,11 +55,8 @@ public abstract class Game : MonoBehaviour
 
     protected virtual void Awake()
     {
-<<<<<<< HEAD
         gameUI = FindObjectOfType<GameUI>();
-=======
         gameUI = FindObjectOfType<LevelGameUI>();
->>>>>>> parent of ec7d2210 (BTDI-96 [Update] 판정 통합을 위한 Commit)
         DataCenter.Instance.LoadData();
     }
 
@@ -70,20 +67,14 @@ public abstract class Game : MonoBehaviour
     
     protected virtual void Init()
     {
-<<<<<<< HEAD
-=======
         SoundManager.instance.PlayBGM(true);
         longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("NewJumpCheck").GetAllEvents().Count];
->>>>>>> parent of ec7d2210 (BTDI-96 [Update] 판정 통합을 위한 Commit)
         longIdx = 0;
         shortIdx = 0;
         isLongPressed = false;
         isLongKeyCorrect = false;
-<<<<<<< HEAD
-=======
         _totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
->>>>>>> parent of ec7d2210 (BTDI-96 [Update] 판정 통합을 위한 Commit)
     }
 
     protected void CheckBeatResult(BeatResult[] resultArr, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange)
