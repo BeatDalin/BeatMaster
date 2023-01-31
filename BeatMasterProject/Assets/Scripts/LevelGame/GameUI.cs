@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public enum TextType
@@ -27,6 +26,7 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected GameObject startPos;
     [SerializeField] protected Color successColor;
     private float _delay = 0f;
+    [SerializeField] protected Button goLevelAfterGameBtn;
     
     [Header("Result Visualize")]
     [SerializeField] protected RectTransform maskImage;
@@ -101,6 +101,8 @@ public abstract class GameUI : MonoBehaviour
         //settings
         goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPopUp(settingsPanel));
         settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePopUp(); });
+        
+        goLevelAfterGameBtn.onClick.AddListener(() => SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect));
     }
 
     public void ChangeOutLineColor(BeatResult result)

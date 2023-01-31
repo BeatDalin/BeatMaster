@@ -79,8 +79,7 @@ public class BossGame : Game
         _eventRangeShort = CalculateRange(_events);
         /*_events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);*/
-        itemCount = 0;
-        gameUI.InitUI();
+        
     }
 
     private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
