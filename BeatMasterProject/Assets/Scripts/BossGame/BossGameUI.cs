@@ -4,31 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelGameUI : GameUI
+public class BossGameUI : GameUI
 {
-    [Header("Base UI for Level Game")]
-    [SerializeField] private Text _itemText;
+    [Header("Base UI for Boss Game")]
     [SerializeField] private Text _deathText;
-    
+
     private void Awake()
     {
-        game = FindObjectOfType<NormalGame>();
+        game = FindObjectOfType<BossGame>();
         InitUI();
-    }
-
-    public override void InitUI()
-    {
-        base.InitUI();
-        _itemText.text = "0";
     }
 
     public override void UpdateText(TextType type, int number)
     {
         switch (type)
         {
-            case TextType.Item:
-                _itemText.text = number.ToString();
-                break;
             case TextType.Death:
                 _deathText.text = number.ToString();
                 break;
