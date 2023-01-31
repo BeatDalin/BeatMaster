@@ -996,7 +996,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &512957733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1004,7 +1004,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 512957732}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80496cb18434954469e4eeb1d27d8183, type: 3}
   m_Name: 
@@ -3771,7 +3771,6 @@ GameObject:
   - component: {fileID: 1319781693}
   - component: {fileID: 1319781692}
   - component: {fileID: 1319781691}
-  - component: {fileID: 1319781690}
   m_Layer: 0
   m_Name: Target
   m_TagString: Untagged
@@ -3779,22 +3778,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1319781690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1319781689}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40e7ae7f4e5664a02863fb0d23d42e1e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireBall: {fileID: 5944770761191395910, guid: 04bc52ae7c72fbf4c89a1405a3cedb17, type: 3}
-  targetVisuals: {fileID: 1319781692}
-  keyboardButton: 275
-  matchedPayloads: 01000000
 --- !u!114 &1319781691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3810,7 +3793,7 @@ MonoBehaviour:
   fireBall: {fileID: 5944770761191395910, guid: 04bc52ae7c72fbf4c89a1405a3cedb17, type: 3}
   targetVisuals: {fileID: 1319781692}
   keyboardButton: 276
-  matchedPayloads: 00000000
+  matchedPayloads: 0000000001000000
 --- !u!212 &1319781692
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3852,7 +3835,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300010, guid: e8ef87f8090afe846bb6584eed118e27, type: 3}
+  m_Sprite: {fileID: 21300004, guid: e8ef87f8090afe846bb6584eed118e27, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3871,7 +3854,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1319781689}
   m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -7.33, y: 0, z: 0}
+  m_LocalPosition: {x: -7.96, y: -0.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4229,9 +4212,7 @@ MonoBehaviour:
   hitWindowRangeInMS: 80
   noteSpeed: 1
   noteObjectArchetype: {fileID: 855271053}
-  noteLanes:
-  - {fileID: 1319781691}
-  - {fileID: 1319781691}
+  noteLane: {fileID: 1319781691}
   leadInTime: 0
   audioCom: {fileID: 1460717647}
   hammerObj: {fileID: 0}
