@@ -35,7 +35,7 @@ public class BossGame : Game
         // Result Array
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("BossCheck").GetAllEvents().Count];
         //longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
-        _totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
+        totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
     }
 
     protected override void Start()
