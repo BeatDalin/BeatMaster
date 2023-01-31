@@ -89,7 +89,9 @@ public class BossGame : Game
             isShortKeyCorrect = true;
             // gameUI.UpdateText(TextType.Item, itemCount);
             _pressedTime = sampleTime; // record the sample time when the button was pressed
-            _laneController.trackedNotes.Peek().OnHit();
+            //_laneController.trackedNotes.Peek().OnHit();
+            NoteObject hitNote = _laneController.trackedNotes.Dequeue();
+            hitNote.OnHit();
             _noteCreator.ReturnLastObject();
         }
 
@@ -102,8 +104,9 @@ public class BossGame : Game
             if (!isShortKeyCorrect)
             {
                 PlayerStatus.Instance.DecreaseHP();
-                _laneController.trackedNotes.Peek().Missed();
-
+                //_laneController.trackedNotes.Dequeue().Missed();
+                NoteObject hitNote = _laneController.trackedNotes.Dequeue();
+                hitNote.Missed();
                 _noteCreator.ReturnLastObject();
             }
             isShortKeyCorrect = false;

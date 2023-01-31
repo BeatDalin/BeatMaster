@@ -116,10 +116,10 @@ namespace SonicBloom.Koreo.Demos
         void Update()
         {
             // Clear out invalid entries.
-            while (trackedNotes.Count > 0 && trackedNotes.Peek().IsNoteMissed())
+/*            while (trackedNotes.Count > 0 && trackedNotes.Peek().IsNoteMissed())
             {
                 trackedNotes.Dequeue();
-            }
+            }*/
 
             // Check for new spawns.
             CheckSpawnNext();
@@ -152,16 +152,15 @@ namespace SonicBloom.Koreo.Demos
 
         private void CheckInput(string input) //수정예정
         {
-            if (keyboardButton.ToString() == input)
+            if (Input.GetKeyDown(keyboardButton)||keyboardButton.ToString() == input)
             {
-                CheckNoteHit();
                 SetScalePress();
             }
-            else if (keyboardButton.ToString() == input)
+            else if (Input.GetKey(keyboardButton)||keyboardButton.ToString() == input)
             {
                 SetScaleHold();
             }
-            else if (keyboardButton.ToString() == input)
+            else if (Input.GetKeyUp(keyboardButton)||keyboardButton.ToString() == input)
             {
                 SetScaleDefault();
             }
