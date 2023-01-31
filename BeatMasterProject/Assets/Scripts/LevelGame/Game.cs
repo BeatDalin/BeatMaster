@@ -74,7 +74,7 @@ public abstract class Game : MonoBehaviour
         shortIdx = 0;
         isLongPressed = false;
         isLongKeyCorrect = false;
-        _totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
+        totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
     }
 
     protected void CheckBeatResult(BeatResult[] resultArr, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange)
