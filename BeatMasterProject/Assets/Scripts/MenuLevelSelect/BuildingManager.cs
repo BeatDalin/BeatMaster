@@ -16,6 +16,7 @@ public class BuildingManager : MonoBehaviour
     
     private void Start()
     {
+        //DataCenter.Instance.InitializeAllData();
         DataCenter.Instance.LoadData();
         
         currMaxLevel = GetMaxLevelInStage(currMaxLevel);
@@ -36,15 +37,15 @@ public class BuildingManager : MonoBehaviour
             
             building.ShowBuilding(isClear);
             
-            if (isClear)
-            {
-                building.ShowStar(currStageData[i].star);
-            }
-
-            else
-            {
-                break;
-            }
+            // if (isClear)
+            // {
+            //     building.ShowStar(currStageData[i].star);
+            // }
+            //
+            // else
+            // {
+            //     break;
+            // }
         }
     }
 
