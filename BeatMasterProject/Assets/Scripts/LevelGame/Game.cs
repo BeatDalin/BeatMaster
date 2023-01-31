@@ -56,6 +56,7 @@ public abstract class Game : MonoBehaviour
     protected virtual void Awake()
     {
         gameUI = FindObjectOfType<GameUI>();
+        gameUI = FindObjectOfType<LevelGameUI>();
         DataCenter.Instance.LoadData();
     }
 
@@ -66,10 +67,14 @@ public abstract class Game : MonoBehaviour
     
     protected virtual void Init()
     {
+        SoundManager.instance.PlayBGM(true);
+        longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
+        shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("NewJumpCheck").GetAllEvents().Count];
         longIdx = 0;
         shortIdx = 0;
         isLongPressed = false;
         isLongKeyCorrect = false;
+        _totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
     }
 
     protected void CheckBeatResult(BeatResult[] resultArr, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange)
