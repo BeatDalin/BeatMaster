@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public enum TextType
@@ -13,6 +12,8 @@ public enum TextType
 }
 public abstract class GameUI : MonoBehaviour
 {
+    [Header("Game")]
+    [SerializeField] protected Game game;
     
     [Header("Result UI")] 
     [SerializeField] protected GameObject finalPanel;
@@ -25,6 +26,16 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected GameObject startPos;
     [SerializeField] protected Color successColor;
     private float _delay = 0f;
+    [SerializeField] protected Button goLevelAfterGameBtn;
+    
+    [Header("Result Visualize")]
+    [SerializeField] protected RectTransform maskImage;
+    [SerializeField] protected RectTransform outLine;
+    [SerializeField] private Image _outLineColor;
+    [SerializeField] private Color _perfectColor;
+    [SerializeField] private Color _fastColor;
+    [SerializeField] private Color _slowColor;
+    [SerializeField] private Color _failColor;
     
     [Header("Time Count UI")]
     [SerializeField] public GameObject timePanel;
@@ -41,10 +52,91 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected GameObject settingsPanel;
     [SerializeField] protected Button settingsCloseBtn;
 
-    protected abstract void OpenPause();
-    public abstract void InitUI();
+    #region Abstract Function
     public abstract void UpdateText(TextType type, int number);
+    #endregion
 
+    
+    protected virtual void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && game.curState == GameState.Play)
+        {
+            OpenPause();
+        }
+        else if(Input.GetKeyDown(KeyCode.Escape) && game.curState == GameState.Pause && UIManager.instance.popUpStack.Count == 1)
+        {
+            UIManager.instance.ClosePopUp();
+            game.ContinueGame();
+        }
+    }
+
+    protected void OpenPause()
+    {
+        UIManager.instance.OpenPopUp(pausePanel);
+        game.PauseGame();
+    }
+
+    public virtual void InitUI()
+    {
+        // panels
+        timePanel.SetActive(true);
+        finalPanel.SetActive(false);
+        pausePanel.SetActive(false);
+        settingsPanel.SetActive(false);
+        // outline
+        outLine.sizeDelta = new Vector2(Screen.width, Screen.height);
+        maskImage.sizeDelta = new Vector2(Screen.width - 60f, Screen.height - 60f);
+        // star
+        foreach (var s in star)
+        {
+            s.SetActive(false);
+        }
+        // Button Events
+        continueBtn.onClick.AddListener(() =>
+        {
+            UIManager.instance.ClosePopUp();
+            game.ContinueGame();
+        });
+        goLevelMenuBtn.onClick.AddListener(() => SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect));
+        //settings
+        goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPopUp(settingsPanel));
+        settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePopUp(); });
+        
+        goLevelAfterGameBtn.onClick.AddListener(() => SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect));
+    }
+
+    public void ChangeOutLineColor(BeatResult result)
+    {
+        if (result == BeatResult.Perfect)
+        {
+            _outLineColor.DOColor(_perfectColor, 0.1f).onComplete += () =>
+            {
+                _outLineColor.DOColor(Color.white, 0.1f);
+            };
+        }
+        else if (result == BeatResult.Fast)
+        {
+            _outLineColor.DOColor(_fastColor, 0.1f).onComplete += () =>
+            {
+                _outLineColor.DOColor(Color.white, 0.1f);
+            };
+        }
+        else if (result == BeatResult.Slow)
+        {
+            _outLineColor.DOColor(_slowColor, 0.1f).onComplete += () =>
+            {
+                _outLineColor.DOColor(Color.white, 0.1f);
+            };
+        }
+        else
+        {
+            _outLineColor.DOColor(_failColor, 0.1f).onComplete += () =>
+            {
+                _outLineColor.DOColor(Color.white, 0.1f);
+            };
+        }
+    }
+    
     public void ShowFinalResult(int[] finalResultSummary, int total, int stageIdx, int levelIdx)
     {
         finalPanel.SetActive(true);
@@ -88,12 +180,6 @@ public abstract class GameUI : MonoBehaviour
                 };
             };
         };
-        //_finalFast.text = $"{finalResultSummary[1]}/{total}";
-        //_finalPerfect.DOCounter(0, finalResultSummary[2], 1);
-        //_finalPerfect.text = $"{finalResultSummary[2]}/{total}";
-        //_finalSlow.DOCounter(0, finalResultSummary[3], 1);
-        //_finalSlow.text = $"{finalResultSummary[3]}/{total}";
-        
     }
     
     
@@ -144,6 +230,5 @@ public abstract class GameUI : MonoBehaviour
                 };
             };
         }
-        
     }
 }

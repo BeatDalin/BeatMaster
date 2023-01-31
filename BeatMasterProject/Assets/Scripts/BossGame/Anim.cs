@@ -24,11 +24,6 @@ public class Anim : MonoBehaviour
         _anim = GetComponentInChildren<Animator>();
     }
 
-    void Start()
-    {
-        StatusJudge(Status.Run);
-    }
-
     public void StatusJudge(Status crnStat)
     {
         switch (crnStat)
