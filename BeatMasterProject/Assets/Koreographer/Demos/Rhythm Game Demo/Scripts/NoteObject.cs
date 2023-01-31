@@ -74,16 +74,18 @@ namespace SonicBloom.Koreo.Demos
             UpdateWidth();
 
             UpdatePosition();
+        }
 
-            if (transform.position.x < laneController.DespawnX - 1f)
-            {
-                _gameController.ReturnNoteObjectToPool(this);
-                Reset();
-            }
-            else if (transform.position.x <= laneController.DespawnX - spumSpriteList._bodyList[0].bounds.size.x / 2)
-            {
-                _animator.Play("Crash", -1, 0f);
-            }
+        public void CorrectHit()
+        {
+            _gameController.ReturnNoteObjectToPool(this);
+            Reset();
+        }
+
+        public void Missed()
+        {
+            _animator.Play("Crash", -1, 0f);
+            ReturnToPool();
         }
 
         // Updates the height of the Note Object.  This is relative to the speed at which the notes fall and 
