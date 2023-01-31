@@ -30,7 +30,6 @@ public abstract class NoteCreator : MonoBehaviour
         playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
 
         KoreographyTrack rhythmTrack = playingKoreo.GetTrackByID(eventID);
-        Debug.Log(rhythmTrack);
         rawEvents = rhythmTrack.GetAllEvents();
 
         noteMaxCount = rawEvents.Count;
