@@ -21,9 +21,10 @@ public class MenuTitleButton : MonoBehaviour
 {
     [SerializeField] private DOTweenAnimation[] _doTweenAnimations;
     [SerializeField] private Button[] _buttons;
-    
+
     [SerializeField] private GameObject _settingPopUp;
     [SerializeField] private GameObject _storePopUp;
+    [SerializeField] private GameObject _stagePopUp;
     [SerializeField] private CanvasGroup _loadingPanelGroup;
 
     [SerializeField] private SimpleMusicPlayer _simpleMusicPlayer;
@@ -77,12 +78,12 @@ public class MenuTitleButton : MonoBehaviour
                 _buttons[(int)ButtonName.Stage].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete += () =>
                 {
                     _buttons[(int)ButtonName.Stage].transform.DORewind();
-                    SceneMoveBtn("Stage");
+                    OpenPopUp("Stage");
                 };
             }
             else
             {
-                SceneMoveBtn("Stage");
+                OpenPopUp("Stage");            
             }
         });
         
@@ -141,6 +142,10 @@ public class MenuTitleButton : MonoBehaviour
 
         switch (popUpName)
         {
+            case "Stage":
+                UIManager.instance.OpenPopUp(_stagePopUp);
+                break;
+            
             case "Store":
                 UIManager.instance.OpenPopUp(_storePopUp);
                 break;
