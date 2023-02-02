@@ -18,11 +18,13 @@ public class LevelMenuManager : MonoBehaviour
     [SerializeField] private float _zPosMax = -6.5f;
     [SerializeField] private float _zPosMin = -15f;
 
-    public Ray ray;
-
+    public Ray effectRayPoint;
+    
     private Camera _mainCam;
     
     private Vector2 _touchPoint;
+
+    private WaypointMover _waypointMover;
     
     private float _zoomSpeed = 10f;
     private float _dragSpeed = 10f;
@@ -33,6 +35,8 @@ public class LevelMenuManager : MonoBehaviour
         _mainCam = _cam.GetComponent<Camera>();
         _mainCam.transform.position = _camPosOrigin.transform.position;
         _mainCam.fieldOfView = _fovOrigin;
+
+        _waypointMover = FindObjectOfType<WaypointMover>();
     }
 
     private void Update()
@@ -67,18 +71,24 @@ public class LevelMenuManager : MonoBehaviour
         {
             _touchPoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 
-            ray = _mainCam.ScreenPointToRay(_touchPoint);
+            Ray ray = _mainCam.ScreenPointToRay(_touchPoint);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit))
             {
                 // Load GameScene
-                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelGame);
+                //_waypointMover.UpdateWaypointPosition();
+                //SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelGame);
                 // 추후 레벨 별로 구분해야 함
             }
         }
 
-    #endif
+        if (Input.GetMouseButton(0))
+        {
+            effectRayPoint = _mainCam.ScreenPointToRay(Input.mousePosition);
+        }
+
+#endif
     }
 
     /// <summary>
