@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,8 +14,8 @@ public class BuildingManager : MonoBehaviour
     
     // 현재 Stage의 Building들
     [SerializeField] private GameObject[] _buildings;
-    
-    private void Start()
+
+    private void Awake()
     {
         // Debug용 Data 초기화
         //DataCenter.Instance.InitializeAllData();
@@ -35,13 +36,34 @@ public class BuildingManager : MonoBehaviour
         SetBuildings();
     }
 
+    private void Start()
+    {
+        // Debug용 Data 초기화
+        //DataCenter.Instance.InitializeAllData();
+        
+        // DataCenter.Instance.LoadData();
+        //
+        // // Level 정보 저장
+        // for (int i = 0; i < 5; i++)
+        // {
+        //     currStageData[i] =
+        //         DataCenter.Instance.GetLevelData(currStage - 1, i);
+        // }
+        //
+        // _levelIndicator = FindObjectOfType<WaypointMover>();
+        //
+        // currMaxLevel = GetMaxLevelInStage();
+        //
+        // SetBuildings();
+    }
+
     private void SetBuildings()
     {
         // Level 5 Clear 시 Stage Clear
         bool isStageClear = currMaxLevel == 4 ? true : false;
         
         // Level 5 Clear 시 보여줄 level 없으니 for문 범위 제한
-        int limitMaxLevel = currMaxLevel + 1 > 4 ? 4 : currMaxLevel + 1;
+        int limitMaxLevel = currMaxLevel + 1 > 4 ? 4 : currMaxLevel;
         
         // 현재 Clear한 레벨과 그 다음 레벨 모델을 보여준다.
         for (int i = 0; i <= limitMaxLevel; i++)
@@ -59,12 +81,12 @@ public class BuildingManager : MonoBehaviour
 
     private void Update()
     {
-        if (currMaxLevel < GetMaxLevelInStage())
-        {
-            currMaxLevel = GetMaxLevelInStage();
-            
-            _levelIndicator.UpdateWaypointPosition();
-        }
+        // if (currMaxLevel < GetMaxLevelInStage())
+        // {
+        //     currMaxLevel = GetMaxLevelInStage();
+        //     
+        //     _levelIndicator.UpdateWaypointPosition();
+        // }
     }
 
     /// <summary>
@@ -86,7 +108,7 @@ public class BuildingManager : MonoBehaviour
             }
         }
         
-        return maxLevel;
+        return maxLevel+1;
     }
 }
 
