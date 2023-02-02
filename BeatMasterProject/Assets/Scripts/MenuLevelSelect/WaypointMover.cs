@@ -13,7 +13,7 @@ public class WaypointMover : MonoBehaviour
     [SerializeField] private GameObject _stagePathTrail;
 
     // player가 현재 위치에서 다음으로 이동할 위치
-    public Transform _currWaypoint;
+    private Transform _currWaypoint;
     private int _currLevel;
     private BuildingManager _buildingManager;
     private bool _isLocated;
@@ -26,7 +26,7 @@ public class WaypointMover : MonoBehaviour
         
         // 현재 레벨 위치로 초기화
         _currWaypoint = _waypoints.transform.GetChild(_currLevel);
-        transform.position = _currWaypoint.position;
+        //transform.position = _currWaypoint.position;
 
         _startPos = transform.position;
     }
@@ -37,13 +37,13 @@ public class WaypointMover : MonoBehaviour
         _currWaypoint = _waypoints.GetNextWaypoint(_currWaypoint);
 
         StartCoroutine(MovePos(_currWaypoint.position));
-
     }
 
     private void Update()
     {
         if (!_isLocated)
         {
+            _stagePathTrail.GetComponent<TrailRenderer>().enabled = true;
             _stagePathTrail.SetActive(true);
             _isLocated = true;
             StartCoroutine(MoveTrail(_currWaypoint.position));
@@ -75,5 +75,6 @@ public class WaypointMover : MonoBehaviour
                 Vector3.MoveTowards(_stagePathTrail.transform.position, _currWaypoint.position, _moveSpeed * Time.deltaTime);
             yield return null;
         }
+        SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.BossGame);
     }
 }
