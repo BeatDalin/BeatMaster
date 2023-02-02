@@ -25,7 +25,7 @@ public class MapGenerator : MonoBehaviour
 
     private void Awake()
     {
-        _koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
+        //_koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
     
         GenerateMap();
     }
@@ -65,8 +65,8 @@ public class MapGenerator : MonoBehaviour
     
     private void GenerateMap()
     {
-        _mapEventList = _koreography.GetTrackByID(_mapEventID).GetAllEvents();
-        //_mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
+        //_mapEventList = _koreography.GetTrackByID(_mapEventID).GetAllEvents();
+        _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
 
         for (int i = 0; i < _mapEventList.Count; i++)
         {
