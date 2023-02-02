@@ -15,7 +15,6 @@ public class NormalGame : Game
     private int _pressedTime;
     private int _pressedTimeLong;
     private bool _isChecked; // to prevent double check
-
     [Header("Input KeyCode")]
     private KeyCode _shortNoteKey = KeyCode.LeftArrow;
     private KeyCode _longNoteKey = KeyCode.RightArrow;
@@ -81,7 +80,6 @@ public class NormalGame : Game
         }
     }
 
-
     private void CheckLongStart(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
         if (_isChecked && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
@@ -129,7 +127,6 @@ public class NormalGame : Game
         {
             if (!isLongKeyCorrect) // increase item only once
             {
-                // correct!
                 isLongKeyCorrect = true;
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, itemCount);
@@ -143,7 +140,6 @@ public class NormalGame : Game
         {
             _isChecked = true;
             CheckBeatResult(longResult, longIdx, isLongKeyCorrect, _pressedTimeLong, _eventRangeLong); // Record Result
-            gameUI.ChangeOutLineColor(longResult[longIdx]);
             longIdx++;
             if (!isLongKeyCorrect)
             {
@@ -204,7 +200,6 @@ public class NormalGame : Game
             itemCount = 0;
         }
     }
-
 
     // public override void CheckBeatResult(BeatResult[] resultArr, BeatResult tempResult, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange)
     // {

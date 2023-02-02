@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using SonicBloom.Koreo.Players;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -95,6 +97,5 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         
         _loadingCanvas.SetActive(false);
     }
-    
-    
+
 }

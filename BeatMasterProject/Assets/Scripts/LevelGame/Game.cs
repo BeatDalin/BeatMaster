@@ -251,11 +251,10 @@ public abstract class Game : MonoBehaviour
 
     public void PauseGame()
     {
-        SoundManager.instance.PlayBGM(false);
-        curState = GameState.Pause;
         // Get current sample for RestartGame()
         curSample = SoundManager.instance.musicPlayer.GetSampleTimeForClip(SoundManager.instance.clipName);
-        // stop character moving
+        SoundManager.instance.PlayBGM(false);
+        curState = GameState.Pause;
     }
 
     public void ContinueGame()

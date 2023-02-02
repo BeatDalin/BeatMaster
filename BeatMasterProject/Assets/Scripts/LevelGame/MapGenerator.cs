@@ -7,7 +7,7 @@ using SonicBloom.Koreo;
 
 public class MapGenerator : MonoBehaviour
 {
-    //[SerializeField] private Koreography _koreography;
+    [SerializeField] private Koreography _koreography;
 
     [Header("Event")]
     [SerializeField] [EventID] private string _mapEventID;
@@ -25,15 +25,48 @@ public class MapGenerator : MonoBehaviour
 
     private void Awake()
     {
-        //_koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
-
+        _koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
+    
         GenerateMap();
     }
-
+    
+    public KoreographyTrack track;
+    public int index = 0;
+    // private void Awake()
+    // {
+    //     var _koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
+    //
+    //     GenerateMap();
+    //
+    //     _mapEventList = _koreography.GetTrackByID(_mapEventID).GetAllEvents();
+    //     for (int i = 0; i < _mapEventList.Count; i++)
+    //     {
+    //         int[] tileData = _mapEventList[i].GetTextValue().Split().Select(int.Parse).ToArray();
+    //         
+    //         
+    //
+    //         if (tileData[2] == 1)
+    //         {
+    //             Debug.Log(tileData[2]);
+    //
+    //             var start = _mapEventList[i].StartSample - 5000;
+    //             var end = _mapEventList[i].StartSample + 5000;
+    //
+    //             var trackEvent = track.GetAllEvents()[index];
+    //             trackEvent.Payload = new CurvePayload();
+    //             Debug.Log(trackEvent.HasCurvePayload());
+    //             trackEvent.StartSample = start;
+    //             trackEvent.EndSample = end;
+    //
+    //             index++;
+    //         }
+    //     }
+    // }
+    
     private void GenerateMap()
     {
-        //_mapEventList = _koreography.GetTrackByID(_mapEventID).GetAllEvents();
-        _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
+        _mapEventList = _koreography.GetTrackByID(_mapEventID).GetAllEvents();
+        //_mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
 
         for (int i = 0; i < _mapEventList.Count; i++)
         {
