@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using SonicBloom.Koreo;
+using SonicBloom.Koreo.Players;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -57,7 +59,6 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
             yield return null;
         }
         // 임의 대기 시간
-        
         
         StartCoroutine(CoFadeIn());
         // 로딩 창 꺼주기
