@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -645,6 +645,11 @@ MonoBehaviour:
   preset: 0
   onEnableBehaviour: 1
   onDisableBehaviour: 2
+--- !u!82 &569653517 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1448129276965389121, guid: cae8134d38f5dcf49a9d45b9c53a6fda, type: 3}
+  m_PrefabInstance: {fileID: 1063601532}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &601645394 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2744721749750396338, guid: 3a2bbee9f612e4161b9d5d36fb5d0c87, type: 3}
@@ -1190,6 +1195,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1448129277279769350, guid: cae8134d38f5dcf49a9d45b9c53a6fda, type: 3}
+      propertyPath: _bgmPlayer
+      value: 
+      objectReference: {fileID: 569653517}
+    - target: {fileID: 1448129277279769350, guid: cae8134d38f5dcf49a9d45b9c53a6fda, type: 3}
+      propertyPath: musicPlayer
+      value: 
+      objectReference: {fileID: 1610323328}
+    - target: {fileID: 1448129277279769350, guid: cae8134d38f5dcf49a9d45b9c53a6fda, type: 3}
+      propertyPath: playingKoreo
+      value: 
+      objectReference: {fileID: 11400000, guid: fabfc8df9f70b4fb8b0ae028f7d44373, type: 2}
     - target: {fileID: 1448129277279769368, guid: cae8134d38f5dcf49a9d45b9c53a6fda, type: 3}
       propertyPath: m_Name
       value: SoundManager
@@ -1712,7 +1729,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1437118086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1861,7 +1878,7 @@ AudioSource:
   m_GameObject: {fileID: 1610323321}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 743016327365038100, guid: 433ef1d309daef74abcf22a35f8fbe03, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -2187,6 +2204,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 86793283}
     m_Modifications:
+    - target: {fileID: 1469504435740962934, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1469504435740962934, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2143633781728154074, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2275,21 +2300,39 @@ PrefabInstance:
       propertyPath: m_Name
       value: SettingPopUp
       objectReference: {fileID: 0}
-    - target: {fileID: 2143633781728154075, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 4025458377796044100, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
+      propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8613467928320322085, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.192
-      objectReference: {fileID: 0}
-    - target: {fileID: 8613467928320322085, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
+    - target: {fileID: 4025458377796044100, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2169762439769832263, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
-    - {fileID: 5154642443262827248, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
+    - target: {fileID: 4025458377796044100, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5480936404495381799, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5480936404495381799, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5480936404495381799, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703723895754786907, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703723895754786907, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
 --- !u!224 &1773899719 stripped
 RectTransform:
@@ -2848,7 +2891,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1959310009}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1939c0083ed144b99a2aa4334498d52a, type: 3}
   m_Name: 

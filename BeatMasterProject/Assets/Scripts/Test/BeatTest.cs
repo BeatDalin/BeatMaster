@@ -7,30 +7,59 @@ using SonicBloom.Koreo;
 
 public class BeatTest : MonoBehaviour
 {
-    [EventID] 
-    public string eventID;
+    [EventID] public string eventID;
 
-    public float moveSpeed = 4f;
-    public float jumpSpeed = 1f;
+    [SerializeField] private float _moveSpeed = 1f;
+    [SerializeField] private float _jumpForce = 10f;
+
+    private float _previousBeatTime = 0;
+    [SerializeField] private bool _isGrounded;
 
     private Rigidbody2D _rigidbody;
-    
+
+
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-        Koreographer.Instance.RegisterForEvents(eventID, Beat);
     }
-    
-    private void Beat(KoreographyEvent evt)
-    {
-        Vector2 vel = _rigidbody.velocity;
-        vel.y = jumpSpeed;
 
-        _rigidbody.velocity = vel;
+    private void Update()
+    {
+        Jump();
     }
 
     private void FixedUpdate()
     {
-        _rigidbody.velocity = new Vector2(moveSpeed, _rigidbody.velocity.y);
+        Move();
+    }
+
+    private void Move()
+    {
+        float currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
+        float x = transform.position.x + (currentBeatTime - _previousBeatTime) * _moveSpeed;
+        ;
+        _previousBeatTime = currentBeatTime;
+
+        _rigidbody.MovePosition(Vector2.right * x);
+    }
+
+    private void Jump()
+    {
+        
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Vector2 jumpVector = new Vector2(0, _jumpForce);
+            _rigidbody.transform.position += (Vector3)jumpVector * Time.deltaTime;
+            
+            _isGrounded = false;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Ground"))
+        {
+            _isGrounded = true;
+        }
     }
 }

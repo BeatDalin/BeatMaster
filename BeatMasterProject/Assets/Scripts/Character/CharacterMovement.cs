@@ -36,11 +36,14 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _rayDistanceOffset = 0.2f;
     [SerializeField] private float _positionOffsetY;
 
+    private Animator _animator;
+    
     private void Start()
     {
         //_game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
-
+        _animator = GetComponent<Animator>();
+        
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
         //SoundManager.instance.PlayBGM(false);
     }
@@ -48,6 +51,7 @@ public class CharacterMovement : MonoBehaviour
     private void Update()
     {
         GetInput();
+        Attack();
     }
 
     private void FixedUpdate()
@@ -63,6 +67,9 @@ public class CharacterMovement : MonoBehaviour
         // 점프 입력
         if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
+            SoundManager.instance.PlaySFX("Jump");
+            _animator.CrossFadeInFixedTime("Jump",0.1f);
+            
             if (++_jumpCount >= _maxJumpCount)
             {
                 _canJump = false;
@@ -175,5 +182,15 @@ public class CharacterMovement : MonoBehaviour
     private void ChangeMoveSpeed(KoreographyEvent evt)
     {
         moveSpeed = evt.GetFloatValue();
+    }
+
+    private void Attack()
+    {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            SoundManager.instance.PlaySFX("Attack");
+            _animator.CrossFadeInFixedTime("Attack",0.1f);
+
+        }
     }
 }
