@@ -10,7 +10,7 @@ public class WaypointMover : MonoBehaviour
     [SerializeField] private float _moveSpeed = 2f;
     
     // player가 현재 위치에서 다음으로 이동할 위치
-    private Transform _currWaypoint;
+    public Transform _currWaypoint;
     private int _currLevel;
     private BuildingManager _buildingManager;
     
@@ -28,8 +28,18 @@ public class WaypointMover : MonoBehaviour
     {
         // 다음으로 이동할 위치
         _currWaypoint = _waypoints.GetNextWaypoint(_currWaypoint);
-        
-        transform.position =
-            Vector3.MoveTowards(transform.position, _currWaypoint.position, _moveSpeed * Time.deltaTime);
+
+        StartCoroutine(MovePos(_currWaypoint.position));
+    }
+
+    IEnumerator MovePos(Vector3 _currWayPoint)
+    {
+        while (transform.position != _currWayPoint)
+        {
+            transform.position =
+                Vector3.MoveTowards(transform.position, _currWaypoint.position, _moveSpeed * Time.deltaTime);
+
+            yield return null;
+        }
     }
 }

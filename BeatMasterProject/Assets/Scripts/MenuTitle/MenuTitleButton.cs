@@ -29,9 +29,6 @@ public class MenuTitleButton : MonoBehaviour
 
     [SerializeField] private SimpleMusicPlayer _simpleMusicPlayer;
 
-    [SerializeField] private RectTransform _maskImage;
-    [SerializeField] private RectTransform _outLine;
-
     private int _objectIdx = 0;
 
     private void Awake()
@@ -44,9 +41,6 @@ public class MenuTitleButton : MonoBehaviour
         Koreographer.Instance.RegisterForEvents("MenuBGMTrack", ChangeScale);
 
         AddClickListener();
-
-        _outLine.sizeDelta = new Vector2(Screen.width, Screen.height);
-        _maskImage.sizeDelta = new Vector2(Screen.width - 40f, Screen.height - 40f);
     }
 
     private void Update()
