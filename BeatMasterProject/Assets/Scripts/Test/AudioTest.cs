@@ -6,36 +6,37 @@ using UnityEngine;
 
 public class AudioTest : MonoBehaviour
 {
-    public string bgmName;
+    public static AudioTest instance;
+    
+    private AudioSource _audioSource;
+
+    public bool isPlaying = false;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {
-        Time.timeScale = 0;
+        _audioSource = GetComponent<AudioSource>();
+        
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            SoundManager.instance.PlaySFX("Jump");
-        }
-
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            SoundManager.instance.PlaySFX("Attack");
-        }
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Time.timeScale = 1;
-            SoundManager.instance.PlayBGM(bgmName);
+            GameStart();
         }
     }
-    
 
-    // public void PlaySFXButton()
-    // {
-    //     SoundManager.instance.PlaySFX("Jump");
-    // }
-
+    private void GameStart()
+    {
+        if (!_audioSource.isPlaying)
+        {
+            isPlaying = true;
+            _audioSource.Play();
+        }
+    }
 }
