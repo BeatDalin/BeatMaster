@@ -6,6 +6,7 @@ using SonicBloom.Koreo;
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
 {
+    private Game _game;
     private Rigidbody2D _rigidbody;
 
     [Header("Music")]
@@ -37,10 +38,11 @@ public class CharacterMovement : MonoBehaviour
 
     private void Start()
     {
+        //_game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
 
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
-        SoundManager.instance.PlayBGM(false);
+        //SoundManager.instance.PlayBGM(false);
     }
 
     private void Update()
@@ -50,7 +52,10 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move();
+        //if (_game.curState == GameState.Play)
+        //{
+            Move();
+        //}
     }
 
     private void GetInput()
@@ -68,7 +73,7 @@ public class CharacterMovement : MonoBehaviour
             _isJumping = true;
             _canGroundCheck = false;
 
-            Invoke("GroundCheckOn", 0.1f);
+            Invoke("GroundCheckOn", 0.2f);
 
             RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + _jumpTileCount, 100f), Vector2.down, 1000, _tileLayer);
             
@@ -92,6 +97,7 @@ public class CharacterMovement : MonoBehaviour
     {
         float currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
         float x = transform.position.x + (currentBeatTime - _previousBeatTime) * moveSpeed;
+        //x = transform.position.x + (float)(Koreographer.Instance.GetMusicBPM() / 60 * moveSpeed * Time.fixedDeltaTime) ;
         float y = 0f;
         _previousBeatTime = currentBeatTime;
 
