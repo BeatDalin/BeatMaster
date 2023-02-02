@@ -78,7 +78,7 @@ public class LevelMenuManager : MonoBehaviour
             {
                 // Load GameScene
                 //_waypointMover.UpdateWaypointPosition();
-                //SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelGame);
+                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelGame);
                 // 추후 레벨 별로 구분해야 함
             }
         }
