@@ -21,6 +21,8 @@ public class ObjectPooling : MonoBehaviour
         }
 
         instance = this;
+        
+        DontDestroyOnLoad(gameObject);
 
         Init(initCount);
     }
