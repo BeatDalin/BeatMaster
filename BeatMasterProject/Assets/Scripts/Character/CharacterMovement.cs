@@ -102,12 +102,8 @@ public class CharacterMovement : MonoBehaviour
     // 캐릭터의 x값은 노래에 맞추어 결정되고, y값은 캐릭터의 행동이나 조건에 따라 결정
     private void Move()
     {
-        //Debug.Log(Koreographer.Instance.);
         float currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-        //currentBeatTime = SoundManager.instance.musicPlayer.
-        Debug.Log(currentBeatTime);
         float x = transform.position.x + (currentBeatTime - _previousBeatTime) * moveSpeed;
-        //float x = transform.position.x + (float)(Koreographer.Instance.GetMusicBPM() / 60 * moveSpeed * Time.fixedDeltaTime);
         float y = 0f;
         _previousBeatTime = currentBeatTime;
 

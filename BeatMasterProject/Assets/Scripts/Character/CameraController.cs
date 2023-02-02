@@ -6,10 +6,9 @@ using SonicBloom.Koreo;
 
 public class CameraController : MonoBehaviour
 {
-    private CinemachineBrain _brain;
     private CinemachineVirtualCamera _virtualCamera;
 
-    [SerializeField] private Vector3 _offset = new Vector3(0, 3, -10);
+    [SerializeField] private Vector3 _offset = new Vector3(0f, 3.5f, -10f);
     [SerializeField] private float _minOrthoSize = 7f;
     [SerializeField] private float _maxOrthoSize = 10f;
     [SerializeField] [EventID] private string _speedEventID;
@@ -17,11 +16,9 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
-        _brain = GetComponent<CinemachineBrain>();
-        _virtualCamera = _brain.ActiveVirtualCamera.VirtualCameraGameObject.GetComponent<CinemachineVirtualCamera>();
+        _virtualCamera = transform.GetComponent<CinemachineVirtualCamera>();
         _virtualCamera.transform.position = _virtualCamera.Follow.position + _offset;
         _virtualCamera.m_Lens.OrthographicSize = _minOrthoSize;
-        //_prevCharacterSpeed = _virtualCamera.Follow.GetComponent<CharacterMovement>().moveSpeed;
 
         Koreographer.Instance.RegisterForEvents(_speedEventID, ChangeOrthoSize);
     }
