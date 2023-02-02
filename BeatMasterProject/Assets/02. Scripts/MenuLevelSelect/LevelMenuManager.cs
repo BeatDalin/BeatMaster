@@ -77,9 +77,17 @@ public class LevelMenuManager : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 // Load GameScene
-                _waypointMover.UpdateWaypointPosition();
                 //SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelGame);
                 // 추후 레벨 별로 구분해야 함
+
+                if (hit.collider.name.Equals("BossGame"))
+                {
+                    _waypointMover.UpdateWaypointPosition();
+                }
+                else
+                {
+                    SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelGame);
+                }
             }
         }
 
