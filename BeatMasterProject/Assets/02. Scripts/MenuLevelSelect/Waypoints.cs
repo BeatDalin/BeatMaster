@@ -31,7 +31,7 @@ public class Waypoints : MonoBehaviour
     {
         if (currentWaypoint != null && currentWaypoint.GetSiblingIndex() < transform.childCount - 1)
         {
-            return transform.GetChild(currentWaypoint.GetSiblingIndex() + 1);
+            return transform.GetChild(currentWaypoint.GetSiblingIndex());
         }
 
         else
