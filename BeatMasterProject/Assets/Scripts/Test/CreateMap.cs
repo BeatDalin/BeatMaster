@@ -33,7 +33,7 @@ public class CreateMap : MonoBehaviour
 
     private void CreateTile(KoreographyEvent evt)
     {
-        Debug.Log(Koreographer.Instance.GetMusicBeatTime());
+        //Debug.Log(Koreographer.Instance.GetMusicBeatTime());
         if (evt.GetTextValue() == "Start")
         {
             for (int i = 0; i <= tileCount; i++)

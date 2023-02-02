@@ -10,28 +10,28 @@ public class Metronome : MonoBehaviour
     public AudioClip tickSound;
     public AudioSource audioSource;
 
-    private float tickInterval;
-    private float nextTick;
+    private float _tickInterval;
+    private float _nextTick;
 
 
-    void Start()
+    private void Start()
     {
-        tickInterval = 60f / bpm * signatureBottom / signatureTop;
-        nextTick = Time.time + tickInterval;
+        _tickInterval = 60f / bpm * signatureBottom / signatureTop;
+        _nextTick = Time.time + _tickInterval;
     }
 
-    void Update()
+    private void Update()
     {
         Metro();
     }
 
     private void Metro()
     {
-        if (Time.time > nextTick)
+        if (Time.time > _nextTick)
         {
             
             audioSource.PlayOneShot(tickSound);
-            nextTick = Time.time + tickInterval;
+            _nextTick = Time.time + _tickInterval;
 
         }
     }
