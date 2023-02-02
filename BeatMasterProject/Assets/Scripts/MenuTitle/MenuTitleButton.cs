@@ -163,12 +163,7 @@ public class MenuTitleButton : MonoBehaviour
     private void SceneMoveBtn(string sceneName)
     {
         SoundManager.instance.PlaySFX("Touch");
-        
-        //temp
-        if (sceneName == "Stage")
-        {
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect);
-        }
+        // LoadScene
     }
 
     
