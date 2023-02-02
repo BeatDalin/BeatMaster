@@ -108,11 +108,12 @@ namespace SonicBloom.Koreo.Demos
             noteLane.Initialize(this);
 
             // Initialize events.
-            //playingKoreo = SoundManager.instance.playingKoreo; //지은님코드 올리시면 이걸로 수정
-            playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
+            playingKoreo = SoundManager.instance.playingKoreo; //지은님코드 올리시면 이걸로 수정
+            //playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
             // Grab all the events out of the Koreography.
-            _rhythmTrackShort = playingKoreo.GetTrackByID(eventID[0]);
+            _rhythmTrackShort = playingKoreo.GetTrackByID("BossEventCheck");
             _rawShortEvents = _rhythmTrackShort.GetAllEvents();
+
 
             /*_rhythmTrackLong = playingKoreo.GetTrackByID(eventID[1]);
             _rawLongEvents = _rhythmTrackLong.GetAllEvents();*/
