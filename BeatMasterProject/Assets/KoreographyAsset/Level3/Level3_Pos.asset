@@ -14,48 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mEventID: Level3_Pos
   mEventList:
-  - mStartSample: 145986
-    mEndSample: 145986
-  - mStartSample: 218979
-    mEndSample: 218979
-  - mStartSample: 291972
-    mEndSample: 291972
-  - mStartSample: 364965
-    mEndSample: 364965
-  - mStartSample: 437958
-    mEndSample: 437958
-  - mStartSample: 510951
-    mEndSample: 510951
-  - mStartSample: 583944
-    mEndSample: 583944
-  - mStartSample: 656937
-    mEndSample: 656937
-  - mStartSample: 729931
-    mEndSample: 729931
-  - mStartSample: 802924
-    mEndSample: 802924
+  - mStartSample: 0
+    mEndSample: 0
   _SerializedPayloadTypes:
-  - SonicBloom.Koreo.IntPayload
+  - SonicBloom.Koreo.FloatPayload
   _ColorPayloads: []
   _ColorPayloadIdxs: 
   _CurvePayloads: []
   _CurvePayloadIdxs: 
-  _FloatPayloads: []
-  _FloatPayloadIdxs: 
+  _FloatPayloads:
+  - mFloatVal: 1
+  _FloatPayloadIdxs: 00000000
   _GradientPayloads: []
   _GradientPayloadIdxs: 
-  _IntPayloads:
-  - mIntVal: 1
-  - mIntVal: 1
-  - mIntVal: -1
-  - mIntVal: -1
-  - mIntVal: 1
-  - mIntVal: 1
-  - mIntVal: -1
-  - mIntVal: -1
-  - mIntVal: 1
-  - mIntVal: -1
-  _IntPayloadIdxs: 00000000010000000200000003000000040000000500000006000000070000000800000009000000
+  _IntPayloads: []
+  _IntPayloadIdxs: 
   _SpectrumPayloads: []
   _SpectrumPayloadIdxs: 
   _TextPayloads: []
