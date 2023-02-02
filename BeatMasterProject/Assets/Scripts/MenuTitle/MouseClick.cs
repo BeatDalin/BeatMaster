@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MouseClick : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class MouseClick : MonoBehaviour
     public float defaultTime = 0.01f;
     
     private float _spawnTime;
+
+    private LevelMenuManager _levelMenuManager;
     
     // Update is called once per frame
     void Update()
@@ -25,9 +28,24 @@ public class MouseClick : MonoBehaviour
     private void InitTouchEffect()
     {
         Vector3 mouse = Input.mousePosition;
-        mouse.z = 20f;
+
+        if (SceneManager.GetActiveScene().name.Equals("MenuLevelSelect"))
+        {
+            mouse.y = 2f;
+        }
+        else
+        {
+            mouse.z = 20f;
+        }
         
         Vector3 mPosition = Camera.main.ScreenToWorldPoint(mouse);
+        
+        if (SceneManager.GetActiveScene().name.Equals("MenuLevelSelect"))
+        {
+            mPosition = _levelMenuManager.ray.origin;
+        }
+        
+        Debug.Log(mPosition);
         //mPosition.z = 20f;
 
         ObjectPooling.GetObject(mPosition);

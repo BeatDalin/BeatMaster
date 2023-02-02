@@ -18,6 +18,8 @@ public class LevelMenuManager : MonoBehaviour
     [SerializeField] private float _zPosMax = -6.5f;
     [SerializeField] private float _zPosMin = -15f;
 
+    public Ray ray;
+
     private Camera _mainCam;
     
     private Vector2 _touchPoint;
@@ -65,7 +67,7 @@ public class LevelMenuManager : MonoBehaviour
         {
             _touchPoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 
-            Ray ray = _mainCam.ScreenPointToRay(_touchPoint);
+            ray = _mainCam.ScreenPointToRay(_touchPoint);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit))

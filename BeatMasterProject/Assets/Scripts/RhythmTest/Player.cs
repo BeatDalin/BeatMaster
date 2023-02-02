@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float moveSpeed;
 
+    private bool _isJumping;
+
     private Animator _animator;
     private Rigidbody2D _rigidbody;
 

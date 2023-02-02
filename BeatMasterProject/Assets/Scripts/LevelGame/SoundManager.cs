@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using SonicBloom.Koreo;
 using SonicBloom.Koreo.Players;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 [Serializable]
 public class Sound
 {
@@ -32,8 +32,7 @@ public class SoundManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-
-            DontDestroyOnLoad(gameObject);
+            
         }
         else
         {
@@ -42,7 +41,7 @@ public class SoundManager : MonoBehaviour
 
         playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
         clipName = playingKoreo.SourceClipName;
-        musicPlayer = FindObjectOfType<SimpleMusicPlayer>();
+        musicPlayer = GetComponentInChildren<SimpleMusicPlayer>();
         musicPlayer.TryGetComponent(typeof(AudioSource), out Component audioSource);
         if (audioSource)
         {
@@ -98,9 +97,7 @@ public class SoundManager : MonoBehaviour
                         return;
                     }
                 }
-                // Debug.Log("모든 오디오 플레이어가 재생중입니다.");
             }
         }
-        // Debug.Log(sfxName + "이름의 효과음이 없습니다.");
     }
 }
