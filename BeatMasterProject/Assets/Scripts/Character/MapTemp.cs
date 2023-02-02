@@ -5,8 +5,9 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using SonicBloom.Koreo;
 
-public class MapGenerator : MonoBehaviour
+public class MapTemp : MonoBehaviour
 {
+    // 주석 필
     [SerializeField] private Koreography _koreography;
 
     [Header("Event")]
@@ -25,48 +26,17 @@ public class MapGenerator : MonoBehaviour
 
     private void Awake()
     {
-        //_koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
-    
+        // 주석 필
+        _koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
+
         GenerateMap();
     }
-    
-    public KoreographyTrack track;
-    public int index = 0;
-    // private void Awake()
-    // {
-    //     var _koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
-    //
-    //     GenerateMap();
-    //
-    //     _mapEventList = _koreography.GetTrackByID(_mapEventID).GetAllEvents();
-    //     for (int i = 0; i < _mapEventList.Count; i++)
-    //     {
-    //         int[] tileData = _mapEventList[i].GetTextValue().Split().Select(int.Parse).ToArray();
-    //         
-    //         
-    //
-    //         if (tileData[2] == 1)
-    //         {
-    //             Debug.Log(tileData[2]);
-    //
-    //             var start = _mapEventList[i].StartSample - 5000;
-    //             var end = _mapEventList[i].StartSample + 5000;
-    //
-    //             var trackEvent = track.GetAllEvents()[index];
-    //             trackEvent.Payload = new CurvePayload();
-    //             Debug.Log(trackEvent.HasCurvePayload());
-    //             trackEvent.StartSample = start;
-    //             trackEvent.EndSample = end;
-    //
-    //             index++;
-    //         }
-    //     }
-    // }
-    
+
     private void GenerateMap()
     {
-        //_mapEventList = _koreography.GetTrackByID(_mapEventID).GetAllEvents();
-        _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
+        // 주석 필
+        _mapEventList = _koreography.GetTrackByID(_mapEventID).GetAllEvents();
+        //_mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
 
         for (int i = 0; i < _mapEventList.Count; i++)
         {
@@ -86,16 +56,39 @@ public class MapGenerator : MonoBehaviour
             }
 
             // 땅 타일
-            _groundTilemap.SetTile(new Vector3Int(_tileX, _tileY, 0), _groundTileList[groundType]);
+            Tile tile = _groundTileList[groundType];
+            Tile underTile = _groundTileList[3];
+
+            bool isLeftSide = false;
+            bool isRightSide = false;
+            
+            if (groundType != 3 && i != 0 && i != _mapEventList.Count - 1)
+            {
+                if (_mapEventList[i - 1].GetTextValue().Split().Select(int.Parse).ToArray()[0] == 3)
+                {
+                    isLeftSide = true;
+                    tile = (groundType == 0) ? _groundTileList[6] : tile;
+                    underTile = _groundTileList[8];
+                }
+                else if (_mapEventList[i + 1].GetTextValue().Split().Select(int.Parse).ToArray()[0] == 3)
+                {
+                    isRightSide = true;
+                    tile = (groundType == 0) ? _groundTileList[7] : tile;
+                    underTile = _groundTileList[9];
+                }
+            }
+
+            _groundTilemap.SetTile(new Vector3Int(_tileX, _tileY, 0), tile);
+            
             for (int j = _tileY - 1; j >= -10; j--)
             {
-                if (j == _tileY - 1 && (groundType == 1 || groundType == 2))
+                if (!isLeftSide && !isRightSide && j == _tileY - 1 && (groundType == 1 || groundType == 2))
                 {
                     _groundTilemap.SetTile(new Vector3Int(_tileX, j, 0), _groundTileList[groundType + 3]);
                 }
                 else
                 {
-                    _groundTilemap.SetTile(new Vector3Int(_tileX, j, 0), _groundTileList[3]);
+                    _groundTilemap.SetTile(new Vector3Int(_tileX, j, 0), underTile);
                 }
             }
 
