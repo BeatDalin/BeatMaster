@@ -128,35 +128,23 @@ public abstract class GameUI : MonoBehaviour
                 TextMove("Perfect");
                 _judgeText.DOColor(_perfectColor, 0.1f);
                 _perfectOutline.SetActive(true);
-                _fastOutline.SetActive(false);
-                _slowOutline.SetActive(false);
-                _failOutline.SetActive(false);
                 break;
 
             case BeatResult.Fast:
                 TextMove("Fast");
                 _judgeText.DOColor(_fastColor, 0.1f);
-                _perfectOutline.SetActive(false);
                 _fastOutline.SetActive(true);
-                _slowOutline.SetActive(false);
-                _failOutline.SetActive(false);
                 break;
 
             case BeatResult.Slow:
                 TextMove("Slow");
                 _judgeText.DOColor(_slowColor, 0.1f);
-                _perfectOutline.SetActive(false);
-                _fastOutline.SetActive(false);
                 _slowOutline.SetActive(true);
-                _failOutline.SetActive(false);
                 break;
 
             case BeatResult.Fail:
                 TextMove("Fail");
                 _judgeText.DOColor(_failColor, 0.1f);
-                _perfectOutline.SetActive(false);
-                _fastOutline.SetActive(false);
-                _slowOutline.SetActive(false);
                 _failOutline.SetActive(true);
                 break;
         }
