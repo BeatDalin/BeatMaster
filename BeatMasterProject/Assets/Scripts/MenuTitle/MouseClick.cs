@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,15 @@ public class MouseClick : MonoBehaviour
     private float _spawnTime;
 
     private LevelMenuManager _levelMenuManager;
-    
+
+    private void Start()
+    {
+        if (SceneManager.GetActiveScene().name.Equals("MenuLevelSelect"))
+        {
+            _levelMenuManager = FindObjectOfType<LevelMenuManager>();
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -27,28 +36,25 @@ public class MouseClick : MonoBehaviour
 
     private void InitTouchEffect()
     {
-        Vector3 mouse = Input.mousePosition;
-
+        
         if (SceneManager.GetActiveScene().name.Equals("MenuLevelSelect"))
         {
-            mouse.y = 2f;
+            Vector3 pos = _levelMenuManager.effectRayPoint.GetPoint(10f);
+            
+            ObjectPooling.GetObject(pos);
         }
         else
         {
-            mouse.z = 20f;
-        }
-        
-        Vector3 mPosition = Camera.main.ScreenToWorldPoint(mouse);
-        
-        if (SceneManager.GetActiveScene().name.Equals("MenuLevelSelect"))
-        {
-            mPosition = _levelMenuManager.ray.origin;
-        }
-        
-        Debug.Log(mPosition);
-        //mPosition.z = 20f;
+            Vector3 mouse = Input.mousePosition;
 
-        ObjectPooling.GetObject(mPosition);
+            mouse.z = 20f;
+            
+            Vector3 mPosition = Camera.main.ScreenToWorldPoint(mouse);
+            
+            ObjectPooling.GetObject(mPosition);
+        }
+        
+        
         //Instantiate(_touchEffect, mPosition, Quaternion.identity);
     }
 }

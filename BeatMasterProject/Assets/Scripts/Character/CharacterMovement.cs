@@ -6,6 +6,7 @@ using SonicBloom.Koreo;
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
 {
+    private Game _game;
     private Rigidbody2D _rigidbody;
 
     [Header("Music")]
@@ -39,8 +40,9 @@ public class CharacterMovement : MonoBehaviour
     
     private void Start()
     {
+        _game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
-        _animator = GetComponent<Animator>();
+        //_animator = GetComponent<Animator>();
         
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
         SoundManager.instance.PlayBGM(false);
@@ -49,12 +51,15 @@ public class CharacterMovement : MonoBehaviour
     private void Update()
     {
         GetInput();
-        Attack();
+        //Attack();
     }
 
     private void FixedUpdate()
     {
-        Move();
+        if (_game.curState == GameState.Play)
+        {
+            Move();
+        }
     }
 
     private void GetInput()
@@ -63,7 +68,7 @@ public class CharacterMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
             SoundManager.instance.PlaySFX("Jump");
-            _animator.CrossFadeInFixedTime("Jump",0.1f);
+            //_animator.CrossFadeInFixedTime("Jump",0.1f);
             
             if (++_jumpCount >= _maxJumpCount)
             {
@@ -75,7 +80,7 @@ public class CharacterMovement : MonoBehaviour
             _isJumping = true;
             _canGroundCheck = false;
 
-            Invoke("GroundCheckOn", 0.1f);
+            Invoke("GroundCheckOn", 0.2f);
 
             RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + _jumpTileCount, 100f), Vector2.down, 1000, _tileLayer);
             
@@ -184,7 +189,6 @@ public class CharacterMovement : MonoBehaviour
         {
             SoundManager.instance.PlaySFX("Attack");
             _animator.CrossFadeInFixedTime("Attack",0.1f);
-
         }
     }
 }
