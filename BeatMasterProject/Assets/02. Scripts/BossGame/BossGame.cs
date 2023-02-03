@@ -32,7 +32,7 @@ public class BossGame : Game
     protected override void Start()
     {
         base.Start();
-        ; Koreographer.Instance.RegisterForEventsWithTime("BossEventCheck", CheckShortEnd);
+        Koreographer.Instance.RegisterForEventsWithTime("BossEventCheck", CheckShortEnd);
 
         // Long Note Event Track
         /*Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
