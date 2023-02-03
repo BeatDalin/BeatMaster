@@ -16,6 +16,8 @@ public class PlayerStatus : MonoBehaviour
     private Vector4 _hairColor;
     private SPUM_SpriteList _spumSpriteList;
 
+    [SerializeField] private BossGameUI _bossGameUI;
+
     private void Awake()
     {
         Instance = this;
@@ -43,6 +45,7 @@ public class PlayerStatus : MonoBehaviour
         if (_hp == 0)
         {
             ChangeStatus(Status.Die);
+            _bossGameUI.ShowFinalPanel();
         }
     }
 

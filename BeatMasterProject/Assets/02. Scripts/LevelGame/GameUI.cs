@@ -13,9 +13,9 @@ public enum TextType
 
 public abstract class GameUI : MonoBehaviour
 {
-    [Header("Game")] [SerializeField] protected Game game;
+    [Header("Game")][SerializeField] protected Game game;
 
-    [Header("Result UI")] [SerializeField] protected GameObject finalPanel;
+    [Header("Result UI")][SerializeField] protected GameObject finalPanel;
     [SerializeField] protected Text finalFast;
     [SerializeField] protected Text finalPerfect;
     [SerializeField] protected Text finalSlow;
@@ -26,6 +26,7 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected Color successColor;
     private float _delay = 0f;
     [SerializeField] protected Button goLevelAfterGameBtn;
+    [SerializeField] protected Button restartAfterGameBtn;
 
     [Header("Result Visualize")]
     [SerializeField] private GameObject _perfectOutline;
@@ -36,24 +37,26 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] private RectTransform _textStart;
     [SerializeField] private RectTransform _textEnd;
     [SerializeField] private RectTransform _textRect;
-    
+
     [SerializeField] private Color _perfectColor;
     [SerializeField] private Color _fastColor;
     [SerializeField] private Color _slowColor;
     [SerializeField] private Color _failColor;
 
-    [Header("Time Count UI")] [SerializeField]
+    [Header("Time Count UI")]
+    [SerializeField]
     public GameObject timePanel;
 
     [SerializeField] public Text timeCount;
 
-    [Header("Pause UI")] [SerializeField] protected GameObject pausePanel;
+    [Header("Pause UI")][SerializeField] protected GameObject pausePanel;
     [SerializeField] protected Button continueBtn;
     [SerializeField] protected Button restartBtn;
     [SerializeField] protected Button goSettingsBtn;
     [SerializeField] protected Button goLevelMenuBtn;
 
-    [Header("Settings UI")] [SerializeField]
+    [Header("Settings UI")]
+    [SerializeField]
     protected GameObject settingsPanel;
 
     [SerializeField] protected Button settingsCloseBtn;
@@ -92,7 +95,7 @@ public abstract class GameUI : MonoBehaviour
         finalPanel.SetActive(false);
         pausePanel.SetActive(false);
         settingsPanel.SetActive(false);
-        
+
         // star
         foreach (var s in star)
         {
@@ -105,6 +108,7 @@ public abstract class GameUI : MonoBehaviour
             UIManager.instance.ClosePopUp();
             game.ContinueGame();
         });
+        restartBtn.onClick.AddListener(() => SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelGame));
         goLevelMenuBtn.onClick.AddListener(() =>
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect));
         //settings
@@ -113,6 +117,9 @@ public abstract class GameUI : MonoBehaviour
 
         goLevelAfterGameBtn.onClick.AddListener(() =>
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect));
+
+        restartAfterGameBtn.onClick.AddListener(() =>
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelGame));
     }
 
     public void ChangeOutLineColor(BeatResult result)
