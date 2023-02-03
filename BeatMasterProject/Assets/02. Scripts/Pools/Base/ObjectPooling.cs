@@ -8,7 +8,7 @@ public abstract class ObjectPooling : Singleton<ObjectPooling>
 { 
     [SerializeField] protected GameObject poolingPrefab;
 
-    protected Queue<GameObject> pollingObjectQueue = new Queue<GameObject>();
+    protected Queue<GameObject> poolingObjectQueue = new Queue<GameObject>();
     
     [SerializeField] protected int initCount;
 
@@ -22,9 +22,9 @@ public abstract class ObjectPooling : Singleton<ObjectPooling>
     
     public virtual GameObject GetObject(Vector3 touchPos)
     {
-        if(pollingObjectQueue.Count > 0)
+        if(poolingObjectQueue.Count > 0)
         {
-            var obj = pollingObjectQueue.Dequeue();
+            var obj = poolingObjectQueue.Dequeue();
             obj.transform.SetParent(null);
             obj.transform.position = touchPos;
             obj.SetActive(true);
@@ -42,6 +42,6 @@ public abstract class ObjectPooling : Singleton<ObjectPooling>
     {
         obj.SetActive(false);
         obj.transform.SetParent(transform);
-        pollingObjectQueue.Enqueue(obj);
+        poolingObjectQueue.Enqueue(obj);
     }
 }

@@ -8,7 +8,7 @@ public class TouchEffectPool : ObjectPooling
     {
         for (int i = 0; i < initCount; i++)
         {
-            pollingObjectQueue.Enqueue(CreateNewObject());
+            poolingObjectQueue.Enqueue(CreateNewObject());
         }
     }
 }
