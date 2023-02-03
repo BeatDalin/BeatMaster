@@ -30,8 +30,9 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         BossGame,
     }
 
-    public void Init()
+    public override void Init()
     {
+        DontDestroyOnLoad(this);
         if (_loadImage == null)
         {
             _loadingCanvas = Instantiate(Resources.Load<GameObject>("UI/SceneTransitionCanvas"), transform);
