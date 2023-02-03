@@ -11,12 +11,12 @@ public class SwipeList : MonoBehaviour
     private float[] _pos;
     private float _distance;
 
-    void Start()
+    private void Start()
     {
         _pos = new float[transform.childCount];
         _distance = 1f / (_pos.Length - 1f);
     }
-    void Update()
+    private void Update()
     {
         for (int i = 0; i < _pos.Length; i++)
         {
