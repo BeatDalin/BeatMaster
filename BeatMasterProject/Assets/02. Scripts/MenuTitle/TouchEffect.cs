@@ -41,7 +41,7 @@ public class TouchEffect : MonoBehaviour
         {
             InitEffect();
             
-            ObjectPooling.ReturnObject(gameObject);
+            ObjectPooling.Instance.ReturnObject(gameObject);
         }
     }
 
