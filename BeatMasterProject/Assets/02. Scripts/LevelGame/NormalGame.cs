@@ -21,9 +21,10 @@ public class NormalGame : Game
     protected override void Awake()
     {
         base.Awake();
+        // Save Point Event Track
+        Koreographer.Instance.RegisterForEventsWithTime("Level1_Spd", SaveCheckPoint);
         // Short Note Event Track
         Koreographer.Instance.RegisterForEventsWithTime("Level1_JumpCheck", CheckShortEnd);
-
         // Long Note Event Track
         // Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
         // Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckStart", CheckLongStart);
@@ -33,6 +34,7 @@ public class NormalGame : Game
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_JumpCheck").GetAllEvents().Count];
         // longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
+        
     }
 
     protected override void Start()
@@ -49,6 +51,9 @@ public class NormalGame : Game
         _eventRangeShort = CalculateRange(_events);
         _events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
+        // Save Point Initialize
+        checkPointVisited = new bool[savePointList.Count];
+        checkPointVisited[0] = true;
     }
 
     private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
@@ -61,7 +66,7 @@ public class NormalGame : Game
         {
             isShortKeyCorrect = true;
             IncreaseItem();
-            gameUI.UpdateText(TextType.Item, itemCount);
+            gameUI.UpdateText(TextType.Item, coinCount);
             _pressedTime = sampleTime; // record the sample time when the button was pressed
         }
 
@@ -130,7 +135,7 @@ public class NormalGame : Game
             {
                 isLongKeyCorrect = true;
                 IncreaseItem();
-                gameUI.UpdateText(TextType.Item, itemCount);
+                gameUI.UpdateText(TextType.Item, coinCount);
 
                 _pressedTimeLong = sampleTime;
             }
@@ -174,7 +179,7 @@ public class NormalGame : Game
         
         // 체크 포인트 이후로 획득한 아이템 개수 계산
         DecreaseItem(1); // for testing purpose ... 
-        gameUI.UpdateText(TextType.Item, itemCount);
+        gameUI.UpdateText(TextType.Item, coinCount);
         int death = IncreaseDeath(); // increase death count
         gameUI.UpdateText(TextType.Death, death);
         // StartCoroutine(CoStartWithDelay(musicSampleTime)); // plays music after delay, at a certain point
@@ -182,26 +187,48 @@ public class NormalGame : Game
 
     private void Rewind()
     {
-        DecreaseItem(1);
-        gameUI.UpdateText(TextType.Item, itemCount);
+        SoundManager.instance.PlayBGM(false); // pause
+        curSample = rewindSampleTime;
+        ContinueGame(); // wait 3 sec and start
+        DecreaseItem(5);
+        gameUI.UpdateText(TextType.Item, coinCount);
         int death = IncreaseDeath(); // increase death count
         gameUI.UpdateText(TextType.Death, death);
+        shortIdx = rewindShortIdx;
+        longIdx = rewindLongIdx;
     }
 
     private void IncreaseItem()
     {
-        itemCount++;
+        coinCount++;
     }
 
     private void DecreaseItem(int amount)
     {
-        itemCount -= amount;
-        if(itemCount < 0)
+        coinCount -= amount;
+        if(coinCount < 0)
         {
-            itemCount = 0;
+            coinCount = 0;
         }
     }
 
+    private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
+    {
+        // Record sample time to play music
+        rewindSampleTime = sampleTime;
+        if (sampleTime > rewindSampleTime)
+        {
+            // Entered new check point
+            checkPointIdx++;
+            checkPointVisited[checkPointIdx] = true;
+            // Play Particle
+            // ex) particleSystem.Play();
+        }
+        // Record Index
+        rewindShortIdx = shortIdx;
+        rewindLongIdx = longIdx;
+    }
+    
     // public override void CheckBeatResult(BeatResult[] resultArr, BeatResult tempResult, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange)
     // {
     //     if (isKeyCorrect)
