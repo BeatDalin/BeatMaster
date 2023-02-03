@@ -41,19 +41,6 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
 
         _canvas = _loadingCanvas.GetComponent<Canvas>();
         _canvas.worldCamera = Camera.main;
-
-        // Scene Transition
-        _loadImage.material.SetFloat(Cutoff, _hideBackground); // filled
-        Debug.Log(_loadImage.material.GetFloat(Cutoff));
-        StartCoroutine(CoSceneEnter());
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            StartCoroutine(CoSceneTransition());
-        }
     }
 
     public void LoadLevelAsync(SceneType sceneType)
