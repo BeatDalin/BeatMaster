@@ -46,7 +46,7 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] private Color _failColor;
 
     [Header("Time Count UI")]
-    [SerializeField] public GameObject timePanel;
+    public GameObject timePanel;
 
     [SerializeField] public Text timeCount;
 

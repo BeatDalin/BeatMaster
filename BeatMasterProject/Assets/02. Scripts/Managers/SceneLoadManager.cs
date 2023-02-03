@@ -46,7 +46,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     public void LoadLevelAsync(SceneType sceneType)
     {
         Scene = sceneType;
-        StartCoroutine(CoLoadLevelAsync());
+        StartCoroutine(CoSceneTransition());
     }
 
     public void RestartGame()
@@ -83,7 +83,6 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
                 Mathf.MoveTowards(_loadImage.material.GetFloat(Cutoff), _hideBackground, _transitionSpd * Time.deltaTime));
             yield return new WaitForEndOfFrame();
         }
-        Scene = sceneType;
         StartCoroutine(CoLoadLevelAsync());
     }
 
