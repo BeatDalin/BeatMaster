@@ -32,7 +32,7 @@ public class BossGame : Game
     protected override void Start()
     {
         base.Start();
-;       Koreographer.Instance.RegisterForEventsWithTime("BossEventCheck", CheckShortEnd);
+        ; Koreographer.Instance.RegisterForEventsWithTime("BossEventCheck", CheckShortEnd);
 
         // Long Note Event Track
         /*Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
@@ -77,7 +77,7 @@ public class BossGame : Game
         _eventRangeShort = CalculateRange(_events);
         /*_events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);*/
-        
+
     }
 
     private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
@@ -106,6 +106,8 @@ public class BossGame : Game
             if (!isShortKeyCorrect)
             {
                 PlayerStatus.Instance.DecreaseHP();
+                int death = IncreaseDeath();
+                gameUI.UpdateText(TextType.Death, death);
                 //_laneController.trackedNotes.Dequeue().Missed();
                 NoteObject hitNote = _laneController.trackedNotes.Dequeue();
                 hitNote.Missed();
