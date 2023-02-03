@@ -27,4 +27,11 @@ public class BossGameUI : GameUI
                 break;
         }
     }
+
+    public void ShowFinalPanel()
+    {
+        SoundManager.instance.PlayBGM(false);
+        game.curState = GameState.Pause;
+        finalPanel.SetActive(true);
+    }
 }
