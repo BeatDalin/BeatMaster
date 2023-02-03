@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public enum BeatResult
 {
@@ -28,6 +29,14 @@ public abstract class Game : MonoBehaviour
     [Header("Game Play")]
     public GameState curState = GameState.Idle;
     public int curSample;
+    
+    [Header("Check Point")]
+    protected int rewindShortIdx;
+    protected int rewindLongIdx;
+    protected int rewindSampleTime;
+    protected List<KoreographyEvent> savePointList;
+    protected bool[] checkPointVisited;
+    protected int checkPointIdx = 0;
 
     [Header("Result Check")]
     public BeatResult[] longResult;
@@ -49,7 +58,7 @@ public abstract class Game : MonoBehaviour
     [Header("Data")]
     [SerializeField] private int _stageIdx; // Stage number-1 : This is an index!!!
     [SerializeField] private int _levelIdx; // Level number-1 : This is an index!!!
-    public int itemCount;
+    public int coinCount;
     
     private int[] _longSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from short notes
     private int[] _shortSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from long notes
@@ -59,7 +68,8 @@ public abstract class Game : MonoBehaviour
     {
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
         gameUI.InitUI();
-        itemCount = 0;
+        
+        // Data
         DataCenter.Instance.LoadData();
     }
 
@@ -76,6 +86,12 @@ public abstract class Game : MonoBehaviour
         shortIdx = 0;
         isLongPressed = false;
         isLongKeyCorrect = false;
+        coinCount = 0;
+        // Save Point
+        savePointList = SoundManager.instance.playingKoreo.GetTrackByID("Level1_Spd").GetAllEvents();
+        rewindShortIdx = 0;
+        rewindLongIdx = 0;
+        rewindSampleTime = 0;
     }
 
     private void CheckEnd(KoreographyEvent evt)
@@ -261,12 +277,12 @@ public abstract class Game : MonoBehaviour
             // boss game clear
             DataCenter.Instance.UpdateStageData(stageIdx);
             DataCenter.Instance.AddStageData();
-            DataCenter.Instance.UpdatePlayerData(stageIdx + 2, 1, itemCount);
+            DataCenter.Instance.UpdatePlayerData(stageIdx + 2, 1, coinCount);
         }
         else
         {
             // normal game clear
-            DataCenter.Instance.UpdatePlayerData(stageIdx + 1, levelIdx + 2, itemCount);
+            DataCenter.Instance.UpdatePlayerData(stageIdx + 1, levelIdx + 2, coinCount);
         }
     }
 
