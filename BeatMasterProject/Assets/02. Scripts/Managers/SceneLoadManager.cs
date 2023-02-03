@@ -37,29 +37,17 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         {
             _loadingCanvas = Instantiate(Resources.Load<GameObject>("UI/SceneTransitionCanvas"), transform);
             _loadImage = _loadingCanvas.GetComponentInChildren<Image>();
+            _loadImage.material.SetFloat(Cutoff, _hideBackground); // filled
         }
-
+        _loadImage.gameObject.SetActive(false);
         _canvas = _loadingCanvas.GetComponent<Canvas>();
         _canvas.worldCamera = Camera.main;
-
-        // Scene Transition
-        _loadImage.material.SetFloat(Cutoff, _hideBackground); // filled
-        Debug.Log(_loadImage.material.GetFloat(Cutoff));
-        StartCoroutine(CoSceneEnter());
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            StartCoroutine(CoSceneTransition());
-        }
     }
 
     public void LoadLevelAsync(SceneType sceneType)
     {
         Scene = sceneType;
-        StartCoroutine(CoLoadLevelAsync());
+        StartCoroutine(CoSceneTransition());
     }
 
     public void RestartGame()
@@ -85,7 +73,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     /// </summary>
     /// <param name="sceneType">Scene to move on.</param>
     /// <returns>CoLoadLevelAsync()</returns>
-    public IEnumerator CoSceneTransition(SceneType sceneType = default)
+    private IEnumerator CoSceneTransition(SceneType sceneType = default)
     {
         _loadImage.gameObject.SetActive(true);
         _loadImage.material.SetFloat(Cutoff, _showBackground); // unfilled
@@ -96,7 +84,6 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
                 Mathf.MoveTowards(_loadImage.material.GetFloat(Cutoff), _hideBackground, _transitionSpd * Time.deltaTime));
             yield return new WaitForEndOfFrame();
         }
-        Scene = sceneType;
         StartCoroutine(CoLoadLevelAsync());
     }
 
@@ -104,7 +91,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     /// Once next scene has been loaded, show transition effect to empty the hiding panel. 
     /// </summary>
     /// <returns>WaitForEndOfFrame()</returns>
-    public IEnumerator CoSceneEnter()
+    private IEnumerator CoSceneEnter()
     {
         _canvas.worldCamera = Camera.main;
         _loadImage.material.SetFloat(Cutoff, _hideBackground); // filled
