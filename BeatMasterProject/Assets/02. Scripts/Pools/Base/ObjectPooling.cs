@@ -22,20 +22,11 @@ public abstract class ObjectPooling : Singleton<ObjectPooling>
     
     public virtual GameObject GetObject(Vector3 touchPos)
     {
-        if(poolingObjectQueue.Count > 0)
-        {
-            var obj = poolingObjectQueue.Dequeue();
-            obj.transform.SetParent(null);
-            obj.transform.position = touchPos;
-            obj.SetActive(true);
-            return obj;
-        }
-        
-        var newObj = CreateNewObject();
-        newObj.gameObject.SetActive(true);
-        newObj.transform.position = touchPos;
-        newObj.transform.SetParent(null);
-        return newObj;
+        var obj = poolingObjectQueue.Dequeue();
+        obj.transform.SetParent(null);
+        obj.transform.position = touchPos;
+        obj.SetActive(true);
+        return obj;
     }
 
     public virtual void ReturnObject(GameObject obj)
