@@ -10,16 +10,17 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     public static T Instance
     {
-        get
-        {
-            if (!_instance)
-            {
-                GameObject go = new GameObject($"{typeof(T)}");
-                _instance = go.AddComponent<T>();
-                DontDestroyOnLoad(_instance);
-            }
-            return _instance;
-        }
+        get => _instance;
     }
 
+    private void Awake()
+    {
+        if (!_instance)
+        {
+            _instance = GetComponent<T>();
+        }
+        Init();
+    }
+
+    public abstract void Init();
 }

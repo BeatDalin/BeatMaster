@@ -41,7 +41,7 @@ public class MouseClick : MonoBehaviour
         {
             Vector3 pos = _levelMenuManager.effectRayPoint.GetPoint(10f);
             
-            ObjectPooling.GetObject(pos);
+            ObjectPooling.Instance.GetObject(pos);
         }
         else
         {
@@ -51,7 +51,7 @@ public class MouseClick : MonoBehaviour
             
             Vector3 mPosition = Camera.main.ScreenToWorldPoint(mouse);
             
-            ObjectPooling.GetObject(mPosition);
+            ObjectPooling.Instance.GetObject(mPosition);
         }
         
         
