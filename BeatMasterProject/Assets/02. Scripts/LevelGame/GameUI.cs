@@ -13,9 +13,11 @@ public enum TextType
 
 public abstract class GameUI : MonoBehaviour
 {
-    [Header("Game")][SerializeField] protected Game game;
+    [Header("Game")]
+    [SerializeField] protected Game game;
 
-    [Header("Result UI")][SerializeField] protected GameObject finalPanel;
+    [Header("Result UI")]
+    [SerializeField] protected GameObject finalPanel;
     [SerializeField] protected Text finalFast;
     [SerializeField] protected Text finalPerfect;
     [SerializeField] protected Text finalSlow;
@@ -44,20 +46,19 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] private Color _failColor;
 
     [Header("Time Count UI")]
-    [SerializeField]
     public GameObject timePanel;
 
     [SerializeField] public Text timeCount;
 
-    [Header("Pause UI")][SerializeField] protected GameObject pausePanel;
+    [Header("Pause UI")]
+    [SerializeField] protected GameObject pausePanel;
     [SerializeField] protected Button continueBtn;
     [SerializeField] protected Button restartBtn;
     [SerializeField] protected Button goSettingsBtn;
     [SerializeField] protected Button goLevelMenuBtn;
 
     [Header("Settings UI")]
-    [SerializeField]
-    protected GameObject settingsPanel;
+    [SerializeField] protected GameObject settingsPanel;
 
     [SerializeField] protected Button settingsCloseBtn;
 
