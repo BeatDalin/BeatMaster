@@ -20,26 +20,29 @@ public class MapTemp : MonoBehaviour
     }
 
     public Theme theme;
-    [SerializeField] private List<TileSet> _tileSet;
+    [SerializeField] private List<TileSet> _tileSetList;
 
     [Header("Check Track")]
     [SerializeField] KoreographyTrack _jumpCheckTrack;
 
-    [Space][Header("Event")]
+    [Space]
+    [Header("Event")]
     [SerializeField] [EventID] private string _mapEventID;
     [SerializeField] [EventID] private string _shortEventID;
     [SerializeField] [EventID] private string _spdEventID;
     [SerializeField] private List<KoreographyEvent> _mapEventList = new List<KoreographyEvent>();
     [SerializeField] private List<KoreographyEvent> _shortEventList = new List<KoreographyEvent>();
     [SerializeField] private List<KoreographyEvent> _spdEventList = new List<KoreographyEvent>();
-    [SerializeField] private int _actEventIndex;
+    [SerializeField] private int _shortEventIndex;
     [SerializeField] private int _spdEventIndex;
 
-    [Space][Header("Tilemap")]
+    [Space]
+    [Header("Tilemap")]
     [SerializeField] private Tilemap _groundTilemap;
     [SerializeField] private Tilemap _interactionTilemap;
 
-    [Space][Header("Interaction")]
+    [Space]
+    [Header("Interaction")]
     [SerializeField] private List<Tile> _interactionTileList = new List<Tile>();
 
     private int _tileX = -1, _tileY;
@@ -66,26 +69,26 @@ public class MapTemp : MonoBehaviour
     }
 
     private void FillMapSide()
-    {   
+    {
         // 맵 오른쪽 끝 채우기
         for (int i = 0; i < 30; i++)
         {
-            _groundTilemap.SetTile(new Vector3Int(++_tileX, _tileY, 0), _tileSet[(int)theme].topTileList[0]);
+            _groundTilemap.SetTile(new Vector3Int(++_tileX, _tileY, 0), _tileSetList[(int)theme].topTileList[0]);
 
             for (int j = _tileY - 1; j >= -10; j--)
             {
-                _groundTilemap.SetTile(new Vector3Int(_tileX, j, 0), _tileSet[(int)theme].underTileList[0]);
+                _groundTilemap.SetTile(new Vector3Int(_tileX, j, 0), _tileSetList[(int)theme].underTileList[0]);
             }
         }
 
         // 맵 왼쪽 끝 채우기
         for (int i = -1; i >= -15; i--)
         {
-            _groundTilemap.SetTile(new Vector3Int(i, 0, 0), _tileSet[(int)theme].topTileList[0]);
+            _groundTilemap.SetTile(new Vector3Int(i, 0, 0), _tileSetList[(int)theme].topTileList[0]);
 
             for (int j = -1; j >= -10; j--)
             {
-                _groundTilemap.SetTile(new Vector3Int(i, j, 0), _tileSet[(int)theme].underTileList[0]);
+                _groundTilemap.SetTile(new Vector3Int(i, j, 0), _tileSetList[(int)theme].underTileList[0]);
             }
         }
     }
@@ -94,9 +97,9 @@ public class MapTemp : MonoBehaviour
     {
         for (int i = 0; i < _shortEventList.Count; i++)
         {
-            int actType = _shortEventList[i].GetIntValue();
+            int shortType = _shortEventList[i].GetIntValue();
 
-            if (actType == 0)
+            if (shortType == 0)
             {
                 KoreographyEvent koreoEvent = new KoreographyEvent();
                 koreoEvent.Payload = new CurvePayload();
@@ -200,10 +203,10 @@ public class MapTemp : MonoBehaviour
             TileChangeData tileChangeData = new TileChangeData
             {
                 position = new Vector3Int(_tileX, _tileY, 0),
-                tile = _tileSet[(int)theme].topTileList[groundIndex],
+                tile = _tileSetList[(int)theme].topTileList[groundIndex],
                 transform = tileTransform
             };
-            
+
             _groundTilemap.SetTile(tileChangeData, false);
 
             // 밑 영역 타일들 배치
@@ -217,97 +220,68 @@ public class MapTemp : MonoBehaviour
                 tileChangeData = new TileChangeData
                 {
                     position = new Vector3Int(_tileX, j, 0),
-                    tile = _tileSet[(int)theme].underTileList[groundIndex],
+                    tile = _tileSetList[(int)theme].underTileList[groundIndex],
                     transform = tileTransform
                 };
 
                 _groundTilemap.SetTile(tileChangeData, false);
             }
 
+            // (임시) 숏 노트 타일
+            for (int j = 0; j < _shortEventList.Count; j++)
+            {
+                if (_shortEventList[j].StartSample - 5 < _mapEventList[i].StartSample && _mapEventList[i].StartSample < _shortEventList[j].StartSample + 5)
+                {
+                    float yOffset = 1f;
+
+                    switch (groundType)
+                    {
+                        case 1:
+                        case 2:
+                            yOffset = 0.5f;
+                            break;
+                        case 3:
+                        case 4:
+                            yOffset = 0.25f;
+                            break;
+                    }
+
+                    Matrix4x4 shortTileTransform = Matrix4x4.Translate(new Vector3(0f, groundYOffset + yOffset, 0f)) * Matrix4x4.Rotate(Quaternion.identity);
+                    TileChangeData shortTileChangeData = new TileChangeData
+                    {
+                        position = new Vector3Int(_tileX, _tileY, 0),
+                        tile = _interactionTileList[0],
+                        transform = shortTileTransform
+                    };
+
+                    _interactionTilemap.SetTile(shortTileChangeData, false);
+
+                    break;
+                }
+            }
+
+            // 체크포인트
+            for (int j = 0; j < _spdEventList.Count; j++)
+            {
+                if (_spdEventList[j].StartSample - 5 < _mapEventList[i].StartSample && _mapEventList[i].StartSample < _spdEventList[j].StartSample + 5)
+                {
+                    if (_spdEventList[j].HasFloatPayload() | (_spdEventList[j].GetTextValue() == "End"))
+                    {
+                        Matrix4x4 spdTileTransform = Matrix4x4.Translate(new Vector3(0f, groundYOffset, 0f)) * Matrix4x4.Rotate(Quaternion.identity);
+                        TileChangeData spdTileChangeData = new TileChangeData
+                        {
+                            position = new Vector3Int(_tileX, _tileY + 1, 0),
+                            tile = _interactionTileList[1],
+                            transform = spdTileTransform
+                        };
+
+                        _interactionTilemap.SetTile(spdTileChangeData, false);
+                    }
+                }
+            }
+
             // 이전 타일 타입을 현재 타일 타입으로 갱신
             prevGroundType = groundType;
         }
     }
-
-    //private void GenerateMap()
-    //{
-    //    _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
-
-    //    for (int i = 0; i < _mapEventList.Count; i++)
-    //    {
-    //        int[] tileData = _mapEventList[i].GetTextValue().Split().Select(int.Parse).ToArray();
-
-    //        int groundType = tileData[0];
-    //        int groundYDelta = tileData[1];
-    //        int actionType = tileData[2];
-    //        int checkPoint = tileData[3];
-
-
-    //        _tileX += 1;
-    //        _tileY += groundYDelta;
-
-    //        if (groundType == 3)
-    //        {
-    //            continue;
-    //        }
-
-    //        // 땅 타일
-    //        Tile tile = _topTileList[groundType];
-    //        Tile underTile = _topTileList[3];
-
-    //        bool isLeftSide = false;
-    //        bool isRightSide = false;
-            
-    //        if (groundType != 3 && i != 0 && i != _mapEventList.Count - 1)
-    //        {
-    //            if (_mapEventList[i - 1].GetTextValue().Split().Select(int.Parse).ToArray()[0] == 3)
-    //            {
-    //                isLeftSide = true;
-    //                tile = (groundType == 0) ? _topTileList[6] : tile;
-    //                underTile = _topTileList[8];
-    //            }
-    //            else if (_mapEventList[i + 1].GetTextValue().Split().Select(int.Parse).ToArray()[0] == 3)
-    //            {
-    //                isRightSide = true;
-    //                tile = (groundType == 0) ? _topTileList[7] : tile;
-    //                underTile = _topTileList[9];
-    //            }
-    //        }
-
-    //        _groundTilemap.SetTile(new Vector3Int(_tileX, _tileY, 0), tile);
-            
-    //        for (int j = _tileY - 1; j >= -10; j--)
-    //        {
-    //            if (!isLeftSide && !isRightSide && j == _tileY - 1 && (groundType == 1 || groundType == 2))
-    //            {
-    //                _groundTilemap.SetTile(new Vector3Int(_tileX, j, 0), _topTileList[groundType + 3]);
-    //            }
-    //            else
-    //            {
-    //                _groundTilemap.SetTile(new Vector3Int(_tileX, j, 0), underTile);
-    //            }
-    //        }
-
-    //        // 액션 타일
-    //        if (actionType != 0)
-    //        {
-    //            float yOffset = (groundType == 0) ? 0.5f : 0f;
-    //            Matrix4x4 tileTransform = Matrix4x4.Translate(new Vector3(0f, yOffset, 0f)) * Matrix4x4.Rotate(Quaternion.identity);
-    //            TileChangeData tileChangeData = new TileChangeData
-    //            {
-    //                position = new Vector3Int(_tileX, _tileY, 0),
-    //                tile = _interactionTileList[0],
-    //                transform = tileTransform
-    //            };
-
-    //            _interactionTilemap.SetTile(tileChangeData, false);
-    //        }
-
-    //        // 체크포인트
-    //        if (checkPoint == 1 || checkPoint == 2)
-    //        {
-    //            _interactionTilemap.SetTile(new Vector3Int(_tileX, _tileY + 1, 0), _interactionTileList[1]);
-    //        }
-    //    }
-    //}
 }
