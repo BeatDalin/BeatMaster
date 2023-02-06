@@ -24,6 +24,8 @@ public enum GameState
 public abstract class Game : MonoBehaviour
 {
     [SerializeField] protected GameUI gameUI; // LevelGameUI or BossGameUI will come in.
+    [SerializeField] protected TileColliderTest tileTest;
+    
     [SerializeField] [EventID] private string _mapEventID;
 
     [Header("Game Play")]
@@ -33,10 +35,10 @@ public abstract class Game : MonoBehaviour
     [Header("Check Point")]
     protected int rewindShortIdx;
     protected int rewindLongIdx;
-    protected int rewindSampleTime;
-    protected List<KoreographyEvent> savePointList;
-    protected bool[] checkPointVisited;
-    protected int checkPointIdx = 0;
+    protected int rewindSampleTime = -1;
+    [SerializeField] protected List<KoreographyEvent> savePointList;
+    [SerializeField] protected bool[] checkPointVisited;
+    protected int checkPointIdx = -1;
 
     [Header("Result Check")]
     public BeatResult[] longResult;
@@ -68,7 +70,7 @@ public abstract class Game : MonoBehaviour
     {
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
         gameUI.InitUI();
-        
+        tileTest = FindObjectOfType<TileColliderTest>();
         // Data
         DataCenter.Instance.LoadData();
     }
@@ -88,10 +90,11 @@ public abstract class Game : MonoBehaviour
         isLongKeyCorrect = false;
         coinCount = 0;
         // Save Point
-        savePointList = SoundManager.instance.playingKoreo.GetTrackByID("Level1_Spd").GetAllEvents();
+        savePointList = SoundManager.instance.playingKoreo.GetTrackByID("Level1_CheckPoint").GetAllEvents();
         rewindShortIdx = 0;
         rewindLongIdx = 0;
-        rewindSampleTime = 0;
+        rewindSampleTime = -1;
+        checkPointIdx = -1;
     }
 
     private void CheckEnd(KoreographyEvent evt)
