@@ -29,7 +29,8 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         Level1,
         Level2,
         Level3,
-        Level4
+        Level4,
+        Level1MonsterTest
     }
 
     public override void Init()
@@ -49,6 +50,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     public void LoadLevelAsync(SceneType sceneType)
     {
         Scene = sceneType;
+        SoundManager.instance.ChangeKoreo(Scene);
         StartCoroutine(CoSceneTransition());
     }
 
@@ -67,6 +69,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
             // loading bar if you want
             yield return null;
         }
+        
         StartCoroutine(CoSceneEnter());
     }
     
