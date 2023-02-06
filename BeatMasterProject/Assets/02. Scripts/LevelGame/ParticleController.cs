@@ -6,11 +6,12 @@ using UnityEngine.Serialization;
 
 public class ParticleController : MonoBehaviour
 {
+    private CharacterMovement _characterMovement; 
     [SerializeField] private ParticleSystem _movementParticle;
     [SerializeField] private ParticleSystem _fallParticle;
     [SerializeField] private ParticleSystem _touchParticle;
     [SerializeField] private ParticleSystem _jumpParticle;
-    [SerializeField] private ParticleSystem _hammerParticle;
+    [SerializeField] private ParticleSystem _attackParticle;
     
     [SerializeField] private Animator _animator;
 
@@ -23,6 +24,13 @@ public class ParticleController : MonoBehaviour
     private float counter;
 
     public bool isOnGround = false;
+    private static readonly int IsJump = Animator.StringToHash("isJump");
+
+    private void Awake()
+    {
+        _characterMovement = GetComponent<CharacterMovement>();
+        
+    }
 
     // Update is called once per frame
     void Update()
@@ -43,14 +51,14 @@ public class ParticleController : MonoBehaviour
             _jumpParticle.Play();
             if (isOnGround)
             {
-                _animator.transform.position = transform.position - Vector3.up * (transform.localPosition.y / 2);
-                _animator.SetTrigger("isJump");
+                // _animator.transform.position = transform.position - Vector3.up * (transform.localPosition.y / 2);
+                _animator.SetTrigger(IsJump);
             }
         }
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            _hammerParticle.Play();
+            _attackParticle.Play();
         }
     }
 
@@ -64,6 +72,7 @@ public class ParticleController : MonoBehaviour
     {
         if (collision.tag == "Ground")
         {
+            Debug.Log("GroundTouch!");
             _fallParticle.Play();
             isOnGround = true;
         }
@@ -74,7 +83,6 @@ public class ParticleController : MonoBehaviour
         if (other.CompareTag("Ground"))
         {
             isOnGround = false;
-            
         }
     }
 }

@@ -172,7 +172,7 @@ public class MapTemp : MonoBehaviour
             if (groundType == 5)
             {
                 prevGroundType = groundType;
-
+                LocateItems(_tileX, _tileY + 2);
                 continue;
             }
 
@@ -229,6 +229,15 @@ public class MapTemp : MonoBehaviour
         }
     }
 
+    [Header("Item")]
+    [SerializeField] private GameObject _starObj;
+    [SerializeField] private Transform _itemContainer;
+
+    private void LocateItems(int xPos, int yPos)
+    {
+        var item = Instantiate(_starObj, new Vector3(xPos, yPos, 0), Quaternion.identity);
+        item.transform.SetParent(_itemContainer);
+    }
     //private void GenerateMap()
     //{
     //    _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();

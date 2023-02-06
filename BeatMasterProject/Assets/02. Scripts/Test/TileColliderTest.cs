@@ -10,10 +10,14 @@ public class TileColliderTest : MonoBehaviour
     [Header("Event")]
     [SerializeField] [EventID] private string _mapEventID;
     [SerializeField] private List<KoreographyEvent> _mapEventList = new List<KoreographyEvent>();
+    [SerializeField] [EventID] private string _shortEventID;
+    [SerializeField] private List<KoreographyEvent> _shortEventList = new List<KoreographyEvent>();
+    [SerializeField] private int _actEventIndex;
     
     [Header("Item")]
     [SerializeField] private GameObject _starObj;
     [SerializeField] private Transform _itemContainer;
+    [SerializeField] private GameObject[] _starObjs;
     [SerializeField] private GameObject _checkPointObj;
     [SerializeField] private List<Animator> _checkPointAnim = new List<Animator>();
 
