@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 public class BackgroundMover : MonoBehaviour
 {
-    [SerializeField] private float moveXAmount = 0.01f;
+    [SerializeField] private float _moveXAmount = 0.01f;
     private Renderer _myRenderer;
     private Material _myMaterial;
     private Vector2 _currentUV;
@@ -36,7 +36,7 @@ public class BackgroundMover : MonoBehaviour
     private void MoveBackgroundOffset()
     {
         Vector2 tempUV = _currentUV;
-        tempUV.x += moveXAmount * Time.deltaTime * _characterMovement.MoveSpeed;
+        tempUV.x += _moveXAmount * Time.deltaTime * _characterMovement.MoveSpeed;
         _currentUV = tempUV;
         _myMaterial.mainTextureOffset = _currentUV;
     }

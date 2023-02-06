@@ -30,8 +30,6 @@ public class CharacterMovement : MonoBehaviour
             if (!_moveSpeed.Equals(value))
             {
                 _moveSpeed = value;
-                // TODO
-                Debug.Log("CharacterMovement");
                 _spriteChanger.OnSpeedChanged();
             }
         }   
