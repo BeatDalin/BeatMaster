@@ -14,90 +14,74 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mEventID: Level1_JumpCheck
   mEventList:
+  - mStartSample: 0
+    mEndSample: 5000
+  - mStartSample: 5756
+    mEndSample: 15756
+  - mStartSample: 16512
+    mEndSample: 26512
+  - mStartSample: 27268
+    mEndSample: 37268
+  - mStartSample: 38024
+    mEndSample: 48024
+  - mStartSample: 48780
+    mEndSample: 58780
+  - mStartSample: 59536
+    mEndSample: 69536
+  - mStartSample: 70292
+    mEndSample: 80292
+  - mStartSample: 81048
+    mEndSample: 91048
+  - mStartSample: 91804
+    mEndSample: 101804
+  - mStartSample: 102560
+    mEndSample: 112560
+  - mStartSample: 113317
+    mEndSample: 123317
+  - mStartSample: 124073
+    mEndSample: 134073
+  - mStartSample: 134829
+    mEndSample: 144829
+  - mStartSample: 145585
+    mEndSample: 155585
+  - mStartSample: 156341
+    mEndSample: 166341
+  - mStartSample: 167097
+    mEndSample: 177097
   - mStartSample: 177853
     mEndSample: 187853
+  - mStartSample: 188609
+    mEndSample: 198609
+  - mStartSample: 199365
+    mEndSample: 209365
+  - mStartSample: 210121
+    mEndSample: 220121
+  - mStartSample: 220878
+    mEndSample: 230878
+  - mStartSample: 231634
+    mEndSample: 241634
+  - mStartSample: 242390
+    mEndSample: 252390
+  - mStartSample: 253146
+    mEndSample: 263146
   - mStartSample: 263902
     mEndSample: 273902
+  - mStartSample: 274658
+    mEndSample: 284658
+  - mStartSample: 285414
+    mEndSample: 295414
+  - mStartSample: 296170
+    mEndSample: 306170
+  - mStartSample: 306926
+    mEndSample: 316926
+  - mStartSample: 317682
+    mEndSample: 327682
+  - mStartSample: 328439
+    mEndSample: 338439
+  - mStartSample: 339195
+    mEndSample: 349195
   - mStartSample: 349951
     mEndSample: 359951
-  - mStartSample: 436000
-    mEndSample: 446000
-  - mStartSample: 522048
-    mEndSample: 532048
-  - mStartSample: 608097
-    mEndSample: 618097
-  - mStartSample: 694146
-    mEndSample: 704146
-  - mStartSample: 780195
-    mEndSample: 790195
-  - mStartSample: 866243
-    mEndSample: 876243
-  - mStartSample: 995316
-    mEndSample: 1005316
-  - mStartSample: 1038341
-    mEndSample: 1048341
-  - mStartSample: 1081365
-    mEndSample: 1091365
-  - mStartSample: 1124390
-    mEndSample: 1134390
-  - mStartSample: 1167414
-    mEndSample: 1177414
-  - mStartSample: 1210439
-    mEndSample: 1220439
-  - mStartSample: 1253463
-    mEndSample: 1263463
-  - mStartSample: 1296487
-    mEndSample: 1306487
-  - mStartSample: 1339512
-    mEndSample: 1349512
-  - mStartSample: 1382536
-    mEndSample: 1392536
-  - mStartSample: 1425560
-    mEndSample: 1435560
-  - mStartSample: 1468585
-    mEndSample: 1478585
-  - mStartSample: 1511609
-    mEndSample: 1521609
-  - mStartSample: 1554634
-    mEndSample: 1564634
-  - mStartSample: 1597658
-    mEndSample: 1607658
-  - mStartSample: 1640682
-    mEndSample: 1650682
-  - mStartSample: 1683707
-    mEndSample: 1693707
-  - mStartSample: 1812780
-    mEndSample: 1822780
-  - mStartSample: 1898829
-    mEndSample: 1908829
-  - mStartSample: 1984877
-    mEndSample: 1994877
-  - mStartSample: 2070926
-    mEndSample: 2080926
-  - mStartSample: 2156975
-    mEndSample: 2166975
-  - mStartSample: 2243024
-    mEndSample: 2253024
-  - mStartSample: 2329072
-    mEndSample: 2339072
-  - mStartSample: 2415121
-    mEndSample: 2425121
-  - mStartSample: 2501170
-    mEndSample: 2511170
-  - mStartSample: 2587219
-    mEndSample: 2597219
-  - mStartSample: 2673268
-    mEndSample: 2683268
-  - mStartSample: 2759316
-    mEndSample: 2769316
-  - mStartSample: 2845365
-    mEndSample: 2855365
-  - mStartSample: 2931414
-    mEndSample: 2941414
-  - mStartSample: 3017463
-    mEndSample: 3027463
-  - mStartSample: 3103512
-    mEndSample: 3113512
   _SerializedPayloadTypes:
   - SonicBloom.Koreo.CurvePayload
   _ColorPayloads: []
@@ -919,199 +903,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  - mCurveData:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  - mCurveData:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  - mCurveData:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  - mCurveData:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  - mCurveData:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  - mCurveData:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  - mCurveData:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  - mCurveData:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  _CurvePayloadIdxs: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f00000020000000210000002200000023000000240000002500000026000000270000002800000029000000
+  _CurvePayloadIdxs: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f0000002000000021000000
   _FloatPayloads: []
   _FloatPayloadIdxs: 
   _GradientPayloads: []
