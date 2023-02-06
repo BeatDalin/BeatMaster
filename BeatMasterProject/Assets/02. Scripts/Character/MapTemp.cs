@@ -30,7 +30,7 @@ public class MapTemp : MonoBehaviour
     [SerializeField] [EventID] private string _actEventID;
     [SerializeField] [EventID] private string _spdEventID;
     [SerializeField] private List<KoreographyEvent> _mapEventList = new List<KoreographyEvent>();
-    [SerializeField] private List<KoreographyEvent> _actEventList = new List<KoreographyEvent>();
+    [SerializeField] private List<KoreographyEvent> _shortEventList = new List<KoreographyEvent>();
     [SerializeField] private List<KoreographyEvent> _spdEventList = new List<KoreographyEvent>();
     [SerializeField] private int _actEventIndex;
     [SerializeField] private int _spdEventIndex;
@@ -61,7 +61,7 @@ public class MapTemp : MonoBehaviour
     private void LoadAllEvents()
     {
         _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
-        _actEventList = SoundManager.instance.playingKoreo.GetTrackByID(_actEventID).GetAllEvents();
+        _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_actEventID).GetAllEvents();
         _spdEventList = SoundManager.instance.playingKoreo.GetTrackByID(_spdEventID).GetAllEvents();
     }
 
@@ -92,9 +92,9 @@ public class MapTemp : MonoBehaviour
 
     private void GenerateJumpCheckEvent()
     {
-        for (int i = 0; i < _actEventList.Count; i++)
+        for (int i = 0; i < _shortEventList.Count; i++)
         {
-            int actType = _actEventList[i].GetIntValue();
+            int actType = _shortEventList[i].GetIntValue();
 
             if (actType == 0)
             {
