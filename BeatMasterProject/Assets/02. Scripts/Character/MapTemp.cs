@@ -27,7 +27,7 @@ public class MapTemp : MonoBehaviour
 
     [Space][Header("Event")]
     [SerializeField] [EventID] private string _mapEventID;
-    [SerializeField] [EventID] private string _actEventID;
+    [SerializeField] [EventID] private string _shortEventID;
     [SerializeField] [EventID] private string _spdEventID;
     [SerializeField] private List<KoreographyEvent> _mapEventList = new List<KoreographyEvent>();
     [SerializeField] private List<KoreographyEvent> _shortEventList = new List<KoreographyEvent>();
@@ -61,7 +61,7 @@ public class MapTemp : MonoBehaviour
     private void LoadAllEvents()
     {
         _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
-        _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_actEventID).GetAllEvents();
+        _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_shortEventID).GetAllEvents();
         _spdEventList = SoundManager.instance.playingKoreo.GetTrackByID(_spdEventID).GetAllEvents();
     }
 
@@ -100,8 +100,8 @@ public class MapTemp : MonoBehaviour
             {
                 KoreographyEvent koreoEvent = new KoreographyEvent();
                 koreoEvent.Payload = new CurvePayload();
-                koreoEvent.StartSample = _mapEventList[i].StartSample - 5000;
-                koreoEvent.EndSample = _mapEventList[i].StartSample + 5000;
+                koreoEvent.StartSample = _shortEventList[i].StartSample - 5000;
+                koreoEvent.EndSample = _shortEventList[i].StartSample + 5000;
 
                 _jumpCheckTrack.AddEvent(koreoEvent);
             }
