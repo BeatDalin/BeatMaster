@@ -14,7 +14,7 @@ public class DataCenter : MonoBehaviour
     private string _path => Application.persistentDataPath + '/' + _fileName;
     private static GameObject _go;
     private static DataCenter _instance;
-    
+
     public static DataCenter Instance
     {
         get
@@ -93,6 +93,8 @@ public class DataCenter : MonoBehaviour
                 _gameData.stageData[i].levelData[j] = temp;
             }
         }
+        
+        CreateStoreData();
 
         SaveData();
     }
@@ -137,6 +139,68 @@ public class DataCenter : MonoBehaviour
         _gameData.playerStage = stageNum;
         _gameData.playerLv = levelNum;
         _gameData.playerItem += playerItem;
+        SaveData();
+    }
+
+    private void CreateStoreData()
+    {
+        _gameData.storeData = new StoreData();
+        
+        _gameData.storeData.itemData = new List<ItemData>(); // 일단 item 3개로 설정. 추후 변경 가능
+        _gameData.storeData.onSaleItem = new List<ItemData>();
+        _gameData.storeData.purchasedItem = new List<ItemData>();
+        
+        ItemData item = new ItemData();
+        for (int i = 0; i < 3; i++)
+        {
+            item.itemNum = i;
+            item.price = 10;
+            item.isPurchased = false;
+            item.unlockStage = 0;
+            item.unlockLevel = i;
+            item.isUnlocked = false;
+            _gameData.storeData.itemData.Add(item);
+        }
+    }
+
+    public StoreData GetStoreData()
+    {
+        return _gameData.storeData;
+    }
+
+    /// <summary>
+    /// StorePopup 오픈, item 구매 후 호출
+    /// </summary>
+    public void UpdateStoreData()
+    {
+        StoreData storeData = _gameData.storeData;
+
+        var tempPurchasedItem = new List<ItemData>();
+        var tempOnSaleItem = new List<ItemData>();
+        
+        for (int i = 0; i < storeData.itemData.Count; i++)
+        {
+             var tempItemData = storeData.itemData[i];
+
+             if (tempItemData.isPurchased)
+             {
+                 tempPurchasedItem.Add(tempItemData);
+             }
+             
+             else if (_gameData.stageData[tempItemData.unlockStage].levelData[tempItemData.unlockLevel].levelClear)
+             {
+                 tempItemData.isUnlocked = true;
+                 tempOnSaleItem.Add(tempItemData);
+             }
+
+             storeData.itemData[i] = tempItemData;
+        }
+
+        storeData.purchasedItem = tempPurchasedItem;
+        storeData.onSaleItem = tempOnSaleItem;
+        
+        _gameData.storeData = storeData;
+        
         SaveData();
     }
 }
