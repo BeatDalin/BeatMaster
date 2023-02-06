@@ -52,6 +52,12 @@ public class ChangeKoreoGraphy : MonoBehaviour
 
                     break;
                 }
+            
+            case "Level1MonsterTest":
+                koreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
+                _musicPlayer.LoadSong(koreo, 0, false);
+
+                break;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ public class MapTemp : MonoBehaviour
 
     [Space][Header("Event")]
     [SerializeField] [EventID] private string _mapEventID;
-    [SerializeField] [EventID] private string _actEventID;
+    [SerializeField] [EventID] private string _shortEventID;
     [SerializeField] [EventID] private string _spdEventID;
     [SerializeField] private List<KoreographyEvent> _mapEventList = new List<KoreographyEvent>();
     [SerializeField] private List<KoreographyEvent> _shortEventList = new List<KoreographyEvent>();
@@ -42,10 +43,14 @@ public class MapTemp : MonoBehaviour
     [Space][Header("Interaction")]
     [SerializeField] private List<Tile> _interactionTileList = new List<Tile>();
 
+    private MonsterPooling _monsterPooling;
+
     private int _tileX = -1, _tileY;
 
     private void Awake()
     {
+        _monsterPooling = FindObjectOfType<MonsterPooling>();
+        
         LoadAllEvents();
         GenerateMap();
         FillMapSide();
@@ -61,8 +66,10 @@ public class MapTemp : MonoBehaviour
     private void LoadAllEvents()
     {
         _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
-        _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_actEventID).GetAllEvents();
+        _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_shortEventID).GetAllEvents();
         _spdEventList = SoundManager.instance.playingKoreo.GetTrackByID(_spdEventID).GetAllEvents();
+
+        
     }
 
     private void FillMapSide()
@@ -100,9 +107,8 @@ public class MapTemp : MonoBehaviour
             {
                 KoreographyEvent koreoEvent = new KoreographyEvent();
                 koreoEvent.Payload = new CurvePayload();
-                koreoEvent.StartSample = _mapEventList[i].StartSample - 5000;
-                koreoEvent.EndSample = _mapEventList[i].StartSample + 5000;
-
+                koreoEvent.StartSample = _shortEventList[i].StartSample - 5000;
+                koreoEvent.EndSample = _shortEventList[i].StartSample + 5000;
                 _jumpCheckTrack.AddEvent(koreoEvent);
             }
         }
@@ -172,6 +178,7 @@ public class MapTemp : MonoBehaviour
             if (groundType == 5)
             {
                 prevGroundType = groundType;
+                _monsterPooling.MonsterInit(_tileX, _tileY + groundYOffset);
 
                 continue;
             }
@@ -203,6 +210,8 @@ public class MapTemp : MonoBehaviour
                 tile = _tileSet[(int)theme].topTileList[groundIndex],
                 transform = tileTransform
             };
+            
+            _monsterPooling.MonsterInit(_tileX, _tileY + groundYOffset);
             
             _groundTilemap.SetTile(tileChangeData, false);
 

@@ -18,6 +18,8 @@ public class NormalGame : Game
     [Header("Input KeyCode")]
     private KeyCode _shortNoteKey = KeyCode.LeftArrow;
     private KeyCode _longNoteKey = KeyCode.RightArrow;
+    [Header("MonsterPool")] 
+    private MonsterPooling _monsterPooling;
     protected override void Awake()
     {
         base.Awake();
@@ -34,7 +36,8 @@ public class NormalGame : Game
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_JumpCheck").GetAllEvents().Count];
         // longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
-        
+
+        _monsterPooling = FindObjectOfType<MonsterPooling>();
     }
 
     protected override void Start()
@@ -214,10 +217,12 @@ public class NormalGame : Game
 
     private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
-        // Record sample time to play music
-        rewindSampleTime = sampleTime;
         if (sampleTime > rewindSampleTime)
         {
+            // DisableMonster Clear
+            //_monsterPooling.ResetPool();
+            // Record sample time to play music
+            rewindSampleTime = sampleTime;
             // Entered new check point
             checkPointIdx++;
             checkPointVisited[checkPointIdx] = true;
