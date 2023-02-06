@@ -38,6 +38,7 @@ public class LevelInformation : MonoBehaviour
     public int curMaxLevel; // 현재 clear한 레벨 중 가장 높은 레벨 index
     private int _maxLevelNum = 3; // 최대 level index
     public LevelData[] curStageData = new LevelData[4];
+    public int uiLevel;
     
     private readonly LevelInfo[] _levelInfo = new LevelInfo[4];
     
@@ -75,31 +76,29 @@ public class LevelInformation : MonoBehaviour
         curMaxLevel = GetMaxLevelInStage();
 
         SetLevelInfo(curMaxLevel+1);
+        uiLevel = curMaxLevel + 1;
 
         _levelPanel.SetActive(true);
     }
     
     private void SetLevelInfo(int levelNum)
     {
-        // levelNum 최댓값 한정
+        // levelNum 최댓 최솟값 한정
         levelNum = levelNum > _maxLevelNum ? _maxLevelNum : levelNum;
+        levelNum = levelNum < 0 ? 0 : levelNum;
+        
+        // move Btn
+        _moveBtn[0].SetActive(levelNum != 0);
+        _moveBtn[1].SetActive(levelNum != _maxLevelNum);
         
         // Camera
         _mainCam.transform.position = Vector3.MoveTowards(_mainCam.transform.position, _levelInfo[levelNum]._camPos, 10f);
-        
-        // move Btn
-        _moveBtn[1].GetComponent<Button>().onClick.AddListener(() => SetLevelInfo(_levelInfo[levelNum]._nextLevelNum));
-        _moveBtn[0].GetComponent<Button>().onClick.AddListener(() => SetLevelInfo(_levelInfo[levelNum]._beforeLevelNum));
-
-        _moveBtn[0].SetActive(levelNum != 0);
-        _moveBtn[1].SetActive(levelNum != _maxLevelNum);
         
         // locked Img
         _lockedPanel.SetActive(_levelInfo[levelNum]._isLocked);
         
         // start Btn
-        _startBtn.onClick.AddListener(() =>
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1));
+        
 
         // levelTitle Txt
         int currLevel = _levelInfo[levelNum]._levelNum + 1;
@@ -113,6 +112,21 @@ public class LevelInformation : MonoBehaviour
         _description.text = _levelInfo[levelNum]._levelDescription;
     }
 
+    public void OnClickStartBtn()
+    {
+        SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1);
+    }
+
+    public void OnClickLeftBtn()
+    {
+        SetLevelInfo(uiLevel--);
+    }
+
+    public void OnClickRightBtn()
+    {
+       SetLevelInfo(uiLevel++);
+    }
+    
     /// <summary>
     /// 현재 Stage 내에서 클리어한 최대 level의 index를 반환하는 함수
     /// </summary>

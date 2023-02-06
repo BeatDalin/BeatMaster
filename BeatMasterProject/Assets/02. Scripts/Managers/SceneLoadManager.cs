@@ -30,6 +30,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         Level2,
         Level3,
         Level4,
+        Level1MonsterTest
     }
 
     public override void Init()
@@ -49,6 +50,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     public void LoadLevelAsync(SceneType sceneType)
     {
         Scene = sceneType;
+        SoundManager.instance.ChangeKoreo(Scene);
         StartCoroutine(CoSceneTransition());
     }
 
@@ -59,7 +61,6 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
 
     private IEnumerator CoLoadLevelAsync()
     {
-
         AsyncOperation async = SceneManager.LoadSceneAsync(Scene.ToString());
         yield return new WaitForSeconds(_loadingTime);
         
@@ -97,8 +98,6 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     /// <returns>WaitForEndOfFrame()</returns>
     private IEnumerator CoSceneEnter()
     {
-        SoundManager.instance.ChangeKoreo(Scene);
-        
         _canvas.worldCamera = Camera.main;
         _loadImage.material.SetFloat(Cutoff, _hideBackground); // filled
         _loadImage.gameObject.SetActive(true);

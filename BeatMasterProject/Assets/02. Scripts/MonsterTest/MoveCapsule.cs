@@ -46,7 +46,7 @@ public class MoveCapsule : MonoBehaviour
         {
             rewindPos.position = _checkPoint[_checkPointIdx].position;
             _checkPointIdx++;
-            _monsterPooling.ResetPool(); //체크포인트를 넘겼으므로 저장된 몬스터들은 오브젝트풀로 돌려도됨
+            //_monsterPooling.ResetPool(); //체크포인트를 넘겼으므로 저장된 몬스터들은 오브젝트풀로 돌려도됨
         }
     }
 

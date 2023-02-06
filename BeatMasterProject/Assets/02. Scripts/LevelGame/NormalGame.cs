@@ -2,6 +2,7 @@ using System;
 using SonicBloom.Koreo;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,8 @@ public class NormalGame : Game
     [Header("Input KeyCode")]
     private KeyCode _shortNoteKey = KeyCode.LeftArrow;
     private KeyCode _longNoteKey = KeyCode.RightArrow;
+    [Header("MonsterPool")] 
+    private MonsterPooling _monsterPooling;
     protected override void Awake()
     {
         base.Awake();
@@ -33,13 +36,13 @@ public class NormalGame : Game
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_JumpCheck").GetAllEvents().Count];
         // longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
-        
+
+        _monsterPooling = FindObjectOfType<MonsterPooling>();
     }
 
     protected override void Start()
     {
         base.Start();
-        
         PlayerStatus.Instance.ChangeStatus(Status.Idle);
         Init();
     }
@@ -79,7 +82,7 @@ public class NormalGame : Game
             if (!isShortKeyCorrect)
             {
                 // ================Rewind 자리================
-                //Rewind();
+                // Rewind();
             }
             isShortKeyCorrect = false;
         }
@@ -104,7 +107,7 @@ public class NormalGame : Game
             {
                 //=======Rewind 자리=========
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
-                Rewind(); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
+                // Rewind(); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
             }
         }
     }
@@ -117,8 +120,8 @@ public class NormalGame : Game
             //==============Rewind 자리==============
             if (!isLongFailed) 
             {
+                Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
-                Rewind(); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
             }
         }
     }
@@ -151,7 +154,7 @@ public class NormalGame : Game
                 // ===============Rewind==============
                 if (!isLongFailed)
                 {
-                    Rewind(); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고} // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
+                    // Rewind(); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
                 }
             }
             
@@ -159,7 +162,7 @@ public class NormalGame : Game
             isLongKeyCorrect = false;
         }
     }
-
+    
     private void Rewind()
     {
         SoundManager.instance.PlayBGM(false); // pause
@@ -191,6 +194,8 @@ public class NormalGame : Game
     {
         if (sampleTime > rewindSampleTime)
         {
+            // DisableMonster Clear
+            //_monsterPooling.ResetPool();
             // Record sample time to play music
             rewindSampleTime = sampleTime;
             // Entered new check point

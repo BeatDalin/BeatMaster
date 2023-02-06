@@ -43,9 +43,12 @@ public class MapTemp : MonoBehaviour
     [SerializeField] private List<Tile> _interactionTileList = new List<Tile>();
 
     private int _tileX = -1, _tileY;
+    private MonsterPooling _monsterPooling;
 
     private void Awake()
     {
+        _monsterPooling = FindObjectOfType<MonsterPooling>();
+        
         LoadAllEvents();
         GenerateMap();
         FillMapSide();
@@ -172,6 +175,7 @@ public class MapTemp : MonoBehaviour
             if (groundType == 5)
             {
                 prevGroundType = groundType;
+                _monsterPooling.AddTilePos(_tileX, _tileY);
                 LocateItems(_tileX, _tileY + 2);
                 continue;
             }
@@ -204,6 +208,7 @@ public class MapTemp : MonoBehaviour
                 transform = tileTransform
             };
             
+            _monsterPooling.AddTilePos(_tileX, _tileY + groundYOffset);
             _groundTilemap.SetTile(tileChangeData, false);
 
             // 밑 영역 타일들 배치
