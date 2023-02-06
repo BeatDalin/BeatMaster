@@ -31,7 +31,7 @@ public class BuildingManager : MonoBehaviour
         
         _levelIndicator = FindObjectOfType<WaypointMover>();
 
-        currMaxLevel = GetMaxLevelInStage();
+        //currMaxLevel = GetMaxLevelInStage();
 
         SetBuildings();
     }
@@ -92,23 +92,23 @@ public class BuildingManager : MonoBehaviour
     /// <summary>
     /// 현재 Stage 내에서 클리어한 최대 level을 반환하는 함수
     /// </summary>
-    /// <returns>return 값 -1 == level 1 Clear X, 값 0 = level 1 Clear, 값 4 == level 5 Clear</returns>
-    public int GetMaxLevelInStage()
-    {
-        int maxLevel;
-        
-        maxLevel = -1;
-
-        for (int i = 4; i >= 0; --i)
-        {
-            if (currStageData[i].levelClear)
-            {
-                maxLevel = i;
-                break;
-            }
-        }
-        
-        return maxLevel+1;
-    }
+    // /// <returns>return 값 -1 == level 1 Clear X, 값 0 = level 1 Clear, 값 4 == level 5 Clear</returns>
+    // public int GetMaxLevelInStage()
+    // {
+    //     int maxLevel;
+    //     
+    //     maxLevel = -1;
+    //
+    //     for (int i = 4; i >= 0; --i)
+    //     {
+    //         if (currStageData[i].levelClear)
+    //         {
+    //             maxLevel = i;
+    //             break;
+    //         }
+    //     }
+    //     
+    //     return maxLevel+1;
+    // }
 }
 
