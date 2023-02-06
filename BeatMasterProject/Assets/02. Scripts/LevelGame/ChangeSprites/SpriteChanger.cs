@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class SpriteChanger : MonoBehaviour
 {
-    [SerializeField] private Material[] _changingMaterials;
     private BackgroundMover _backgroundMover;
     private int _materialIndex;
+    [SerializeField] private ChangingSprites[] _changingSprites;
     
     // TODO
     // 추후에 적, 주변 환경 등 1가지 이상으로 여러가지가 달라진다면 (적, 타일, {이펙트도 여기..??} 등)
@@ -43,22 +43,37 @@ public class SpriteChanger : MonoBehaviour
     
     private void OnDestroy()
     {
+        /*switch (SceneLoadManager.Instance.Scene)
+        {
+            case SceneLoadManager.SceneType.SpiteChange:
+                ResetMaterialsOffset(_changingSprites[0].ChangingMaterials);
+                break;
+        }*/
+    }
+
+    private static void ResetMaterialsOffset(Material[] materials)
+    {
         // BackgroundMover에서 이동한 결과에 의해 원본이 훼손되는 것을 막기위함
-        foreach (var material in _changingMaterials)
+        foreach (var material in materials)
         {
             material.mainTextureOffset = Vector2.zero;
         }
     }
-    
+
     private void ChangeMaterial()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            // 스프라이트 교체
-            _materialIndex++;
-            _materialIndex %= _changingMaterials.Length;
-            Material changingMaterial = _changingMaterials[_materialIndex];
-            _backgroundMover.SetMaterial(changingMaterial);
+            /*switch (SceneLoadManager.Instance.Scene)
+            {
+                case SceneLoadManager.SceneType.SpiteChange:
+                    // 스프라이트 교체
+                    _materialIndex++;
+                    _materialIndex %= _changingSprites[0].ChangingMaterials.Length;
+                    Material changingMaterial = _changingSprites[0].ChangingMaterials[_materialIndex];
+                    _backgroundMover.SetMaterial(changingMaterial);
+                    break;
+            }*/
         }
     }
 }
