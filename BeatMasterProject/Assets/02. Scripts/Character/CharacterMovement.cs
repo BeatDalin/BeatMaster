@@ -21,7 +21,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _jumpHeight = 3f;
     [SerializeField] private int _jumpTileCount = 2;
     [SerializeField] private float _jumpGapRate = 0.25f;
-    private const int _maxJumpCount = 2;
+    private const int _maxJumpCount = 1;
     private int _jumpCount;
     private Vector2 _jumpStartPosition;
     private float _jumpEndY;
@@ -65,7 +65,7 @@ public class CharacterMovement : MonoBehaviour
     private void GetInput()
     {
         // 점프 입력
-        if (Input.GetKeyDown(KeyCode.LeftArrow)&&_canJump)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
             SoundManager.instance.PlaySFX("Jump");
             //_animator.CrossFadeInFixedTime("Jump",0.1f);
@@ -80,7 +80,7 @@ public class CharacterMovement : MonoBehaviour
             _isJumping = true;
             _canGroundCheck = false;
 
-            Invoke("GroundCheckOn", 0.1f);
+            Invoke("GroundCheckOn", 0.2f);
 
             RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + _jumpTileCount, 100f), Vector2.down, 1000, _tileLayer);
             
