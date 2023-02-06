@@ -9,6 +9,8 @@ using SonicBloom.Koreo;
 
 public class ChangeKoreoGraphy : MonoBehaviour
 {
+    public static ChangeKoreoGraphy instance;
+    
     [SerializeField] private string _currentScene = "";
 
     private SimpleMusicPlayer _musicPlayer;
@@ -16,6 +18,7 @@ public class ChangeKoreoGraphy : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
         _musicPlayer = GetComponent<SimpleMusicPlayer>();
         _currentScene = SceneManager.GetActiveScene().name;
 
@@ -28,28 +31,21 @@ public class ChangeKoreoGraphy : MonoBehaviour
         {
             case "MenuTitle":
                 {
-                    koreo = Resources.Load<Koreography>("KoreoGraphys/MenuBGM");
+                    koreo = Resources.Load<Koreography>("KoreoGraphys/Title");
                     _musicPlayer.LoadSong(koreo, 0, false);
                     break;
                 }
             case "MenuLevelSelect":
                 {
-                    koreo = Resources.Load<Koreography>("KoreoGraphys/MenuLevelBGM");
+                    koreo = Resources.Load<Koreography>("KoreoGraphys/LevelSelect");
                     _musicPlayer.LoadSong(koreo, 0, true);
                     break;
                 }
 
-            case "LevelGame":
+            case "Level1":
                 {
                     koreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
                     _musicPlayer.LoadSong(koreo, 0, false);
-                    break;
-                }
-            case "BossGame":
-                {
-                    koreo = Resources.Load<Koreography>("KoreoGraphys/BossBGM");
-                    _musicPlayer.LoadSong(koreo, 0, false);
-
                     break;
                 }
         }
