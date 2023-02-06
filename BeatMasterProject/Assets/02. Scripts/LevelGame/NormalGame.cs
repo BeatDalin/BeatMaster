@@ -166,6 +166,7 @@ public class NormalGame : Game
     private void Rewind()
     {
         SoundManager.instance.PlayBGM(false); // pause
+        _monsterPooling.checkPoint
         curSample = rewindSampleTime;
         ContinueGame(); // wait 3 sec and start
         DecreaseItem(5);

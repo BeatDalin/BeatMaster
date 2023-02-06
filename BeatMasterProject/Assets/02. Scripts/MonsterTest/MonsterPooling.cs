@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using SonicBloom.Koreo;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -9,6 +10,8 @@ using UnityEngine.Serialization;
 public class MonsterPooling : MonoBehaviour
 {
     public Queue<GameObject> disableMonsterQueue = new Queue<GameObject>();
+    public Queue<GameObject> monsterQueue = new Queue<GameObject>();
+    public List<float> checkPoint = new List<float>();
     
     [Space][Header("Event")]
     [SerializeField] [EventID] private string _mapEventID;
@@ -21,13 +24,20 @@ public class MonsterPooling : MonoBehaviour
     [Header("No ObjectPool")] 
     [SerializeField] private GameObject _monsterPrefab;
 
-    [SerializeField] private List<Vector3> _tilePos = new List<Vector3>();
+    private List<Vector3> _tilePos = new List<Vector3>();
+    private float currentPlayerTime = 0;
+    private int checkPointIdx = 0;
 
     private void Start()
     {
         _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
         _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_shortEventID).GetAllEvents();
         _spdEventList = SoundManager.instance.playingKoreo.GetTrackByID(_spdEventID).GetAllEvents();
+
+        foreach (var spd in _spdEventList)
+        {
+            checkPoint.Add(spd.EndSample);
+        }
 
         for (int i = 0; i < _shortEventList.Count; i++)
         {
@@ -40,11 +50,24 @@ public class MonsterPooling : MonoBehaviour
                     int groundType = (int)groundData[0];
                     if (groundType == 0)
                     {
-                        Instantiate(_monsterPrefab, new Vector3(_tilePos[j].x + 1f, _tilePos[j].y + 2f), Quaternion.identity, transform);
+                        GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[j].x + 1f, _tilePos[j].y + 2f), Quaternion.identity, transform);
+                        
+                        monsterQueue.Enqueue(g);
+                        
                         break;
                     }
                 }
             }
+        }
+    }
+
+    private void Update()
+    {
+        currentPlayerTime = (float)Koreographer.Instance.GetMusicBeatTime();
+
+        if (currentPlayerTime >= checkPoint[checkPointIdx])
+        {
+            checkPointIdx++;
         }
     }
 
