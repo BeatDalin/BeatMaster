@@ -99,7 +99,7 @@ public class LevelInformation : MonoBehaviour
         
         // start Btn
         _startBtn.onClick.AddListener(() =>
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelGame));
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1));
 
         // levelTitle Txt
         int currLevel = _levelInfo[levelNum]._levelNum + 1;
