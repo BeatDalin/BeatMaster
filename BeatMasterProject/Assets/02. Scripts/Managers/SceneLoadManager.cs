@@ -29,7 +29,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         Level1,
         Level2,
         Level3,
-        Level4
+        Level4,
     }
 
     public override void Init()
@@ -59,6 +59,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
 
     private IEnumerator CoLoadLevelAsync()
     {
+
         AsyncOperation async = SceneManager.LoadSceneAsync(Scene.ToString());
         yield return new WaitForSeconds(_loadingTime);
         
@@ -67,6 +68,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
             // loading bar if you want
             yield return null;
         }
+        
         StartCoroutine(CoSceneEnter());
     }
     
@@ -95,6 +97,8 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     /// <returns>WaitForEndOfFrame()</returns>
     private IEnumerator CoSceneEnter()
     {
+        SoundManager.instance.ChangeKoreo(Scene);
+        
         _canvas.worldCamera = Camera.main;
         _loadImage.material.SetFloat(Cutoff, _hideBackground); // filled
         _loadImage.gameObject.SetActive(true);

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,14 +42,10 @@ public class MapTemp : MonoBehaviour
     [Space][Header("Interaction")]
     [SerializeField] private List<Tile> _interactionTileList = new List<Tile>();
 
-    private MonsterPooling _monsterPooling;
-
     private int _tileX = -1, _tileY;
 
     private void Awake()
     {
-        _monsterPooling = FindObjectOfType<MonsterPooling>();
-        
         LoadAllEvents();
         GenerateMap();
         FillMapSide();
@@ -68,8 +63,6 @@ public class MapTemp : MonoBehaviour
         _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
         _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_shortEventID).GetAllEvents();
         _spdEventList = SoundManager.instance.playingKoreo.GetTrackByID(_spdEventID).GetAllEvents();
-
-        
     }
 
     private void FillMapSide()
@@ -109,6 +102,7 @@ public class MapTemp : MonoBehaviour
                 koreoEvent.Payload = new CurvePayload();
                 koreoEvent.StartSample = _shortEventList[i].StartSample - 5000;
                 koreoEvent.EndSample = _shortEventList[i].StartSample + 5000;
+
                 _jumpCheckTrack.AddEvent(koreoEvent);
             }
         }
@@ -178,8 +172,7 @@ public class MapTemp : MonoBehaviour
             if (groundType == 5)
             {
                 prevGroundType = groundType;
-                _monsterPooling.MonsterInit(_tileX, _tileY + groundYOffset);
-
+                LocateItems(_tileX, _tileY + 2);
                 continue;
             }
 
@@ -211,8 +204,6 @@ public class MapTemp : MonoBehaviour
                 transform = tileTransform
             };
             
-            _monsterPooling.MonsterInit(_tileX, _tileY + groundYOffset);
-            
             _groundTilemap.SetTile(tileChangeData, false);
 
             // 밑 영역 타일들 배치
@@ -238,6 +229,15 @@ public class MapTemp : MonoBehaviour
         }
     }
 
+    [Header("Item")]
+    [SerializeField] private GameObject _starObj;
+    [SerializeField] private Transform _itemContainer;
+
+    private void LocateItems(int xPos, int yPos)
+    {
+        var item = Instantiate(_starObj, new Vector3(xPos, yPos, 0), Quaternion.identity);
+        item.transform.SetParent(_itemContainer);
+    }
     //private void GenerateMap()
     //{
     //    _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
