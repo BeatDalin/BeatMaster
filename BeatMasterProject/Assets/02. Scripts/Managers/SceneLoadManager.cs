@@ -30,6 +30,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         Level2,
         Level3,
         Level4,
+        Level1MonsterTest
     }
 
     public override void Init()

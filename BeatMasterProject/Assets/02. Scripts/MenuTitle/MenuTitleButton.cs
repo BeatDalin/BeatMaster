@@ -120,12 +120,12 @@ public class MenuTitleButton : MonoBehaviour
                 _buttons[(int)ButtonName.ShutDown].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete += () =>
                 {
                     _buttons[(int)ButtonName.ShutDown].transform.DORewind();
-                    OpenPopUp("ShutDown");
+                    SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1MonsterTest);
                 };
             }
             else
             {
-                OpenPopUp("ShutDown");
+                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1MonsterTest);
             }
         });
     }
