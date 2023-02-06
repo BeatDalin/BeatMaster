@@ -28,13 +28,13 @@ public class NormalGame : Game
         // Short Note Event Track
         Koreographer.Instance.RegisterForEventsWithTime("Level1_JumpCheck", CheckShortEnd);
         // Long Note Event Track
-        // Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
-        // Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckStart", CheckLongStart);
-        // Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckEnd", CheckLongEnd);
+        // Koreographer.Instance.RegisterForEvents("Level1_LongCheckMiddle", CheckLongMiddle);
+        // Koreographer.Instance.RegisterForEventsWithTime("Level1_LongCheckStart", CheckLongStart);
+        // Koreographer.Instance.RegisterForEventsWithTime("Level1_LongCheckEnd", CheckLongEnd);
         
         // Result Array
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_JumpCheck").GetAllEvents().Count];
-        // longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
+        // longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_Long").GetAllEvents().Count];
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
 
         _monsterPooling = FindObjectOfType<MonsterPooling>();
