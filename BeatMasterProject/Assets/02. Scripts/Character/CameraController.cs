@@ -10,7 +10,9 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private Vector3 _offset = new Vector3(0f, 3.5f, -10f);
     [SerializeField] private float _minOrthoSize = 7f;
+    public float MinOrthoSize { get => _minOrthoSize; private set => _minOrthoSize = value; }
     [SerializeField] private float _maxOrthoSize = 10f;
+    public float MaxOrthoSize { get => _maxOrthoSize; private set => _maxOrthoSize = value; }
     [SerializeField] [EventID] private string _speedEventID;
     private float _prevCharacterSpeed;
 
