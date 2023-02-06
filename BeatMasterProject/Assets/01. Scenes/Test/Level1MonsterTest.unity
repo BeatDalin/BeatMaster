@@ -1713,9 +1713,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameUI: {fileID: 1819510389}
+  tileTest: {fileID: 0}
   _spdEventID: Level1_Spd
   curState: 0
   curSample: 0
+  savePointList: []
+  checkPointVisited: 
   longResult: 
   shortResult: 
   deathCount: 0
@@ -2660,6 +2663,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 826938277}
   m_CullTransparentMesh: 1
+--- !u!1 &844131489
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 844131490}
+  m_Layer: 0
+  m_Name: StarItemContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &844131490
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844131489}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 123.918396, y: 21.676567, z: 4.0485754}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &870899398
 GameObject:
   m_ObjectHideFlags: 0
@@ -2933,6 +2967,8 @@ MonoBehaviour:
   _interactionTileList:
   - {fileID: 11400000, guid: 7e877a6e4b306d5419d1825d9c61dc20, type: 2}
   - {fileID: 11400000, guid: 55a4e7756a2f3d14093d6eb3c9695761, type: 2}
+  _starObj: {fileID: 2222503924655302269, guid: 9870be05766ef86479abbf1e23c1a2b6, type: 3}
+  _itemContainer: {fileID: 844131490}
 --- !u!4 &1005781689
 Transform:
   m_ObjectHideFlags: 0
@@ -4705,6 +4741,7 @@ MonoBehaviour:
   _shortEventList: []
   _spdEventList: []
   _monsterPrefab: {fileID: 3003763203973727308, guid: 367c90cd1e9064c43bbfaafbc81f3d4a, type: 3}
+  tilePos: []
 --- !u!4 &1674836051
 Transform:
   m_ObjectHideFlags: 0

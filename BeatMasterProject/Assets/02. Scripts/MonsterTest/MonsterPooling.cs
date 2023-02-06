@@ -39,7 +39,7 @@ public class MonsterPooling : MonoBehaviour
                     int groundType = (int)groundData[0];
                     if (groundType == 0)
                     {
-                        Instantiate(_monsterPrefab, new Vector3(tilePos[j].x + 1f, tilePos[j].y + 1.5f), Quaternion.identity, transform);
+                        Instantiate(_monsterPrefab, new Vector3(tilePos[j].x + 1f, tilePos[j].y + 2f), Quaternion.identity, transform);
                         break;
                     }
                 }
@@ -83,7 +83,7 @@ public class MonsterPooling : MonoBehaviour
     //     }
     // }
 
-    public void MonsterInit(float posX, float posY)
+    public void AddTilePos(float posX, float posY)
     {
         tilePos.Add(new Vector3(posX, posY, 0));
     }
