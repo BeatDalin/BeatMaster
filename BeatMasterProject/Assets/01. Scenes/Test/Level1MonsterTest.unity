@@ -4734,6 +4734,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5502efebde2a24f4e9eaf54de75d7629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkPoint: []
+  currentPlayerTime: 0
   _mapEventID: Level1_Map
   _shortEventID: Level1_Short
   _spdEventID: Level1_Spd
@@ -4741,7 +4743,6 @@ MonoBehaviour:
   _shortEventList: []
   _spdEventList: []
   _monsterPrefab: {fileID: 3003763203973727308, guid: 367c90cd1e9064c43bbfaafbc81f3d4a, type: 3}
-  _tilePos: []
 --- !u!4 &1674836051
 Transform:
   m_ObjectHideFlags: 0

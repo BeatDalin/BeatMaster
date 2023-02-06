@@ -13,19 +13,33 @@ MonoBehaviour:
   m_Name: Level1_CheckPoint
   m_EditorClassIdentifier: 
   mEventID: Level1_CheckPoint
-  mEventList: []
-  _SerializedPayloadTypes: []
+  mEventList:
+  - mStartSample: 0
+    mEndSample: 0
+  - mStartSample: 957292
+    mEndSample: 957292
+  - mStartSample: 1731731
+    mEndSample: 1731731
+  - mStartSample: 3183804
+    mEndSample: 3183804
+  _SerializedPayloadTypes:
+  - SonicBloom.Koreo.FloatPayload
+  - SonicBloom.Koreo.TextPayload
   _ColorPayloads: []
   _ColorPayloadIdxs: 
   _CurvePayloads: []
   _CurvePayloadIdxs: 
-  _FloatPayloads: []
-  _FloatPayloadIdxs: 
+  _FloatPayloads:
+  - mFloatVal: 2
+  - mFloatVal: 3
+  - mFloatVal: 2
+  _FloatPayloadIdxs: 000000000100000002000000
   _GradientPayloads: []
   _GradientPayloadIdxs: 
   _IntPayloads: []
   _IntPayloadIdxs: 
   _SpectrumPayloads: []
   _SpectrumPayloadIdxs: 
-  _TextPayloads: []
-  _TextPayloadIdxs: 
+  _TextPayloads:
+  - mTextVal: End
+  _TextPayloadIdxs: 03000000

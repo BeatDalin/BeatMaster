@@ -166,8 +166,8 @@ public class NormalGame : Game
     private void Rewind()
     {
         SoundManager.instance.PlayBGM(false); // pause
-        _monsterPooling.checkPoint
         curSample = rewindSampleTime;
+        //curSample = (int)_monsterPooling.currentPlayerTime;
         ContinueGame(); // wait 3 sec and start
         DecreaseItem(5);
         gameUI.UpdateText(TextType.Item, coinCount);
@@ -204,10 +204,18 @@ public class NormalGame : Game
             checkPointVisited[checkPointIdx] = true;
             // Play Particle or Animation
             // ex) particleSystem.Play();
-            tileTest.PlayCheckAnim(checkPointIdx);
+            //tileTest.PlayCheckAnim(checkPointIdx);
         }
         // Record Index
         rewindShortIdx = shortIdx;
         rewindLongIdx = longIdx;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Rewind();
+        }
     }
 }

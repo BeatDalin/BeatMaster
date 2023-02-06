@@ -10,9 +10,10 @@ using UnityEngine.Serialization;
 public class MonsterPooling : MonoBehaviour
 {
     public Queue<GameObject> disableMonsterQueue = new Queue<GameObject>();
-    public Queue<GameObject> monsterQueue = new Queue<GameObject>();
+    public List<GameObject> monsterList = new List<GameObject>();
     public List<float> checkPoint = new List<float>();
-    
+    public float currentPlayerTime = 0;
+
     [Space][Header("Event")]
     [SerializeField] [EventID] private string _mapEventID;
     [SerializeField] [EventID] private string _shortEventID;
@@ -24,12 +25,21 @@ public class MonsterPooling : MonoBehaviour
     [Header("No ObjectPool")] 
     [SerializeField] private GameObject _monsterPrefab;
 
-    private List<Vector3> _tilePos = new List<Vector3>();
-    private float currentPlayerTime = 0;
-    private int checkPointIdx = 0;
+    [SerializeField] List<Vector3> _tilePos = new List<Vector3>();
+    private int _checkPointIdx = 0;
+
+
+    private CharacterMovement _characterMovement;
+
+    private void Awake()
+    {
+        Koreographer.Instance.RegisterForEventsWithTime("Level1_Short", AddMonsterQueue);
+    }
 
     private void Start()
     {
+        _characterMovement = FindObjectOfType<CharacterMovement>();
+        
         _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
         _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_shortEventID).GetAllEvents();
         _spdEventList = SoundManager.instance.playingKoreo.GetTrackByID(_spdEventID).GetAllEvents();
@@ -52,7 +62,7 @@ public class MonsterPooling : MonoBehaviour
                     {
                         GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[j].x + 1f, _tilePos[j].y + 2f), Quaternion.identity, transform);
                         
-                        monsterQueue.Enqueue(g);
+                        monsterList.Add(g);
                         
                         break;
                     }
@@ -61,13 +71,15 @@ public class MonsterPooling : MonoBehaviour
         }
     }
 
-    private void Update()
+    void AddMonsterQueue(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
-        currentPlayerTime = (float)Koreographer.Instance.GetMusicBeatTime();
-
-        if (currentPlayerTime >= checkPoint[checkPointIdx])
+        if (sampleTime >= _shortEventList[_checkPointIdx].EndSample)
         {
-            checkPointIdx++;
+            disableMonsterQueue.Enqueue(monsterList[_checkPointIdx]);
+            Debug.Log("sampletime"+sampleTime);
+            Debug.Log("monstertime" + _shortEventList[_checkPointIdx].EndSample);
+            monsterList[_checkPointIdx].SetActive(false);
+            _checkPointIdx++;
         }
     }
 
