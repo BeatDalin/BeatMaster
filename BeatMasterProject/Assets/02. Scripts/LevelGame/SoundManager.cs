@@ -126,8 +126,13 @@ public class SoundManager : MonoBehaviour
                 musicPlayer.LoadSong(playingKoreo, 0, true);
                 break;
             }
-
             case SceneLoadManager.SceneType.Level1: // Level1 씬
+            {
+                playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
+                musicPlayer.LoadSong(playingKoreo, 0, false);
+                break;
+            }
+            case SceneLoadManager.SceneType.Level1MonsterTest: // Level1 씬
             {
                 playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
                 musicPlayer.LoadSong(playingKoreo, 0, false);
