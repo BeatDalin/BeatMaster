@@ -2,18 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SonicBloom.Koreo;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
 {
     private Game _game;
     private Rigidbody2D _rigidbody;
+    private SpriteChanger _spriteChanger;
 
     [Header("Music")]
     [EventID] public string speedEventID;
-    public float moveSpeed;
     public float gravityScale;
     public float startGravityAccel;
+    [SerializeField] private float _moveSpeed;
+    public float MoveSpeed
+    {
+        get => _moveSpeed;
+        set
+        {
+            if (_moveSpeed == 0)
+            {
+                _moveSpeed = value;
+                return;
+            }
+
+            if (!_moveSpeed.Equals(value))
+            {
+                _moveSpeed = value;
+                // TODO
+                Debug.Log("CharacterMovement");
+                _spriteChanger.OnSpeedChanged();
+            }
+        }   
+    }
     private float _gravityAccel;
     private float _previousBeatTime = 0;
 
@@ -42,6 +64,7 @@ public class CharacterMovement : MonoBehaviour
     {
         _game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
+        _spriteChanger = FindObjectOfType<SpriteChanger>();
         //_animator = GetComponent<Animator>();
         
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
@@ -103,7 +126,7 @@ public class CharacterMovement : MonoBehaviour
     private void Move()
     {
         float currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-        float x = transform.position.x + (currentBeatTime - _previousBeatTime) * moveSpeed;
+        float x = transform.position.x + (currentBeatTime - _previousBeatTime) * MoveSpeed;
         float y = 0f;
         _previousBeatTime = currentBeatTime;
 
@@ -180,7 +203,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void ChangeMoveSpeed(KoreographyEvent evt)
     {
-        moveSpeed = evt.GetFloatValue();
+        MoveSpeed = evt.GetFloatValue();
     }
 
     private void Attack()

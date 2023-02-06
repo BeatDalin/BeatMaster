@@ -8,6 +8,7 @@ public class SpriteChanger : MonoBehaviour
 {
     [SerializeField] private ChangingSprites[] _changingSprites;
     private BackgroundMover _backgroundMover;
+    private CameraController _cameraController;
     private int _materialIndex;
     
     // TODO
@@ -35,12 +36,12 @@ public class SpriteChanger : MonoBehaviour
     private void Awake()
     {
         _backgroundMover = FindObjectOfType<BackgroundMover>();
+        _cameraController = FindObjectOfType<CameraController>();
     }
 
     public void Init()
     {
-        Koreography koreography = SoundManager.instance.playingKoreo;
-        
+
         switch (SceneLoadManager.Instance.Scene)
         {
             case SceneLoadManager.SceneType.Level1:
@@ -54,11 +55,6 @@ public class SpriteChanger : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        ChangeMaterial();
-    }
-    
     private void OnDestroy()
     {
         switch (SceneLoadManager.Instance.Scene)
@@ -84,7 +80,13 @@ public class SpriteChanger : MonoBehaviour
         }
     }
 
-    private void ChangeMaterial()
+    public void OnSpeedChanged()
+    {
+        ChangeBackgroundMaterial();
+        SetBackgroundSize();
+    }
+    
+    private void ChangeBackgroundMaterial()
     {
         switch (SceneLoadManager.Instance.Scene)
         {
@@ -104,9 +106,12 @@ public class SpriteChanger : MonoBehaviour
         }
     }
 
-    public void OnSpeedChanged(float speed)
+    private void SetBackgroundSize()
     {
-        ChangeMaterial();
+        Transform backgroundTrans = _backgroundMover.transform;
+        backgroundTrans.localScale = backgroundTrans.localScale.x.Equals(_cameraController.MinOrthoSize)
+            ? backgroundTrans.localScale * _cameraController.MinOrthoSize / _cameraController.MaxOrthoSize
+            : backgroundTrans.localScale * _cameraController.MaxOrthoSize / _cameraController.MinOrthoSize;
     }
 
     public void OnLongPressed()

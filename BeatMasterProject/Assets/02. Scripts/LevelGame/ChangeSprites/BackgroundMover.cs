@@ -10,6 +10,7 @@ public class BackgroundMover : MonoBehaviour
     private Renderer _myRenderer;
     private Material _myMaterial;
     private Vector2 _currentUV;
+    private CharacterMovement _characterMovement;
     
     // TODO
     // 추후 해상도에 따라 스케일 조정 등을 생각 해봐야할 듯
@@ -17,22 +18,34 @@ public class BackgroundMover : MonoBehaviour
     private void Awake()
     {
         _myRenderer = GetComponent<Renderer>();
+        _characterMovement = FindObjectOfType<CharacterMovement>();
         _myMaterial = _myRenderer.material;
         _currentUV = _myMaterial.mainTextureOffset;
     }
 
     private void Update()
     {
+        MoveBackgroundOffset();
+    }
+
+    private void LateUpdate()
+    {
         MoveBackground();
+    }
+
+    private void MoveBackgroundOffset()
+    {
+        Vector2 tempUV = _currentUV;
+        tempUV.x += moveXAmount * Time.deltaTime * _characterMovement.MoveSpeed;
+        _currentUV = tempUV;
+        _myMaterial.mainTextureOffset = _currentUV;
     }
 
     private void MoveBackground()
     {
-        // 캐릭터 속도와 맞출 필요성이 있어보임
-        Vector2 tempUV = _currentUV;
-        tempUV.x += moveXAmount * Time.deltaTime;
-        _currentUV = tempUV;
-        _myMaterial.mainTextureOffset = _currentUV;
+        Vector3 tempVec = transform.position;
+        tempVec.x = _characterMovement.transform.position.x;
+        transform.position = tempVec;
     }
 
     public void SetMaterial(Material material)
@@ -43,5 +56,6 @@ public class BackgroundMover : MonoBehaviour
         _myMaterial.mainTextureOffset = _currentUV;
     }
 
+    
     
 }
