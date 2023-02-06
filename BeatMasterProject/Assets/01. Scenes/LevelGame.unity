@@ -1713,7 +1713,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameUI: {fileID: 1819510389}
-  _mapEventID: Level1_Map
+  _spdEventID: Level1_Spd
   curState: 0
   curSample: 0
   longResult: 
@@ -1721,7 +1721,7 @@ MonoBehaviour:
   deathCount: 0
   _stageIdx: 0
   _levelIdx: 0
-  itemCount: 0
+  coinCount: 0
 --- !u!4 &612035090
 Transform:
   m_ObjectHideFlags: 0
@@ -2891,21 +2891,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 613a8eb57722cbc4cb2a9d36064a9568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  theme: 1
+  _tileSet:
+  - topTileList: []
+    underTileList: []
+  - topTileList:
+    - {fileID: 11400000, guid: 33ec2b05aed6ce54798a0f17c661f8a8, type: 2}
+    - {fileID: 11400000, guid: dbd12c47406d66c4d837cd67f6157a9f, type: 2}
+    - {fileID: 11400000, guid: b7db3835f44776744aa6b17f5fe0bd26, type: 2}
+    - {fileID: 11400000, guid: cae9a8360392bfd49b13e8cbe579bf85, type: 2}
+    - {fileID: 11400000, guid: 617e78c004a17874bba2e83fd1509baa, type: 2}
+    - {fileID: 11400000, guid: 441afb49a6a3c8e41820d8d218442054, type: 2}
+    - {fileID: 11400000, guid: 70ef95d2121c6204d95aeb88bfbc0504, type: 2}
+    - {fileID: 11400000, guid: bb3520a55781a954abe89b92bcdc313f, type: 2}
+    - {fileID: 11400000, guid: 6106597909d47804dad36a5aab5d99b8, type: 2}
+    underTileList:
+    - {fileID: 11400000, guid: c541c54721a16c2469f4cc6e8d48c303, type: 2}
+    - {fileID: 11400000, guid: e7347a6ca6d80754a80ca305ccabfeb6, type: 2}
+    - {fileID: 11400000, guid: b02df6a39c3c60445993c5f9235b37e3, type: 2}
+    - {fileID: 11400000, guid: bd649b0ac389e614584644136213427d, type: 2}
+    - {fileID: 11400000, guid: 55bafae4ec7630148bc3460c22a96af9, type: 2}
+    - {fileID: 11400000, guid: bf52b14d19901034bbb8f9bc58d03e32, type: 2}
+    - {fileID: 11400000, guid: 8c933fd3ebbc0d84c974cc1d5dcc48d9, type: 2}
+    - {fileID: 11400000, guid: f507f9c2862ce4846baef785fb27a5f1, type: 2}
+    - {fileID: 11400000, guid: 0e4d7fffb7e9c434c9dad1d562df3bdf, type: 2}
+  - topTileList: []
+    underTileList: []
+  - topTileList: []
+    underTileList: []
   _jumpCheckTrack: {fileID: 11400000, guid: 0f615f06881c8f64bb55e18b30c39be3, type: 2}
   _mapEventID: Level1_Map
+  _actEventID: Level1_Short
+  _spdEventID: Level1_Spd
   _mapEventList: []
+  _shortEventList: []
+  _spdEventList: []
+  _actEventIndex: 0
+  _spdEventIndex: 0
   _groundTilemap: {fileID: 1828062194}
-  _groundTileList:
-  - {fileID: 11400000, guid: 53bef4ee931a43a4fa9ddc57a869acbd, type: 2}
-  - {fileID: 11400000, guid: 17f75c71aa2c63b4fb744af73e8aa110, type: 2}
-  - {fileID: 11400000, guid: 10d7e87cefce918468c7636f27b3a216, type: 2}
-  - {fileID: 11400000, guid: b2751b1c7e26a594b8b98b35a23f5995, type: 2}
-  - {fileID: 11400000, guid: cf6442f2ebbf0704f8d14bbf3cab8f5d, type: 2}
-  - {fileID: 11400000, guid: 0b0a3177e4ff6b347ab9528dfc4ad1cb, type: 2}
-  - {fileID: 11400000, guid: 42e45f5f715230745b2c31f5485beed9, type: 2}
-  - {fileID: 11400000, guid: 73b332d19067b4e448b30550debdfafd, type: 2}
-  - {fileID: 11400000, guid: d18cd1c51b1427f418fe106cfd4e96f2, type: 2}
-  - {fileID: 11400000, guid: 9b2bb57d8c4fee64c85a8622e0c312fc, type: 2}
   _interactionTilemap: {fileID: 1912302631}
   _interactionTileList:
   - {fileID: 11400000, guid: 7e877a6e4b306d5419d1825d9c61dc20, type: 2}
@@ -4076,7 +4099,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3931478986007098716, guid: 28c56ff943a07a9468296de369142635, type: 3}
       propertyPath: _rayDistanceOffset
-      value: 0.4
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 4792369881517075378, guid: 28c56ff943a07a9468296de369142635, type: 3}
       propertyPath: m_Pivot.x

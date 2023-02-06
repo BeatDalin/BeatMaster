@@ -25,8 +25,7 @@ public abstract class Game : MonoBehaviour
 {
     [SerializeField] protected GameUI gameUI; // LevelGameUI or BossGameUI will come in.
     [SerializeField] protected TileColliderTest tileTest;
-    
-    [SerializeField] [EventID] private string _mapEventID;
+    [SerializeField] [EventID] private string _spdEventID;
 
     [Header("Game Play")]
     public GameState curState = GameState.Idle;
@@ -79,7 +78,7 @@ public abstract class Game : MonoBehaviour
     {
         StartWithDelay();
 
-        Koreographer.Instance.RegisterForEvents(_mapEventID, CheckEnd);
+        Koreographer.Instance.RegisterForEvents(_spdEventID, CheckEnd);
     }
     
     protected virtual void Init()
@@ -99,15 +98,20 @@ public abstract class Game : MonoBehaviour
 
     private void CheckEnd(KoreographyEvent evt)
     {
-        int endEvent = evt.GetTextValue().Split().Select(int.Parse).ToArray()[3];
+        if (!evt.HasTextPayload())
+        {
+            return;
+        }
 
-        if (endEvent == 2)
+        string message = evt.GetTextValue();
+
+        if (message == "End")
         {
             SummarizeResult();
             RateResult(_stageIdx, _levelIdx);
             gameUI.ShowFinalResult(_finalSummary, totalNoteCount, _stageIdx, _levelIdx); // for testing purpose ...
         }
-        if (endEvent == 3)
+        else if (message == "Stop")
         {
             PlayerStatus.Instance.ChangeStatus(Status.Idle);
         }
