@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SonicBloom.Koreo;
 using UnityEngine;
 
 public class SpriteChanger : MonoBehaviour
 {
+    [SerializeField] private ChangingSprites[] _changingSprites;
     private BackgroundMover _backgroundMover;
     private int _materialIndex;
-    [SerializeField] private ChangingSprites[] _changingSprites;
     
     // TODO
     // 추후에 적, 주변 환경 등 1가지 이상으로 여러가지가 달라진다면 (적, 타일, {이펙트도 여기..??} 등)
@@ -36,6 +37,23 @@ public class SpriteChanger : MonoBehaviour
         _backgroundMover = FindObjectOfType<BackgroundMover>();
     }
 
+    public void Init()
+    {
+        Koreography koreography = SoundManager.instance.playingKoreo;
+        
+        switch (SceneLoadManager.Instance.Scene)
+        {
+            case SceneLoadManager.SceneType.Level1:
+                break;
+            case SceneLoadManager.SceneType.Level2:
+                break;
+            case SceneLoadManager.SceneType.Level3:
+                break;
+            case SceneLoadManager.SceneType.Level4:
+                break;
+        }
+    }
+
     void Update()
     {
         ChangeMaterial();
@@ -43,15 +61,21 @@ public class SpriteChanger : MonoBehaviour
     
     private void OnDestroy()
     {
-        /*switch (SceneLoadManager.Instance.Scene)
+        switch (SceneLoadManager.Instance.Scene)
         {
-            case SceneLoadManager.SceneType.SpiteChange:
+            case SceneLoadManager.SceneType.Level1:
                 ResetMaterialsOffset(_changingSprites[0].ChangingMaterials);
                 break;
-        }*/
+            case SceneLoadManager.SceneType.Level2:
+                break;
+            case SceneLoadManager.SceneType.Level3:
+                break;
+            case SceneLoadManager.SceneType.Level4:
+                break;
+        }
     }
 
-    private static void ResetMaterialsOffset(Material[] materials)
+    private void ResetMaterialsOffset(Material[] materials)
     {
         // BackgroundMover에서 이동한 결과에 의해 원본이 훼손되는 것을 막기위함
         foreach (var material in materials)
@@ -62,18 +86,31 @@ public class SpriteChanger : MonoBehaviour
 
     private void ChangeMaterial()
     {
-        if (Input.GetMouseButtonDown(0))
+        switch (SceneLoadManager.Instance.Scene)
         {
-            /*switch (SceneLoadManager.Instance.Scene)
-            {
-                case SceneLoadManager.SceneType.SpiteChange:
-                    // 스프라이트 교체
-                    _materialIndex++;
-                    _materialIndex %= _changingSprites[0].ChangingMaterials.Length;
-                    Material changingMaterial = _changingSprites[0].ChangingMaterials[_materialIndex];
-                    _backgroundMover.SetMaterial(changingMaterial);
-                    break;
-            }*/
+            case SceneLoadManager.SceneType.Level1:
+                // 스프라이트 교체
+                _materialIndex++;
+                _materialIndex %= _changingSprites[0].ChangingMaterials.Length;
+                Material changingMaterial = _changingSprites[0].ChangingMaterials[_materialIndex];
+                _backgroundMover.SetMaterial(changingMaterial);
+                break;
+            case SceneLoadManager.SceneType.Level2:
+                break;
+            case SceneLoadManager.SceneType.Level3:
+                break;
+            case SceneLoadManager.SceneType.Level4:
+                break;
         }
+    }
+
+    public void OnSpeedChanged(float speed)
+    {
+        ChangeMaterial();
+    }
+
+    public void OnLongPressed()
+    {
+        // 플레이어 스프라이트 변경
     }
 }

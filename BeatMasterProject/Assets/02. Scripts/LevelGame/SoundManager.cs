@@ -40,7 +40,6 @@ public class SoundManager : MonoBehaviour
         }
 
         playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
-        clipName = playingKoreo.SourceClipName;
         musicPlayer = GetComponentInChildren<SimpleMusicPlayer>();
         musicPlayer.TryGetComponent(typeof(AudioSource), out Component audioSource);
         if (audioSource)
