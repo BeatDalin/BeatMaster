@@ -7,25 +7,25 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class LevelInfo
 {
-    public int _levelNum; // 레벨 index
-    public int _nextLevelNum; // 다음 level index
-    public int _beforeLevelNum; // 이전 level index
-    public int _maxLevelNum = 3; // 최대 level index
-    public string _levelDescription; // levelUI TextArea에 들어갈 level 설명
-    public bool _isLocked; // 레벨 잠금 여부
+    public int levelNum; // 레벨 index
+    public int nextLevelNum; // 다음 level index
+    public int beforeLevelNum; // 이전 level index
+    public int maxLevelNum = 3; // 최대 level index
+    public string levelDescription; // levelUI TextArea에 들어갈 level 설명
+    public bool isLocked; // 레벨 잠금 여부
     
-    public Vector3 _mapPos; // levelUI에서 보여줄 map 영역
-    public Vector3 _camPos; // levelUI BG에서 보여줄 map 영역
+    public Vector3 mapPos; // levelUI에서 보여줄 map 영역
+    public Vector3 camPos; // levelUI BG에서 보여줄 map 영역
 
     public LevelInfo(int levelNum, string levelDescription, Vector3 mapPos, Vector3 camPos)
     {
-        _levelNum = levelNum;
-        _nextLevelNum = _levelNum == _maxLevelNum ? _levelNum : _levelNum + 1; // 현재 레벨이 최대 레벨이라면, 다음 레벨 없음
-        _beforeLevelNum = _levelNum == 0 ? _levelNum : _levelNum - 1; // 현재 레벨이 최소 레벨이라면, 이전 레벨 없음
-        _levelDescription = levelDescription;
-        _isLocked = _levelNum == 0 ? false : true; // 현재 레벨이 최소 레벨이라면, 잠금 false
-        _mapPos = mapPos;
-        _camPos = camPos;
+        this.levelNum = levelNum;
+        nextLevelNum = this.levelNum == maxLevelNum ? this.levelNum : this.levelNum + 1; // 현재 레벨이 최대 레벨이라면, 다음 레벨 없음
+        beforeLevelNum = this.levelNum == 0 ? this.levelNum : this.levelNum - 1; // 현재 레벨이 최소 레벨이라면, 이전 레벨 없음
+        this.levelDescription = levelDescription;
+        isLocked = this.levelNum == 0 ? false : true; // 현재 레벨이 최소 레벨이라면, 잠금 false
+        this.mapPos = mapPos;
+        this.camPos = camPos;
     }
 }
 
@@ -48,7 +48,6 @@ public class LevelInformation : MonoBehaviour
     [SerializeField] private Text _levelTitle;
     [SerializeField] private Text _description;
     [SerializeField] private GameObject _lockedPanel;
-    [SerializeField] private Button _startBtn;
     [SerializeField] private Vector3[] _mapPos;
     [SerializeField] private GameObject[] _moveBtn;
     [SerializeField] private GameObject[] _camPos;
@@ -69,7 +68,7 @@ public class LevelInformation : MonoBehaviour
             if (i > 0)
             {
                 // 이전 levelClear했다면, 현재 레벨 unlock
-                _levelInfo[i]._isLocked = !curStageData[_levelInfo[i]._beforeLevelNum].levelClear;
+                _levelInfo[i].isLocked = !curStageData[_levelInfo[i].beforeLevelNum].levelClear;
             }
         }
         
@@ -92,24 +91,21 @@ public class LevelInformation : MonoBehaviour
         _moveBtn[1].SetActive(levelNum != _maxLevelNum);
         
         // Camera
-        _mainCam.transform.position = Vector3.MoveTowards(_mainCam.transform.position, _levelInfo[levelNum]._camPos, 10f);
+        _mainCam.transform.position = Vector3.MoveTowards(_mainCam.transform.position, _levelInfo[levelNum].camPos, 10f);
         
         // locked Img
-        _lockedPanel.SetActive(_levelInfo[levelNum]._isLocked);
+        _lockedPanel.SetActive(_levelInfo[levelNum].isLocked);
         
-        // start Btn
-        
-
         // levelTitle Txt
-        int currLevel = _levelInfo[levelNum]._levelNum + 1;
+        int currLevel = _levelInfo[levelNum].levelNum + 1;
         _levelTitle.text = "LEVEL " + currLevel;
         
         // map position
         _maskTarget.GetComponent<RectTransform>().localPosition =
-            new Vector3(_levelInfo[levelNum]._mapPos.x, _levelInfo[levelNum]._mapPos.y, 0);
+            new Vector3(_levelInfo[levelNum].mapPos.x, _levelInfo[levelNum].mapPos.y, 0);
         
         // description Txt
-        _description.text = _levelInfo[levelNum]._levelDescription;
+        _description.text = _levelInfo[levelNum].levelDescription;
     }
 
     public void OnClickStartBtn()
@@ -119,12 +115,12 @@ public class LevelInformation : MonoBehaviour
 
     public void OnClickLeftBtn()
     {
-        SetLevelInfo(uiLevel--);
+        SetLevelInfo(--uiLevel);
     }
 
     public void OnClickRightBtn()
     {
-       SetLevelInfo(uiLevel++);
+       SetLevelInfo(++uiLevel);
     }
     
     /// <summary>
