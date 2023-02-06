@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SonicBloom.Koreo;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class MonsterPooling : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class MonsterPooling : MonoBehaviour
     [Header("No ObjectPool")] 
     [SerializeField] private GameObject _monsterPrefab;
 
-    [SerializeField] private List<Vector3> tilePos = new List<Vector3>();
+    [SerializeField] private List<Vector3> _tilePos = new List<Vector3>();
 
     private void Start()
     {
@@ -39,7 +40,7 @@ public class MonsterPooling : MonoBehaviour
                     int groundType = (int)groundData[0];
                     if (groundType == 0)
                     {
-                        Instantiate(_monsterPrefab, new Vector3(tilePos[j].x + 1f, tilePos[j].y + 2f), Quaternion.identity, transform);
+                        Instantiate(_monsterPrefab, new Vector3(_tilePos[j].x + 1f, _tilePos[j].y + 2f), Quaternion.identity, transform);
                         break;
                     }
                 }
@@ -85,7 +86,7 @@ public class MonsterPooling : MonoBehaviour
 
     public void AddTilePos(float posX, float posY)
     {
-        tilePos.Add(new Vector3(posX, posY, 0));
+        _tilePos.Add(new Vector3(posX, posY, 0));
     }
 
     // public void ResetPool() //캐릭터가 체크포인트를 지났으면 현재 꺼져있는 몬스터 오브젝트를 다시 오브젝트 풀로 넣어줌
