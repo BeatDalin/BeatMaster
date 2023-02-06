@@ -25,12 +25,11 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     public enum SceneType
     {
         Title,
-        MenuLevelSelect,
         LevelSelect,
         Level1,
         Level2,
         Level3,
-        Level4
+        Level4,
     }
 
     public override void Init()
