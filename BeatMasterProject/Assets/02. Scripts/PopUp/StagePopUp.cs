@@ -29,7 +29,7 @@ public class StagePopUp : MonoBehaviour
         _stageBtn.onClick.AddListener(() =>
         {
            // Load LevelMenuScene
-           SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect);
+           SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
     }
 }

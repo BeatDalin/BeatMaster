@@ -86,7 +86,7 @@ public class LevelMenuManager : MonoBehaviour
                 }
                 else
                 {
-                    SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelGame);
+                    SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1);
                 }
             }
         }

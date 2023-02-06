@@ -109,18 +109,18 @@ public abstract class GameUI : MonoBehaviour
             UIManager.instance.ClosePopUp();
             game.ContinueGame();
         });
-        restartBtn.onClick.AddListener(() => SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelGame));
+        restartBtn.onClick.AddListener(() => SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene));
         goLevelMenuBtn.onClick.AddListener(() =>
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect));
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect));
         //settings
         goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPopUp(settingsPanel));
         settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePopUp(); });
 
         goLevelAfterGameBtn.onClick.AddListener(() =>
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect));
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect));
 
         restartAfterGameBtn.onClick.AddListener(() =>
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelGame));
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene));
     }
 
     public void ChangeOutLineColor(BeatResult result)
