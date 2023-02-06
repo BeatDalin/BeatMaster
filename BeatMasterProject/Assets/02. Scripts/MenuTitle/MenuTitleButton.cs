@@ -161,7 +161,7 @@ public class MenuTitleButton : MonoBehaviour
         //temp
         if (sceneName == "Stage")
         {
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect);
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         }
     }
 
