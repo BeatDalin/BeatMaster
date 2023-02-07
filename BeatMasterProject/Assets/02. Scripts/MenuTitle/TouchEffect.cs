@@ -1,46 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class TouchEffect : MonoBehaviour
 {
     private Vector2 _direction;
     private SpriteRenderer _sprite;
 
-    public float moveSpeed = 0.1f;
+    [SerializeField] private float _moveSpeed = 0.1f;
+    [SerializeField] private float _minSize = 0.1f;
+    [SerializeField] private float _maxSize = 0.3f;
+    [SerializeField] private float _sizeSpeed = 1f;
+    [SerializeField] private float _colorSpeed = 5f;
 
-    public float minSize = 0.1f;
-    public float maxSize = 0.3f;
+    [SerializeField] private Color[] _colors;
 
-    public float sizeSpeed = 1f;
-    public float colorSpeed = 5f;
-
-    public Color[] colors;
     // Start is called before the first frame update
     void Start()
     {
         _sprite = GetComponent<SpriteRenderer>();
-        
+
         InitEffect();
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(_direction * moveSpeed);
+        transform.Translate(_direction * _moveSpeed);
 
-        transform.localScale = Vector2.Lerp(transform.localScale, Vector2.zero, Time.deltaTime * sizeSpeed);
+        transform.localScale = Vector2.Lerp(transform.localScale, Vector2.zero, Time.deltaTime * _sizeSpeed);
 
         Color color = _sprite.color;
 
-        color.a = Mathf.Lerp(_sprite.color.a, 0, Time.deltaTime * colorSpeed);
+        color.a = Mathf.Lerp(_sprite.color.a, 0, Time.deltaTime * _colorSpeed);
 
         _sprite.color = color;
 
-        if (_sprite.color.a < 0.1f)
+        if (_sprite.color.a <= 0.1f)
         {
             InitEffect();
-            
+
             ObjectPooling.Instance.ReturnObject(gameObject);
         }
     }
@@ -49,10 +49,10 @@ public class TouchEffect : MonoBehaviour
     {
         _direction = new Vector2(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
 
-        float size = Random.Range(minSize, maxSize);
+        float size = Random.Range(_minSize, _maxSize);
 
         transform.localScale = new Vector2(size, size);
-        
-        _sprite.color = colors[Random.Range(0, colors.Length)];
+
+        _sprite.color = _colors[Random.Range(0, _colors.Length)];
     }
 }
