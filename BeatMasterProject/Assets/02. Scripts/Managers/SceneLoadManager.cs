@@ -78,7 +78,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     /// </summary>
     /// <param name="sceneType">Scene to move on.</param>
     /// <returns>CoLoadLevelAsync()</returns>
-    private IEnumerator CoSceneTransition(SceneType sceneType = default)
+    private IEnumerator CoSceneTransition()
     {
         _loadImage.gameObject.SetActive(true);
         _loadImage.material.SetFloat(Cutoff, _showBackground); // unfilled

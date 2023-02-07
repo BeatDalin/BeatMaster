@@ -22,9 +22,6 @@ public class MapTemp : MonoBehaviour
     public Theme theme;
     [SerializeField] private List<TileSet> _tileSetList;
 
-    [Header("Check Track")]
-    [SerializeField] KoreographyTrack _jumpCheckTrack;
-
     [Space]
     [Header("Event")]
     [SerializeField] [EventID] private string _mapEventID;
@@ -55,13 +52,6 @@ public class MapTemp : MonoBehaviour
         LoadAllEvents();
         GenerateMap();
         FillMapSide();
-
-        // 액션 트랙을 확인해 판정용 트랙들을 초기화
-        // 판정용 트랙들의 이벤트가 비어있을 때에만 실행
-        if (_jumpCheckTrack.GetAllEvents().Count == 0)
-        {
-            GenerateJumpCheckEvent();
-        }
     }
 
     private void LoadAllEvents()
@@ -92,24 +82,6 @@ public class MapTemp : MonoBehaviour
             for (int j = -1; j >= -10; j--)
             {
                 _groundTilemap.SetTile(new Vector3Int(i, j, 0), _tileSetList[(int)theme].underTileList[0]);
-            }
-        }
-    }
-
-    private void GenerateJumpCheckEvent()
-    {
-        for (int i = 0; i < _shortEventList.Count; i++)
-        {
-            int shortType = _shortEventList[i].GetIntValue();
-
-            if (shortType == 0)
-            {
-                KoreographyEvent koreoEvent = new KoreographyEvent();
-                koreoEvent.Payload = new CurvePayload();
-                koreoEvent.StartSample = _shortEventList[i].StartSample - 5000;
-                koreoEvent.EndSample = _shortEventList[i].StartSample + 5000;
-
-                _jumpCheckTrack.AddEvent(koreoEvent);
             }
         }
     }
