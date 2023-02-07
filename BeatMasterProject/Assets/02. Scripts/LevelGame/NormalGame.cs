@@ -30,13 +30,13 @@ public class NormalGame : Game
         // Short Note Event Track
         Koreographer.Instance.RegisterForEventsWithTime("Level1_JumpCheck", CheckShortEnd);
         // Long Note Event Track
-        // Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
-        // Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckStart", CheckLongStart);
-        // Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckEnd", CheckLongEnd);
+        Koreographer.Instance.RegisterForEvents("Level1_LongCheckMiddle", CheckLongMiddle);
+        Koreographer.Instance.RegisterForEventsWithTime("Level1_LongCheckStart", CheckLongStart);
+        Koreographer.Instance.RegisterForEventsWithTime("Level1_LongCheckEnd", CheckLongEnd);
         
         // Result Array
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_JumpCheck").GetAllEvents().Count];
-        // longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
+        longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_Long").GetAllEvents().Count];
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
 
         _monsterPooling = FindObjectOfType<MonsterPooling>();
@@ -101,6 +101,7 @@ public class NormalGame : Game
         if (Input.GetKeyDown(_longNoteKey))
         {
             isLongPressed = true;
+            Debug.Log("Long Key Press");
         }
 
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1f && !_isChecked)
@@ -120,10 +121,12 @@ public class NormalGame : Game
         if (isLongPressed && Input.GetKeyUp(_longNoteKey))
         {
             isLongPressed = false;
+            Debug.Log("Middle KeyUP => Fail!!!");
+
             //==============Rewind 자리==============
             if (!isLongFailed) 
             {
-                Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
+                // Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
             }
         }
@@ -138,6 +141,8 @@ public class NormalGame : Game
         {
             if (!isLongKeyCorrect) // increase item only once
             {
+                Debug.Log("End Key Up => Correct!");
+
                 isLongKeyCorrect = true;
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, coinCount);
@@ -154,6 +159,8 @@ public class NormalGame : Game
             longIdx++;
             if (!isLongKeyCorrect)
             {
+                
+                Debug.Log("End Key Fail!!!");
                 // ===============Rewind==============
                 if (!isLongFailed)
                 {
