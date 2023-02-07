@@ -111,39 +111,34 @@ public class SoundManager : MonoBehaviour
     // 각 씬별로 KoreoGraphy 바꾸는 기능
     public void ChangeKoreo(Enum currentScene)
     {
+        //playingKoreo = Resources.Load<Koreography>($"KoreoGraphys/{currentScene.ToString()}");
         switch (currentScene)
         {
             case SceneLoadManager.SceneType.Title: // Title 씬
             {
                 playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Title");
                 musicPlayer.LoadSong(playingKoreo, 0, false);
-                clipName = musicPlayer.GetCurrentClipName();
                 break;
             }
             case SceneLoadManager.SceneType.LevelSelect: // LevelSelect 씬
             {
                 playingKoreo = Resources.Load<Koreography>("KoreoGraphys/LevelSelect");
                 musicPlayer.LoadSong(playingKoreo, 0, true);
-                clipName = musicPlayer.GetCurrentClipName();
                 break;
             }
             case SceneLoadManager.SceneType.Level1: // Level1 씬
             {
                 playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
                 musicPlayer.LoadSong(playingKoreo, 0, false);
-                clipName = musicPlayer.GetCurrentClipName();
                 break;
             }
             case SceneLoadManager.SceneType.Level1MonsterTest: // Level1 씬
             {
                 playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
                 musicPlayer.LoadSong(playingKoreo, 0, false);
-                clipName = musicPlayer.GetCurrentClipName();
                 break;
             }
-            
-            
-            
         }
+        clipName = musicPlayer.GetCurrentClipName();
     }
 }
