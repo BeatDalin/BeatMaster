@@ -466,8 +466,8 @@ CanvasGroup:
   m_GameObject: {fileID: 601645394}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 0
-  m_BlocksRaycasts: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!114 &601645399
 MonoBehaviour:
@@ -1557,7 +1557,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1939c0083ed144b99a2aa4334498d52a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _touchEffect: {fileID: 7368994942055723, guid: 64de812f07c5d44e08687e2ce9530433, type: 3}
   defaultTime: 0.01
 --- !u!114 &1240425823
 MonoBehaviour:
@@ -1870,11 +1869,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1469504435740962934, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1469504435740962934, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1688309559007019597, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1990,7 +1989,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2143633781728154075, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2199158075089121234, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2074,15 +2073,15 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: b5219f202af5bdd4e9fcb57fda99b78e, type: 3}
     - target: {fileID: 4025458377796044100, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4025458377796044100, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4025458377796044100, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4315748122236803322, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_Sprite
@@ -2122,15 +2121,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5480936404495381799, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5480936404495381799, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5480936404495381799, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5720256683257145972, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_IsActive
@@ -2148,11 +2147,11 @@ PrefabInstance:
       objectReference: {fileID: 12800000, guid: 585188cdc4600544eb408bee749e4b3a, type: 3}
     - target: {fileID: 6703723895754786907, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6703723895754786907, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6956847604479468341, guid: 00937ab8266c74619bc106784bacc3e8, type: 3}
       propertyPath: m_Text
@@ -2814,7 +2813,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1939c0083ed144b99a2aa4334498d52a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _touchEffect: {fileID: 7368994942055723, guid: 64de812f07c5d44e08687e2ce9530433, type: 3}
   defaultTime: 0.05
 --- !u!1 &2069694257 stripped
 GameObject:
@@ -4236,7 +4234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2744721749750396338, guid: 3a2bbee9f612e4161b9d5d36fb5d0c87, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2744721749750396339, guid: 3a2bbee9f612e4161b9d5d36fb5d0c87, type: 3}
       propertyPath: m_Pivot.x

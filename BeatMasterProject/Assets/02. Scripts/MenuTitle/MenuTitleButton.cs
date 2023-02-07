@@ -5,10 +5,7 @@ using DG.Tweening;
 using SonicBloom.Koreo;
 using SonicBloom.Koreo.Players;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
-using Button = UnityEngine.UI.Button;
+using UnityEngine.UI;
 
 enum ButtonName
 {
@@ -42,6 +39,8 @@ public class MenuTitleButton : MonoBehaviour
         Koreographer.Instance.RegisterForEvents("Title_Track", ChangeScale);
 
         AddClickListener();
+
+        _simpleMusicPlayer = SoundManager.instance.musicPlayer;
     }
 
     private void Update()
@@ -51,6 +50,8 @@ public class MenuTitleButton : MonoBehaviour
             if (!_simpleMusicPlayer.IsPlaying)
             {
                 _simpleMusicPlayer.Play();
+                _loadingPanelGroup.gameObject.SetActive(false);
+                
             }
         }
         
