@@ -68,8 +68,8 @@ public abstract class Game : MonoBehaviour
     protected virtual void Awake()
     {
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
-        gameUI.InitUI();
         tileTest = FindObjectOfType<TileColliderTest>();
+        Koreographer.Instance.ClearEventRegister(); // Initialize Koreographer Event Regiser
         // Data
         DataCenter.Instance.LoadData();
     }

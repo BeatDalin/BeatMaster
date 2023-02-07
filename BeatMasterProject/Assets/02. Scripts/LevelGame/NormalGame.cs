@@ -98,6 +98,7 @@ public class NormalGame : Game
         if (Input.GetKeyDown(_longNoteKey))
         {
             isLongPressed = true;
+            Debug.Log("Long Key Press");
         }
 
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1f && !_isChecked)
@@ -117,6 +118,8 @@ public class NormalGame : Game
         if (isLongPressed && Input.GetKeyUp(_longNoteKey))
         {
             isLongPressed = false;
+            Debug.Log("Middle KeyUP => Fail!!!");
+
             //==============Rewind 자리==============
             if (!isLongFailed) 
             {
@@ -135,6 +138,8 @@ public class NormalGame : Game
         {
             if (!isLongKeyCorrect) // increase item only once
             {
+                Debug.Log("End Key Up => Correct!");
+
                 isLongKeyCorrect = true;
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, coinCount);
@@ -151,6 +156,8 @@ public class NormalGame : Game
             longIdx++;
             if (!isLongKeyCorrect)
             {
+                
+                Debug.Log("End Key Fail!!!");
                 // ===============Rewind==============
                 if (!isLongFailed)
                 {
