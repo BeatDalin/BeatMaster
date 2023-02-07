@@ -117,24 +117,28 @@ public class SoundManager : MonoBehaviour
             {
                 playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Title");
                 musicPlayer.LoadSong(playingKoreo, 0, false);
+                clipName = musicPlayer.GetCurrentClipName();
                 break;
             }
             case SceneLoadManager.SceneType.LevelSelect: // LevelSelect 씬
             {
                 playingKoreo = Resources.Load<Koreography>("KoreoGraphys/LevelSelect");
                 musicPlayer.LoadSong(playingKoreo, 0, true);
+                clipName = musicPlayer.GetCurrentClipName();
                 break;
             }
             case SceneLoadManager.SceneType.Level1: // Level1 씬
             {
                 playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
                 musicPlayer.LoadSong(playingKoreo, 0, false);
+                clipName = musicPlayer.GetCurrentClipName();
                 break;
             }
             case SceneLoadManager.SceneType.Level1MonsterTest: // Level1 씬
             {
                 playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
                 musicPlayer.LoadSong(playingKoreo, 0, false);
+                clipName = musicPlayer.GetCurrentClipName();
                 break;
             }
             
