@@ -84,8 +84,13 @@ public class NormalGame : Game
             shortIdx++;
             if (!isShortKeyCorrect)
             {
+                _monsterPooling.DisableMonster();
                 // ================Rewind 자리================
                 // Rewind();
+            }
+            else
+            {
+                _monsterPooling.DisableMonster();
             }
             isShortKeyCorrect = false;
         }
@@ -175,8 +180,10 @@ public class NormalGame : Game
     
     private void Rewind()
     {
+        curState = GameState.Pause;
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
+        _monsterPooling.ReArrange();
         //curSample = (int)_monsterPooling.currentPlayerTime;
         _characterMovement.RewindPosition();
         ContinueGame(); // wait 3 sec and start
@@ -207,7 +214,11 @@ public class NormalGame : Game
         if (sampleTime > rewindSampleTime)
         {
             // DisableMonster Clear
-            //_monsterPooling.ResetPool();
+            // sampleTime = 0 이면 첫시작이므로 ResetPool 안해도됨
+            if (evt.StartSample != 0)
+            {
+                _monsterPooling.ResetPool();
+            }
             // Record sample time to play music
             rewindSampleTime = sampleTime;
             Debug.Log(rewindSampleTime);

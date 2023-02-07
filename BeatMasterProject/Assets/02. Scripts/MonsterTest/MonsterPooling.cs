@@ -9,7 +9,7 @@ using UnityEngine.Serialization;
 
 public class MonsterPooling : MonoBehaviour
 {
-    public Queue<GameObject> disableMonsterQueue = new Queue<GameObject>();
+    [SerializeField] List<GameObject> _disableMonsterList = new List<GameObject>();
     public List<GameObject> monsterList = new List<GameObject>();
     public List<float> checkPoint = new List<float>();
 
@@ -26,12 +26,15 @@ public class MonsterPooling : MonoBehaviour
 
     [SerializeField] private List<Vector3> _tilePos = new List<Vector3>();
     private int _checkPointIdx = 0;
-    private int _monsterIdx = 0;
     private CharacterMovement _characterMovement;
+    private int _maxMonsterCount;
+    private int _deleteMonsterCount;
+    private int _monsterIdx;
+    private int _count;
 
-    
     private void Awake()
     {
+        _monsterIdx = 0;
         //Koreographer.Instance.RegisterForEventsWithTime("Level1_Short", AddMonsterQueue);
     }
 
@@ -55,29 +58,23 @@ public class MonsterPooling : MonoBehaviour
                 if (_mapEventList[j].EndSample - 5 <= _shortEventList[i].EndSample &&
                     _shortEventList[i].EndSample <= _mapEventList[j].EndSample + 5)
                 {
-                    float[] groundData = _mapEventList[j].GetTextValue().Split().Select(float.Parse).ToArray();
-                    int groundType = (int)groundData[0];
-                    if (groundType == 0)
-                    {
-                        GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[j].x + 1f, _tilePos[j].y + 2f), Quaternion.identity, transform);
+                    
+                    GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[j].x + 1f, _tilePos[j].y + 2f), Quaternion.identity, transform);
                         
-                        monsterList.Add(g);
+                    monsterList.Add(g);
                         
-                        break;
-                    }
+                    break;
+                    // float[] groundData = _mapEventList[j].GetTextValue().Split().Select(float.Parse).ToArray();
+                    // int groundType = (int)groundData[0];
+                    // if (groundType == 0)
+                    // {
+                    //     
+                    // }
                 }
             }
         }
-    }
 
-    private void Update()
-    {
-        if (_characterMovement.transform.position.x >= monsterList[_monsterIdx].transform.position.x)
-        {
-            disableMonsterQueue.Enqueue(monsterList[_monsterIdx]);
-            monsterList[_monsterIdx].SetActive(false);
-            _monsterIdx++;
-        }
+        _maxMonsterCount = monsterList.Count;
     }
 
     // void AddMonsterQueue(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
@@ -128,43 +125,36 @@ public class MonsterPooling : MonoBehaviour
     //     }
     // }
 
+    public void DisableMonster()
+    {
+        _disableMonsterList.Add(monsterList[_monsterIdx]);
+        monsterList[_monsterIdx].SetActive(false);
+        _monsterIdx++;
+    }
+
     public void AddTilePos(float posX, float posY)
     {
         _tilePos.Add(new Vector3(posX, posY, 0));
     }
 
-    public void ResetPool() //캐릭터가 체크포인트를 지났으면 현재 꺼져있는 몬스터 오브젝트를 다시 오브젝트 풀로 넣어줌
+    public void ResetPool() //캐릭터가 체크포인트를 지났으면 몬스터를 Destroy
     {
-        while (disableMonsterQueue.Count != 0)
-        {
-            Destroy(disableMonsterQueue.Dequeue());
-        }
+        _monsterIdx = _disableMonsterList.Count - 1;
+        // for (int i = 0; i < _disableMonsterList.Count; i++)
+        // {
+        //     Destroy(_disableMonsterList[i]);
+        // }
+        // _disableMonsterList.Clear();
+        _count = _monsterIdx - 1;
     }
 
     public void ReArrange() //캐릭터가 다음 체크포인트를 지나지 못하고 죽으면 꺼져있는 몬스터들을 다시 켜줌
     {
-        while (disableMonsterQueue.Count != 0)
+        for (int i = _count; i < _monsterIdx; i++)
         {
-            disableMonsterQueue.Dequeue().SetActive(true);
+            monsterList[i].SetActive(true);
         }
+        _monsterIdx = _count;
+        // _disableMonsterList.Clear();
     }
 }
-
-/*
- * private void Rewind()
-    {
-        SoundManager.instance.PlayBGM(false); // pause
-        curSample = rewindSampleTime;
-        //1. 캐릭터가 체크포인트를 지났는지 어떻게 아는가?
-        speedTrack에서 속도바뀌는 시작부분과 끝부분이 체크포인트
-        //Rewind함수에서 MonsterPooling.cs ReArrange()부르기
-        //2. 그러면 체크포인트를 지났으면 부르는 함수은 ResetPool()은 어디서 불러야하는가? -> 아마 1번 질문이 해결되면 부르는곳을 알 수 있을 네
-        ContinueGame(); // wait 3 sec and start
-        DecreaseItem(5);
-        gameUI.UpdateText(TextType.Item, coinCount);
-        int death = IncreaseDeath(); // increase death count
-        gameUI.UpdateText(TextType.Death, death);
-        shortIdx = rewindShortIdx;
-        longIdx = rewindLongIdx;
-    }
- */
