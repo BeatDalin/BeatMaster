@@ -42,8 +42,17 @@ public class MapTemp : MonoBehaviour
     [Header("Interaction")]
     [SerializeField] private List<Tile> _interactionTileList = new List<Tile>();
 
+    [Space]
+    [Header("Item")]
+    [SerializeField] private GameObject _starObj; // Item
+    [SerializeField] private Transform _itemContainer;
+    [SerializeField] private GameObject _checkPointObj; // 
+    [SerializeField] private List<Animator> _checkPointAnim = new List<Animator>();
+
+    
     private int _tileX = -1, _tileY;
     private MonsterPooling _monsterPooling;
+    private static readonly int IsPlay = Animator.StringToHash("isPlay");
 
     private void Awake()
     {
@@ -244,6 +253,7 @@ public class MapTemp : MonoBehaviour
                 {
                     if (_spdEventList[j].HasFloatPayload() | (_spdEventList[j].GetTextValue() == "End"))
                     {
+                        Debug.Log("CHeckPointCreate");
                         Matrix4x4 spdTileTransform = Matrix4x4.Translate(new Vector3(0f, groundYOffset, 0f)) * Matrix4x4.Rotate(Quaternion.identity);
                         TileChangeData spdTileChangeData = new TileChangeData
                         {
@@ -253,6 +263,10 @@ public class MapTemp : MonoBehaviour
                         };
 
                         _interactionTilemap.SetTile(spdTileChangeData, false);
+                        
+                        // Locate CheckPoint Animation
+                        var effect = Instantiate(_checkPointObj, new Vector3Int(_tileX, _tileY+1, 0), Quaternion.identity);
+                        _checkPointAnim.Add(effect.GetComponent<Animator>());
                     }
                 }
             }
@@ -261,14 +275,16 @@ public class MapTemp : MonoBehaviour
             prevGroundType = groundType;
         }
     }
-
-    [Header("Item")]
-    [SerializeField] private GameObject _starObj;
-    [SerializeField] private Transform _itemContainer;
-
+    
     private void LocateItems(int xPos, int yPos)
     {
         var item = Instantiate(_starObj, new Vector3(xPos, yPos, 0), Quaternion.identity);
         item.transform.SetParent(_itemContainer);
+    }
+    
+    public void PlayCheckAnim(int idx)
+    {
+        Debug.Log("Change Anim State");
+        _checkPointAnim[idx].SetTrigger(IsPlay);
     }
 }

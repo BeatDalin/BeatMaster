@@ -1876,7 +1876,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameUI: {fileID: 1819510389}
-  tileTest: {fileID: 0}
   _spdEventID: Level1_Spd
   curState: 0
   curSample: 0
@@ -1888,6 +1887,7 @@ MonoBehaviour:
   _stageIdx: 0
   _levelIdx: 0
   coinCount: 0
+  mapTemp: {fileID: 1005781688}
 --- !u!4 &612035090
 Transform:
   m_ObjectHideFlags: 0
@@ -3185,6 +3185,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 55a4e7756a2f3d14093d6eb3c9695761, type: 2}
   _starObj: {fileID: 2222503924655302269, guid: 9870be05766ef86479abbf1e23c1a2b6, type: 3}
   _itemContainer: {fileID: 39094806}
+  _checkPointObj: {fileID: 7384471502369270403, guid: 068390efa75ccce49a3cb31d7915638b, type: 3}
+  _checkPointAnim: []
 --- !u!4 &1005781689
 Transform:
   m_ObjectHideFlags: 0

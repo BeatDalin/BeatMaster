@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class NormalGame : Game
 {
+    public MapTemp mapTemp;
     [Header("Event Check")]
     private List<KoreographyEvent> _events;
     private int[,] _eventRangeShort;
@@ -16,8 +17,9 @@ public class NormalGame : Game
     private int _pressedTimeLong;
     private bool _isChecked; // to prevent double check
     [Header("Input KeyCode")]
-    private KeyCode _shortNoteKey = KeyCode.LeftArrow;
-    private KeyCode _longNoteKey = KeyCode.RightArrow;
+    private KeyCode _jumpNoteKey = KeyCode.LeftArrow;
+    private KeyCode _attackNoteKey = KeyCode.RightArrow;
+    private KeyCode _longNoteKey = KeyCode.LeftArrow;
     [Header("MonsterPool")] 
     private MonsterPooling _monsterPooling;
     protected override void Awake()
@@ -64,12 +66,24 @@ public class NormalGame : Game
         {
             _isChecked = false; // initialize before a curve value becomes 1
         }
-        if (!isShortKeyCorrect && Input.GetKeyDown(_shortNoteKey))
+
+        if (!isShortKeyCorrect)
         {
-            isShortKeyCorrect = true;
-            IncreaseItem();
-            gameUI.UpdateText(TextType.Item, coinCount);
-            _pressedTime = sampleTime; // record the sample time when the button was pressed
+            if (evt.GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey))
+            {
+                isShortKeyCorrect = true;
+                IncreaseItem();
+                gameUI.UpdateText(TextType.Item, coinCount);
+                _pressedTime = sampleTime; // record the sample time when the button was pressed
+            }
+            else if (evt.GetIntValue() == 1 && Input.GetKeyDown(_attackNoteKey))
+            {
+                isShortKeyCorrect = true;
+                IncreaseItem();
+                gameUI.UpdateText(TextType.Item, coinCount);
+                _pressedTime = sampleTime; // record the sample time when the button was pressed
+                // 몬스터 삭제
+            }
         }
 
         // The end of checking event range
@@ -177,7 +191,7 @@ public class NormalGame : Game
         ContinueGame(); // wait 3 sec and start
         DecreaseItem(5);
         gameUI.UpdateText(TextType.Item, coinCount);
-        int death = IncreaseDeath(); // increase death count
+        int death = IncreaseDeath(); // increase dea    th count
         gameUI.UpdateText(TextType.Death, death);
         shortIdx = rewindShortIdx;
         longIdx = rewindLongIdx;
@@ -210,7 +224,7 @@ public class NormalGame : Game
             checkPointVisited[checkPointIdx] = true;
             // Play Particle or Animation
             // ex) particleSystem.Play();
-            tileTest.PlayCheckAnim(checkPointIdx);
+            mapTemp.PlayCheckAnim(checkPointIdx);
         }
         // Record Index
         rewindShortIdx = shortIdx;

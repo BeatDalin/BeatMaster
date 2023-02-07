@@ -24,7 +24,6 @@ public enum GameState
 public abstract class Game : MonoBehaviour
 {
     [SerializeField] protected GameUI gameUI; // LevelGameUI or BossGameUI will come in.
-    [SerializeField] protected TileColliderTest tileTest;
     [SerializeField] [EventID] private string _spdEventID;
 
     [Header("Game Play")]
@@ -68,7 +67,6 @@ public abstract class Game : MonoBehaviour
     protected virtual void Awake()
     {
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
-        tileTest = FindObjectOfType<TileColliderTest>();
         Koreographer.Instance.ClearEventRegister(); // Initialize Koreographer Event Regiser
         // Data
         DataCenter.Instance.LoadData();
