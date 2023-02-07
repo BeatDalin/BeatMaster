@@ -4328,7 +4328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b1c9d57332bde449adf1bccf2321add, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveXAmount: 0.05
+  _moveXAmount: 0.01
 --- !u!23 &1494601849
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5406,8 +5406,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7df77eeb86c55c947bf044f6c5e623b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _changingSprites:
-  - {fileID: 11400000, guid: d90ca8880363b5a47a8f0819e43aeca1, type: 2}
+  _changingResources:
+  - {fileID: 11400000, guid: 5894df63c24b48947a9429d9e5dae341, type: 2}
 --- !u!4 &1811512137
 Transform:
   m_ObjectHideFlags: 0
