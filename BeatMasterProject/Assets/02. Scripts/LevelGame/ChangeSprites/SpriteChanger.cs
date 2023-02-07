@@ -3,13 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using SonicBloom.Koreo;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SpriteChanger : MonoBehaviour
 {
-    [SerializeField] private ChangingSprites[] _changingSprites;
+    [SerializeField] private ChangingResources[] _changingResources;
     private BackgroundMover _backgroundMover;
     private CameraController _cameraController;
+    private CharacterMovement _characterMovement;
+    private SpriteRenderer _characterRenderer;
     private int _materialIndex;
+    private int _spriteIndex;    
     
     // TODO
     // 추후에 적, 주변 환경 등 1가지 이상으로 여러가지가 달라진다면 (적, 타일, {이펙트도 여기..??} 등)
@@ -35,6 +39,8 @@ public class SpriteChanger : MonoBehaviour
     
     private void Awake()
     {
+        _characterMovement = FindObjectOfType<CharacterMovement>();
+        _characterRenderer = _characterMovement.GetComponent<SpriteRenderer>();
         _backgroundMover = FindObjectOfType<BackgroundMover>();
         _cameraController = FindObjectOfType<CameraController>();
     }
@@ -60,7 +66,7 @@ public class SpriteChanger : MonoBehaviour
         switch (SceneLoadManager.Instance.Scene)
         {
             case SceneLoadManager.SceneType.Level1:
-                ResetMaterialsOffset(_changingSprites[0].ChangingMaterials);
+                ResetMaterialsOffset(_changingResources[0].ChangingMaterials);
                 break;
             case SceneLoadManager.SceneType.Level2:
                 break;
@@ -93,8 +99,8 @@ public class SpriteChanger : MonoBehaviour
             case SceneLoadManager.SceneType.Level1:
                 // 스프라이트 교체
                 _materialIndex++;
-                _materialIndex %= _changingSprites[0].ChangingMaterials.Length;
-                Material changingMaterial = _changingSprites[0].ChangingMaterials[_materialIndex];
+                _materialIndex %= _changingResources[0].ChangingMaterials.Length;
+                Material changingMaterial = _changingResources[0].ChangingMaterials[_materialIndex];
                 _backgroundMover.SetMaterial(changingMaterial);
                 break;
             case SceneLoadManager.SceneType.Level2:
@@ -117,5 +123,26 @@ public class SpriteChanger : MonoBehaviour
     public void OnLongPressed()
     {
         // 플레이어 스프라이트 변경
+        switch (SceneLoadManager.Instance.Scene)
+        {
+            case SceneLoadManager.SceneType.Level1:
+                // 스프라이트 교체
+                _spriteIndex++;
+                _spriteIndex %= _changingResources[0].ChangingSprites.Length;
+                Sprite changingSprite = _changingResources[0].ChangingSprites[_spriteIndex];
+                SetSprite(changingSprite);
+                break;
+            case SceneLoadManager.SceneType.Level2:
+                break;
+            case SceneLoadManager.SceneType.Level3:
+                break;
+            case SceneLoadManager.SceneType.Level4:
+                break;
+        }
+    }
+    
+    private void SetSprite(Sprite sprite)
+    {
+        _characterRenderer.sprite = sprite;
     }
 }
