@@ -38,7 +38,7 @@ public class MenuTitleButton : MonoBehaviour
 
     private void Start()
     {
-        Koreographer.Instance.RegisterForEvents("MenuBGMTrack", ChangeScale);
+        Koreographer.Instance.RegisterForEvents("Title", ChangeScale);
 
         AddClickListener();
     }
