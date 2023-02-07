@@ -40,7 +40,7 @@ public class SpriteChanger : MonoBehaviour
     private void Awake()
     {
         _characterMovement = FindObjectOfType<CharacterMovement>();
-        _characterRenderer = _characterMovement.GetComponent<SpriteRenderer>();
+        _characterRenderer = _characterMovement.GetComponentInChildren<SpriteRenderer>();
         _backgroundMover = FindObjectOfType<BackgroundMover>();
         _cameraController = FindObjectOfType<CameraController>();
     }
@@ -143,6 +143,7 @@ public class SpriteChanger : MonoBehaviour
     
     private void SetSprite(Sprite sprite)
     {
+        Debug.Log("스프라이트 변경");
         _characterRenderer.sprite = sprite;
     }
 }
