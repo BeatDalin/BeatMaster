@@ -69,8 +69,8 @@ public class Store : MonoBehaviour
 
     private void SetPurchasePopup(int charNum)
     {
-        _popupPanel[0].SetActive(true);
         _popupPanel[0].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ((Image)_character[charNum].targetGraphic).sprite;
+        _popupPanel[0].SetActive(true);
         if (!_isPurchased[charNum])
         {
             //_currentChar = charNum;
