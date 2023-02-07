@@ -7,7 +7,8 @@ using SonicBloom.Koreo.Players;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
 
 enum ButtonName
 {
@@ -38,7 +39,7 @@ public class MenuTitleButton : MonoBehaviour
 
     private void Start()
     {
-        Koreographer.Instance.RegisterForEvents("Title", ChangeScale);
+        Koreographer.Instance.RegisterForEvents("Title_Track", ChangeScale);
 
         AddClickListener();
     }
@@ -168,22 +169,28 @@ public class MenuTitleButton : MonoBehaviour
     
     private void ChangeScale(KoreographyEvent evt)
     {
-        if (_objectIdx == _doTweenAnimations.Length)
+        for (int i = 0; i < _doTweenAnimations.Length; i++)
         {
-            _objectIdx = 0;
-        }
+            _doTweenAnimations[i].DORewind();
+            _doTweenAnimations[i].DOPlay();
 
-        if (_objectIdx == 0)
-        {
-            _doTweenAnimations[_doTweenAnimations.Length - 1].DORewind();
-            _doTweenAnimations[_objectIdx].DOPlay();
-            _objectIdx++;
         }
-        else
-        {
-            _doTweenAnimations[_objectIdx - 1].DORewind();
-            _doTweenAnimations[_objectIdx].DOPlay();
-            _objectIdx++;
-        }
+        // if (_objectIdx == _doTweenAnimations.Length)
+        // {
+        //     _objectIdx = 0;
+        // }
+        //
+        // if (_objectIdx == 0)
+        // {
+        //     _doTweenAnimations[_doTweenAnimations.Length - 1].DORewind();
+        //     _doTweenAnimations[_objectIdx].DOPlay();
+        //     _objectIdx++;
+        // }
+        // else
+        // {
+        //     _doTweenAnimations[_objectIdx - 1].DORewind();
+        //     _doTweenAnimations[_objectIdx].DOPlay();
+        //     _objectIdx++;
+        // }
     }
 }
