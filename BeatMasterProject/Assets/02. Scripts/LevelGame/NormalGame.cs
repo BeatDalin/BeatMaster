@@ -62,7 +62,7 @@ public class NormalGame : Game
     protected override void Start()
     {
         base.Start();
-        PlayerStatus.Instance.ChangeStatus(Status.Idle);
+        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
         Init();
     }
 
@@ -88,6 +88,7 @@ public class NormalGame : Game
         {
             if ((evt.GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey)) || (evt.GetIntValue() == 1 && Input.GetKeyDown(_attackNoteKey)))
             {
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 isShortKeyCorrect = true;
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, coinCount);
@@ -162,7 +163,7 @@ public class NormalGame : Game
             if (!isLongKeyCorrect) // increase item only once
             {
                 Debug.Log("End Key Up => Correct!");
-
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 isLongKeyCorrect = true;
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, coinCount);
@@ -195,6 +196,7 @@ public class NormalGame : Game
     
     private void Rewind()
     {
+        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Damage);
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
         ContinueGame(); // wait 3 sec and start

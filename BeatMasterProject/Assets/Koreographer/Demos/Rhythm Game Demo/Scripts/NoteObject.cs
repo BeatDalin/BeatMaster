@@ -90,7 +90,7 @@ namespace SonicBloom.Koreo.Demos
 
         public void OnHit()
         {
-            PlayerStatus.Instance.ChangeStatus(Status.Attack);
+            PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
             ReturnToPool();
         }
 

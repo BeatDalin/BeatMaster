@@ -22,6 +22,8 @@ public class Store : MonoBehaviour
     [SerializeField]
     private Data _gameData;
 
+    private StoreData currentStoreData;
+
     //구매 여부 판단 변수 
     [SerializeField]
     private bool[] _isPurchased;
@@ -39,10 +41,16 @@ public class Store : MonoBehaviour
 
     [SerializeField]
     private RuntimeAnimatorController[] _animatorController;
+
+    private void Awake()
+    {
+        //currentStoreData=DataCenter.Instance.GetStoreData();
+    }
+
     private void Start()
     {
         _animator = _popupPanel[0].transform.GetChild(0).GetComponent<Animator>();
-        _coin = 1000;
+        //_coin = 1000;
         UpdatePlayersCoinData();
         for (int i = 0; i < _character.Length; i++)
         {
@@ -103,14 +111,14 @@ public class Store : MonoBehaviour
 
     private void UpdatePlayersCoinData()
     {
-        //_coin = _gameData.playerItem;
+        _coin = _gameData.playerItem;
         _playerCoin.text = _coin.ToString();
     }
 
     private void UpdatePlayersCoinInScene()
     {
+        //DataCenter.Instance.UpdateStoreData();
         _playerCoin.text = _coin.ToString();
-        _gameData.playerItem = _coin;
     }
 
     private void ClosePanel()
@@ -124,7 +132,7 @@ public class Store : MonoBehaviour
     private void ChangeDropdownValue(Dropdown select)
     {
         int op = select.value;
-        _animator.Play(Enum.GetName(typeof(Status), op));
+        _animator.Play(Enum.GetName(typeof(CharacterStatus), op));
     }
 
     #region ifFix

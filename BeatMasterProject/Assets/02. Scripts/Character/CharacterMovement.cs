@@ -89,7 +89,7 @@ public class CharacterMovement : MonoBehaviour
         {
             SoundManager.instance.PlaySFX("Jump");
             //_animator.CrossFadeInFixedTime("Jump",0.1f);
-            PlayerStatus.Instance.ChangeStatus(Status.Jump);
+            PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);
             if (++_jumpCount >= _maxJumpCount)
             {
                 _canJump = false;
@@ -157,7 +157,7 @@ public class CharacterMovement : MonoBehaviour
                 _canJump = true;
                 _jumpCount = 0;
                 _gravityAccel = startGravityAccel;
-                PlayerStatus.Instance.ChangeStatus(Status.Run);
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
             }
         }
 

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Status
+public enum CharacterStatus
 {
     Idle = 0,
     Run,
@@ -25,31 +25,31 @@ public class Anim : MonoBehaviour
         _anim = GetComponentInChildren<Animator>();
     }
 
-    public void StatusJudge(Status crnStat)
+    public void StatusJudge(CharacterStatus crnStat)
     {
         switch (crnStat)
         {
-            case Status.Idle:
+            case CharacterStatus.Idle:
                 Idle();
                 break;
 
-            case Status.Run:
+            case CharacterStatus.Run:
                 Run();
                 break;
 
-            case Status.Jump:
+            case CharacterStatus.Jump:
                 Jump();
                 break;
 
-            case Status.Attack:
+            case CharacterStatus.Attack:
                 Attack();
                 break;
 
-            case Status.Damage:
+            case CharacterStatus.Damage:
                 Damage();
                 break;
 
-            case Status.Die:
+            case CharacterStatus.Die:
                 Die();
                 break;
         }

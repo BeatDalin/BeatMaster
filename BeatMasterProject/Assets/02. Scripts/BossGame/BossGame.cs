@@ -47,7 +47,7 @@ public class BossGame : Game
         _laneController = GameObject.Find("Target").GetComponent<LaneController>();
         _noteCreator = GameObject.Find("NoteCreator").GetComponent<NoteCreator>();
         StartCoroutine(CoCheckStart());
-        PlayerStatus.Instance.ChangeStatus(Status.Idle);
+        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
         Init();
     }
 
@@ -67,7 +67,7 @@ public class BossGame : Game
             yield return null;
         }
         _rhythmGameController.noteLane.enabled = true;
-        PlayerStatus.Instance.ChangeStatus(Status.Run);
+        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
     }
 
     protected override void Init()
