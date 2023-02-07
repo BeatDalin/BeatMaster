@@ -120,12 +120,12 @@ public class MenuTitleButton : MonoBehaviour
                 _buttons[(int)ButtonName.ShutDown].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete += () =>
                 {
                     _buttons[(int)ButtonName.ShutDown].transform.DORewind();
-                    OpenPopUp("ShutDown");
+                    SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1MonsterTest);
                 };
             }
             else
             {
-                OpenPopUp("ShutDown");
+                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1MonsterTest);
             }
         });
     }
@@ -161,7 +161,7 @@ public class MenuTitleButton : MonoBehaviour
         //temp
         if (sceneName == "Stage")
         {
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.MenuLevelSelect);
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         }
     }
 

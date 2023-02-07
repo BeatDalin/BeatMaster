@@ -5,6 +5,7 @@ using SonicBloom.Koreo;
 using SonicBloom.Koreo.Players;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 [Serializable]
 public class Sound
 {
@@ -32,21 +33,28 @@ public class SoundManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(this.gameObject);
         }
 
-        playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
-        clipName = playingKoreo.SourceClipName;
         musicPlayer = GetComponentInChildren<SimpleMusicPlayer>();
+        playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
+
+        
         musicPlayer.TryGetComponent(typeof(AudioSource), out Component audioSource);
         if (audioSource)
         {
             _bgmPlayer = audioSource as AudioSource;
         }
+    }
+
+    private void Start()
+    {
+        ChangeKoreo(SceneLoadManager.Instance.Scene);
+        Debug.Log(SceneLoadManager.Instance.Scene);
     }
 
     // BGM
@@ -97,6 +105,38 @@ public class SoundManager : MonoBehaviour
                         return;
                     }
                 }
+            }
+        }
+    }
+
+    // 각 씬별로 KoreoGraphy 바꾸는 기능
+    public void ChangeKoreo(Enum currentScene)
+    {
+        switch (currentScene)
+        {
+            case SceneLoadManager.SceneType.Title: // Title 씬
+            {
+                playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Title");
+                musicPlayer.LoadSong(playingKoreo, 0, false);
+                break;
+            }
+            case SceneLoadManager.SceneType.LevelSelect: // LevelSelect 씬
+            {
+                playingKoreo = Resources.Load<Koreography>("KoreoGraphys/LevelSelect");
+                musicPlayer.LoadSong(playingKoreo, 0, true);
+                break;
+            }
+            case SceneLoadManager.SceneType.Level1: // Level1 씬
+            {
+                playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
+                musicPlayer.LoadSong(playingKoreo, 0, false);
+                break;
+            }
+            case SceneLoadManager.SceneType.Level1MonsterTest: // Level1 씬
+            {
+                playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
+                musicPlayer.LoadSong(playingKoreo, 0, false);
+                break;
             }
         }
     }

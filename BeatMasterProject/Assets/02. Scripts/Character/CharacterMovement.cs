@@ -2,18 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SonicBloom.Koreo;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
 {
     private Game _game;
     private Rigidbody2D _rigidbody;
+    private SpriteChanger _spriteChanger;
 
     [Header("Music")]
     [EventID] public string speedEventID;
-    public float moveSpeed;
     public float gravityScale;
     public float startGravityAccel;
+    [SerializeField] private float _moveSpeed;
+    public float MoveSpeed
+    {
+        get => _moveSpeed;
+        set
+        {
+            if (_moveSpeed == 0)
+            {
+                _moveSpeed = value;
+                return;
+            }
+
+            if (!_moveSpeed.Equals(value))
+            {
+                _moveSpeed = value;
+                _spriteChanger.OnSpeedChanged();
+            }
+        }   
+    }
     private float _gravityAccel;
     private float _previousBeatTime = 0;
 
@@ -21,7 +41,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _jumpHeight = 3f;
     [SerializeField] private int _jumpTileCount = 2;
     [SerializeField] private float _jumpGapRate = 0.25f;
-    private const int _maxJumpCount = 2;
+    private const int _maxJumpCount = 1;
     private int _jumpCount;
     private Vector2 _jumpStartPosition;
     private float _jumpEndY;
@@ -42,6 +62,7 @@ public class CharacterMovement : MonoBehaviour
     {
         _game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
+        _spriteChanger = FindObjectOfType<SpriteChanger>();
         //_animator = GetComponent<Animator>();
         
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
@@ -65,7 +86,7 @@ public class CharacterMovement : MonoBehaviour
     private void GetInput()
     {
         // 점프 입력
-        if (Input.GetKeyDown(KeyCode.LeftArrow)&&_canJump)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
             SoundManager.instance.PlaySFX("Jump");
             //_animator.CrossFadeInFixedTime("Jump",0.1f);
@@ -80,7 +101,7 @@ public class CharacterMovement : MonoBehaviour
             _isJumping = true;
             _canGroundCheck = false;
 
-            Invoke("GroundCheckOn", 0.1f);
+            Invoke("GroundCheckOn", 0.2f);
 
             RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + _jumpTileCount, 100f), Vector2.down, 1000, _tileLayer);
             
@@ -103,7 +124,7 @@ public class CharacterMovement : MonoBehaviour
     private void Move()
     {
         float currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-        float x = transform.position.x + (currentBeatTime - _previousBeatTime) * moveSpeed;
+        float x = transform.position.x + (currentBeatTime - _previousBeatTime) * MoveSpeed;
         float y = 0f;
         _previousBeatTime = currentBeatTime;
 
@@ -180,7 +201,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void ChangeMoveSpeed(KoreographyEvent evt)
     {
-        moveSpeed = evt.GetFloatValue();
+        MoveSpeed = evt.GetFloatValue();
     }
 
     private void Attack()

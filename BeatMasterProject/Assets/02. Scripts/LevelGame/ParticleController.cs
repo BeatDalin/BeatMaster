@@ -2,14 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ParticleController : MonoBehaviour
 {
+    private CharacterMovement _characterMovement; 
     [SerializeField] private ParticleSystem _movementParticle;
     [SerializeField] private ParticleSystem _fallParticle;
     [SerializeField] private ParticleSystem _touchParticle;
     [SerializeField] private ParticleSystem _jumpParticle;
-    [SerializeField] private ParticleSystem _hammerParticle;
+    [SerializeField] private ParticleSystem _attackParticle;
     
     [SerializeField] private Animator _animator;
 
@@ -21,14 +23,21 @@ public class ParticleController : MonoBehaviour
 
     private float counter;
 
-    private bool _isOnGround = false;
+    public bool isOnGround = false;
+    private static readonly int IsJump = Animator.StringToHash("isJump");
+
+    private void Awake()
+    {
+        _characterMovement = GetComponent<CharacterMovement>();
+        
+    }
 
     // Update is called once per frame
     void Update()
     {
         counter += Time.deltaTime;
 
-        if (_isOnGround && Mathf.Abs(playerRb.velocity.x) > _occurAfterVelocity)
+        if (isOnGround && Mathf.Abs(playerRb.velocity.x) > _occurAfterVelocity)
         {
             if (counter > _dustFormationPeriod)
             {
@@ -37,19 +46,19 @@ public class ParticleController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             _jumpParticle.Play();
-            if (_isOnGround)
+            if (isOnGround)
             {
-                _animator.transform.position = transform.position - Vector3.up * (transform.localPosition.y / 2);
-                _animator.SetTrigger("isJump");
+                // _animator.transform.position = transform.position - Vector3.up * (transform.localPosition.y / 2);
+                _animator.SetTrigger(IsJump);
             }
         }
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            _hammerParticle.Play();
+            _attackParticle.Play();
         }
     }
 
@@ -63,8 +72,9 @@ public class ParticleController : MonoBehaviour
     {
         if (collision.tag == "Ground")
         {
+            Debug.Log("GroundTouch!");
             _fallParticle.Play();
-            _isOnGround = true;
+            isOnGround = true;
         }
     }
 
@@ -72,8 +82,7 @@ public class ParticleController : MonoBehaviour
     {
         if (other.CompareTag("Ground"))
         {
-            _isOnGround = false;
-            
+            isOnGround = false;
         }
     }
 }

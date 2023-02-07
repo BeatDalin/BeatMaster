@@ -24,10 +24,13 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
 
     public enum SceneType
     {
-        MenuTitle,
-        MenuLevelSelect,
-        LevelGame,
-        BossGame,
+        Title,
+        LevelSelect,
+        Level1,
+        Level2,
+        Level3,
+        Level4,
+        Level1MonsterTest
     }
 
     public override void Init()
@@ -47,6 +50,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     public void LoadLevelAsync(SceneType sceneType)
     {
         Scene = sceneType;
+        SoundManager.instance.ChangeKoreo(Scene);
         StartCoroutine(CoSceneTransition());
     }
 
@@ -65,6 +69,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
             // loading bar if you want
             yield return null;
         }
+        
         StartCoroutine(CoSceneEnter());
     }
     
@@ -73,7 +78,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     /// </summary>
     /// <param name="sceneType">Scene to move on.</param>
     /// <returns>CoLoadLevelAsync()</returns>
-    private IEnumerator CoSceneTransition(SceneType sceneType = default)
+    private IEnumerator CoSceneTransition()
     {
         _loadImage.gameObject.SetActive(true);
         _loadImage.material.SetFloat(Cutoff, _showBackground); // unfilled

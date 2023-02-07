@@ -29,6 +29,14 @@ public abstract class ObjectPooling : Singleton<ObjectPooling>
         return obj;
     }
 
+    protected GameObject GetObject()
+    {
+        var obj = poolingObjectQueue.Dequeue();
+        obj.transform.SetParent(null);
+        obj.SetActive(true);
+        return obj;
+    }
+
     public virtual void ReturnObject(GameObject obj)
     {
         obj.SetActive(false);

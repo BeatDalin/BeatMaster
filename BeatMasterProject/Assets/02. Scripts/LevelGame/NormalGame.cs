@@ -18,23 +18,26 @@ public class NormalGame : Game
     [Header("Input KeyCode")]
     private KeyCode _shortNoteKey = KeyCode.LeftArrow;
     private KeyCode _longNoteKey = KeyCode.RightArrow;
+    [Header("MonsterPool")] 
+    private MonsterPooling _monsterPooling;
     protected override void Awake()
     {
         base.Awake();
         // Save Point Event Track
-        Koreographer.Instance.RegisterForEventsWithTime("Level1_Spd", SaveCheckPoint);
+        Koreographer.Instance.RegisterForEventsWithTime("Level1_CheckPoint", SaveCheckPoint);
         // Short Note Event Track
         Koreographer.Instance.RegisterForEventsWithTime("Level1_JumpCheck", CheckShortEnd);
         // Long Note Event Track
-        // Koreographer.Instance.RegisterForEvents("LongJumpMiddle", CheckLongMiddle);
-        // Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckStart", CheckLongStart);
-        // Koreographer.Instance.RegisterForEventsWithTime("LongJumpCheckEnd", CheckLongEnd);
+        Koreographer.Instance.RegisterForEvents("Level1_LongCheckMiddle", CheckLongMiddle);
+        Koreographer.Instance.RegisterForEventsWithTime("Level1_LongCheckStart", CheckLongStart);
+        Koreographer.Instance.RegisterForEventsWithTime("Level1_LongCheckEnd", CheckLongEnd);
         
         // Result Array
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_JumpCheck").GetAllEvents().Count];
-        // longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("LongJump").GetAllEvents().Count];
+        longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_Long").GetAllEvents().Count];
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
-        
+
+        _monsterPooling = FindObjectOfType<MonsterPooling>();
     }
 
     protected override void Start()
@@ -53,7 +56,6 @@ public class NormalGame : Game
         _eventRangeLong = CalculateRange(_events);
         // Save Point Initialize
         checkPointVisited = new bool[savePointList.Count];
-        checkPointVisited[0] = true;
     }
 
     private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
@@ -80,7 +82,7 @@ public class NormalGame : Game
             if (!isShortKeyCorrect)
             {
                 // ================Rewind 자리================
-                Rewind(Vector2.zero, sampleTime-50000);
+                // Rewind();
             }
             isShortKeyCorrect = false;
         }
@@ -105,7 +107,7 @@ public class NormalGame : Game
             {
                 //=======Rewind 자리=========
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
-                Rewind(Vector2.zero, sampleTime); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
+                // Rewind(); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
             }
         }
     }
@@ -118,7 +120,7 @@ public class NormalGame : Game
             //==============Rewind 자리==============
             if (!isLongFailed) 
             {
-                Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
+                // Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
             }
         }
@@ -152,7 +154,7 @@ public class NormalGame : Game
                 // ===============Rewind==============
                 if (!isLongFailed)
                 {
-                    Rewind(Vector2.zero, sampleTime); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
+                    // Rewind(); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
                 }
             }
             
@@ -160,31 +162,7 @@ public class NormalGame : Game
             isLongKeyCorrect = false;
         }
     }
-
-    private void Rewind(Vector2 goBackPos, int musicSampleTime) //, bool isShort
-    {
-        // SoundManager.instance.PlayBGM(false, musicSampleTime);
-        // character move stop
-        
-        // index update: longIdx, shortIdx 체크 포인트 다음 노트로 돌려놓음 -> longResult 새로 기록할 수 있게
-        // if (isShort)
-        // {
-        //     shortIdx--;
-        // }
-        // else
-        // {
-        //     longIdx--;
-        // }
-        // Player 위치 돌려놓음
-        
-        // 체크 포인트 이후로 획득한 아이템 개수 계산
-        DecreaseItem(1); // for testing purpose ... 
-        gameUI.UpdateText(TextType.Item, coinCount);
-        int death = IncreaseDeath(); // increase death count
-        gameUI.UpdateText(TextType.Death, death);
-        // StartCoroutine(CoStartWithDelay(musicSampleTime)); // plays music after delay, at a certain point
-    }
-
+    
     private void Rewind()
     {
         SoundManager.instance.PlayBGM(false); // pause
@@ -214,48 +192,21 @@ public class NormalGame : Game
 
     private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
-        // Record sample time to play music
-        rewindSampleTime = sampleTime;
         if (sampleTime > rewindSampleTime)
         {
+            // DisableMonster Clear
+            //_monsterPooling.ResetPool();
+            // Record sample time to play music
+            rewindSampleTime = sampleTime;
             // Entered new check point
             checkPointIdx++;
             checkPointVisited[checkPointIdx] = true;
-            // Play Particle
+            // Play Particle or Animation
             // ex) particleSystem.Play();
+            tileTest.PlayCheckAnim(checkPointIdx);
         }
         // Record Index
         rewindShortIdx = shortIdx;
         rewindLongIdx = longIdx;
     }
-    
-    // public override void CheckBeatResult(BeatResult[] resultArr, BeatResult tempResult, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange)
-    // {
-    //     if (isKeyCorrect)
-    //     {
-    //         if (pressedTime <= eventRange[idx, 0])
-    //         {
-    //             tempResult = BeatResult.Fast;
-    //         }
-    //         else if (pressedTime <= eventRange[idx, 1])
-    //         {
-    //             tempResult = BeatResult.Perfect;
-    //         }
-    //         else
-    //         {
-    //             tempResult = BeatResult.Slow;
-    //         }
-    //     }
-    //     else
-    //     {
-    //         tempResult = BeatResult.Fail;
-    //     }
-    //     resultArr[idx] = tempResult;
-    //
-    //     if ( CheckFinish() )
-    //     {
-    //         Debug.Log("Game Ended");
-    //     }
-    // }
-    
 }
