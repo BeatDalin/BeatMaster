@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class NormalGame : Game
 {
     public MapTemp mapTemp;
+    private ParticleController _particleController;
     [Header("Event Check")]
     private List<KoreographyEvent> _events;
     private int[,] _eventRangeShort;
@@ -42,6 +43,7 @@ public class NormalGame : Game
     protected override void Awake()
     {
         base.Awake();
+        _particleController = FindObjectOfType<ParticleController>();
         _spriteChanger = FindObjectOfType<SpriteChanger>();
         // Save Point Event Track
         Koreographer.Instance.RegisterForEventsWithTime("Level1_CheckPoint", SaveCheckPoint);
@@ -87,6 +89,7 @@ public class NormalGame : Game
 
         if (!isShortKeyCorrect)
         {
+            _particleController.PlayJumpParticle();
             if (evt.GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey))
             {
                 isShortKeyCorrect = true;
