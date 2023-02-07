@@ -36,6 +36,7 @@ public class CharacterMovement : MonoBehaviour
     }
     private float _gravityAccel;
     private float _previousBeatTime = 0;
+    private float currentBeatTime = 0;
 
     [Header("Jump")]
     [SerializeField] private float _jumpHeight = 3f;
@@ -58,8 +59,14 @@ public class CharacterMovement : MonoBehaviour
 
     private Animator _animator;
 
+    public Vector3 _characterPosition;
+
+    private float _checkPointCurrentBeatTime = 0f;
+    
+
     private void Start()
     {
+        _characterPosition = transform.position;
         _game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteChanger = FindObjectOfType<SpriteChanger>();
@@ -72,6 +79,15 @@ public class CharacterMovement : MonoBehaviour
     private void Update()
     {
         GetInput();
+
+        //Attack();
+
+        if (_game.curState.Equals(GameState.Pause))
+        {
+            currentBeatTime = _checkPointCurrentBeatTime;
+            _previousBeatTime = _checkPointCurrentBeatTime;
+        }
+
     }
 
     private void FixedUpdate()
@@ -122,7 +138,7 @@ public class CharacterMovement : MonoBehaviour
     // 캐릭터의 x값은 노래에 맞추어 결정되고, y값은 캐릭터의 행동이나 조건에 따라 결정
     private void Move()
     {
-        float currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
+        currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
         float x = transform.position.x + (currentBeatTime - _previousBeatTime) * MoveSpeed;
         float y = 0f;
         _previousBeatTime = currentBeatTime;
@@ -201,6 +217,17 @@ public class CharacterMovement : MonoBehaviour
 
     private void ChangeMoveSpeed(KoreographyEvent evt)
     {
-        MoveSpeed = evt.GetFloatValue();
+        if (evt.HasFloatPayload())
+        {
+            MoveSpeed = evt.GetFloatValue();
+            _checkPointCurrentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
+            _characterPosition = transform.position;
+            Debug.Log(_characterPosition);
+        }
+    }
+
+    public void RewindPosition()
+    {
+        transform.position = _characterPosition;
     }
 }

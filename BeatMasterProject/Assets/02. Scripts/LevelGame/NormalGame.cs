@@ -21,6 +21,8 @@ public class NormalGame : Game
     private KeyCode _longNoteKey = KeyCode.LeftArrow;
     [Header("MonsterPool")] 
     private MonsterPooling _monsterPooling;
+
+    private CharacterMovement _characterMovement;
     [Header("SpriteChanger")]
     private SpriteChanger _spriteChanger;
     
@@ -38,6 +40,7 @@ public class NormalGame : Game
         }
     }
     
+
     protected override void Awake()
     {
         base.Awake();
@@ -57,6 +60,7 @@ public class NormalGame : Game
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
 
         _monsterPooling = FindObjectOfType<MonsterPooling>();
+        _characterMovement = FindObjectOfType<CharacterMovement>();
     }
 
     protected override void Start()
@@ -104,8 +108,13 @@ public class NormalGame : Game
             shortIdx++;
             if (!isShortKeyCorrect)
             {
+                _monsterPooling.DisableMonster();
                 // ================Rewind 자리================
                 // Rewind();
+            }
+            else
+            {
+                _monsterPooling.DisableMonster();
             }
             isShortKeyCorrect = false;
         }
@@ -195,8 +204,12 @@ public class NormalGame : Game
     
     private void Rewind()
     {
+        curState = GameState.Pause;
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
+        _monsterPooling.ReArrange();
+        //curSample = (int)_monsterPooling.currentPlayerTime;
+        _characterMovement.RewindPosition();
         ContinueGame(); // wait 3 sec and start
         DecreaseItem(5);
         gameUI.UpdateText(TextType.Item, coinCount);
@@ -225,18 +238,29 @@ public class NormalGame : Game
         if (sampleTime > rewindSampleTime)
         {
             // DisableMonster Clear
-            //_monsterPooling.ResetPool();
+            // sampleTime = 0 이면 첫시작이므로 ResetPool 안해도됨
+            if (evt.StartSample != 0)
+            {
+                _monsterPooling.ResetPool();
+            }
             // Record sample time to play music
             rewindSampleTime = sampleTime;
+            Debug.Log(rewindSampleTime);
             // Entered new check point
             checkPointIdx++;
             checkPointVisited[checkPointIdx] = true;
             // Play Particle or Animation
             // ex) particleSystem.Play();
-            // tileTest.PlayCheckAnim(checkPointIdx);
         }
         // Record Index
         rewindShortIdx = shortIdx;
         rewindLongIdx = longIdx;
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Rewind();
+        }
     }
 }
