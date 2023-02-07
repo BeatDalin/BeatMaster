@@ -6,8 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class MouseClick : MonoBehaviour
 {
-    [SerializeField] private GameObject _touchEffect;
-
     public float defaultTime = 0.01f;
     
     private float _spawnTime;
@@ -65,8 +63,5 @@ public class MouseClick : MonoBehaviour
             
             ObjectPooling.Instance.GetObject(mPosition);
         }
-        
-        
-        //Instantiate(_touchEffect, mPosition, Quaternion.identity);
     }
 }
