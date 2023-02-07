@@ -16,7 +16,6 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     private GameObject _loadingCanvas;
     private Canvas _canvas;
     [SerializeField] private Image _loadImage;
-    private bool _shouldHide = false;
     private static readonly int Cutoff = Shader.PropertyToID("_Cutoff");
     private float _showBackground = 1.2f;
     private float _hideBackground = -0.1f;

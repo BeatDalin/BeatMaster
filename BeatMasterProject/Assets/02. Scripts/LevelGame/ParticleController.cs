@@ -29,7 +29,6 @@ public class ParticleController : MonoBehaviour
     private void Awake()
     {
         _characterMovement = GetComponent<CharacterMovement>();
-        
     }
 
     // Update is called once per frame
@@ -37,7 +36,7 @@ public class ParticleController : MonoBehaviour
     {
         counter += Time.deltaTime;
 
-        if (isOnGround && Mathf.Abs(playerRb.velocity.x) > _occurAfterVelocity)
+        if (isOnGround && playerRb.position.x > 0)// && Mathf.Abs(playerRb.velocity.x) > _occurAfterVelocity)
         {
             if (counter > _dustFormationPeriod)
             {
@@ -72,7 +71,6 @@ public class ParticleController : MonoBehaviour
     {
         if (collision.tag == "Ground")
         {
-            Debug.Log("GroundTouch!");
             _fallParticle.Play();
             isOnGround = true;
         }
