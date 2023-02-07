@@ -12,7 +12,6 @@ public class MonsterPooling : MonoBehaviour
     public Queue<GameObject> disableMonsterQueue = new Queue<GameObject>();
     public List<GameObject> monsterList = new List<GameObject>();
     public List<float> checkPoint = new List<float>();
-    public float currentPlayerTime = 0;
 
     [Space][Header("Event")]
     [SerializeField] [EventID] private string _mapEventID;
@@ -25,15 +24,15 @@ public class MonsterPooling : MonoBehaviour
     [Header("No ObjectPool")] 
     [SerializeField] private GameObject _monsterPrefab;
 
-    [SerializeField] List<Vector3> _tilePos = new List<Vector3>();
+    [SerializeField] private List<Vector3> _tilePos = new List<Vector3>();
     private int _checkPointIdx = 0;
-
-
+    private int _monsterIdx = 0;
     private CharacterMovement _characterMovement;
 
+    
     private void Awake()
     {
-        Koreographer.Instance.RegisterForEventsWithTime("Level1_Short", AddMonsterQueue);
+        //Koreographer.Instance.RegisterForEventsWithTime("Level1_Short", AddMonsterQueue);
     }
 
     private void Start()
@@ -71,17 +70,27 @@ public class MonsterPooling : MonoBehaviour
         }
     }
 
-    void AddMonsterQueue(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
+    private void Update()
     {
-        if (sampleTime >= _shortEventList[_checkPointIdx].EndSample)
+        if (_characterMovement.transform.position.x >= monsterList[_monsterIdx].transform.position.x)
         {
-            disableMonsterQueue.Enqueue(monsterList[_checkPointIdx]);
-            Debug.Log("sampletime"+sampleTime);
-            Debug.Log("monstertime" + _shortEventList[_checkPointIdx].EndSample);
-            monsterList[_checkPointIdx].SetActive(false);
-            _checkPointIdx++;
+            disableMonsterQueue.Enqueue(monsterList[_monsterIdx]);
+            monsterList[_monsterIdx].SetActive(false);
+            _monsterIdx++;
         }
     }
+
+    // void AddMonsterQueue(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
+    // {
+    //     if (sampleTime >= _shortEventList[_checkPointIdx].EndSample)
+    //     {
+    //         disableMonsterQueue.Enqueue(monsterList[_checkPointIdx]);
+    //         Debug.Log("sampletime"+sampleTime);
+    //         Debug.Log("monstertime" + _shortEventList[_checkPointIdx].EndSample);
+    //         monsterList[_checkPointIdx].SetActive(false);
+    //         _checkPointIdx++;
+    //     }
+    // }
 
     // public override void Init()
     // {
@@ -124,13 +133,13 @@ public class MonsterPooling : MonoBehaviour
         _tilePos.Add(new Vector3(posX, posY, 0));
     }
 
-    // public void ResetPool() //캐릭터가 체크포인트를 지났으면 현재 꺼져있는 몬스터 오브젝트를 다시 오브젝트 풀로 넣어줌
-    // {
-    //     while (disableMonsterQueue.Count != 0)
-    //     {
-    //         ReturnObject(disableMonsterQueue.Dequeue());
-    //     }
-    // }
+    public void ResetPool() //캐릭터가 체크포인트를 지났으면 현재 꺼져있는 몬스터 오브젝트를 다시 오브젝트 풀로 넣어줌
+    {
+        while (disableMonsterQueue.Count != 0)
+        {
+            Destroy(disableMonsterQueue.Dequeue());
+        }
+    }
 
     public void ReArrange() //캐릭터가 다음 체크포인트를 지나지 못하고 죽으면 꺼져있는 몬스터들을 다시 켜줌
     {

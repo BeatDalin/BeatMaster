@@ -11,13 +11,12 @@ public class Monster : MonoBehaviour
     public Transform position;
 
     [SerializeField] private Rigidbody2D _rigidbody2D;
-    [SerializeField] private CapsuleCollider2D _capsuleCollider2D;
-
-    private void Update()
+    
+    private void OnCollisionEnter2D(Collision2D col)
     {
-        if (_rigidbody2D.velocity.y == 0)
+        if (col.collider.name.Equals("Ground Tilemap"))
         {
-            _capsuleCollider2D.isTrigger = true;
+            _rigidbody2D.isKinematic = true;
         }
     }
 }

@@ -20,6 +20,8 @@ public class NormalGame : Game
     private KeyCode _longNoteKey = KeyCode.RightArrow;
     [Header("MonsterPool")] 
     private MonsterPooling _monsterPooling;
+
+    private CharacterMovement _characterMovement;
     protected override void Awake()
     {
         base.Awake();
@@ -38,6 +40,7 @@ public class NormalGame : Game
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
 
         _monsterPooling = FindObjectOfType<MonsterPooling>();
+        _characterMovement = FindObjectOfType<CharacterMovement>();
     }
 
     protected override void Start()
@@ -168,6 +171,7 @@ public class NormalGame : Game
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
         //curSample = (int)_monsterPooling.currentPlayerTime;
+        _characterMovement.RewindPosition();
         ContinueGame(); // wait 3 sec and start
         DecreaseItem(5);
         gameUI.UpdateText(TextType.Item, coinCount);
@@ -199,6 +203,7 @@ public class NormalGame : Game
             //_monsterPooling.ResetPool();
             // Record sample time to play music
             rewindSampleTime = sampleTime;
+            Debug.Log(rewindSampleTime);
             // Entered new check point
             checkPointIdx++;
             checkPointVisited[checkPointIdx] = true;

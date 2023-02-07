@@ -57,9 +57,12 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _positionOffsetY;
 
     private Animator _animator;
+
+    public Vector3 characterPosition;
     
     private void Start()
     {
+        characterPosition = transform.position;
         _game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteChanger = FindObjectOfType<SpriteChanger>();
@@ -201,7 +204,17 @@ public class CharacterMovement : MonoBehaviour
 
     private void ChangeMoveSpeed(KoreographyEvent evt)
     {
-        MoveSpeed = evt.GetFloatValue();
+        if (evt.HasFloatPayload())
+        {
+            MoveSpeed = evt.GetFloatValue();
+            characterPosition = transform.position;
+            Debug.Log(characterPosition);
+        }
+    }
+
+    public void RewindPosition()
+    {
+        transform.position = characterPosition;
     }
 
     private void Attack()
