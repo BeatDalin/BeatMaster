@@ -39,6 +39,7 @@ public class MenuTitleButton : MonoBehaviour
     private void Start()
     {
         Koreographer.Instance.RegisterForEvents("Title", ChangeScale);
+        _simpleMusicPlayer = SoundManager.instance.musicPlayer;
 
         AddClickListener();
     }
