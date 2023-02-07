@@ -32,7 +32,7 @@ public class CharacterMovement : MonoBehaviour
                 _moveSpeed = value;
                 _spriteChanger.OnSpeedChanged();
             }
-        }   
+        }
     }
     private float _gravityAccel;
     private float _previousBeatTime = 0;
@@ -63,6 +63,7 @@ public class CharacterMovement : MonoBehaviour
 
     private float _checkPointCurrentBeatTime = 0f;
     
+
     private void Start()
     {
         _characterPosition = transform.position;
@@ -70,7 +71,7 @@ public class CharacterMovement : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteChanger = FindObjectOfType<SpriteChanger>();
         //_animator = GetComponent<Animator>();
-        
+
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
         //SoundManager.instance.PlayBGM(false);
     }
@@ -78,6 +79,7 @@ public class CharacterMovement : MonoBehaviour
     private void Update()
     {
         GetInput();
+
         //Attack();
 
         if (_game.curState.Equals(GameState.Pause))
@@ -85,6 +87,7 @@ public class CharacterMovement : MonoBehaviour
             currentBeatTime = _checkPointCurrentBeatTime;
             _previousBeatTime = _checkPointCurrentBeatTime;
         }
+
     }
 
     private void FixedUpdate()
@@ -102,7 +105,7 @@ public class CharacterMovement : MonoBehaviour
         {
             SoundManager.instance.PlaySFX("Jump");
             //_animator.CrossFadeInFixedTime("Jump",0.1f);
-            
+            PlayerStatus.Instance.ChangeStatus(Status.Jump);
             if (++_jumpCount >= _maxJumpCount)
             {
                 _canJump = false;
@@ -116,7 +119,7 @@ public class CharacterMovement : MonoBehaviour
             Invoke("GroundCheckOn", 0.2f);
 
             RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + _jumpTileCount, 100f), Vector2.down, 1000, _tileLayer);
-            
+
             if (jumpEndCheckHit)
             {
                 float yGap = jumpEndCheckHit.point.y - _jumpStartPosition.y;
@@ -170,6 +173,7 @@ public class CharacterMovement : MonoBehaviour
                 _canJump = true;
                 _jumpCount = 0;
                 _gravityAccel = startGravityAccel;
+                PlayerStatus.Instance.ChangeStatus(Status.Run);
             }
         }
 
@@ -225,14 +229,5 @@ public class CharacterMovement : MonoBehaviour
     public void RewindPosition()
     {
         transform.position = _characterPosition;
-    }
-
-    private void Attack()
-    {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            SoundManager.instance.PlaySFX("Attack");
-            _animator.CrossFadeInFixedTime("Attack",0.1f);
-        }
     }
 }
