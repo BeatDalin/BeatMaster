@@ -40,7 +40,7 @@ public class SpriteChanger : MonoBehaviour
     private void Awake()
     {
         _characterMovement = FindObjectOfType<CharacterMovement>();
-        _characterRenderer = _characterMovement.GetComponent<SpriteRenderer>();
+        _characterRenderer = _characterMovement.GetComponentInChildren<SpriteRenderer>();
         _backgroundMover = FindObjectOfType<BackgroundMover>();
         _cameraController = FindObjectOfType<CameraController>();
     }
@@ -66,7 +66,7 @@ public class SpriteChanger : MonoBehaviour
         switch (SceneLoadManager.Instance.Scene)
         {
             case SceneLoadManager.SceneType.Level1:
-                ResetMaterialsOffset(_changingResources[0].ChangingMaterials);
+                ResetTexturesOffset(_changingResources[0].ChangingMaterials);
                 break;
             case SceneLoadManager.SceneType.Level2:
                 break;
@@ -77,7 +77,7 @@ public class SpriteChanger : MonoBehaviour
         }
     }
 
-    private void ResetMaterialsOffset(Material[] materials)
+    private void ResetTexturesOffset(Material[] materials)
     {
         // BackgroundMover에서 이동한 결과에 의해 원본이 훼손되는 것을 막기위함
         foreach (var material in materials)
@@ -101,7 +101,7 @@ public class SpriteChanger : MonoBehaviour
                 _materialIndex++;
                 _materialIndex %= _changingResources[0].ChangingMaterials.Length;
                 Material changingMaterial = _changingResources[0].ChangingMaterials[_materialIndex];
-                _backgroundMover.SetMaterial(changingMaterial);
+                _backgroundMover.SetTextureOffset(changingMaterial);
                 break;
             case SceneLoadManager.SceneType.Level2:
                 break;
@@ -143,6 +143,7 @@ public class SpriteChanger : MonoBehaviour
     
     private void SetSprite(Sprite sprite)
     {
+        Debug.Log("스프라이트 변경");
         _characterRenderer.sprite = sprite;
     }
 }

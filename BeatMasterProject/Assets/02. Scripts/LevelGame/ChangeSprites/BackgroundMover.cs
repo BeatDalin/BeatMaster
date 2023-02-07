@@ -48,7 +48,7 @@ public class BackgroundMover : MonoBehaviour
         transform.position = tempVec;
     }
 
-    public void SetMaterial(Material material)
+    public void SetTextureOffset(Material material)
     {
         _myRenderer.material = material;
         _myMaterial = material;
