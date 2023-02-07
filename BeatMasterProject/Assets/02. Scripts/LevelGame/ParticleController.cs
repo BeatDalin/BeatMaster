@@ -72,7 +72,6 @@ public class ParticleController : MonoBehaviour
     {
         if (collision.tag == "Ground")
         {
-            Debug.Log("GroundTouch!");
             _fallParticle.Play();
             isOnGround = true;
         }
