@@ -54,7 +54,6 @@ public class SoundManager : MonoBehaviour
     private void Start()
     {
         ChangeKoreo(SceneLoadManager.Instance.Scene);
-        Debug.Log(SceneLoadManager.Instance.Scene);
     }
 
     // BGM
@@ -138,6 +137,9 @@ public class SoundManager : MonoBehaviour
                 musicPlayer.LoadSong(playingKoreo, 0, false);
                 break;
             }
+            
+            
+            
         }
     }
 }
