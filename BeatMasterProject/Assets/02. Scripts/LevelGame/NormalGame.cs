@@ -16,13 +16,35 @@ public class NormalGame : Game
     private int _pressedTimeLong;
     private bool _isChecked; // to prevent double check
     [Header("Input KeyCode")]
-    private KeyCode _shortNoteKey = KeyCode.LeftArrow;
-    private KeyCode _longNoteKey = KeyCode.RightArrow;
+    private KeyCode _jumpNoteKey = KeyCode.LeftArrow;
+    private KeyCode _attackNoteKey = KeyCode.RightArrow;
+    private KeyCode _longNoteKey = KeyCode.LeftArrow;
     [Header("MonsterPool")] 
     private MonsterPooling _monsterPooling;
+
+    private CharacterMovement _characterMovement;
+    [Header("SpriteChanger")]
+    private SpriteChanger _spriteChanger;
+    
+    public bool IsLongPressed
+    {
+        get => isLongPressed;
+        private set
+        {
+            if (isLongPressed != value)
+            {
+                isLongPressed = value;
+                // TODO
+                _spriteChanger.OnLongPressed();
+            }
+        }
+    }
+    
+
     protected override void Awake()
     {
         base.Awake();
+        _spriteChanger = FindObjectOfType<SpriteChanger>();
         // Save Point Event Track
         Koreographer.Instance.RegisterForEventsWithTime("Level1_CheckPoint", SaveCheckPoint);
         // Short Note Event Track
@@ -38,6 +60,7 @@ public class NormalGame : Game
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
 
         _monsterPooling = FindObjectOfType<MonsterPooling>();
+        _characterMovement = FindObjectOfType<CharacterMovement>();
     }
 
     protected override void Start()
@@ -64,12 +87,16 @@ public class NormalGame : Game
         {
             _isChecked = false; // initialize before a curve value becomes 1
         }
-        if (!isShortKeyCorrect && Input.GetKeyDown(_shortNoteKey))
+
+        if (!isShortKeyCorrect)
         {
-            isShortKeyCorrect = true;
-            IncreaseItem();
-            gameUI.UpdateText(TextType.Item, coinCount);
-            _pressedTime = sampleTime; // record the sample time when the button was pressed
+            if ((evt.GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey)) || (evt.GetIntValue() == 1 && Input.GetKeyDown(_attackNoteKey)))
+            {
+                isShortKeyCorrect = true;
+                IncreaseItem();
+                gameUI.UpdateText(TextType.Item, coinCount);
+                _pressedTime = sampleTime; // record the sample time when the button was pressed
+            }
         }
 
         // The end of checking event range
@@ -81,8 +108,13 @@ public class NormalGame : Game
             shortIdx++;
             if (!isShortKeyCorrect)
             {
+                _monsterPooling.DisableMonster();
                 // ================Rewind 자리================
                 // Rewind();
+            }
+            else
+            {
+                _monsterPooling.DisableMonster();
             }
             isShortKeyCorrect = false;
         }
@@ -97,14 +129,14 @@ public class NormalGame : Game
         }
         if (Input.GetKeyDown(_longNoteKey))
         {
-            isLongPressed = true;
+            IsLongPressed = true;
             Debug.Log("Long Key Press");
         }
 
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1f && !_isChecked)
         {
             _isChecked = true;
-            if (!isLongPressed) // Failed to press at the start of the long note
+            if (!IsLongPressed) // Failed to press at the start of the long note
             {
                 //=======Rewind 자리=========
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
@@ -115,9 +147,9 @@ public class NormalGame : Game
     private void CheckLongMiddle(KoreographyEvent evt)
     {
         // if space key is released during long note
-        if (isLongPressed && Input.GetKeyUp(_longNoteKey))
+        if (IsLongPressed && Input.GetKeyUp(_longNoteKey))
         {
-            isLongPressed = false;
+            IsLongPressed = false;
             Debug.Log("Middle KeyUP => Fail!!!");
 
             //==============Rewind 자리==============
@@ -134,7 +166,7 @@ public class NormalGame : Game
         {
             _isChecked = false; // initialize before a curve value becomes 1
         }
-        if (isLongPressed && Input.GetKeyUp(_longNoteKey))
+        if (IsLongPressed && Input.GetKeyUp(_longNoteKey))
         {
             if (!isLongKeyCorrect) // increase item only once
             {
@@ -165,15 +197,19 @@ public class NormalGame : Game
                 }
             }
             
-            isLongPressed = false;
+            IsLongPressed = false;
             isLongKeyCorrect = false;
         }
     }
     
     private void Rewind()
     {
+        curState = GameState.Pause;
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
+        _monsterPooling.ReArrange();
+        //curSample = (int)_monsterPooling.currentPlayerTime;
+        _characterMovement.RewindPosition();
         ContinueGame(); // wait 3 sec and start
         DecreaseItem(5);
         gameUI.UpdateText(TextType.Item, coinCount);
@@ -202,18 +238,29 @@ public class NormalGame : Game
         if (sampleTime > rewindSampleTime)
         {
             // DisableMonster Clear
-            //_monsterPooling.ResetPool();
+            // sampleTime = 0 이면 첫시작이므로 ResetPool 안해도됨
+            if (evt.StartSample != 0)
+            {
+                _monsterPooling.ResetPool();
+            }
             // Record sample time to play music
             rewindSampleTime = sampleTime;
+            Debug.Log(rewindSampleTime);
             // Entered new check point
             checkPointIdx++;
             checkPointVisited[checkPointIdx] = true;
             // Play Particle or Animation
             // ex) particleSystem.Play();
-            tileTest.PlayCheckAnim(checkPointIdx);
         }
         // Record Index
         rewindShortIdx = shortIdx;
         rewindLongIdx = longIdx;
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Rewind();
+        }
     }
 }

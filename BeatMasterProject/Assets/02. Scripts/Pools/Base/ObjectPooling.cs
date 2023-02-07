@@ -29,7 +29,7 @@ public abstract class ObjectPooling : Singleton<ObjectPooling>
         return obj;
     }
 
-    protected GameObject GetObject()
+    public GameObject GetObject()
     {
         var obj = poolingObjectQueue.Dequeue();
         obj.transform.SetParent(null);
