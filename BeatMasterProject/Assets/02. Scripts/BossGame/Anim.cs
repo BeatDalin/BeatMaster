@@ -10,13 +10,14 @@ public enum Status
     Run,
     Jump,
     Attack,
+    Damage,
     Die
 }
 
 public class Anim : MonoBehaviour
 {
     [SerializeField] private GameObject _hammer;
-    private Animator _anim;
+    public Animator _anim;
 
     // Start is called before the first frame update
     private void Awake()
@@ -44,6 +45,10 @@ public class Anim : MonoBehaviour
                 Attack();
                 break;
 
+            case Status.Damage:
+                Damage();
+                break;
+
             case Status.Die:
                 Die();
                 break;
@@ -53,33 +58,46 @@ public class Anim : MonoBehaviour
 
     public void Attack()
     {
-        GameObject hammerClone = Instantiate(_hammer, _hammer.transform.position, _hammer.transform.rotation);
+        /*GameObject hammerClone = Instantiate(_hammer, _hammer.transform.position, _hammer.transform.rotation);
         _anim.Play("2_Attack_Normal", -1, 0f);
-        hammerClone.GetComponent<Animator>().SetTrigger("Attack");
+        hammerClone.GetComponent<Animator>().SetTrigger("Attack");*/
+        _anim.Play("Attack");
     }
 
     public void Jump()
     {
         //anim.SetBool("Attack", false);
+        _anim.Play("Jump");
+    }
+
+    public void Damage()
+    {/*
+        _anim.SetTrigger("Die");
+        _anim.SetBool("Run", false);
+        _anim.SetBool("Idle", false);*/
+        _anim.Play("Damage");
     }
 
     public void Die()
-    {
+    {/*
         _anim.SetTrigger("Die");
         _anim.SetBool("Run", false);
-        _anim.SetBool("Idle", false);
+        _anim.SetBool("Idle", false);*/
+        _anim.Play("Die");
     }
 
     public void Run()
     {
-        _anim.SetBool("Run", true);
-        _anim.SetBool("Idle", false);
+        /*_anim.SetBool("Run", true);
+        _anim.SetBool("Idle", false);*/
+        _anim.Play("Run");
     }
 
     public void Idle()
     {
-        _anim.SetBool("Attack", false);
-        _anim.SetBool("Run", false);
-        _anim.SetBool("Idle", true);
+        /*        _anim.SetBool("Attack", false);
+                _anim.SetBool("Run", false);
+                _anim.SetBool("Idle", true);*/
+        _anim.Play("Idle");
     }
 }
