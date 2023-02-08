@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -367,6 +367,7 @@ MonoBehaviour:
     m_Bits: 2048
   _rayDistanceOffset: 0.6
   _positionOffsetY: 0.5
+  _characterPosition: {x: 0, y: 0, z: 0}
 --- !u!50 &18329007
 Rigidbody2D:
   serializedVersion: 4
@@ -882,6 +883,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5502efebde2a24f4e9eaf54de75d7629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _disableMonsterList: []
+  monsterList: []
+  checkPoint: []
   _mapEventID: Level1_Map
   _shortEventID: Level1_Short
   _spdEventID: Level1_Spd
@@ -1960,6 +1964,7 @@ MonoBehaviour:
   _spdEventID: Level1_Spd
   curState: 0
   curSample: 0
+  rewindSampleTime: -1
   savePointList: []
   checkPointVisited: 
   longResult: 
@@ -3315,7 +3320,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1939c0083ed144b99a2aa4334498d52a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _touchEffect: {fileID: 7368994942055723, guid: 64de812f07c5d44e08687e2ce9530433, type: 3}
   defaultTime: 0.05
 --- !u!1 &1050743217
 GameObject:
@@ -5332,7 +5336,7 @@ GameObject:
   - component: {fileID: 1811512137}
   - component: {fileID: 1811512136}
   m_Layer: 0
-  m_Name: SpriteChanger
+  m_Name: ResourcesChanger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5352,6 +5356,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _changingResources:
   - {fileID: 11400000, guid: 5894df63c24b48947a9429d9e5dae341, type: 2}
+  - {fileID: 11400000, guid: 0ba22824d8e8eb34bac6a55a9b8c21cb, type: 2}
+  - {fileID: 11400000, guid: 2caf4524f9d43984f80657f6fd53a5e9, type: 2}
+  - {fileID: 11400000, guid: d331cc4ffe2d1dc4eb9a0dfdef1c1cbd, type: 2}
 --- !u!4 &1811512137
 Transform:
   m_ObjectHideFlags: 0
