@@ -25,6 +25,7 @@ public class CharacterMovement : MonoBehaviour
             if (_moveSpeed == 0)
             {
                 _moveSpeed = value;
+                _resourcesChanger.SetDefaultSpeed(_moveSpeed);
                 return;
             }
 
@@ -64,7 +65,6 @@ public class CharacterMovement : MonoBehaviour
         _game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _resourcesChanger = FindObjectOfType<ResourcesChanger>();
-
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
     }
 
