@@ -151,18 +151,18 @@ public class DataCenter : MonoBehaviour
     {
         _gameData.storeData = new StoreData();
 
-        _gameData.storeData.itemData = new List<ItemData>(); // 일단 item 3개로 설정. 추후 변경 가능
+        _gameData.storeData.characterData = new List<CharacterData>(); // 일단 item 3개로 설정. 추후 변경 가능
 
-        ItemData item = new ItemData();
+        CharacterData characterData = new CharacterData();
         for (int i = 0; i < 5; i++)
         {
-            item.itemNum = i;
-            item.price = 10;
-            item.isPurchased = false;
-            item.unlockStage = 0;
-            item.unlockLevel = i;
-            item.isUnlocked = false;
-            _gameData.storeData.itemData.Add(item);
+            characterData.characterNum = i;
+            characterData.price = 10;
+            characterData.isPurchased = false;
+            characterData.unlockStage = 0;
+            characterData.unlockLevel = i;
+            characterData.isUnlocked = false;
+            _gameData.storeData.characterData.Add(characterData);
         }
     }
 
@@ -173,14 +173,14 @@ public class DataCenter : MonoBehaviour
 
     public void UpdateStorePurchaseData(int charNum)
     {
-        for (int i = 0; i < _gameData.storeData.itemData.Count; i++)
+        for (int i = 0; i < _gameData.storeData.characterData.Count; i++)
         {
-            ItemData item = _gameData.storeData.itemData[i];
-            if (item.itemNum == charNum)
+            CharacterData characterData = _gameData.storeData.characterData[i];
+            if (characterData.characterNum == charNum)
             {
-                item.isPurchased = true;
-                _playerData.playerItem -= item.price;
-                _gameData.storeData.itemData[i] = item;
+                characterData.isPurchased = true;
+                _playerData.playerItem -= characterData.price;
+                _gameData.storeData.characterData[i] = characterData;
                 _playerData.playerChar = charNum;//임시
                 _gameData.playerData = _playerData;
             }
@@ -196,10 +196,10 @@ public class DataCenter : MonoBehaviour
     {
         StoreData storeData = _gameData.storeData;
 
-        for (int i = 0; i < storeData.itemData.Count; i++)
+        for (int i = 0; i < storeData.characterData.Count; i++)
         {
-            var tempItemData = storeData.itemData[i];
-            storeData.itemData[i] = tempItemData;
+            var tempItemData = storeData.characterData[i];
+            storeData.characterData[i] = tempItemData;
         }
         _gameData.storeData = storeData;
 
@@ -218,7 +218,7 @@ public class DataCenter : MonoBehaviour
     /// <param name="levelNum"></param>
     public void UpdateItemData(int stageNum, int levelNum)
     {
-        var tempItemData = _gameData.storeData.itemData;
+        var tempItemData = _gameData.storeData.characterData;
 
         for (int i = 0; i < tempItemData.Count; i++)
         {

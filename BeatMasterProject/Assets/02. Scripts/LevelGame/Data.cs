@@ -42,13 +42,13 @@ public struct LevelData
 [Serializable]
 public struct StoreData
 {
-    public List<ItemData> itemData; // 전체 상품 목록(해금 체크를 위함)
+    public List<CharacterData> characterData; // 전체 상품 목록(해금 체크를 위함)
 }
 
 [Serializable]
-public struct ItemData
+public struct CharacterData
 {
-    public int itemNum;
+    public int characterNum;
     public int price;
     public bool isPurchased;
     public int unlockStage; // index

@@ -49,15 +49,15 @@ public class Store : MonoBehaviour
     private void Start()
     {
         //_animator = _popupPanel[0].transform.GetChild(0).GetComponent<Animator>();
-        _isPurchased = new bool[DataCenter.Instance.GetStoreData().itemData.Count];
-        _isUnlocked = new bool[DataCenter.Instance.GetStoreData().itemData.Count];
-        _price = new int[DataCenter.Instance.GetStoreData().itemData.Count];
+        _isPurchased = new bool[DataCenter.Instance.GetStoreData().characterData.Count];
+        _isUnlocked = new bool[DataCenter.Instance.GetStoreData().characterData.Count];
+        _price = new int[DataCenter.Instance.GetStoreData().characterData.Count];
 
-        for (int i = 0; i < DataCenter.Instance.GetStoreData().itemData.Count; i++)
+        for (int i = 0; i < DataCenter.Instance.GetStoreData().characterData.Count; i++)
         {
-            _isPurchased[i] = DataCenter.Instance.GetStoreData().itemData[i].isPurchased;
-            _isUnlocked[i] = DataCenter.Instance.GetStoreData().itemData[i].isUnlocked;
-            _price[i] = DataCenter.Instance.GetStoreData().itemData[i].price;
+            _isPurchased[i] = DataCenter.Instance.GetStoreData().characterData[i].isPurchased;
+            _isUnlocked[i] = DataCenter.Instance.GetStoreData().characterData[i].isUnlocked;
+            _price[i] = DataCenter.Instance.GetStoreData().characterData[i].price;
         }
         //_playerChar = _gameData.playerChar;
 
@@ -107,7 +107,7 @@ public class Store : MonoBehaviour
     private void PurchaseCharacter(int charNum)
     {
         int price = _price[charNum];
-        if (price > DataCenter.Instance.GetPlayerData().playerItem)//_playerDatas.playerItem)
+        if (price > DataCenter.Instance.GetPlayerData().playerItem)
         {
             _popupPanel[1].SetActive(true);
             return;
@@ -121,10 +121,10 @@ public class Store : MonoBehaviour
     private void UpdatePlayersDataInScene()
     {
         _playerCoin.text = DataCenter.Instance.GetPlayerData().playerItem.ToString();
-        for (int i = 0; i < DataCenter.Instance.GetStoreData().itemData.Count; i++)
+        for (int i = 0; i < DataCenter.Instance.GetStoreData().characterData.Count; i++)
         {
-            _isPurchased[i] = DataCenter.Instance.GetStoreData().itemData[i].isPurchased;
-            _isUnlocked[i] = DataCenter.Instance.GetStoreData().itemData[i].isUnlocked;
+            _isPurchased[i] = DataCenter.Instance.GetStoreData().characterData[i].isPurchased;
+            _isUnlocked[i] = DataCenter.Instance.GetStoreData().characterData[i].isUnlocked;
         }
     }
 
