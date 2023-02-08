@@ -15,21 +15,21 @@ public class ParticleTest : MonoBehaviour
         _particleController = GetComponent<ParticleController>();
     }
 
-    // // Update is called once per frame
-    // void Update()
-    // {
-    //     if (Input.GetKey(KeyCode.LeftArrow))
-    //     {
-    //         _rb2.velocity = Vector2.left * speed + _rb2.velocity.y * Vector2.up;
-    //     }
-    //     else if (Input.GetKey(KeyCode.RightArrow))
-    //     {
-    //         _rb2.velocity = Vector2.right * speed + _rb2.velocity.y * Vector2.up;
-    //     }
-    //
-    //     if (Input.GetKeyDown(KeyCode.Space))
-    //     {
-    //         _rb2.AddForce(Vector2.up * (speed * 2), ForceMode2D.Impulse);
-    //     }
-    // }
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            _rb2.velocity = Vector2.left * speed + _rb2.velocity.y * Vector2.up;
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            _rb2.velocity = Vector2.right * speed + _rb2.velocity.y * Vector2.up;
+        }
+    
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _rb2.AddForce(Vector2.up * (speed * 2), ForceMode2D.Impulse);
+        }
+    }
 }
