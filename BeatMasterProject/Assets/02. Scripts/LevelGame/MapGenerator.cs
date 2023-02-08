@@ -7,7 +7,7 @@ using SonicBloom.Koreo;
 
 public class MapGenerator : MonoBehaviour
 {
-    private enum TileType
+    private enum _TileType
     {
         Top, Under, Interaction
     }
@@ -169,7 +169,7 @@ public class MapGenerator : MonoBehaviour
             _monsterPooling.AddTilePos(_tileX, _tileY + _groundYOffset);
 
             // 최상단 타일 배치
-            _groundTilemap.SetTile(GetTileChangeData(TileType.Top, groundIndex, new Vector3Int(_tileX, _tileY, 0), _groundYOffset), false);
+            _groundTilemap.SetTile(GetTileChangeData(_TileType.Top, groundIndex, new Vector3Int(_tileX, _tileY, 0), _groundYOffset), false);
 
             // 밑 영역 타일들 배치
             for (int j = _tileY - 1; j >= -10; j--)
@@ -179,7 +179,7 @@ public class MapGenerator : MonoBehaviour
                     groundIndex = 0;
                 }
 
-                _groundTilemap.SetTile(GetTileChangeData(TileType.Under, groundIndex, new Vector3Int(_tileX, j, 0), _groundYOffset), false);
+                _groundTilemap.SetTile(GetTileChangeData(_TileType.Under, groundIndex, new Vector3Int(_tileX, j, 0), _groundYOffset), false);
             }
 
             // (임시) 숏 노트 타일 배치
@@ -201,7 +201,7 @@ public class MapGenerator : MonoBehaviour
                             break;
                     }
 
-                    _interactionTilemap.SetTile(GetTileChangeData(TileType.Interaction, 0, new Vector3Int(_tileX, _tileY, 0), _groundYOffset + shortYOffset), false);
+                    _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0, new Vector3Int(_tileX, _tileY, 0), _groundYOffset + shortYOffset), false);
 
                     break;
                 }
@@ -214,7 +214,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     if (_spdEventList[j].HasFloatPayload() | (_spdEventList[j].GetTextValue() == "End"))
                     {
-                        _interactionTilemap.SetTile(GetTileChangeData(TileType.Interaction, 1, new Vector3Int(_tileX, _tileY + 1, 0), _groundYOffset), false);
+                        _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 1, new Vector3Int(_tileX, _tileY + 1, 0), _groundYOffset), false);
                     }
                 }
             }
@@ -226,27 +226,27 @@ public class MapGenerator : MonoBehaviour
         // 맵 오른쪽 끝 채우기
         for (int i = 0; i < 30; i++)
         {
-            _groundTilemap.SetTile(GetTileChangeData(TileType.Top, 0, new Vector3Int(++_tileX, _tileY, 0), _groundYOffset), false);
+            _groundTilemap.SetTile(GetTileChangeData(_TileType.Top, 0, new Vector3Int(++_tileX, _tileY, 0), _groundYOffset), false);
 
             for (int j = _tileY - 1; j >= -10; j--)
             {
-                _groundTilemap.SetTile(GetTileChangeData(TileType.Under, 0, new Vector3Int(_tileX, j, 0), _groundYOffset), false);
+                _groundTilemap.SetTile(GetTileChangeData(_TileType.Under, 0, new Vector3Int(_tileX, j, 0), _groundYOffset), false);
             }
         }
 
         // 맵 왼쪽 끝 채우기
         for (int i = -1; i >= -15; i--)
         {
-            _groundTilemap.SetTile(GetTileChangeData(TileType.Top, 0, new Vector3Int(i, 0, 0), _groundYOffset), false);
+            _groundTilemap.SetTile(GetTileChangeData(_TileType.Top, 0, new Vector3Int(i, 0, 0), _groundYOffset), false);
 
             for (int j = -1; j >= -10; j--)
             {
-                _groundTilemap.SetTile(GetTileChangeData(TileType.Under, 0, new Vector3Int(i, j, 0), _groundYOffset), false);
+                _groundTilemap.SetTile(GetTileChangeData(_TileType.Under, 0, new Vector3Int(i, j, 0), _groundYOffset), false);
             }
         }
     }
 
-    private TileChangeData GetTileChangeData(TileType type, int index, Vector3Int position, float yOffset)
+    private TileChangeData GetTileChangeData(_TileType type, int index, Vector3Int position, float yOffset)
     {
         Matrix4x4 tileTransform = Matrix4x4.Translate(new Vector3(0f, yOffset, 0f)) * Matrix4x4.Rotate(Quaternion.identity);
         TileChangeData tileChangeData = new TileChangeData
