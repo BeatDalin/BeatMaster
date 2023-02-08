@@ -187,13 +187,12 @@ public class CharacterMovement : MonoBehaviour
         _rigidbody.MovePosition(new Vector2(x, y));
     }
 
-    // 점프 시 캐릭터의 y값을 계산하는 메소드
+    // 점프 시 캐릭터 Position의 y값을 계산하는 메소드
     // 이차함수 포물선을 따름(y = ax^2 + bx)
     // jumpTileCount로 x로 몇 칸만큼을 점프할지 지정
     private float GetJumpingY(float x, int jumpTileCount)
     {
-        float a;
-        float b;
+        float a, b;
 
         switch (jumpTileCount)
         {
@@ -205,8 +204,7 @@ public class CharacterMovement : MonoBehaviour
                 a = ((2 * _jumpEndY) - (4 * _jumpMidY)) / 9;
                 b = (_jumpEndY - (9 * a)) / 3;
                 break;
-            // default = jumpTileCount 1
-            default:
+            default: // jumpTileCount 1
                 a = 2 * _jumpEndY - 4 * _jumpMidY;
                 b = _jumpEndY - a;
                 break;
