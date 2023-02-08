@@ -19,6 +19,7 @@ public enum GameState
     Idle,
     Play,
     Pause,
+    End
 }
 
 public abstract class Game : MonoBehaviour
