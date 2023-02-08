@@ -3,11 +3,13 @@ using SonicBloom.Koreo;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class NormalGame : Game
 {
-    public MapTemp mapTemp;
+    public ObjectGenerator objectGenerator;
     private ParticleController _particleController;
+    private Anim _animScript;
     [Header("Event Check")]
     private List<KoreographyEvent> _events;
     private int[,] _eventRangeShort;
@@ -48,6 +50,7 @@ public class NormalGame : Game
         _monsterPooling = FindObjectOfType<MonsterPooling>();
         _characterMovement = FindObjectOfType<CharacterMovement>();
         _playerStatus = FindObjectOfType<PlayerStatus>();
+        _animScript = FindObjectOfType<Anim>();
         // Save Point Event Track
         Koreographer.Instance.RegisterForEventsWithTime("Level1_CheckPoint", SaveCheckPoint);
         // Short Note Event Track
@@ -143,11 +146,13 @@ public class NormalGame : Game
         {
             IsLongPressed = true;
             Debug.Log("Long Key Press");
+            _animScript.SetEffectBool(true);
         }
         else if (Input.GetKeyUp(_longNoteKey))
         {
             IsLongPressed = false;
             Debug.Log("Long Key Up during CheckLongStart");
+            _animScript.SetEffectBool(false);
         }
 
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1f && !_isCheckedLong)
@@ -155,6 +160,7 @@ public class NormalGame : Game
             _isCheckedLong = true;
             if (!IsLongPressed) // Failed to press at the start of the long note
             {
+                _animScript.SetEffectBool(false);
                 //=======Rewind 자리=========
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
                 // Rewind(); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
@@ -172,6 +178,7 @@ public class NormalGame : Game
             //==============Rewind 자리==============
             if (!isLongFailed) 
             {
+                _animScript.SetEffectBool(false);
                 // Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
             }
@@ -194,6 +201,7 @@ public class NormalGame : Game
                 gameUI.UpdateText(TextType.Item, coinCount);
 
                 _pressedTimeLong = sampleTime;
+                _animScript.SetEffectBool(false);
             }
         }
 
@@ -273,7 +281,7 @@ public class NormalGame : Game
             checkPointVisited[checkPointIdx] = true;
             // Play Particle or Animation
             // ex) particleSystem.Play();
-            mapTemp.PlayCheckAnim(checkPointIdx);
+            objectGenerator.PlayCheckAnim(checkPointIdx);
         }
         // Record Index
         rewindShortIdx = shortIdx;

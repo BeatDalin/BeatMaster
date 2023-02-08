@@ -17,12 +17,18 @@ public enum Status
 public class Anim : MonoBehaviour
 {
     [SerializeField] private GameObject _hammer;
+
+    [SerializeField] private Animator[] _animators;
     private Animator _anim;
+    private Animator _effectAnim;
+    [SerializeField] private Animator _jumpAnim;
 
     // Start is called before the first frame update
     private void Awake()
     {
-        _anim = GetComponentInChildren<Animator>();
+        _animators = GetComponentsInChildren<Animator>();
+        _anim = _animators[0];
+        _effectAnim = _animators[1];
     }
 
     public void StatusJudge(Status crnStat)
@@ -71,6 +77,7 @@ public class Anim : MonoBehaviour
                 _anim.SetBool("Run", true);
                 _anim.SetBool("Idle", false);*/
         _anim.Play("Jump");
+        ShowJumpEffect();
     }
 
     public void Damage()
@@ -100,5 +107,16 @@ public class Anim : MonoBehaviour
         /*_anim.SetBool("Run", false);
         _anim.SetBool("Idle", true);*/
         _anim.Play("Idle");
+    }
+
+
+    private void ShowJumpEffect()
+    {
+        _jumpAnim.transform.position = transform.position; // set position of 
+        _jumpAnim.Play("JumpDustEffect");
+    }
+    public void SetEffectBool(bool isLong)
+    {
+        _effectAnim.SetBool("isLongNote", isLong);
     }
 }
