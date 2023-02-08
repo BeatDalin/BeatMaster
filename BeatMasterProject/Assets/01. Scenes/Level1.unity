@@ -1980,7 +1980,7 @@ MonoBehaviour:
   _stageIdx: 0
   _levelIdx: 0
   coinCount: 0
-  objectGenerator: {fileID: 1005781690}
+  objectGenerator: {fileID: 1860435643}
 --- !u!4 &612035090
 Transform:
   m_ObjectHideFlags: 0
@@ -3216,7 +3216,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1005781689}
   - component: {fileID: 1005781688}
-  - component: {fileID: 1005781690}
   m_Layer: 0
   m_Name: Temp Map Generator
   m_TagString: Untagged
@@ -3299,7 +3298,7 @@ MonoBehaviour:
   _itemContainer: {fileID: 39094806}
   _checkPointObj: {fileID: 7384471502369270403, guid: 068390efa75ccce49a3cb31d7915638b, type: 3}
   _checkPointAnim: []
-  _objectGenerator: {fileID: 1005781690}
+  _objectGenerator: {fileID: 0}
 --- !u!4 &1005781689
 Transform:
   m_ObjectHideFlags: 0
@@ -3315,25 +3314,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1005781690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1005781687}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dabd7d5bc70bae2499f342adb8dbe61e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _starObj: {fileID: 2222503924655302269, guid: 9870be05766ef86479abbf1e23c1a2b6, type: 3}
-  _itemContainer: {fileID: 39094806}
-  _checkPointObj: {fileID: 7384471502369270403, guid: 068390efa75ccce49a3cb31d7915638b, type: 3}
-  _checkPointAnim: []
-  _longObj: {fileID: 6894169135177945391, guid: 8616b69a768114632a773562203b0002, type: 3}
-  _longObjContainer: {fileID: 1625267936}
-  _longObjPosList: []
 --- !u!1 &1026440231 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1455545215042877320, guid: 0a0bc7912ba0746dba1711d9fc49f157, type: 3}
@@ -6020,6 +6000,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1860435642}
   - component: {fileID: 1860435641}
+  - component: {fileID: 1860435643}
   m_Layer: 0
   m_Name: MapGenerator
   m_TagString: Untagged
@@ -6053,8 +6034,7 @@ MonoBehaviour:
   _interactionTiles:
   - {fileID: 11400000, guid: 7e877a6e4b306d5419d1825d9c61dc20, type: 2}
   - {fileID: 11400000, guid: 55a4e7756a2f3d14093d6eb3c9695761, type: 2}
-  _starObj: {fileID: 2222503924655302269, guid: 9870be05766ef86479abbf1e23c1a2b6, type: 3}
-  _itemContainer: {fileID: 39094806}
+  _objectGenerator: {fileID: 1860435643}
 --- !u!4 &1860435642
 Transform:
   m_ObjectHideFlags: 0
@@ -6070,6 +6050,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1860435643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860435640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dabd7d5bc70bae2499f342adb8dbe61e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _starObj: {fileID: 2222503924655302269, guid: 9870be05766ef86479abbf1e23c1a2b6, type: 3}
+  _itemContainer: {fileID: 39094806}
+  _checkPointObj: {fileID: 7384471502369270403, guid: 068390efa75ccce49a3cb31d7915638b, type: 3}
+  _checkPointAnim: []
+  _longObj: {fileID: 6894169135177945391, guid: 8616b69a768114632a773562203b0002, type: 3}
+  _longObjContainer: {fileID: 1625267936}
+  _longObjPosList: []
 --- !u!1 &1864745434
 GameObject:
   m_ObjectHideFlags: 0

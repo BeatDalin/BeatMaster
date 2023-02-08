@@ -18,8 +18,8 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         if (!_instance)
         {
             _instance = GetComponent<T>();
+            Init();
         }
-        Init();
     }
 
     public abstract void Init();
