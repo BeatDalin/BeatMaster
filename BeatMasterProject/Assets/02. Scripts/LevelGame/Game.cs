@@ -25,12 +25,12 @@ public enum GameState
 public abstract class Game : MonoBehaviour
 {
     [SerializeField] protected GameUI gameUI; // LevelGameUI or BossGameUI will come in.
-    [SerializeField] [EventID] private string _spdEventID;
+    [SerializeField][EventID] private string _spdEventID;
 
     [Header("Game Play")]
     public GameState curState = GameState.Idle;
     public int curSample;
-    
+
     [Header("Check Point")]
     protected int rewindShortIdx;
     protected int rewindLongIdx;
@@ -60,7 +60,7 @@ public abstract class Game : MonoBehaviour
     [SerializeField] private int _stageIdx; // Stage number-1 : This is an index!!!
     [SerializeField] private int _levelIdx; // Level number-1 : This is an index!!!
     public int coinCount;
-    
+
     private int[] _longSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from short notes
     private int[] _shortSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from long notes
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
@@ -79,7 +79,7 @@ public abstract class Game : MonoBehaviour
 
         Koreographer.Instance.RegisterForEvents(_spdEventID, CheckEnd);
     }
-    
+
     protected virtual void Init()
     {
         longIdx = 0;
@@ -119,7 +119,7 @@ public abstract class Game : MonoBehaviour
 
         SoundManager.instance.PlayBGM(true, startSample);
         curState = GameState.Play;
-        PlayerStatus.Instance.ChangeStatus(Status.Run);
+        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
     }
 
     protected int[,] CalculateRange(List<KoreographyEvent> koreographyEvents)
@@ -131,11 +131,11 @@ public abstract class Game : MonoBehaviour
             int eventLength = curEvent.EndSample - curEvent.StartSample;
             sampleRange[i, 0] = curEvent.StartSample + eventLength / 5;
             sampleRange[i, 1] = curEvent.StartSample + eventLength / 5 * 4;
-            
+
         }
         return sampleRange;
     }
-    
+
     private void CheckEnd(KoreographyEvent evt)
     {
         if (!evt.HasTextPayload())
@@ -153,13 +153,13 @@ public abstract class Game : MonoBehaviour
         }
         else if (message == "Stop")
         {
-            PlayerStatus.Instance.ChangeStatus(Status.Idle);
+            PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
         }
     }
 
     protected void CheckBeatResult(BeatResult[] resultArr, int idx, bool isKeyCorrect, int pressedTime, int[,] eventRange)
     {
-        BeatResult tempResult = BeatResult.Fail; 
+        BeatResult tempResult = BeatResult.Fail;
         if (isKeyCorrect)
         {
             if (pressedTime <= eventRange[idx, 0])
@@ -177,13 +177,13 @@ public abstract class Game : MonoBehaviour
         }
         resultArr[idx] = tempResult;
     }
-    
+
     protected int IncreaseDeath()
     {
         deathCount++;
         return deathCount;
     }
-    
+
     private void SummarizeResult()
     {
         // Count each result type in shortResult and longResult array
