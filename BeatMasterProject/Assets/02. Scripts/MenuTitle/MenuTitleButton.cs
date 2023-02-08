@@ -5,8 +5,6 @@ using DG.Tweening;
 using SonicBloom.Koreo;
 using SonicBloom.Koreo.Players;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 enum ButtonName
@@ -38,9 +36,11 @@ public class MenuTitleButton : MonoBehaviour
 
     private void Start()
     {
-        Koreographer.Instance.RegisterForEvents("MenuBGMTrack", ChangeScale);
+        Koreographer.Instance.RegisterForEvents("Title_Track", ChangeScale);
 
         AddClickListener();
+
+        _simpleMusicPlayer = SoundManager.instance.musicPlayer;
     }
 
     private void Update()
@@ -50,6 +50,8 @@ public class MenuTitleButton : MonoBehaviour
             if (!_simpleMusicPlayer.IsPlaying)
             {
                 _simpleMusicPlayer.Play();
+                _loadingPanelGroup.gameObject.SetActive(false);
+                
             }
         }
         
@@ -168,22 +170,28 @@ public class MenuTitleButton : MonoBehaviour
     
     private void ChangeScale(KoreographyEvent evt)
     {
-        if (_objectIdx == _doTweenAnimations.Length)
+        for (int i = 0; i < _doTweenAnimations.Length; i++)
         {
-            _objectIdx = 0;
-        }
+            _doTweenAnimations[i].DORewind();
+            _doTweenAnimations[i].DOPlay();
 
-        if (_objectIdx == 0)
-        {
-            _doTweenAnimations[_doTweenAnimations.Length - 1].DORewind();
-            _doTweenAnimations[_objectIdx].DOPlay();
-            _objectIdx++;
         }
-        else
-        {
-            _doTweenAnimations[_objectIdx - 1].DORewind();
-            _doTweenAnimations[_objectIdx].DOPlay();
-            _objectIdx++;
-        }
+        // if (_objectIdx == _doTweenAnimations.Length)
+        // {
+        //     _objectIdx = 0;
+        // }
+        //
+        // if (_objectIdx == 0)
+        // {
+        //     _doTweenAnimations[_doTweenAnimations.Length - 1].DORewind();
+        //     _doTweenAnimations[_objectIdx].DOPlay();
+        //     _objectIdx++;
+        // }
+        // else
+        // {
+        //     _doTweenAnimations[_objectIdx - 1].DORewind();
+        //     _doTweenAnimations[_objectIdx].DOPlay();
+        //     _objectIdx++;
+        // }
     }
 }

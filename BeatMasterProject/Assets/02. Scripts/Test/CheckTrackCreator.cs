@@ -18,11 +18,16 @@ public class CheckTrackCreator : MonoBehaviour
     [SerializeField] KoreographyTrack _jumpCheckTrack; // Track for check to be created
     [SerializeField] private List<KoreographyEvent> _shortEventList = new List<KoreographyEvent>();
 
+    [Header("Check Point Track")] 
+    public KoreographyTrack spdTrack;
+    public KoreographyTrack checkPointTrack;
+    
     private void Start()
     {
         // If you want to create check events, call functions here
         // GenerateJumpCheckEvent();
         // GenerateLongCheckEvent();
+        // GenerateCheckPointEvent();
     }
 
 
@@ -70,6 +75,19 @@ public class CheckTrackCreator : MonoBehaviour
 
                 _jumpCheckTrack.AddEvent(koreoEvent);
             }
+        }
+    }
+
+    private void GenerateCheckPointEvent()
+    {
+        var spdEvents = spdTrack.GetAllEvents();
+        for (int i = 0; i < spdEvents.Count-1; i++)
+        {
+            KoreographyEvent koreoEvent = new KoreographyEvent();
+            koreoEvent.Payload = new IntPayload();
+            koreoEvent.StartSample = spdEvents[i].StartSample;
+            koreoEvent.EndSample = spdEvents[i].EndSample;
+            checkPointTrack.AddEvent(koreoEvent);
         }
     }
 }

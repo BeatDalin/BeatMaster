@@ -29,7 +29,6 @@ public class ParticleController : MonoBehaviour
     private void Awake()
     {
         _characterMovement = GetComponent<CharacterMovement>();
-        
     }
 
     // Update is called once per frame
@@ -37,22 +36,12 @@ public class ParticleController : MonoBehaviour
     {
         counter += Time.deltaTime;
 
-        if (isOnGround && Mathf.Abs(playerRb.velocity.x) > _occurAfterVelocity)
+        if (isOnGround && playerRb.position.x > 0)// && Mathf.Abs(playerRb.velocity.x) > _occurAfterVelocity)
         {
             if (counter > _dustFormationPeriod)
             {
                 _movementParticle.Play();
                 counter = 0;
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            _jumpParticle.Play();
-            if (isOnGround)
-            {
-                // _animator.transform.position = transform.position - Vector3.up * (transform.localPosition.y / 2);
-                _animator.SetTrigger(IsJump);
             }
         }
 
@@ -67,12 +56,21 @@ public class ParticleController : MonoBehaviour
         _touchParticle.Play();
     }
 
+    public void PlayJumpParticle()
+    {
+        _jumpParticle.Play();
+        if (isOnGround)
+        {
+            // _animator.transform.position = transform.position - Vector3.up * (transform.localPosition.y / 2);
+            _animator.SetTrigger(IsJump);
+        }
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Ground")
         {
-            Debug.Log("GroundTouch!");
             _fallParticle.Play();
             isOnGround = true;
         }

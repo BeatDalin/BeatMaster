@@ -17,7 +17,7 @@ public enum Status
 public class Anim : MonoBehaviour
 {
     [SerializeField] private GameObject _hammer;
-    public Animator _anim;
+    private Animator _anim;
 
     // Start is called before the first frame update
     private void Awake()
@@ -67,23 +67,25 @@ public class Anim : MonoBehaviour
     public void Jump()
     {
         //anim.SetBool("Attack", false);
+        /*        _anim.SetTrigger("Jump");
+                _anim.SetBool("Run", true);
+                _anim.SetBool("Idle", false);*/
         _anim.Play("Jump");
     }
 
     public void Damage()
-    {/*
-        _anim.SetTrigger("Die");
-        _anim.SetBool("Run", false);
-        _anim.SetBool("Idle", false);*/
+    {
+        /*        _anim.SetTrigger("Die");
+                _anim.SetBool("Run", false);
+                _anim.SetBool("Idle", false);*/
         _anim.Play("Damage");
     }
 
     public void Die()
-    {/*
+    {
         _anim.SetTrigger("Die");
         _anim.SetBool("Run", false);
-        _anim.SetBool("Idle", false);*/
-        _anim.Play("Die");
+        _anim.SetBool("Idle", false);
     }
 
     public void Run()
@@ -95,9 +97,8 @@ public class Anim : MonoBehaviour
 
     public void Idle()
     {
-        /*        _anim.SetBool("Attack", false);
-                _anim.SetBool("Run", false);
-                _anim.SetBool("Idle", true);*/
+        /*_anim.SetBool("Run", false);
+        _anim.SetBool("Idle", true);*/
         _anim.Play("Idle");
     }
 }

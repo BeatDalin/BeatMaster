@@ -54,7 +54,6 @@ public class SoundManager : MonoBehaviour
     private void Start()
     {
         ChangeKoreo(SceneLoadManager.Instance.Scene);
-        Debug.Log(SceneLoadManager.Instance.Scene);
     }
 
     // BGM
@@ -112,6 +111,7 @@ public class SoundManager : MonoBehaviour
     // 각 씬별로 KoreoGraphy 바꾸는 기능
     public void ChangeKoreo(Enum currentScene)
     {
+        //playingKoreo = Resources.Load<Koreography>($"KoreoGraphys/{currentScene.ToString()}");
         switch (currentScene)
         {
             case SceneLoadManager.SceneType.Title: // Title 씬
@@ -139,5 +139,6 @@ public class SoundManager : MonoBehaviour
                 break;
             }
         }
+        clipName = musicPlayer.GetCurrentClipName();
     }
 }
