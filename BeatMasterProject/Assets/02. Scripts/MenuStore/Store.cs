@@ -53,7 +53,7 @@ public class Store : MonoBehaviour
         _isPurchased = new bool[_currentStoreData.itemData.Count];
         _isUnlocked = new bool[_currentStoreData.itemData.Count];
         _price = new int[_currentStoreData.itemData.Count];
-        Debug.Log(_price.Length);
+
         for (int i = 0; i < _currentStoreData.itemData.Count; i++)
         {
             _isPurchased[i] = _currentStoreData.itemData[i].isPurchased;

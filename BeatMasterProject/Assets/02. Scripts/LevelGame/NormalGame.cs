@@ -27,7 +27,10 @@ public class NormalGame : Game
     private CharacterMovement _characterMovement;
     [Header("SpriteChanger")]
     private PlayerStatus _playerStatus;
-    
+
+    private Anim _anim;
+    private int[] _playerDatas;
+
     public bool IsLongPressed
     {
         get => isLongPressed;

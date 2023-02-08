@@ -40,7 +40,10 @@ public class Anim : MonoBehaviour
     {
         _animators = GetComponentsInChildren<Animator>();
         _anim = _animators[0];
-        _effectAnim = _animators[1];
+        if(_animators.Length > 1)
+        {
+            _effectAnim = _animators[1];
+        }
 
     }
     
@@ -104,7 +107,10 @@ public class Anim : MonoBehaviour
                 _anim.SetBool("Run", true);
                 _anim.SetBool("Idle", false);*/
         _anim.Play("Jump");
-        ShowJumpEffect();
+        if (_animators.Length > 1)
+        {
+            ShowJumpEffect();
+        }
     }
 
     public void Damage()

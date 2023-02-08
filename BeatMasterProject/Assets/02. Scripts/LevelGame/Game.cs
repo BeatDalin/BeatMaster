@@ -122,7 +122,7 @@ public abstract class Game : MonoBehaviour
 
         SoundManager.instance.PlayBGM(true, startSample);
         curState = GameState.Play;
-        PlayerStatus.Instance.ChangeStatus(Status.Run);
+        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
     }
 
     protected int[,] CalculateRange(List<KoreographyEvent> koreographyEvents)

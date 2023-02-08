@@ -148,15 +148,7 @@ public class DataCenter : MonoBehaviour
         _gameData.storeData = new StoreData();
 
         _gameData.storeData.itemData = new List<ItemData>(); // 일단 item 3개로 설정. 추후 변경 가능
-<<<<<<< Updated upstream
-        _gameData.storeData.onSaleItem = new List<ItemData>();
-        _gameData.storeData.purchasedItem = new List<ItemData>();
 
-=======
-        // _gameData.storeData.onSaleItem = new List<ItemData>();
-        // _gameData.storeData.purchasedItem = new List<ItemData>();
-        
->>>>>>> Stashed changes
         ItemData item = new ItemData();
         for (int i = 0; i < 5; i++)
         {
@@ -205,25 +197,17 @@ public class DataCenter : MonoBehaviour
              var tempItemData = storeData.itemData[i];
              storeData.itemData[i] = tempItemData;
         }
-<<<<<<< Updated upstream
-
-        storeData.purchasedItem = tempPurchasedItem;
-        storeData.onSaleItem = tempOnSaleItem;
-
-=======
-        
->>>>>>> Stashed changes
         _gameData.storeData = storeData;
 
         SaveData();
     }
 
-<<<<<<< Updated upstream
     public int[] GetPlayerData()
     {
         int[] playerData = { _gameData.playerStage, _gameData.playerLv, _gameData.playerItem, _gameData.playerChar };
         return playerData;
-=======
+    }
+
     /// <summary>
     /// LevelClear마다 호출됨. item의 Unlock여부를 Update해준다.
     /// </summary>
@@ -242,6 +226,5 @@ public class DataCenter : MonoBehaviour
             //     tempItemData[i].isUnlocked = true;
             // }
         }
->>>>>>> Stashed changes
     }
 }
