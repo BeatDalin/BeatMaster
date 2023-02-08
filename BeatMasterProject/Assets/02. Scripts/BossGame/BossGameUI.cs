@@ -11,7 +11,7 @@ public class BossGameUI : GameUI
 
     private void Awake()
     {
-        game = FindObjectOfType<BossGame>();
+        //game = FindObjectOfType<BossGame>();
         InitUI();
     }
 

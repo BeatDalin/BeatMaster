@@ -332,8 +332,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 449442010}
   - 20: {fileID: 449442009}
-  - 92: {fileID: 449442008}
-  - 124: {fileID: 449442007}
   - 81: {fileID: 449442006}
   m_Layer: 0
   m_Name: Main Camera
@@ -344,20 +342,6 @@ GameObject:
   m_IsActive: 1
 --- !u!81 &449442006
 AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 449442005}
-  m_Enabled: 1
---- !u!124 &449442007
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 449442005}
-  m_Enabled: 1
---- !u!92 &449442008
-Behaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -1109,7 +1093,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1062016098}
-  - 132: {fileID: 1062016097}
   - 114: {fileID: 1062016099}
   m_Layer: 5
   m_Name: 04_IMGUI Text
@@ -1118,30 +1101,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!132 &1062016097
-GUIText:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 13200000, guid: 097c41e92228c4ad3a0cb92709485a63,
-    type: 2}
-  m_PrefabInternal: {fileID: 1301623585}
-  m_GameObject: {fileID: 1062016096}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Text: Onomatopoeia Rocks!
-  m_Anchor: 7
-  m_Alignment: 1
-  m_PixelOffset: {x: 0, y: 10}
-  m_LineSpacing: 1
-  m_TabSize: 4
-  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Material: {fileID: 0}
-  m_FontSize: 30
-  m_FontStyle: 0
-  m_Color:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_PixelCorrect: 1
-  m_RichText: 1
 --- !u!4 &1062016098
 Transform:
   m_ObjectHideFlags: 0
@@ -1167,6 +1126,65 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventID: Onomatopoeia
+  style:
+    m_Name: 
+    m_Normal:
+      m_Background: {fileID: 0}
+      m_TextColor: {r: 1, g: 1, b: 1, a: 1}
+    m_Hover:
+      m_Background: {fileID: 0}
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Active:
+      m_Background: {fileID: 0}
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Focused:
+      m_Background: {fileID: 0}
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnNormal:
+      m_Background: {fileID: 0}
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnHover:
+      m_Background: {fileID: 0}
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnActive:
+      m_Background: {fileID: 0}
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnFocused:
+      m_Background: {fileID: 0}
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Border:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Margin:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Padding:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 10
+    m_Overflow:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 30
+    m_FontStyle: 0
+    m_Alignment: 7
+    m_WordWrap: 0
+    m_RichText: 1
+    m_TextClipping: 0
+    m_ImagePosition: 0
+    m_ContentOffset: {x: 0, y: 0}
+    m_FixedWidth: 0
+    m_FixedHeight: 0
+    m_StretchWidth: 1
+    m_StretchHeight: 0
 --- !u!1001 &1301623585
 Prefab:
   m_ObjectHideFlags: 0

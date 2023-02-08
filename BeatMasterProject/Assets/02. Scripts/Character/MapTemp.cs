@@ -42,12 +42,22 @@ public class MapTemp : MonoBehaviour
     [Header("Interaction")]
     [SerializeField] private List<Tile> _interactionTileList = new List<Tile>();
 
+    [Space]
+    [Header("Item")]
+    [SerializeField] private GameObject _starObj; // Item
+    [SerializeField] private Transform _itemContainer;
+    [SerializeField] private GameObject _checkPointObj; // 
+    [SerializeField] private List<Animator> _checkPointAnim = new List<Animator>();
+    
+    [SerializeField] private ObjectGenerator _objectGenerator;
+    
     private int _tileX = -1, _tileY;
     private MonsterPooling _monsterPooling;
 
     private void Awake()
     {
         _monsterPooling = FindObjectOfType<MonsterPooling>();
+        _objectGenerator = GetComponent<ObjectGenerator>();
         
         LoadAllEvents();
         GenerateMap();
@@ -151,7 +161,7 @@ public class MapTemp : MonoBehaviour
             {
                 prevGroundType = groundType;
                 _monsterPooling.AddTilePos(_tileX, _tileY);
-                LocateItems(_tileX, _tileY + 2);
+                _objectGenerator.PositItems(_tileX, _tileY + 2);
                 continue;
             }
 
@@ -244,6 +254,7 @@ public class MapTemp : MonoBehaviour
                 {
                     if (_spdEventList[j].HasFloatPayload() | (_spdEventList[j].GetTextValue() == "End"))
                     {
+                        Debug.Log("CheckPointCreate");
                         Matrix4x4 spdTileTransform = Matrix4x4.Translate(new Vector3(0f, groundYOffset, 0f)) * Matrix4x4.Rotate(Quaternion.identity);
                         TileChangeData spdTileChangeData = new TileChangeData
                         {
@@ -253,6 +264,9 @@ public class MapTemp : MonoBehaviour
                         };
 
                         _interactionTilemap.SetTile(spdTileChangeData, false);
+                        
+                        // Locate CheckPoint Animation
+                        _objectGenerator.PositCheckPoint(_tileX, _tileY+1);
                     }
                 }
             }
@@ -262,13 +276,4 @@ public class MapTemp : MonoBehaviour
         }
     }
 
-    [Header("Item")]
-    [SerializeField] private GameObject _starObj;
-    [SerializeField] private Transform _itemContainer;
-
-    private void LocateItems(int xPos, int yPos)
-    {
-        var item = Instantiate(_starObj, new Vector3(xPos, yPos, 0), Quaternion.identity);
-        item.transform.SetParent(_itemContainer);
-    }
 }

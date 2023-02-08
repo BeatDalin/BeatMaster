@@ -4839,7 +4839,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 4
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -9789,9 +9789,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementParticle: {fileID: 428939381543145417}
   _fallParticle: {fileID: 6821809335624813540}
+  _touchParticle: {fileID: 0}
+  _jumpParticle: {fileID: 0}
+  _attackParticle: {fileID: 0}
+  _animator: {fileID: 0}
   _occurAfterVelocity: 3
   _dustFormationPeriod: 0.006
   playerRb: {fileID: 0}
+  isOnGround: 0
 --- !u!1 &7481748156189747514
 GameObject:
   m_ObjectHideFlags: 0
@@ -14631,7 +14636,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 3
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0

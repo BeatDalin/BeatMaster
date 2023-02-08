@@ -33,7 +33,7 @@ public class TileColliderTest : MonoBehaviour
     public KoreographyTrack newTrack;
     void Awake()
     {
-        CreateItemTile();
+        // CreateItemTile();
     }
 
     private void CreateItem(float tileX, float tileY)

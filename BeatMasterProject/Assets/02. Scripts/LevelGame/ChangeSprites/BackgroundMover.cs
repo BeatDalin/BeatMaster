@@ -48,13 +48,4 @@ public class BackgroundMover : MonoBehaviour
         transform.position = tempVec;
     }
 
-    public void SetTextureOffset(Material material)
-    {
-        _myRenderer.material = material;
-        _myMaterial = material;
-        // 자연스럽게 교체하기 위해 초기화
-        _myMaterial.mainTextureOffset = _currentUV;
-    }
-
-    
 }

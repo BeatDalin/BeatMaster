@@ -24,8 +24,7 @@ public enum GameState
 public abstract class Game : MonoBehaviour
 {
     [SerializeField] protected GameUI gameUI; // LevelGameUI or BossGameUI will come in.
-    [SerializeField] protected TileColliderTest tileTest;
-    [SerializeField][EventID] private string _spdEventID;
+    [SerializeField] [EventID] private string _spdEventID;
 
     [Header("Game Play")]
     public GameState curState = GameState.Idle;
@@ -34,8 +33,8 @@ public abstract class Game : MonoBehaviour
     [Header("Check Point")]
     protected int rewindShortIdx;
     protected int rewindLongIdx;
-    public int rewindSampleTime = -1;
-    [SerializeField] protected List<KoreographyEvent> savePointList;
+    protected int rewindSampleTime = -1;
+    [SerializeField] protected List<KoreographyEvent> checkPointList;
     [SerializeField] protected bool[] checkPointVisited;
     protected int checkPointIdx = -1;
 
@@ -44,11 +43,11 @@ public abstract class Game : MonoBehaviour
     public BeatResult[] shortResult;
     protected static int totalNoteCount = 0;
     // long notes
-    protected int longIdx = 0;
+    [SerializeField] protected int longIdx = 0;
     protected bool isLongPressed = false;
     protected bool isLongKeyCorrect = false;
     // short notes
-    protected int shortIdx = 0;
+    [SerializeField] protected int shortIdx = 0;
     //protected bool isShortKeyPressed = false; // To prevent double check...
     protected bool isShortKeyCorrect = false;
 
@@ -66,10 +65,10 @@ public abstract class Game : MonoBehaviour
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
 
     public bool isEnd = false;
+    
     protected virtual void Awake()
     {
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
-        tileTest = FindObjectOfType<TileColliderTest>();
         Koreographer.Instance.ClearEventRegister(); // Initialize Koreographer Event Regiser
         // Data
         DataCenter.Instance.LoadData();
@@ -90,7 +89,7 @@ public abstract class Game : MonoBehaviour
         isLongKeyCorrect = false;
         coinCount = 0;
         // Save Point
-        savePointList = SoundManager.instance.playingKoreo.GetTrackByID("Level1_CheckPoint").GetAllEvents();
+        checkPointList = SoundManager.instance.playingKoreo.GetTrackByID("Level1_CheckPoint").GetAllEvents();
         rewindShortIdx = 0;
         rewindLongIdx = 0;
         rewindSampleTime = -1;
@@ -99,6 +98,47 @@ public abstract class Game : MonoBehaviour
         isEnd = false;
     }
 
+    protected void StartWithDelay(int startSample = 0)
+    {
+        StartCoroutine(CoStartWithDelay(startSample));
+    }
+
+    protected IEnumerator CoStartWithDelay(int startSample = 0)
+    {
+        // UI Timer
+        gameUI.timePanel.SetActive(true);
+        // Wait for Scene Transition to end
+        yield return new WaitWhile(() => !SceneLoadManager.Instance.GetTransitionEnd());
+        int waitTime = 3;
+        while (waitTime > 0)
+        {
+            gameUI.UpdateText(TextType.Time, waitTime);
+            waitTime--;
+            yield return new WaitForSeconds(1);
+        }
+        gameUI.timePanel.SetActive(false);
+        // Music Play & Game Start
+        startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
+
+        SoundManager.instance.PlayBGM(true, startSample);
+        curState = GameState.Play;
+        PlayerStatus.Instance.ChangeStatus(Status.Run);
+    }
+
+    protected int[,] CalculateRange(List<KoreographyEvent> koreographyEvents)
+    {
+        int[,] sampleRange = new int[koreographyEvents.Count, 2];
+        for (int i = 0; i < koreographyEvents.Count; i++)
+        {
+            KoreographyEvent curEvent = koreographyEvents[i];
+            int eventLength = curEvent.EndSample - curEvent.StartSample;
+            sampleRange[i, 0] = curEvent.StartSample + eventLength / 5;
+            sampleRange[i, 1] = curEvent.StartSample + eventLength / 5 * 4;
+            
+        }
+        return sampleRange;
+    }
+    
     private void CheckEnd(KoreographyEvent evt)
     {
         if (!evt.HasTextPayload())
@@ -139,63 +179,8 @@ public abstract class Game : MonoBehaviour
             }
         }
         resultArr[idx] = tempResult;
-
-        //if (CheckFinish())
-        //{
-        //    SummarizeResult();
-        //    RateResult(_stageIdx, _levelIdx);
-        //    gameUI.ShowFinalResult(_finalSummary, totalNoteCount, _stageIdx, _levelIdx); // for testing purpose ...
-        //}
     }
-    protected void StartWithDelay(int startSample = 0)
-    {
-        StartCoroutine(CoStartWithDelay(startSample));
-    }
-
-    protected IEnumerator CoStartWithDelay(int startSample = 0)
-    {
-        // UI Timer
-        gameUI.timePanel.SetActive(true);
-        int waitTime = 3;
-        while (waitTime > 0)
-        {
-            gameUI.UpdateText(TextType.Time, waitTime);
-            waitTime--;
-            yield return new WaitForSeconds(1);
-        }
-        gameUI.timePanel.SetActive(false);
-        // Music Play & Game Start
-        startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
-
-        SoundManager.instance.PlayBGM(true, startSample);
-        curState = GameState.Play;
-        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
-    }
-
-    protected int[,] CalculateRange(List<KoreographyEvent> koreographyEvents)
-    {
-        int[,] sampleRange = new int[koreographyEvents.Count, 2];
-        for (int i = 0; i < koreographyEvents.Count; i++)
-        {
-            KoreographyEvent curEvent = koreographyEvents[i];
-            int eventLength = curEvent.EndSample - curEvent.StartSample;
-            sampleRange[i, 0] = curEvent.StartSample + eventLength / 5;
-            sampleRange[i, 1] = curEvent.StartSample + eventLength / 5 * 4;
-
-        }
-        return sampleRange;
-    }
-
-    //protected bool CheckFinish()
-    //{
-    //    // If index becomes the length of Arrays (or length -1), the game has been ended.
-    //    if (isEndPoint)
-    //    {
-    //        return true;
-    //    }
-    //    return false;
-    //}
-
+    
     protected int IncreaseDeath()
     {
         deathCount++;
@@ -282,7 +267,7 @@ public abstract class Game : MonoBehaviour
         // Save updated level data into json file
         DataCenter.Instance.SaveData(curLevelData, stageIdx, levelIdx);
 
-        if (levelIdx == 4)
+        if (levelIdx % 4 == 0)
         {
             // boss game clear
             DataCenter.Instance.UpdateStageData(stageIdx);

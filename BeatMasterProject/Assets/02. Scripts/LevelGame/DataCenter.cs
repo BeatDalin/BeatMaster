@@ -80,7 +80,7 @@ public class DataCenter : MonoBehaviour
         _gameData = new Data();
         _gameData.playerLv = 1;
         _gameData.playerStage = 1;
-        _gameData.playerChar = 0;
+        _gameData.playerChar = 0; // default character index
         _gameData.stageData = new StageData[1]; // temporally, set array size as 1
         LevelData temp = new LevelData();
         for (int i = 0; i < _gameData.stageData.Length; i++)
@@ -187,7 +187,7 @@ public class DataCenter : MonoBehaviour
     }
 
     /// <summary>
-    /// StorePopup 오픈, item 구매 후 호출
+    /// StorePopup 오픈, item 구매 후, 장착 후 호출
     /// </summary>
     public void UpdateStoreData()
     {
@@ -195,23 +195,27 @@ public class DataCenter : MonoBehaviour
 
         var tempPurchasedItem = new List<ItemData>();
         var tempOnSaleItem = new List<ItemData>();
+        
+        int equippedIndex = _gameData.playerChar;
 
         for (int i = 0; i < storeData.itemData.Count; i++)
         {
-            var tempItemData = storeData.itemData[i];
-
-            if (tempItemData.isPurchased)
-            {
-                tempPurchasedItem.Add(tempItemData);
-            }
-
-            else if (_gameData.stageData[tempItemData.unlockStage].levelData[tempItemData.unlockLevel].levelClear)
-            {
-                tempItemData.isUnlocked = true;
-                tempOnSaleItem.Add(tempItemData);
-            }
-
-            storeData.itemData[i] = tempItemData;
+             var tempItemData = storeData.itemData[i];
+             
+             if (tempItemData.isPurchased)
+             {
+                 tempPurchasedItem.Add(tempItemData);
+             }
+             
+             else if (_gameData.stageData[tempItemData.unlockStage].levelData[tempItemData.unlockLevel].levelClear)
+             {
+                 tempItemData.isUnlocked = true;
+                 tempItemData.isEquipped = i == equippedIndex ? true : false;
+                 
+                 tempOnSaleItem.Add(tempItemData);
+             }
+             
+             storeData.itemData[i] = tempItemData;
         }
 
         storeData.purchasedItem = tempPurchasedItem;
