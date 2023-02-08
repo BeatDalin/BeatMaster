@@ -9,7 +9,7 @@ public class CharacterMovement : MonoBehaviour
 {
     private Game _game;
     private Rigidbody2D _rigidbody;
-    private z _spriteChanger;
+    private SpriteChanger _spriteChanger;
 
     [Header("Music")]
     [EventID] public string speedEventID;
