@@ -45,16 +45,6 @@ public class ParticleController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            _jumpParticle.Play();
-            if (isOnGround)
-            {
-                // _animator.transform.position = transform.position - Vector3.up * (transform.localPosition.y / 2);
-                _animator.SetTrigger(IsJump);
-            }
-        }
-
         if (Input.GetKeyDown(KeyCode.F))
         {
             _attackParticle.Play();
@@ -64,6 +54,16 @@ public class ParticleController : MonoBehaviour
     public void PlayTouchPartcle()
     {
         _touchParticle.Play();
+    }
+
+    public void PlayJumpParticle()
+    {
+        _jumpParticle.Play();
+        if (isOnGround)
+        {
+            // _animator.transform.position = transform.position - Vector3.up * (transform.localPosition.y / 2);
+            _animator.SetTrigger(IsJump);
+        }
     }
 
 
