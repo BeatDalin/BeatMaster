@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------
 //            	   Koreographer                 
-//    Copyright © 2014-2016 Sonic Bloom, LLC    
+//    Copyright © 2014-2020 Sonic Bloom, LLC    
 //----------------------------------------------
 
 using UnityEngine;
