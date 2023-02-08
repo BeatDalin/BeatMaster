@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------
 //            	   Koreographer                 
-//    Copyright © 2014-2016 Sonic Bloom, LLC    
+//    Copyright © 2014-2020 Sonic Bloom, LLC    
 //----------------------------------------------
 
 using UnityEngine;
@@ -14,7 +14,8 @@ namespace SonicBloom.Koreo.Demos
 		public Behaviour[] quarterNoteGroup;
 		public Behaviour[] eighthNoteGroup;
 
-		int lastQuarterNote = 0;
+		int lastQuarterNote = 0        
+;
 		int lastEighthNote = -1;
 		
 		void Update()
@@ -35,7 +36,7 @@ namespace SonicBloom.Koreo.Demos
 			//  the current "Main" song.  These demos use a basic player with a single song and
 			//  define that as the Main song.  Therefore there is no need to specify it.  The
 			//  '2' parameter, tells Koreographer to divide each beat into 2 equal parts.  As the
-			//  base beat value is 4, this will longResult in eighth notes.
+			//  base beat value is 4, this will result in eighth notes.
 			int curEighthNote = Mathf.FloorToInt(Koreographer.GetBeatTime(null, 2));
 
 			if (curEighthNote != lastEighthNote)
