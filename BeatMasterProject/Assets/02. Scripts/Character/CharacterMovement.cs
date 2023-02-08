@@ -246,7 +246,7 @@ public class CharacterMovement : MonoBehaviour
             else if (evt.GetTextValue() == "Stop")
             {
                 _canGroundCheck = false;
-                PlayerStatus.Instance.ChangeStatus(Status.Idle);
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
             }
         }
     }
