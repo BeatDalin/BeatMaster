@@ -148,9 +148,15 @@ public class DataCenter : MonoBehaviour
         _gameData.storeData = new StoreData();
 
         _gameData.storeData.itemData = new List<ItemData>(); // 일단 item 3개로 설정. 추후 변경 가능
+<<<<<<< Updated upstream
         _gameData.storeData.onSaleItem = new List<ItemData>();
         _gameData.storeData.purchasedItem = new List<ItemData>();
 
+=======
+        // _gameData.storeData.onSaleItem = new List<ItemData>();
+        // _gameData.storeData.purchasedItem = new List<ItemData>();
+        
+>>>>>>> Stashed changes
         ItemData item = new ItemData();
         for (int i = 0; i < 5; i++)
         {
@@ -188,47 +194,54 @@ public class DataCenter : MonoBehaviour
 
     /// <summary>
     /// StorePopup 오픈, item 구매 후, 장착 후 호출
-    /// </summary>
+    /// --> 필요한지 잘 모르겠음
+    // /// </summary>
     public void UpdateStoreData()
     {
         StoreData storeData = _gameData.storeData;
-
-        var tempPurchasedItem = new List<ItemData>();
-        var tempOnSaleItem = new List<ItemData>();
         
-        int equippedIndex = _gameData.playerChar;
-
         for (int i = 0; i < storeData.itemData.Count; i++)
         {
              var tempItemData = storeData.itemData[i];
-             
-             if (tempItemData.isPurchased)
-             {
-                 tempPurchasedItem.Add(tempItemData);
-             }
-             
-             else if (_gameData.stageData[tempItemData.unlockStage].levelData[tempItemData.unlockLevel].levelClear)
-             {
-                 tempItemData.isUnlocked = true;
-                 tempItemData.isEquipped = i == equippedIndex ? true : false;
-                 
-                 tempOnSaleItem.Add(tempItemData);
-             }
-             
              storeData.itemData[i] = tempItemData;
         }
+<<<<<<< Updated upstream
 
         storeData.purchasedItem = tempPurchasedItem;
         storeData.onSaleItem = tempOnSaleItem;
 
+=======
+        
+>>>>>>> Stashed changes
         _gameData.storeData = storeData;
 
         SaveData();
     }
 
+<<<<<<< Updated upstream
     public int[] GetPlayerData()
     {
         int[] playerData = { _gameData.playerStage, _gameData.playerLv, _gameData.playerItem, _gameData.playerChar };
         return playerData;
+=======
+    /// <summary>
+    /// LevelClear마다 호출됨. item의 Unlock여부를 Update해준다.
+    /// </summary>
+    /// <param name="stageNum"></param>
+    /// <param name="levelNum"></param>
+    public void UpdateItemData(int stageNum, int levelNum)
+    {
+        var tempItemData = _gameData.storeData.itemData;
+
+        for (int i = 0; i < tempItemData.Count; i++)
+        {
+            int unlockStage = tempItemData[i].unlockStage;
+            
+            // if (_gameData.stageData[].levelData[tempItemData[i].unlockLevel].levelClear)
+            // {
+            //     tempItemData[i].isUnlocked = true;
+            // }
+        }
+>>>>>>> Stashed changes
     }
 }

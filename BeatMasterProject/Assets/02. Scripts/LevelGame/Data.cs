@@ -7,7 +7,7 @@ public struct Data
     public int playerStage; // Player's current max stage number
     public int playerLv; // Player's current max level in playerStage number
     public int playerItem; // Player's item(coin) count
-    public int playerChar; // Player's current Character index
+    public int playerChar;   // Player's current Character index
     public StageData[] stageData;
     public StoreData storeData;
 }
@@ -50,6 +50,5 @@ public struct ItemData
     public int unlockStage; // index
     public int unlockLevel; // index
     public bool isUnlocked;
-    public bool isEquipped; // item 장착 여부
 }
 
