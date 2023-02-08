@@ -490,7 +490,6 @@ MonoBehaviour:
   - {fileID: 6470633393249580849}
   - {fileID: 3494114943120558226}
   - {fileID: 1780202308226763339}
-  _price: e7030000010000000a0000004100000056000000
   _popupPanel:
   - {fileID: 2824224856137109381}
   - {fileID: 8536125015646485855}
@@ -498,26 +497,9 @@ MonoBehaviour:
   - {fileID: 1986820753228797927}
   - {fileID: 1770251104459100295}
   _playerCoin: {fileID: 8536125016503559945}
-  _gameData:
-    playerStage: 0
-    playerLv: 0
-    playerItem: 0
-    playerChar: 0
-    stageData: []
-    storeData:
-      itemData: []
-      onSaleItem: []
-      purchasedItem: []
-  _isPurchased: 0000000000
   _ifPurchased: {fileID: 1490014242}
   _dropdown: {fileID: 2518470118818892855}
-  _anims: []
-  _animatorController:
-  - {fileID: 9100000, guid: 51d77895004a0b940850aa1087a45748, type: 2}
-  - {fileID: 9100000, guid: 91bb64ed109054046aac8404ff1ff2e9, type: 2}
-  - {fileID: 9100000, guid: 9a312e5dd9a76a4408639d7b64f94f14, type: 2}
-  - {fileID: 9100000, guid: 2d1921dcb37ca214b9a6c17b4ac62808, type: 2}
-  - {fileID: 9100000, guid: df9c8da84522b914f80f3ea58b5ac9fb, type: 2}
+  _anim: {fileID: 0}
 --- !u!1 &513451716
 GameObject:
   m_ObjectHideFlags: 0
@@ -3030,6 +3012,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hammer: {fileID: 0}
+  _animators: []
+  _jumpAnim: {fileID: 0}
 --- !u!212 &2071639854
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8328,6 +8312,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hammer: {fileID: 0}
+  _animators: []
+  _jumpAnim: {fileID: 0}
 --- !u!114 &8852342774548859507
 MonoBehaviour:
   m_ObjectHideFlags: 0
