@@ -41,9 +41,14 @@ public class MapGenerator : MonoBehaviour
     private MonsterPooling _monsterPooling;
     private int _tileX = -1, _tileY;
     private float _groundYOffset = 0f;
+    
+    [Space]
+    [Header("Object Generator")]
+    [SerializeField] private ObjectGenerator _objectGenerator;
 
     private void Awake()
     {
+        _objectGenerator = GetComponent<ObjectGenerator>();
         Init(theme);
         GenerateMap();
     }
@@ -94,9 +99,9 @@ public class MapGenerator : MonoBehaviour
                 _tileX += 1;
 
                 _monsterPooling.AddTilePos(_tileX, _tileY);
-                LocateItems(_tileX, _tileY + 2);
 
                 prevGroundType = groundType;
+                _objectGenerator.PositItems(_tileX, _tileY + 2);
 
                 continue;
             }
@@ -215,6 +220,8 @@ public class MapGenerator : MonoBehaviour
                     if (_spdEventList[j].HasFloatPayload() | (_spdEventList[j].GetTextValue() == "End"))
                     {
                         _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 1, new Vector3Int(_tileX, _tileY + 1, 0), _groundYOffset), false);
+                        // Locate CheckPoint Animation
+                        _objectGenerator.PositCheckPoint(_tileX, _tileY+1);
                     }
                 }
             }
@@ -257,15 +264,5 @@ public class MapGenerator : MonoBehaviour
         };
 
         return tileChangeData;
-    }
-
-    [Header("Item")]
-    [SerializeField] private GameObject _starObj;
-    [SerializeField] private Transform _itemContainer;
-
-    private void LocateItems(int xPos, int yPos)
-    {
-        var item = Instantiate(_starObj, new Vector3(xPos, yPos, 0), Quaternion.identity);
-        item.transform.SetParent(_itemContainer);
     }
 }
