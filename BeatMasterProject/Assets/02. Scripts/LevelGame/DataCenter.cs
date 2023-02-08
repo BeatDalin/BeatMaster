@@ -9,7 +9,7 @@ public class DataCenter : MonoBehaviour
 {
     [SerializeField]
     private Data _gameData; // keep it private, and update it through method using stage & level number
-
+    private PlayerData _playerData;
     private readonly string _fileName = "Data.json"; // file name 
     private string _path => Application.persistentDataPath + '/' + _fileName;
     private static GameObject _go;
@@ -45,6 +45,7 @@ public class DataCenter : MonoBehaviour
 
             string data = stream.ReadToEnd();
             _gameData = JsonUtility.FromJson<Data>(data);
+            _playerData = _gameData.playerData;
             stream.Close();
         }
         else
@@ -78,9 +79,11 @@ public class DataCenter : MonoBehaviour
     private void CreateData()
     {
         _gameData = new Data();
-        _gameData.playerLv = 1;
-        _gameData.playerStage = 1;
-        _gameData.playerChar = 0; // default character index
+        _playerData = new PlayerData();
+        _playerData.playerLv = 1;
+        _playerData.playerStage = 1;
+        _playerData.playerChar = 0; // default character index
+        _gameData.playerData = _playerData;
         _gameData.stageData = new StageData[1]; // temporally, set array size as 1
         LevelData temp = new LevelData();
         for (int i = 0; i < _gameData.stageData.Length; i++)
@@ -137,9 +140,10 @@ public class DataCenter : MonoBehaviour
     /// <param name="playerItem">Add this number to player's current item count</param>
     public void UpdatePlayerData(int stageNum, int levelNum, int playerItem = 0)
     {
-        _gameData.playerStage = stageNum;
-        _gameData.playerLv = levelNum;
-        _gameData.playerItem += playerItem;
+        _playerData.playerStage = stageNum;
+        _playerData.playerLv = levelNum;
+        _playerData.playerItem += playerItem;
+        _gameData.playerData = _playerData;
         SaveData();
     }
 
@@ -175,13 +179,13 @@ public class DataCenter : MonoBehaviour
             if (item.itemNum == charNum)
             {
                 item.isPurchased = true;
-                _gameData.playerItem -= item.price;
+                _playerData.playerItem -= item.price;
                 _gameData.storeData.itemData[i] = item;
-                _gameData.playerChar = charNum;//임시
+                _playerData.playerChar = charNum;//임시
+                _gameData.playerData = _playerData;
             }
         }
         SaveData();
-        //UpdateStoreData();
     }
 
     /// <summary>
@@ -191,21 +195,20 @@ public class DataCenter : MonoBehaviour
     public void UpdateStoreData()
     {
         StoreData storeData = _gameData.storeData;
-        
+
         for (int i = 0; i < storeData.itemData.Count; i++)
         {
-             var tempItemData = storeData.itemData[i];
-             storeData.itemData[i] = tempItemData;
+            var tempItemData = storeData.itemData[i];
+            storeData.itemData[i] = tempItemData;
         }
         _gameData.storeData = storeData;
 
         SaveData();
     }
 
-    public int[] GetPlayerData()
+    public PlayerData GetPlayerData()
     {
-        int[] playerData = { _gameData.playerStage, _gameData.playerLv, _gameData.playerItem, _gameData.playerChar };
-        return playerData;
+        return _gameData.playerData;
     }
 
     /// <summary>
@@ -220,7 +223,7 @@ public class DataCenter : MonoBehaviour
         for (int i = 0; i < tempItemData.Count; i++)
         {
             int unlockStage = tempItemData[i].unlockStage;
-            
+
             // if (_gameData.stageData[].levelData[tempItemData[i].unlockLevel].levelClear)
             // {
             //     tempItemData[i].isUnlocked = true;

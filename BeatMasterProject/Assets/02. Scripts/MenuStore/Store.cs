@@ -31,38 +31,37 @@ public class Store : MonoBehaviour
     /*    [SerializeField]*/
     private Data _gameData;
 
-    private StoreData _currentStoreData;
+    //private StoreData _currentStoreData;
 
     private int[] _price;
     //구매 여부 판단 변수 
     private bool[] _isPurchased;
     private bool[] _isUnlocked;
-    private int[] _playerDatas; //0: playerStage, 1: playerLv, 2:playerItem(coin) 3:playerChar
+    //private PlayerData _playerDatas; //0: playerStage, 1: playerLv, 2:playerItem(coin) 3:playerChar
 
     private void Awake()
     {
         DataCenter.Instance.LoadData();
-        _playerDatas = DataCenter.Instance.GetPlayerData();
-        _currentStoreData = DataCenter.Instance.GetStoreData();
+        //_currentStoreData = DataCenter.Instance.GetStoreData();
         //각 변수에 맞는 데이터들 받아오기
     }
 
     private void Start()
     {
         //_animator = _popupPanel[0].transform.GetChild(0).GetComponent<Animator>();
-        _isPurchased = new bool[_currentStoreData.itemData.Count];
-        _isUnlocked = new bool[_currentStoreData.itemData.Count];
-        _price = new int[_currentStoreData.itemData.Count];
+        _isPurchased = new bool[DataCenter.Instance.GetStoreData().itemData.Count];
+        _isUnlocked = new bool[DataCenter.Instance.GetStoreData().itemData.Count];
+        _price = new int[DataCenter.Instance.GetStoreData().itemData.Count];
 
-        for (int i = 0; i < _currentStoreData.itemData.Count; i++)
+        for (int i = 0; i < DataCenter.Instance.GetStoreData().itemData.Count; i++)
         {
-            _isPurchased[i] = _currentStoreData.itemData[i].isPurchased;
-            _isUnlocked[i] = _currentStoreData.itemData[i].isUnlocked;
-            _price[i] = _currentStoreData.itemData[i].price;
+            _isPurchased[i] = DataCenter.Instance.GetStoreData().itemData[i].isPurchased;
+            _isUnlocked[i] = DataCenter.Instance.GetStoreData().itemData[i].isUnlocked;
+            _price[i] = DataCenter.Instance.GetStoreData().itemData[i].price;
         }
         //_playerChar = _gameData.playerChar;
 
-        UpdatePlayersCoinInScene();
+        UpdatePlayersDataInScene();
         for (int i = 0; i < _character.Length; i++)
         {
             int index = i;
@@ -108,29 +107,25 @@ public class Store : MonoBehaviour
     private void PurchaseCharacter(int charNum)
     {
         int price = _price[charNum];
-        if (price > _playerDatas[2])
+        if (price > DataCenter.Instance.GetPlayerData().playerItem)//_playerDatas.playerItem)
         {
             _popupPanel[1].SetActive(true);
             return;
         }
 
-        //_coin -= price;
-        //_isPurchased[charNum] = true;
-
         DataCenter.Instance.UpdateStorePurchaseData(charNum);
 
-        UpdatePlayersCoinInScene();
+        UpdatePlayersDataInScene();
     }
 
-    private void UpdatePlayersCoinData()
+    private void UpdatePlayersDataInScene()
     {
-        //_playerDatas[2] = _gameData.playerItem;
-        _playerCoin.text = _playerDatas[2].ToString();
-    }
-
-    private void UpdatePlayersCoinInScene()
-    {
-        _playerCoin.text = _playerDatas[2].ToString();
+        _playerCoin.text = DataCenter.Instance.GetPlayerData().playerItem.ToString();
+        for (int i = 0; i < DataCenter.Instance.GetStoreData().itemData.Count; i++)
+        {
+            _isPurchased[i] = DataCenter.Instance.GetStoreData().itemData[i].isPurchased;
+            _isUnlocked[i] = DataCenter.Instance.GetStoreData().itemData[i].isUnlocked;
+        }
     }
 
     private void ClosePanel()

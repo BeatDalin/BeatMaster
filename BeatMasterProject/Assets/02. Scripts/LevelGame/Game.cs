@@ -24,7 +24,7 @@ public enum GameState
 public abstract class Game : MonoBehaviour
 {
     [SerializeField] protected GameUI gameUI; // LevelGameUI or BossGameUI will come in.
-    [SerializeField] [EventID] private string _spdEventID;
+    [SerializeField][EventID] private string _spdEventID;
 
     [Header("Game Play")]
     public GameState curState = GameState.Idle;
@@ -64,8 +64,6 @@ public abstract class Game : MonoBehaviour
     private int[] _shortSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from long notes
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
 
-    public bool isEnd = false;
-    
     protected virtual void Awake()
     {
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
@@ -94,8 +92,6 @@ public abstract class Game : MonoBehaviour
         rewindLongIdx = 0;
         rewindSampleTime = -1;
         checkPointIdx = -1;
-
-        isEnd = false;
     }
 
     protected void StartWithDelay(int startSample = 0)
@@ -134,11 +130,11 @@ public abstract class Game : MonoBehaviour
             int eventLength = curEvent.EndSample - curEvent.StartSample;
             sampleRange[i, 0] = curEvent.StartSample + eventLength / 5;
             sampleRange[i, 1] = curEvent.StartSample + eventLength / 5 * 4;
-            
+
         }
         return sampleRange;
     }
-    
+
     private void CheckEnd(KoreographyEvent evt)
     {
         if (!evt.HasTextPayload())
@@ -180,7 +176,7 @@ public abstract class Game : MonoBehaviour
         }
         resultArr[idx] = tempResult;
     }
-    
+
     protected int IncreaseDeath()
     {
         deathCount++;

@@ -29,7 +29,7 @@ public class NormalGame : Game
     private PlayerStatus _playerStatus;
 
     private Anim _anim;
-    private int[] _playerDatas;
+    private PlayerData _playerDatas;
 
     public bool IsLongPressed
     {
@@ -67,10 +67,10 @@ public class NormalGame : Game
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_JumpCheck").GetAllEvents().Count];
         longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_Long").GetAllEvents().Count];
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
-        
+
         _playerDatas = DataCenter.Instance.GetPlayerData();
         _anim = FindObjectOfType<Anim>();
-        _anim.ChangeCharacterAnim(_playerDatas[3]);
+        _anim.ChangeCharacterAnim(_playerDatas.playerChar);
     }
 
     protected override void Start()
@@ -92,8 +92,8 @@ public class NormalGame : Game
     }
 
     private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
-    { 
-        if(_isCheckedShort && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
+    {
+        if (_isCheckedShort && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
         {
             _isCheckedShort = false; // initialize before a curve value becomes 1
         }
@@ -123,7 +123,7 @@ public class NormalGame : Game
         // The end of checking event range
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isCheckedShort)
         {
-            _isCheckedShort= true;
+            _isCheckedShort = true;
             Debug.Log($"shortIdx: {shortIdx}");
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
@@ -149,7 +149,7 @@ public class NormalGame : Game
             _isCheckedLong = false; // initialize before a curve value becomes 1
             isLongFailed = false;
         }
-        
+
         if (Input.GetKeyDown(_longNoteKey))
         {
             IsLongPressed = true;
@@ -272,7 +272,7 @@ public class NormalGame : Game
     {
         check++;
         Debug.Log($"SaveCheckPoint {check}");
-        
+
         if (sampleTime > rewindSampleTime)
         {
             // DisableMonster Clear
@@ -286,7 +286,7 @@ public class NormalGame : Game
             // Record sample time to play music
             rewindSampleTime = checkPointList[checkPointIdx].StartSample;
             Debug.Log(rewindSampleTime);
-            Debug.Log($"{checkPointIdx}");      
+            Debug.Log($"{checkPointIdx}");
             checkPointVisited[checkPointIdx] = true;
             // Play Particle or Animation
             // ex) particleSystem.Play();

@@ -17,8 +17,8 @@ public enum CharacterStatus
 public enum CharacterNum
 {
     Corgi,
-    Corgi_Notail,
     Tri_Corgi,
+    Corgi_Notail,
     Tri_Corgi_Notail,
 }
 
@@ -34,26 +34,26 @@ public class Anim : MonoBehaviour
 
     /*    [SerializeField]
         private RuntimeAnimatorController[] _animatorController;*/
+    private RuntimeAnimatorController _value;
     Dictionary<string, RuntimeAnimatorController> AnimatorDic = new Dictionary<string, RuntimeAnimatorController>();
     // Start is called before the first frame update
     private void Awake()
     {
         _animators = GetComponentsInChildren<Animator>();
         _anim = _animators[0];
-        if(_animators.Length > 1)
+        if (_animators.Length > 1) //수정예정
         {
             _effectAnim = _animators[1];
         }
-
     }
-    
+
     private RuntimeAnimatorController GetDic(string _key)
     {
-        if (AnimatorDic.ContainsKey(_key))
+        if (AnimatorDic.TryGetValue(_key, out _value))
             return AnimatorDic[_key];
-        RuntimeAnimatorController value = Resources.Load<RuntimeAnimatorController>(_key);
-        AnimatorDic.Add(_key, value);
-        return value;
+        _value = Resources.Load<RuntimeAnimatorController>(_key);
+        AnimatorDic.Add(_key, _value);
+        return _value;
     }
 
     public void ChangeCharacterAnim(int charNum)

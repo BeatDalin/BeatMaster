@@ -161,7 +161,7 @@ public class CharacterMovement : MonoBehaviour
         {
             RaycastHit2D groundCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
 
-            if (groundCheckHit && _game.isEnd)
+            if (groundCheckHit)
             {
                 _isJumping = false;
                 _canJump = true;
