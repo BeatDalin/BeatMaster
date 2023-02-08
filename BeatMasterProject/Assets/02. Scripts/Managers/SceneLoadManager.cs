@@ -109,42 +109,14 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         }
         _loadImage.gameObject.SetActive(false);
     }
-    
-    
-    
-    // private float _fadeMod = 1f;
-    // private float _timer = 0f;
-    // private void FadeOut()
-    // {
-    //     _timer = 1f;
-    //     foreach (Image image in _loadingCanvasImages)
-    //     {
-    //         Color color = image.color;
-    //         color.a = _timer;
-    //         image.color = color;
-    //     }
-    //     
-    //     _loadingCanvas.SetActive(true);
-    //     
-    // }
-    //
-    // private IEnumerator CoFadeIn()
-    // {
-    //     while (_timer > 0f)
-    //     {
-    //         foreach (Image image in _loadingCanvasImages)
-    //         {
-    //             Color color = image.color;
-    //             color.a = _timer;
-    //             image.color = color;
-    //         }
-    //         
-    //         _timer -= Time.deltaTime * _fadeMod;
-    //         yield return new WaitForEndOfFrame();
-    //     }
-    //     
-    //     _loadingCanvas.SetActive(false);
-    // }
-    
-    
+
+    public bool GetTransitionEnd()
+    {
+        if (_loadImage.material.GetFloat(Cutoff) >= _showBackground)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

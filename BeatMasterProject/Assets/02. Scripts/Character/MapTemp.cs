@@ -253,7 +253,7 @@ public class MapTemp : MonoBehaviour
                 {
                     if (_spdEventList[j].HasFloatPayload() | (_spdEventList[j].GetTextValue() == "End"))
                     {
-                        Debug.Log("CHeckPointCreate");
+                        Debug.Log("CheckPointCreate");
                         Matrix4x4 spdTileTransform = Matrix4x4.Translate(new Vector3(0f, groundYOffset, 0f)) * Matrix4x4.Rotate(Quaternion.identity);
                         TileChangeData spdTileChangeData = new TileChangeData
                         {
