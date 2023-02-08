@@ -9,7 +9,7 @@ public class CharacterMovement : MonoBehaviour
 {
     private Game _game;
     private Rigidbody2D _rigidbody;
-    private SpriteChanger _spriteChanger;
+    private ResourcesChanger _resourcesChanger;
 
     [Header("Music")]
     [EventID] public string speedEventID;
@@ -24,13 +24,14 @@ public class CharacterMovement : MonoBehaviour
             if (_moveSpeed == 0)
             {
                 _moveSpeed = value;
+                _resourcesChanger.SetDefaultSpeed(_moveSpeed);
                 return;
             }
 
             if (!_moveSpeed.Equals(value))
             {
                 _moveSpeed = value;
-                _spriteChanger.OnSpeedChanged();
+                _resourcesChanger.OnSpeedChanged(_moveSpeed);
             }
         }
     }
@@ -69,7 +70,7 @@ public class CharacterMovement : MonoBehaviour
         _characterPosition = transform.position;
         _game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
-        _spriteChanger = FindObjectOfType<SpriteChanger>();
+        _resourcesChanger = FindObjectOfType<ResourcesChanger>();
         //_animator = GetComponent<Animator>();
 
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
