@@ -46,6 +46,7 @@ public class NormalGame : Game
     protected override void Awake()
     {
         base.Awake();
+        objectGenerator = FindObjectOfType<ObjectGenerator>();
         _particleController = FindObjectOfType<ParticleController>();
         _monsterPooling = FindObjectOfType<MonsterPooling>();
         _characterMovement = FindObjectOfType<CharacterMovement>();

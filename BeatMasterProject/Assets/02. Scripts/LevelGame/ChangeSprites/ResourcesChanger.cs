@@ -71,9 +71,9 @@ public class ResourcesChanger : MonoBehaviour
         {
             case SceneLoadManager.SceneType.Level1:
                 // 포스트 프로세싱
-                //_volumeIndex %= _changingResources[0].ChangingProfiles.Length;
-                //_volume.profile = _changingResources[0].ChangingProfiles[_volumeIndex];
-                //_volumeIndex++;
+                // _volumeIndex %= _changingResources[0].ChangingProfiles.Length;
+                // _volume.profile = _changingResources[0].ChangingProfiles[_volumeIndex];
+                // _volumeIndex++;
                 break;
             case SceneLoadManager.SceneType.Level2:
                 break;
