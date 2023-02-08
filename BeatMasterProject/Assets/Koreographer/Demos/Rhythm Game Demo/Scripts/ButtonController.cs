@@ -1,6 +1,6 @@
-//----------------------------------------------
+﻿//----------------------------------------------
 //            	   Koreographer                 
-//    Copyright © 2014-2016 Sonic Bloom, LLC    
+//    Copyright © 2014-2020 Sonic Bloom, LLC    
 //----------------------------------------------
 
 using UnityEngine;
@@ -28,10 +28,9 @@ namespace SonicBloom.Koreo.Demos
 		void Start()
 		{
 			// Adjust the color to match that of the target Lane.
-			/*Color buttonColor = laneController.color;
+			Color buttonColor = laneController.color;
 			buttonColor.a = imageCom.color.a;
-			imageCom.color = buttonColor;*/
-            SpriteRenderer spriteRenderer = laneController.GetComponent<SpriteRenderer>();
+			imageCom.color = buttonColor;
 
 			// Change our button setup depending on whether we're using Touch Input or not.  For brevity,
 			//  only iOS and Android are currently handled.
@@ -40,13 +39,12 @@ namespace SonicBloom.Koreo.Demos
 		
 			// Adjust the brightness of the text for readability.  We get the "brightness" of the
 			//  color with grayscale and then invert it to get a feasible brightness.
-			//textCom.color = Color.Lerp(Color.black, Color.white, 1f - buttonColor.grayscale);
-            textCom.color = Color.Lerp(Color.black, Color.white, 1f - spriteRenderer.color.grayscale);
+			textCom.color = Color.Lerp(Color.black, Color.white, 1f - buttonColor.grayscale);
 #else
 			// No text to show.  Simply disable the Text component.
 			textCom.enabled = false;
 #endif
-        }
+		}
 		
 		#endregion
 	}

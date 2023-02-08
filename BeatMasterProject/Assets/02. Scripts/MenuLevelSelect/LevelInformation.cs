@@ -122,6 +122,11 @@ public class LevelInformation : MonoBehaviour
     {
        SetLevelInfo(++uiLevel);
     }
+
+    public void OnClickTitleBtn()
+    {
+        SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Title);
+    }
     
     /// <summary>
     /// 현재 Stage 내에서 클리어한 최대 level의 index를 반환하는 함수
