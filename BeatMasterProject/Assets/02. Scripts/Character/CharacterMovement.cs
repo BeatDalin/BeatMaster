@@ -57,12 +57,10 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _rayDistanceOffset = 0.2f;
     [SerializeField] private float _positionOffsetY;
 
-    private Animator _animator;
-
     public Vector3 _characterPosition;
 
     private float _checkPointCurrentBeatTime = 0f;
-    
+
 
     private void Start()
     {
@@ -70,7 +68,6 @@ public class CharacterMovement : MonoBehaviour
         _game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteChanger = FindObjectOfType<SpriteChanger>();
-        //_animator = GetComponent<Animator>();
 
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
         //SoundManager.instance.PlayBGM(false);
@@ -79,8 +76,6 @@ public class CharacterMovement : MonoBehaviour
     private void Update()
     {
         GetInput();
-
-        //Attack();
 
         if (_game.curState.Equals(GameState.Pause))
         {
@@ -104,7 +99,6 @@ public class CharacterMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
             SoundManager.instance.PlaySFX("Jump");
-            //_animator.CrossFadeInFixedTime("Jump",0.1f);
             PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);
             if (++_jumpCount >= _maxJumpCount)
             {
@@ -167,7 +161,7 @@ public class CharacterMovement : MonoBehaviour
         {
             RaycastHit2D groundCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
 
-            if (groundCheckHit)
+            if (groundCheckHit && _game.isEnd)
             {
                 _isJumping = false;
                 _canJump = true;

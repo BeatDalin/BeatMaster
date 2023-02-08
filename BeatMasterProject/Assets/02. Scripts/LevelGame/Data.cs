@@ -7,9 +7,10 @@ public struct Data
     public int playerStage; // Player's current max stage number
     public int playerLv; // Player's current max level in playerStage number
     public int playerItem; // Player's item count
+    public int playerChar;
     public StageData[] stageData;
     public StoreData storeData;
-} 
+}
 
 [Serializable]
 public struct StageData

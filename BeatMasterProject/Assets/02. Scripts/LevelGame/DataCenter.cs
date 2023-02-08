@@ -33,9 +33,9 @@ public class DataCenter : MonoBehaviour
     private void Start()
     {
         // if you want to find where the json file is located...
-        // Debug.Log(Application.persistentDataPath);
+        Debug.Log(Application.persistentDataPath);
     }
-    
+
     public void LoadData()
     {
         if (File.Exists(_path))
@@ -63,7 +63,7 @@ public class DataCenter : MonoBehaviour
         _gameData.stageData[stageIdx].levelData[levelIdx] = levelData;
         SaveData();
     }
-    
+
     public LevelData GetLevelData(int stageIdx, int levelIdx)
     {
         return _gameData.stageData[stageIdx].levelData[levelIdx];
@@ -80,25 +80,26 @@ public class DataCenter : MonoBehaviour
         _gameData = new Data();
         _gameData.playerLv = 1;
         _gameData.playerStage = 1;
+        _gameData.playerChar = 0;
         _gameData.stageData = new StageData[1]; // temporally, set array size as 1
         LevelData temp = new LevelData();
         for (int i = 0; i < _gameData.stageData.Length; i++)
         {
-            _gameData.stageData[i].stage = i+1;
+            _gameData.stageData[i].stage = i + 1;
             _gameData.stageData[i].levelData = new LevelData[5];
-            
+
             for (int j = 0; j < _gameData.stageData[i].levelData.Length; j++)
             {
-                temp.level = j+1;
+                temp.level = j + 1;
                 _gameData.stageData[i].levelData[j] = temp;
             }
         }
-        
+
         CreateStoreData();
 
         SaveData();
     }
-    
+
     /// <summary>
     /// Add new StageData when a boss level is cleared.
     /// </summary>
@@ -107,11 +108,11 @@ public class DataCenter : MonoBehaviour
         // Call AddStageData() when new stage is opened or previous stage's boss level has been cleared.
         var old = _gameData.stageData.ToList(); // convert the old array into a List
         StageData newStage = new StageData(); // create new StageData
-        
+
         // push initial values to the new StageData
         newStage.stage = old.Count + 1;
         newStage.levelData = new LevelData[5];
-        
+
         LevelData temp = new LevelData();
         for (int i = 0; i < 5; i++)
         {
@@ -145,13 +146,13 @@ public class DataCenter : MonoBehaviour
     private void CreateStoreData()
     {
         _gameData.storeData = new StoreData();
-        
+
         _gameData.storeData.itemData = new List<ItemData>(); // 일단 item 3개로 설정. 추후 변경 가능
         _gameData.storeData.onSaleItem = new List<ItemData>();
         _gameData.storeData.purchasedItem = new List<ItemData>();
-        
+
         ItemData item = new ItemData();
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
             item.itemNum = i;
             item.price = 10;
@@ -168,6 +169,23 @@ public class DataCenter : MonoBehaviour
         return _gameData.storeData;
     }
 
+    public void UpdateStorePurchaseData(int charNum)
+    {
+        for (int i = 0; i < _gameData.storeData.itemData.Count; i++)
+        {
+            ItemData item = _gameData.storeData.itemData[i];
+            if (item.itemNum == charNum)
+            {
+                item.isPurchased = true;
+                _gameData.playerItem -= item.price;
+                _gameData.storeData.itemData[i] = item;
+                _gameData.playerChar = charNum;//임시
+            }
+        }
+        SaveData();
+        //UpdateStoreData();
+    }
+
     /// <summary>
     /// StorePopup 오픈, item 구매 후 호출
     /// </summary>
@@ -177,30 +195,36 @@ public class DataCenter : MonoBehaviour
 
         var tempPurchasedItem = new List<ItemData>();
         var tempOnSaleItem = new List<ItemData>();
-        
+
         for (int i = 0; i < storeData.itemData.Count; i++)
         {
-             var tempItemData = storeData.itemData[i];
+            var tempItemData = storeData.itemData[i];
 
-             if (tempItemData.isPurchased)
-             {
-                 tempPurchasedItem.Add(tempItemData);
-             }
-             
-             else if (_gameData.stageData[tempItemData.unlockStage].levelData[tempItemData.unlockLevel].levelClear)
-             {
-                 tempItemData.isUnlocked = true;
-                 tempOnSaleItem.Add(tempItemData);
-             }
+            if (tempItemData.isPurchased)
+            {
+                tempPurchasedItem.Add(tempItemData);
+            }
 
-             storeData.itemData[i] = tempItemData;
+            else if (_gameData.stageData[tempItemData.unlockStage].levelData[tempItemData.unlockLevel].levelClear)
+            {
+                tempItemData.isUnlocked = true;
+                tempOnSaleItem.Add(tempItemData);
+            }
+
+            storeData.itemData[i] = tempItemData;
         }
 
         storeData.purchasedItem = tempPurchasedItem;
         storeData.onSaleItem = tempOnSaleItem;
-        
+
         _gameData.storeData = storeData;
-        
+
         SaveData();
+    }
+
+    public int[] GetPlayerData()
+    {
+        int[] playerData = { _gameData.playerStage, _gameData.playerLv, _gameData.playerItem, _gameData.playerChar };
+        return playerData;
     }
 }

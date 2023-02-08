@@ -14,15 +14,39 @@ public enum CharacterStatus
     Die
 }
 
+public enum CharacterNum
+{
+    Corgi,
+    Corgi_Notail,
+    Tri_Corgi,
+    Tri_Corgi_Notail,
+}
+
 public class Anim : MonoBehaviour
 {
     [SerializeField] private GameObject _hammer;
     private Animator _anim;
-
+    /*    [SerializeField]
+        private RuntimeAnimatorController[] _animatorController;*/
+    Dictionary<string, RuntimeAnimatorController> AnimatorDic = new Dictionary<string, RuntimeAnimatorController>();
     // Start is called before the first frame update
     private void Awake()
     {
         _anim = GetComponentInChildren<Animator>();
+
+    }
+    private RuntimeAnimatorController GetDic(string _key)
+    {
+        if (AnimatorDic.ContainsKey(_key))
+            return AnimatorDic[_key];
+        RuntimeAnimatorController value = Resources.Load<RuntimeAnimatorController>(_key);
+        AnimatorDic.Add(_key, value);
+        return value;
+    }
+
+    public void ChangeCharacterAnim(int charNum)
+    {
+        _anim.runtimeAnimatorController = GetDic(Enum.GetName(typeof(CharacterNum), charNum));
     }
 
     public void StatusJudge(CharacterStatus crnStat)

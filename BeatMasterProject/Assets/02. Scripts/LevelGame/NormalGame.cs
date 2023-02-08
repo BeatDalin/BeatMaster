@@ -19,13 +19,16 @@ public class NormalGame : Game
     private KeyCode _jumpNoteKey = KeyCode.LeftArrow;
     private KeyCode _attackNoteKey = KeyCode.RightArrow;
     private KeyCode _longNoteKey = KeyCode.LeftArrow;
-    [Header("MonsterPool")] 
+    [Header("MonsterPool")]
     private MonsterPooling _monsterPooling;
 
     private CharacterMovement _characterMovement;
     [Header("SpriteChanger")]
     private SpriteChanger _spriteChanger;
-    
+
+    private Anim _anim;
+    private int[] _playerDatas;
+
     public bool IsLongPressed
     {
         get => isLongPressed;
@@ -39,7 +42,7 @@ public class NormalGame : Game
             }
         }
     }
-    
+
 
     protected override void Awake()
     {
@@ -53,7 +56,7 @@ public class NormalGame : Game
         Koreographer.Instance.RegisterForEvents("Level1_LongCheckMiddle", CheckLongMiddle);
         Koreographer.Instance.RegisterForEventsWithTime("Level1_LongCheckStart", CheckLongStart);
         Koreographer.Instance.RegisterForEventsWithTime("Level1_LongCheckEnd", CheckLongEnd);
-        
+
         // Result Array
         shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_JumpCheck").GetAllEvents().Count];
         longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_Long").GetAllEvents().Count];
@@ -61,12 +64,16 @@ public class NormalGame : Game
 
         _monsterPooling = FindObjectOfType<MonsterPooling>();
         _characterMovement = FindObjectOfType<CharacterMovement>();
+
+        _playerDatas = DataCenter.Instance.GetPlayerData();
+        _anim = FindObjectOfType<Anim>();
+        _anim.ChangeCharacterAnim(_playerDatas[3]);
     }
 
     protected override void Start()
     {
         base.Start();
-        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
+        //PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
         Init();
     }
 
@@ -82,8 +89,8 @@ public class NormalGame : Game
     }
 
     private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
-    { 
-        if(_isChecked && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
+    {
+        if (_isChecked && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
         {
             _isChecked = false; // initialize before a curve value becomes 1
         }
@@ -103,7 +110,7 @@ public class NormalGame : Game
         // The end of checking event range
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isChecked)
         {
-            _isChecked= true;
+            _isChecked = true;
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             shortIdx++;
@@ -154,7 +161,7 @@ public class NormalGame : Game
             Debug.Log("Middle KeyUP => Fail!!!");
 
             //==============Rewind 자리==============
-            if (!isLongFailed) 
+            if (!isLongFailed)
             {
                 // Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
@@ -189,7 +196,7 @@ public class NormalGame : Game
             longIdx++;
             if (!isLongKeyCorrect)
             {
-                
+
                 Debug.Log("End Key Fail!!!");
                 // ===============Rewind==============
                 if (!isLongFailed)
@@ -197,12 +204,12 @@ public class NormalGame : Game
                     // Rewind(); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
                 }
             }
-            
+
             IsLongPressed = false;
             isLongKeyCorrect = false;
         }
     }
-    
+
     private void Rewind()
     {
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Damage);
@@ -229,7 +236,7 @@ public class NormalGame : Game
     private void DecreaseItem(int amount)
     {
         coinCount -= amount;
-        if(coinCount < 0)
+        if (coinCount < 0)
         {
             coinCount = 0;
         }
