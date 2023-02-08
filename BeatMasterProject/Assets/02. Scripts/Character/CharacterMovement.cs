@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -62,17 +63,21 @@ public class CharacterMovement : MonoBehaviour
     public Vector3 _characterPosition;
 
     private float _checkPointCurrentBeatTime = 0f;
-    
+
+    private void Awake()
+    {
+        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
+    }
 
     private void Start()
     {
+        _moveSpeed = 2f;
         _characterPosition = transform.position;
         _game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteChanger = FindObjectOfType<SpriteChanger>();
         //_animator = GetComponent<Animator>();
 
-        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
         //SoundManager.instance.PlayBGM(false);
     }
 
