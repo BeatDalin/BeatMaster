@@ -131,7 +131,6 @@ public abstract class Game : MonoBehaviour
             int eventLength = curEvent.EndSample - curEvent.StartSample;
             sampleRange[i, 0] = curEvent.StartSample + eventLength / 5;
             sampleRange[i, 1] = curEvent.StartSample + eventLength / 5 * 4;
-
         }
         return sampleRange;
     }

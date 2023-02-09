@@ -54,6 +54,7 @@ public class MonsterPooling : MonoBehaviour
 
     public void DisableMonster()
     {
+        monsterList[_monsterIdx].GetComponent<Monster>().ShowAnim();
         monsterList[_monsterIdx].SetActive(false);
         _monsterIdx++;
     }

@@ -61,10 +61,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _positionOffsetY;
 
     private Animator _animator;
-
-    public Vector3 _characterPosition;
-
-    private float _checkPointCurrentBeatTime = 0f;
+    
 
     private void Awake()
     {

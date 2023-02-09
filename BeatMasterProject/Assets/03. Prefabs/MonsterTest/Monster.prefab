@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 6fa64587f9d17cc49a6545bb92ae5e1a, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -94,7 +94,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2016255017951099006}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 5c499e595388942528b52b4627ea1a19, type: 2}
   m_CullingMode: 0
@@ -225,7 +225,7 @@ MonoBehaviour:
   isGainCoin: 1
   position: {fileID: 0}
   _rigidbody2D: {fileID: 6571710119711434610}
-  _capsuleCollider2D: {fileID: 4553432830243929760}
+  _animator: {fileID: 6257243306756893677}
 --- !u!50 &6571710119711434610
 Rigidbody2D:
   serializedVersion: 4
