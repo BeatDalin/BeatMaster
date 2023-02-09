@@ -10,16 +10,18 @@ public class ResourcesChanger : MonoBehaviour
 {
     [SerializeField] private ChangingResources[] _changingResources;
     private BackgroundMover _backgroundMover;
+    private Renderer _backgroundRenderer;
+    private Material _backgroundMaterial;
     private CameraController _cameraController;
-    private Volume _volume;
-    private int _volumeIndex;
+    private int _materialIndex;
     private float _defaultSpeed;
     
     private void Awake()
     {
         _backgroundMover = FindObjectOfType<BackgroundMover>();
+        _backgroundRenderer = _backgroundMover.GetComponent<Renderer>();
+        _backgroundMaterial = _backgroundRenderer.material;
         _cameraController = FindObjectOfType<CameraController>();
-        _volume = FindObjectOfType<Volume>();
         Init();
     }
 
@@ -43,6 +45,7 @@ public class ResourcesChanger : MonoBehaviour
         switch (SceneLoadManager.Instance.Scene)
         {
             case SceneLoadManager.SceneType.Level1:
+                ResetMaterialsOffset(_changingResources[0].ChangingMaterials);
                 break;
             case SceneLoadManager.SceneType.Level2:
                 break;
@@ -52,6 +55,8 @@ public class ResourcesChanger : MonoBehaviour
                 break;
         }
     }
+    
+    
 
     public void OnSpeedChanged(float speed)
     {
@@ -63,17 +68,18 @@ public class ResourcesChanger : MonoBehaviour
     {
         if (_defaultSpeed.Equals(speed))
         {
-            _volume.profile = null;
+            _backgroundMover.SetMaterial(_backgroundMaterial);
             return;
         }
          
         switch (SceneLoadManager.Instance.Scene)
         {
             case SceneLoadManager.SceneType.Level1:
-                // 포스트 프로세싱
-                // _volumeIndex %= _changingResources[0].ChangingProfiles.Length;
-                // _volume.profile = _changingResources[0].ChangingProfiles[_volumeIndex];
-                // _volumeIndex++;
+                // 스프라이트 교체
+                _materialIndex %= _changingResources[0].ChangingMaterials.Length;
+                Material changingMaterial = _changingResources[0].ChangingMaterials[_materialIndex];
+                _backgroundMover.SetMaterial(changingMaterial);
+                _materialIndex++;
                 break;
             case SceneLoadManager.SceneType.Level2:
                 break;
@@ -81,6 +87,16 @@ public class ResourcesChanger : MonoBehaviour
                 break;
             case SceneLoadManager.SceneType.Level4:
                 break;
+        }
+    }
+    
+    private void ResetMaterialsOffset(Material[] materials)
+    {
+        // BackgroundMover에서 이동한 결과에 의해 원본이 훼손되는 것을 막기위함
+        _backgroundMaterial.mainTextureOffset = Vector2.zero;
+        foreach (var material in materials)
+        {
+            material.mainTextureOffset = Vector2.zero;
         }
     }
 
