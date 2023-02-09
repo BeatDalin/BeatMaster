@@ -17,17 +17,23 @@ public class NormalGame : Game
     private int _pressedTime;
     private int _pressedTimeLong;
     private bool _isCheckedShort; // to prevent double check
+    private bool _isCheckedAttack; // to prevent double check
     private bool _isCheckedLong; // to prevent double check
     [Header("Input KeyCode")]
     private KeyCode _jumpNoteKey = KeyCode.LeftArrow;
     private KeyCode _attackNoteKey = KeyCode.RightArrow;
     private KeyCode _longNoteKey = KeyCode.LeftArrow;
+    private List<KoreographyEvent> _shortEvent;
     [Header("MonsterPool")] 
+
     private MonsterPooling _monsterPooling;
     private CharacterMovement _characterMovement;
     [Header("SpriteChanger")]
     private PlayerStatus _playerStatus;
-    
+
+    private Anim _anim;
+    private PlayerData _playerDatas;
+
     public bool IsLongPressed
     {
         get => isLongPressed;
@@ -41,7 +47,7 @@ public class NormalGame : Game
             }
         }
     }
-    
+
 
     protected override void Awake()
     {
@@ -56,29 +62,49 @@ public class NormalGame : Game
         Koreographer.Instance.RegisterForEventsWithTime("Level1_CheckPoint", SaveCheckPoint);
         // Short Note Event Track
         Koreographer.Instance.RegisterForEventsWithTime("Level1_JumpCheck", CheckShortEnd);
+        // Attack Note Event Track
+        Koreographer.Instance.RegisterForEventsWithTime("Level1_AttackCheck", CheckAttackEnd);
         // Long Note Event Track
         Koreographer.Instance.RegisterForEvents("Level1_LongCheckMiddle", CheckLongMiddle);
         Koreographer.Instance.RegisterForEventsWithTime("Level1_LongCheckStart", CheckLongStart);
         Koreographer.Instance.RegisterForEventsWithTime("Level1_LongCheckEnd", CheckLongEnd);
-        
+
         // Result Array
-        shortResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_JumpCheck").GetAllEvents().Count];
+        
+        _shortEvent = SoundManager.instance.playingKoreo.GetTrackByID("Level1_Short").GetAllEvents();
+        shortResult = new BeatResult[_shortEvent.Count];
         longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID("Level1_Long").GetAllEvents().Count];
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
+
+        _playerDatas = DataCenter.Instance.GetPlayerData();
+        _anim = FindObjectOfType<Anim>();
+        _anim.ChangeCharacterAnim(_playerDatas.playerChar);
     }
 
     protected override void Start()
     {
         base.Start();
-        PlayerStatus.Instance.ChangeStatus(Status.Idle);
+        //PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
         Init();
     }
 
     protected override void Init()
     {
         base.Init();
-        _events = SoundManager.instance.playingKoreo.GetTrackByID("Level1_JumpCheck").GetAllEvents();
-        _eventRangeShort = CalculateRange(_events);
+        // Need CurveEvent
+        _events = SoundManager.instance.playingKoreo.GetTrackByID("Level1_Short").GetAllEvents();
+
+        List<KoreographyEvent> rangeEventList = new List<KoreographyEvent>();
+        
+        for (int i = 0; i < _events.Count; i++)
+        {
+            KoreographyEvent ev = new KoreographyEvent();
+            ev.StartSample = _events[i].StartSample - 5000;
+            ev.EndSample = _events[i].EndSample + 5000;
+            rangeEventList.Add(ev);
+        }
+        
+        _eventRangeShort = CalculateRange(rangeEventList);
         _events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
         // Save Point Initialize
@@ -86,26 +112,58 @@ public class NormalGame : Game
     }
 
     private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
-    { 
-        if(_isCheckedShort && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
+    {
+        if (_isCheckedShort && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
         {
             _isCheckedShort = false; // initialize before a curve value becomes 1
         }
 
         if (!isShortKeyCorrect)
         {
-            if (evt.GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey))
+            if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey))
             {
+                Debug.Log(sampleTime);
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 _particleController.PlayJumpParticle();
                 isShortKeyCorrect = true;
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, coinCount);
                 _pressedTime = sampleTime; // record the sample time when the button was pressed
             }
-            else if (evt.GetIntValue() == 1 && Input.GetKeyDown(_attackNoteKey))
+        }
+
+        // The end of checking event range
+        if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isCheckedShort)
+        {
+            _isCheckedShort= true;
+            Debug.Log($"JumpIdx: {shortIdx}");
+            CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
+            gameUI.ChangeOutLineColor(shortResult[shortIdx]);
+            shortIdx++;
+            // if (!isShortKeyCorrect)
+            // {
+            //     // ================Rewind 자리================
+            //     // Rewind();
+            // }
+            isShortKeyCorrect = false;
+        }
+    }
+
+    private void CheckAttackEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
+    {
+        if(_isCheckedAttack && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
+        {
+            _isCheckedAttack = false; // initialize before a curve value becomes 1
+        }
+
+        if (!isShortKeyCorrect)
+        {
+            if (_shortEvent[shortIdx].GetIntValue() == 1 && Input.GetKeyDown(_attackNoteKey))
             {
                 _particleController.PlayJumpParticle();
+                Debug.Log(evt.GetIntValue());
                 isShortKeyCorrect = true;
+                _monsterPooling.DisableMonster();
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, coinCount);
                 _pressedTime = sampleTime; // record the sample time when the button was pressed
@@ -114,10 +172,11 @@ public class NormalGame : Game
         }
 
         // The end of checking event range
-        if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isCheckedShort)
+        if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isCheckedAttack)
         {
-            _isCheckedShort= true;
-            Debug.Log($"shortIdx: {shortIdx}");
+            _isCheckedAttack = true;
+
+            Debug.Log($"AttackIdx: {shortIdx}");
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             shortIdx++;
@@ -126,10 +185,6 @@ public class NormalGame : Game
                 _monsterPooling.DisableMonster();
                 // ================Rewind 자리================
                 // Rewind();
-            }
-            else
-            {
-                _monsterPooling.DisableMonster();
             }
             isShortKeyCorrect = false;
         }
@@ -142,7 +197,7 @@ public class NormalGame : Game
             _isCheckedLong = false; // initialize before a curve value becomes 1
             isLongFailed = false;
         }
-        
+
         if (Input.GetKeyDown(_longNoteKey))
         {
             IsLongPressed = true;
@@ -177,7 +232,7 @@ public class NormalGame : Game
             Debug.Log("Middle KeyUP => Fail!!!");
 
             //==============Rewind 자리==============
-            if (!isLongFailed) 
+            if (!isLongFailed)
             {
                 _animScript.SetEffectBool(false);
                 // Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
@@ -196,7 +251,7 @@ public class NormalGame : Game
             if (!isLongKeyCorrect) // increase item only once
             {
                 Debug.Log("End Key Up => Correct!");
-
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 isLongKeyCorrect = true;
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, coinCount);
@@ -214,7 +269,7 @@ public class NormalGame : Game
             longIdx++;
             if (!isLongKeyCorrect)
             {
-                
+
                 Debug.Log("End Key Fail!!!");
                 // ===============Rewind==============
                 if (!isLongFailed)
@@ -222,14 +277,16 @@ public class NormalGame : Game
                     // Rewind(); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
                 }
             }
-            
+
             IsLongPressed = false;
             isLongKeyCorrect = false;
+            _animScript.SetEffectBool(false);
         }
     }
-    
+
     private void Rewind()
     {
+        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Damage);
         curState = GameState.Pause;
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
@@ -253,7 +310,7 @@ public class NormalGame : Game
     private void DecreaseItem(int amount)
     {
         coinCount -= amount;
-        if(coinCount < 0)
+        if (coinCount < 0)
         {
             coinCount = 0;
         }
@@ -264,7 +321,7 @@ public class NormalGame : Game
     {
         check++;
         Debug.Log($"SaveCheckPoint {check}");
-        
+
         if (sampleTime > rewindSampleTime)
         {
             // DisableMonster Clear
@@ -278,7 +335,7 @@ public class NormalGame : Game
             // Record sample time to play music
             rewindSampleTime = checkPointList[checkPointIdx].StartSample;
             Debug.Log(rewindSampleTime);
-            Debug.Log($"{checkPointIdx}");      
+            Debug.Log($"{checkPointIdx}");
             checkPointVisited[checkPointIdx] = true;
             // Play Particle or Animation
             // ex) particleSystem.Play();
@@ -287,6 +344,7 @@ public class NormalGame : Game
         // Record Index
         rewindShortIdx = shortIdx;
         rewindLongIdx = longIdx;
+        Debug.Log(rewindShortIdx);
     }
     private void Update()
     {

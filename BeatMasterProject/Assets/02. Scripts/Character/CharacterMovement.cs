@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,7 @@ public class CharacterMovement : MonoBehaviour
             if (_moveSpeed == 0)
             {
                 _moveSpeed = value;
+                _resourcesChanger.SetDefaultSpeed(_moveSpeed);
                 return;
             }
 
@@ -58,13 +60,22 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _rayDistanceOffset = 0.2f;
     [SerializeField] private float _positionOffsetY;
 
+    private Animator _animator;
+    
+
+    private void Awake()
+    {
+        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
+    }
+
     private void Start()
     {
         _characterPosition = transform.position;
         _game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _resourcesChanger = FindObjectOfType<ResourcesChanger>();
-
+        
+        MoveSpeed = 2f;
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
     }
 
@@ -74,8 +85,6 @@ public class CharacterMovement : MonoBehaviour
         {
             GetInput();
         }
-
-        //Attack();
 
         if (_game.curState.Equals(GameState.Pause))
         {
@@ -98,8 +107,7 @@ public class CharacterMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
             SoundManager.instance.PlaySFX("Jump");
-            PlayerStatus.Instance.ChangeStatus(Status.Jump);
-
+            PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);
             if (++_jumpCount >= _maxJumpCount)
             {
                 _canJump = false;
@@ -182,7 +190,7 @@ public class CharacterMovement : MonoBehaviour
                 _canJump = true;
                 _jumpCount = 0;
                 _gravityAccel = startGravityAccel;
-                PlayerStatus.Instance.ChangeStatus(Status.Run);
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
             }
         }
 
@@ -249,7 +257,7 @@ public class CharacterMovement : MonoBehaviour
             else if (evt.GetTextValue() == "Stop")
             {
                 _canGroundCheck = false;
-                PlayerStatus.Instance.ChangeStatus(Status.Idle);
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
             }
         }
     }
