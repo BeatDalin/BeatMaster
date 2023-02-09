@@ -48,26 +48,6 @@ public class MenuTitleButton : MonoBehaviour
         }
     }
 
-    private void ChangeScale(KoreographyEvent evt)
-    {
-        if (_doTweenAnimations[0] == null)
-        {
-            _doTweenAnimations[0] = GameObject.Find("TitleText").GetComponent<DOTweenAnimation>();
-            _doTweenAnimations[1] = GameObject.Find("StageBtn").GetComponent<DOTweenAnimation>();
-            _doTweenAnimations[2] = GameObject.Find("StoreBtn").GetComponent<DOTweenAnimation>();
-            _doTweenAnimations[3] = GameObject.Find("SettingBtn").GetComponent<DOTweenAnimation>();
-            _doTweenAnimations[4] = GameObject.Find("ShotdownBtn").GetComponent<DOTweenAnimation>();
-
-        }
-
-        for (int i = 0; i < _doTweenAnimations.Length; i++)
-        {
-            _doTweenAnimations[i].DORewind();
-            _doTweenAnimations[i].DOPlay();
-        }
-    }
-
-
     /// <summary>
     /// 각 버튼에 클릭 리스너를 달아주는 함수
     /// 눌린것을 표현하기 위해서 DOScale을 사용하고 완료되면 DORewind로 원래 Scale로 돌아오게함
@@ -164,18 +144,6 @@ public class MenuTitleButton : MonoBehaviour
                 break;
         }
     }
-
-    private void SceneMoveBtn(string sceneName)
-    {
-        SoundManager.instance.PlaySFX("Touch");
-
-        //temp
-        if (sceneName == "Stage")
-        {
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
-        }
-    }
-
     
     private void ChangeScale(KoreographyEvent evt)
     {
@@ -185,22 +153,5 @@ public class MenuTitleButton : MonoBehaviour
             _doTweenAnimations[i].DOPlay();
 
         }
-        // if (_objectIdx == _doTweenAnimations.Length)
-        // {
-        //     _objectIdx = 0;
-        // }
-        //
-        // if (_objectIdx == 0)
-        // {
-        //     _doTweenAnimations[_doTweenAnimations.Length - 1].DORewind();
-        //     _doTweenAnimations[_objectIdx].DOPlay();
-        //     _objectIdx++;
-        // }
-        // else
-        // {
-        //     _doTweenAnimations[_objectIdx - 1].DORewind();
-        //     _doTweenAnimations[_objectIdx].DOPlay();
-        //     _objectIdx++;
-        // }
     }
 }

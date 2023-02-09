@@ -372,7 +372,6 @@ MonoBehaviour:
     m_Bits: 2048
   _rayDistanceOffset: 0.6
   _positionOffsetY: 0.5
-  _characterPosition: {x: 0, y: 0, z: 0}
 --- !u!50 &18329007
 Rigidbody2D:
   serializedVersion: 4
@@ -995,15 +994,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5502efebde2a24f4e9eaf54de75d7629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _disableMonsterList: []
   monsterList: []
-  checkPoint: []
   _mapEventID: Level1_Map
   _shortEventID: Level1_Short
-  _spdEventID: Level1_Spd
   _mapEventList: []
   _shortEventList: []
-  _spdEventList: []
   _monsterPrefab: {fileID: 3003763203973727308, guid: 367c90cd1e9064c43bbfaafbc81f3d4a, type: 3}
   _tilePos: []
 --- !u!4 &199611011
@@ -10511,7 +10506,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 3.5, z: -10}
-  _minOrthoSize: 7
+  _minOrthoSize: 5
   _maxOrthoSize: 10
   _speedEventID: Level1_Spd
 --- !u!114 &1686695924
@@ -10939,7 +10934,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7df77eeb86c55c947bf044f6c5e623b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _changingResources: []
 --- !u!4 &1811512137
 Transform:
   m_ObjectHideFlags: 0

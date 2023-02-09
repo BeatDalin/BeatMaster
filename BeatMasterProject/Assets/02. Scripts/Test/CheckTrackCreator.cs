@@ -32,7 +32,7 @@ public class CheckTrackCreator : MonoBehaviour
         // GenerateLongCheckEvent();
         // GenerateCheckPointEvent();
         // SyncAttackLong();
-        //GenerateAttackCheckEvent();
+        // GenerateAttackCheckEvent();
     }
 
 
