@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour
 
     private void ChangeOrthoSize(KoreographyEvent evt)
     {
-        if (evt.StartSample == 0)
+        if (evt.StartSample == 0 | !evt.HasFloatPayload())
         {
             _prevCharacterSpeed = evt.GetFloatValue();
 
