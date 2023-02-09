@@ -23,38 +23,23 @@ public class MenuTitleButton : MonoBehaviour
     [SerializeField] private GameObject _settingPopUp;
     [SerializeField] private GameObject _storePopUp;
     [SerializeField] private GameObject _stagePopUp;
-    [SerializeField] private CanvasGroup _loadingPanelGroup;
-
-    [SerializeField] private SimpleMusicPlayer _simpleMusicPlayer;
-
+   
     private int _objectIdx = 0;
-
-    private void Awake()
-    {
-        Koreographer.Instance.GetKoreographyAtIndex(0);
-    }
 
     private void Start()
     {
+        // Event Register
         Koreographer.Instance.RegisterForEvents("Title_Track", ChangeScale);
-
         AddClickListener();
-
-        _simpleMusicPlayer = SoundManager.instance.musicPlayer;
+        
+        if (!SoundManager.instance.musicPlayer.IsPlaying)
+        {
+            SoundManager.instance.musicPlayer.Play();
+        }
     }
 
     private void Update()
     {
-        if (_loadingPanelGroup.alpha == 0)
-        {
-            if (!_simpleMusicPlayer.IsPlaying)
-            {
-                _simpleMusicPlayer.Play();
-                _loadingPanelGroup.gameObject.SetActive(false);
-                
-            }
-        }
-        
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             UIManager.instance.ClosePopUp();
@@ -193,5 +178,18 @@ public class MenuTitleButton : MonoBehaviour
         //     _doTweenAnimations[_objectIdx].DOPlay();
         //     _objectIdx++;
         // }
+    }
+
+    public void RegisterTitleEvent(bool isRegister)
+    {
+        if (isRegister)
+        {
+            Koreographer.Instance.RegisterForEvents("Title_Track", ChangeScale);
+
+        }
+        else
+        {
+            Koreographer.Instance.UnregisterForEvents("Title_Track", ChangeScale);
+        }
     }
 }
