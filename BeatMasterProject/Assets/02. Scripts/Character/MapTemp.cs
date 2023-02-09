@@ -48,15 +48,16 @@ public class MapTemp : MonoBehaviour
     [SerializeField] private Transform _itemContainer;
     [SerializeField] private GameObject _checkPointObj; // 
     [SerializeField] private List<Animator> _checkPointAnim = new List<Animator>();
-
+    
+    [SerializeField] private ObjectGenerator _objectGenerator;
     
     private int _tileX = -1, _tileY;
     private MonsterPooling _monsterPooling;
-    private static readonly int IsPlay = Animator.StringToHash("isPlay");
 
     private void Awake()
     {
         _monsterPooling = FindObjectOfType<MonsterPooling>();
+        _objectGenerator = GetComponent<ObjectGenerator>();
         
         LoadAllEvents();
         GenerateMap();
@@ -160,7 +161,7 @@ public class MapTemp : MonoBehaviour
             {
                 prevGroundType = groundType;
                 _monsterPooling.AddTilePos(_tileX, _tileY);
-                LocateItems(_tileX, _tileY + 2);
+                _objectGenerator.PositItems(_tileX, _tileY + 2);
                 continue;
             }
 
@@ -265,8 +266,7 @@ public class MapTemp : MonoBehaviour
                         _interactionTilemap.SetTile(spdTileChangeData, false);
                         
                         // Locate CheckPoint Animation
-                        var effect = Instantiate(_checkPointObj, new Vector3Int(_tileX, _tileY+1, 0), Quaternion.identity);
-                        _checkPointAnim.Add(effect.GetComponent<Animator>());
+                        _objectGenerator.PositCheckPoint(_tileX, _tileY+1);
                     }
                 }
             }
@@ -275,16 +275,5 @@ public class MapTemp : MonoBehaviour
             prevGroundType = groundType;
         }
     }
-    
-    private void LocateItems(int xPos, int yPos)
-    {
-        var item = Instantiate(_starObj, new Vector3(xPos, yPos, 0), Quaternion.identity);
-        item.transform.SetParent(_itemContainer);
-    }
-    
-    public void PlayCheckAnim(int idx)
-    {
-        Debug.Log("Change Anim State");
-        _checkPointAnim[idx].SetTrigger(IsPlay);
-    }
+
 }

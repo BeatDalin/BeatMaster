@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Status
+public enum CharacterStatus
 {
     Idle = 0,
     Run,
@@ -14,42 +14,78 @@ public enum Status
     Die
 }
 
+public enum CharacterNum
+{
+    Corgi,
+    Tri_Corgi,
+    Corgi_Notail,
+    Tri_Corgi_Notail,
+}
+
 public class Anim : MonoBehaviour
 {
     [SerializeField] private GameObject _hammer;
+
+    [SerializeField] private Animator[] _animators;
     private Animator _anim;
 
+    private Animator _effectAnim;
+    [SerializeField] private Animator _jumpAnim;
+
+    /*    [SerializeField]
+        private RuntimeAnimatorController[] _animatorController;*/
+    private RuntimeAnimatorController _value;
+    Dictionary<string, RuntimeAnimatorController> AnimatorDic = new Dictionary<string, RuntimeAnimatorController>();
     // Start is called before the first frame update
     private void Awake()
     {
-        _anim = GetComponentInChildren<Animator>();
+        _animators = GetComponentsInChildren<Animator>();
+        _anim = _animators[0];
+        if (_animators.Length > 1) //수정예정
+        {
+            _effectAnim = _animators[1];
+        }
     }
 
-    public void StatusJudge(Status crnStat)
+    private RuntimeAnimatorController GetDic(string _key)
+    {
+        if (AnimatorDic.TryGetValue(_key, out _value))
+            return AnimatorDic[_key];
+        _value = Resources.Load<RuntimeAnimatorController>(_key);
+        AnimatorDic.Add(_key, _value);
+        return _value;
+    }
+
+    public void ChangeCharacterAnim(int charNum)
+    {
+        _anim.runtimeAnimatorController = GetDic(Enum.GetName(typeof(CharacterNum), charNum));
+    }
+
+    public void StatusJudge(CharacterStatus crnStat)
     {
         switch (crnStat)
         {
-            case Status.Idle:
+            case CharacterStatus.Idle:
                 Idle();
                 break;
 
-            case Status.Run:
+            case CharacterStatus.Run:
                 Run();
                 break;
 
-            case Status.Jump:
+            case CharacterStatus.Jump:
                 Jump();
                 break;
 
-            case Status.Attack:
+            case CharacterStatus.Attack:
                 Attack();
                 break;
 
-            case Status.Damage:
+            case CharacterStatus.Damage:
                 Damage();
                 break;
 
-            case Status.Die:
+            case CharacterStatus.Die:
                 Die();
                 break;
         }
@@ -71,6 +107,10 @@ public class Anim : MonoBehaviour
                 _anim.SetBool("Run", true);
                 _anim.SetBool("Idle", false);*/
         _anim.Play("Jump");
+        if (_animators.Length > 1)
+        {
+            ShowJumpEffect();
+        }
     }
 
     public void Damage()
@@ -100,5 +140,16 @@ public class Anim : MonoBehaviour
         /*_anim.SetBool("Run", false);
         _anim.SetBool("Idle", true);*/
         _anim.Play("Idle");
+    }
+
+
+    private void ShowJumpEffect()
+    {
+        _jumpAnim.transform.position = transform.position; // set position of 
+        _jumpAnim.Play("JumpDustEffect");
+    }
+    public void SetEffectBool(bool isLong)
+    {
+        _effectAnim.SetBool("isLongNote", isLong);
     }
 }

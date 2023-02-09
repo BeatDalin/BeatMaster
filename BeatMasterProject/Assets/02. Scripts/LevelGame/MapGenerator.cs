@@ -7,147 +7,262 @@ using SonicBloom.Koreo;
 
 public class MapGenerator : MonoBehaviour
 {
-    [SerializeField] private Koreography _koreography;
+    private enum _TileType
+    {
+        Top, Under, Interaction
+    }
+    public enum Theme
+    {
+        City, Forest, Desert, Glacier
+    }
+    public Theme theme;
 
+    [Space]
     [Header("Event")]
     [SerializeField] [EventID] private string _mapEventID;
+    [SerializeField] [EventID] private string _shortEventID;
+    [SerializeField] [EventID] private string _spdEventID;
     [SerializeField] private List<KoreographyEvent> _mapEventList = new List<KoreographyEvent>();
+    [SerializeField] private List<KoreographyEvent> _shortEventList = new List<KoreographyEvent>();
+    [SerializeField] private List<KoreographyEvent> _spdEventList = new List<KoreographyEvent>();
+    [SerializeField] private int _shortEventIndex;
+    [SerializeField] private int _spdEventIndex;
 
-    [Header("Ground")]
+    [Space]
+    [Header("Tile")]
     [SerializeField] private Tilemap _groundTilemap;
-    [SerializeField] private List<Tile> _groundTileList = new List<Tile>();
-
-    [Header("Interaction")]
     [SerializeField] private Tilemap _interactionTilemap;
-    [SerializeField] private List<Tile> _interactionTileList = new List<Tile>();
+    private List<List<Tile>> _tileLists = new List<List<Tile>>();
+    private List<Tile> _topTiles = new List<Tile>();
+    private List<Tile> _underTiles = new List<Tile>();
+    [SerializeField] private List<Tile> _interactionTiles = new List<Tile>();
+    private const int _tileCount = 9;
 
+    private MonsterPooling _monsterPooling;
     private int _tileX = -1, _tileY;
+    private float _groundYOffset = 0f;
+    
+    [Space]
+    [Header("Object Generator")]
+    [SerializeField] private ObjectGenerator _objectGenerator;
 
     private void Awake()
     {
-        //_koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
-    
+        _objectGenerator = GetComponent<ObjectGenerator>();
+        Init(theme);
         GenerateMap();
-        GenerateJumpCheckEvent();
     }
 
-    public KoreographyTrack track;
-    private void GenerateJumpCheckEvent()
+    private void Init(Theme theme)
     {
-        var _koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
+        // 타일 세팅
+        string tilePath = "Tiles/" + theme.ToString() + "/" + theme.ToString();
 
-        for (int i = 0; i < _mapEventList.Count; i++)
+        for (int i = 0; i < _tileCount; i++)
         {
-            int[] tileData = _mapEventList[i].GetTextValue().Split().Select(int.Parse).ToArray();
-
-            if (tileData[2] == 1)
-            {
-                int startSample = _mapEventList[i].StartSample - 5000;
-                int endSample = _mapEventList[i].StartSample + 5000;
-
-                KoreographyEvent koreoEvent = new KoreographyEvent();
-
-                CurvePayload curvePayload = new CurvePayload();
-                
-                koreoEvent.Payload = curvePayload;
-                koreoEvent.StartSample = startSample;
-                koreoEvent.EndSample = endSample;
-
-                track.AddEvent(koreoEvent);
-
-            }
-
-
+            _topTiles.Add(Resources.Load<Tile>(tilePath + "_Top_" + i.ToString()));
+            _underTiles.Add(Resources.Load<Tile>(tilePath + "_Under_" + i.ToString()));
         }
+
+        _tileLists.Add(_topTiles);
+        _tileLists.Add(_underTiles);
+        _tileLists.Add(_interactionTiles);
+
+        // 이벤트 세팅
+        _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
+        _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_shortEventID).GetAllEvents();
+        _spdEventList = SoundManager.instance.playingKoreo.GetTrackByID(_spdEventID).GetAllEvents();
+
+        // 기타 세팅
+        _monsterPooling = FindObjectOfType<MonsterPooling>();
     }
-    
-    // private void Awake()
-    // {
-    //     var _koreography = Koreographer.Instance.GetKoreographyAtIndex(0);
-    //
-    //     GenerateMap();
-    //
-    //     _mapEventList = _koreography.GetTrackByID(_mapEventID).GetAllEvents();
-    //     for (int i = 0; i < _mapEventList.Count; i++)
-    //     {
-    //         int[] tileData = _mapEventList[i].GetTextValue().Split().Select(int.Parse).ToArray();
-    //         
-    //         
-    //
-    //         if (tileData[2] == 1)
-    //         {
-    //             Debug.Log(tileData[2]);
-    //
-    //             var start = _mapEventList[i].StartSample - 5000;
-    //             var end = _mapEventList[i].StartSample + 5000;
-    //
-    //             var trackEvent = track.GetAllEvents()[index];
-    //             trackEvent.Payload = new CurvePayload();
-    //             Debug.Log(trackEvent.HasCurvePayload());
-    //             trackEvent.StartSample = start;
-    //             trackEvent.EndSample = end;
-    //
-    //             index++;
-    //         }
-    //     }
-    // }
-    
+
     private void GenerateMap()
     {
-        //_mapEventList = _koreography.GetTrackByID(_mapEventID).GetAllEvents();
-        _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
+        int prevGroundType = 0;
+        int gentleSlopeCount = 0;
 
         for (int i = 0; i < _mapEventList.Count; i++)
         {
-            int[] tileData = _mapEventList[i].GetTextValue().Split().Select(int.Parse).ToArray();
+            float[] groundData = _mapEventList[i].GetTextValue().Split().Select(float.Parse).ToArray();
 
-            int groundType = tileData[0];
-            int groundYDelta = tileData[1];
-            int actionType = tileData[2];
-            int checkPoint = tileData[3];
+            int groundType = (int)groundData[0];
+            _groundYOffset += groundData.Length > 1 ? groundData[1] : 0;
+
+            bool isSideTile = false;
+            int groundIndex = groundType;
+            int groundYDelta = 0;
+
+            // 빈 타일(5)일 때는 특정 사항들만 처리 후 다음 타일로 넘어간다.
+            if (groundType == 5)
+            {
+                _tileX += 1;
+
+                _monsterPooling.AddTilePos(_tileX, _tileY);
+
+                prevGroundType = groundType;
+                _objectGenerator.PositItems(_tileX, _tileY + 2);
+
+                continue;
+            }
+
+            // 경사 타일(1, 2, 3, 4)일 때 타일 위치와 번호 지정
+            // 완경사(1, 2)일 때
+            if ((groundType == 1 || prevGroundType == 2))
+            {
+                gentleSlopeCount++;
+
+                if (groundType == 1)
+                {
+                    if (gentleSlopeCount == 1)
+                    {
+                        groundYDelta = 1;
+                    }
+                    else // gradualTileCount == 2
+                    {
+                        groundIndex = groundType + 4;
+                    }
+                }
+                else // prevGroundType == 2
+                {
+                    if (gentleSlopeCount == 2)
+                    {
+                        groundYDelta = -1;
+                    }
+                    else // gradualTileCount == 1
+                    {
+                        groundIndex = groundType + 4;
+                    }
+                }
+
+                gentleSlopeCount %= 2;
+            }
+
+            // 급경사(3, 4)일 때
+            if (groundType == 3)
+            {
+                groundYDelta = 1;
+            }
+            else if (prevGroundType == 4)
+            {
+                groundYDelta = -1;
+            }
 
             _tileX += 1;
             _tileY += groundYDelta;
 
-            if (groundType == 3)
+            // 사이드 타일 체크
+            // 사이드 타일은 평평한 타일(0)만 올 수 있기 때문에 현재 타일 타입이 0인지 체크
+            if (groundType == 0 && i != 0 && i != _mapEventList.Count - 1)
             {
-                continue;
+                // 이전 타일이 빈 타일(5)이면 왼쪽 사이드
+                if (prevGroundType == 5)
+                {
+                    isSideTile = true;
+                    groundIndex = 7;
+                }
+                // 다음 타일이 빈 타일(5)이면 오른쪽 사이드
+                else if ((int)(_mapEventList[i + 1].GetTextValue().Split().Select(float.Parse).ToArray()[0]) == 5)
+                {
+                    isSideTile = true;
+                    groundIndex = 8;
+                }
             }
 
-            // 땅 타일
-            _groundTilemap.SetTile(new Vector3Int(_tileX, _tileY, 0), _groundTileList[groundType]);
+            // 최종 결정된 타일 위치와 번호로 타일을 배치하고 적 위치를 저장한다.
+            // 적 위치 저장
+            _monsterPooling.AddTilePos(_tileX, _tileY + _groundYOffset);
+
+            // 최상단 타일 배치
+            _groundTilemap.SetTile(GetTileChangeData(_TileType.Top, groundIndex, new Vector3Int(_tileX, _tileY, 0), _groundYOffset), false);
+
+            // 밑 영역 타일들 배치
             for (int j = _tileY - 1; j >= -10; j--)
             {
-                if (j == _tileY - 1 && (groundType == 1 || groundType == 2))
+                if (!isSideTile && j != _tileY - 1)
                 {
-                    _groundTilemap.SetTile(new Vector3Int(_tileX, j, 0), _groundTileList[groundType + 3]);
+                    groundIndex = 0;
                 }
-                else
+
+                _groundTilemap.SetTile(GetTileChangeData(_TileType.Under, groundIndex, new Vector3Int(_tileX, j, 0), _groundYOffset), false);
+            }
+
+            // (임시) 숏 노트 타일 배치
+            for (int j = 0; j < _shortEventList.Count; j++)
+            {
+                if (_shortEventList[j].StartSample - 5 < _mapEventList[i].StartSample && _mapEventList[i].StartSample < _shortEventList[j].StartSample + 5)
                 {
-                    _groundTilemap.SetTile(new Vector3Int(_tileX, j, 0), _groundTileList[3]);
+                    float shortYOffset = 1f;
+
+                    switch (groundType)
+                    {
+                        case 1:
+                        case 2:
+                            shortYOffset = 0.5f;
+                            break;
+                        case 3:
+                        case 4:
+                            shortYOffset = 0.25f;
+                            break;
+                    }
+
+                    _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0, new Vector3Int(_tileX, _tileY, 0), _groundYOffset + shortYOffset), false);
+
+                    break;
                 }
             }
 
-            // 액션 타일
-            if (actionType != 0)
+            // 체크포인트 배치
+            for (int j = 0; j < _spdEventList.Count; j++)
             {
-                float yOffset = (groundType == 0) ? 0.5f : 0f;
-                Matrix4x4 tileTransform = Matrix4x4.Translate(new Vector3(0f, yOffset, 0f)) * Matrix4x4.Rotate(Quaternion.identity);
-                TileChangeData tileChangeData = new TileChangeData
+                if (_spdEventList[j].StartSample - 5 < _mapEventList[i].StartSample && _mapEventList[i].StartSample < _spdEventList[j].StartSample + 5)
                 {
-                    position = new Vector3Int(_tileX, _tileY, 0),
-                    tile = _interactionTileList[0],
-                    transform = tileTransform
-                };
-
-                _interactionTilemap.SetTile(tileChangeData, false);
+                    if (_spdEventList[j].HasFloatPayload() | (_spdEventList[j].GetTextValue() == "End"))
+                    {
+                        _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 1, new Vector3Int(_tileX, _tileY + 1, 0), _groundYOffset), false);
+                        // Locate CheckPoint Animation
+                        _objectGenerator.PositCheckPoint(_tileX, _tileY+1);
+                    }
+                }
             }
 
-            // 체크포인트
-            if (checkPoint == 1)
+            // 이전 타일 타입을 현재 타일 타입으로 갱신
+            prevGroundType = groundType;
+        }
+
+        // 맵 오른쪽 끝 채우기
+        for (int i = 0; i < 30; i++)
+        {
+            _groundTilemap.SetTile(GetTileChangeData(_TileType.Top, 0, new Vector3Int(++_tileX, _tileY, 0), _groundYOffset), false);
+
+            for (int j = _tileY - 1; j >= -10; j--)
             {
-                _interactionTilemap.SetTile(new Vector3Int(_tileX, _tileY + 1, 0), _interactionTileList[1]);
+                _groundTilemap.SetTile(GetTileChangeData(_TileType.Under, 0, new Vector3Int(_tileX, j, 0), _groundYOffset), false);
             }
         }
+
+        // 맵 왼쪽 끝 채우기
+        for (int i = -1; i >= -15; i--)
+        {
+            _groundTilemap.SetTile(GetTileChangeData(_TileType.Top, 0, new Vector3Int(i, 0, 0), _groundYOffset), false);
+
+            for (int j = -1; j >= -10; j--)
+            {
+                _groundTilemap.SetTile(GetTileChangeData(_TileType.Under, 0, new Vector3Int(i, j, 0), _groundYOffset), false);
+            }
+        }
+    }
+
+    private TileChangeData GetTileChangeData(_TileType type, int index, Vector3Int position, float yOffset)
+    {
+        Matrix4x4 tileTransform = Matrix4x4.Translate(new Vector3(0f, yOffset, 0f)) * Matrix4x4.Rotate(Quaternion.identity);
+        TileChangeData tileChangeData = new TileChangeData
+        {
+            position = position,
+            tile = _tileLists[(int)type][index],
+            transform = tileTransform
+        };
+
+        return tileChangeData;
     }
 }

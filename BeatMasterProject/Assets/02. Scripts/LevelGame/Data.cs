@@ -4,13 +4,19 @@ using System.Collections.Generic;
 [Serializable]
 public struct Data
 {
+    public PlayerData playerData;
+    public StageData[] stageData;
+    public StoreData storeData;
+}
+
+[Serializable]
+public struct PlayerData
+{
     public int playerStage; // Player's current max stage number
     public int playerLv; // Player's current max level in playerStage number
     public int playerItem; // Player's item(coin) count
-    public int playerChar; // Player's current Character index
-    public StageData[] stageData;
-    public StoreData storeData;
-} 
+    public int playerChar;   // Player's current Character index
+}
 
 [Serializable]
 public struct StageData
@@ -36,20 +42,17 @@ public struct LevelData
 [Serializable]
 public struct StoreData
 {
-    public List<ItemData> itemData; // 전체 상품 목록(해금 체크를 위함)
-    public List<ItemData> onSaleItem; // 판매 중인 상품 목록, 상점 오픈, 구매 시 Update
-    public List<ItemData> purchasedItem; // 구매한 상품 목록, 상점 오픈, 구매 시 Update
+    public List<CharacterData> characterData; // 전체 상품 목록(해금 체크를 위함)
 }
 
 [Serializable]
-public struct ItemData
+public struct CharacterData
 {
-    public int itemNum;
+    public int characterNum;
     public int price;
     public bool isPurchased;
     public int unlockStage; // index
     public int unlockLevel; // index
     public bool isUnlocked;
-    public bool isEquipped; // item 장착 여부
 }
 

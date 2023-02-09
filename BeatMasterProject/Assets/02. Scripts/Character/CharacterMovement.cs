@@ -10,7 +10,8 @@ public class CharacterMovement : MonoBehaviour
 {
     private Game _game;
     private Rigidbody2D _rigidbody;
-    private SpriteChanger _spriteChanger;
+    private ResourcesChanger _resourcesChanger;
+    private Vector3 _characterPosition;
 
     [Header("Music")]
     [EventID] public string speedEventID;
@@ -25,19 +26,21 @@ public class CharacterMovement : MonoBehaviour
             if (_moveSpeed == 0)
             {
                 _moveSpeed = value;
+                _resourcesChanger.SetDefaultSpeed(_moveSpeed);
                 return;
             }
 
             if (!_moveSpeed.Equals(value))
             {
                 _moveSpeed = value;
-                _spriteChanger.OnSpeedChanged();
+                _resourcesChanger.OnSpeedChanged(_moveSpeed);
             }
         }
     }
     private float _gravityAccel;
     private float _previousBeatTime = 0;
-    private float currentBeatTime = 0;
+    private float _currentBeatTime = 0;
+    private float _checkPointCurrentBeatTime = 0f;
 
     [Header("Jump")]
     [SerializeField] private float _jumpHeight = 3f;
@@ -46,8 +49,7 @@ public class CharacterMovement : MonoBehaviour
     private const int _maxJumpCount = 1;
     private int _jumpCount;
     private Vector2 _jumpStartPosition;
-    private float _jumpEndY;
-    private float _jumpMidY;
+    private float _jumpEndY, _jumpMidY;
     private bool _canGroundCheck = true;
     private bool _canJump = true;
     private bool _isJumping;
@@ -75,29 +77,28 @@ public class CharacterMovement : MonoBehaviour
         _characterPosition = transform.position;
         _game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
-        _spriteChanger = FindObjectOfType<SpriteChanger>();
-        //_animator = GetComponent<Animator>();
 
-        //SoundManager.instance.PlayBGM(false);
+        _resourcesChanger = FindObjectOfType<ResourcesChanger>();
+        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
     }
 
     private void Update()
     {
-        GetInput();
-
-        //Attack();
+        if (_game.curState.Equals(GameState.Play))
+        {
+            GetInput();
+        }
 
         if (_game.curState.Equals(GameState.Pause))
         {
-            currentBeatTime = _checkPointCurrentBeatTime;
+            _currentBeatTime = _checkPointCurrentBeatTime;
             _previousBeatTime = _checkPointCurrentBeatTime;
         }
-
     }
 
     private void FixedUpdate()
     {
-        if (_game.curState == GameState.Play)
+        if (_game.curState == GameState.Play || _game.curState == GameState.End)
         {
             Move();
         }
@@ -109,8 +110,7 @@ public class CharacterMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
             SoundManager.instance.PlaySFX("Jump");
-            //_animator.CrossFadeInFixedTime("Jump",0.1f);
-            PlayerStatus.Instance.ChangeStatus(Status.Jump);
+            PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);
             if (++_jumpCount >= _maxJumpCount)
             {
                 _canJump = false;
@@ -123,14 +123,27 @@ public class CharacterMovement : MonoBehaviour
 
             Invoke("GroundCheckOn", 0.2f);
 
-            RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + _jumpTileCount, 100f), Vector2.down, 1000, _tileLayer);
-
-            if (jumpEndCheckHit)
+            for (int i = 2; i <= 5; i++)
             {
-                float yGap = jumpEndCheckHit.point.y - _jumpStartPosition.y;
+                RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down, 1000, _tileLayer);
 
-                _jumpMidY += yGap * _jumpGapRate;
+                if (jumpEndCheckHit)
+                {
+                    _jumpTileCount = i;
+                    float yGap = jumpEndCheckHit.point.y - _jumpStartPosition.y;
+                    _jumpMidY += yGap * _jumpGapRate;
+
+                    break;
+                }
             }
+            //RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + _jumpTileCount, 100f), Vector2.down, 1000, _tileLayer);
+
+            //if (jumpEndCheckHit)
+            //{
+            //    float yGap = jumpEndCheckHit.point.y - _jumpStartPosition.y;
+
+            //    _jumpMidY += yGap * _jumpGapRate;
+            //}
         }
     }
 
@@ -139,14 +152,16 @@ public class CharacterMovement : MonoBehaviour
         _canGroundCheck = true;
     }
 
-    // 캐릭터의 움직임을 결정하는 메소드
-    // 캐릭터의 x값은 노래에 맞추어 결정되고, y값은 캐릭터의 행동이나 조건에 따라 결정
+    /// <summary>
+    /// 캐릭터의 움직임을 결정하는 메소드
+    /// x는 노래에 맞추어 결정되고, y는 캐릭터의 행동이나 조건에 따라 결정
+    /// </summary>
     private void Move()
     {
-        currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-        float x = transform.position.x + (currentBeatTime - _previousBeatTime) * MoveSpeed;
+        _currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
+        float x = transform.position.x + (_currentBeatTime - _previousBeatTime) * MoveSpeed;
         float y = 0f;
-        _previousBeatTime = currentBeatTime;
+        _previousBeatTime = _currentBeatTime;
 
         // 점프 중이 아닐 때 캐릭터의 y값 설정
         RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
@@ -178,7 +193,7 @@ public class CharacterMovement : MonoBehaviour
                 _canJump = true;
                 _jumpCount = 0;
                 _gravityAccel = startGravityAccel;
-                PlayerStatus.Instance.ChangeStatus(Status.Run);
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
             }
         }
 
@@ -192,13 +207,14 @@ public class CharacterMovement : MonoBehaviour
         _rigidbody.MovePosition(new Vector2(x, y));
     }
 
-    // 점프 시 캐릭터의 y값을 계산하는 메소드
-    // 이차함수 포물선을 따름(y = ax^2 + bx)
-    // jumpTileCount로 x로 몇 칸만큼을 점프할지 지정
+    /// <summary>
+    /// 점프 시 캐릭터 Position의 y를 계산하는 메소드
+    /// 이차함수 포물선을 따름(y = ax^2 + bx)
+    /// jumpTileCount로 x로 몇 칸만큼을 점프할지 지정(최대 5칸)
+    /// </summary>
     private float GetJumpingY(float x, int jumpTileCount)
     {
-        float a;
-        float b;
+        float a, b;
 
         switch (jumpTileCount)
         {
@@ -210,8 +226,15 @@ public class CharacterMovement : MonoBehaviour
                 a = ((2 * _jumpEndY) - (4 * _jumpMidY)) / 9;
                 b = (_jumpEndY - (9 * a)) / 3;
                 break;
-            // default = jumpTileCount 1
-            default:
+            case 4:
+                a = (_jumpEndY - (2 * _jumpMidY)) / 8;
+                b = (_jumpMidY - (4 * a)) / 2;
+                break;
+            case 5:
+                a = ((2 * _jumpEndY) - (4 * _jumpMidY)) / 25;
+                b = (_jumpEndY - (25 * a)) / 5;
+                break;
+            default: // jumpTileCount 1
                 a = 2 * _jumpEndY - 4 * _jumpMidY;
                 b = _jumpEndY - a;
                 break;
@@ -227,7 +250,18 @@ public class CharacterMovement : MonoBehaviour
             MoveSpeed = evt.GetFloatValue();
             _checkPointCurrentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
             _characterPosition = transform.position;
-            Debug.Log(_characterPosition);
+        }
+        if (evt.HasTextPayload())
+        {
+            if (evt.GetTextValue() == "End")
+            {
+                _game.curState = GameState.End;
+            }
+            else if (evt.GetTextValue() == "Stop")
+            {
+                _canGroundCheck = false;
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
+            }
         }
     }
 
