@@ -249,11 +249,19 @@ public abstract class Game : MonoBehaviour
         {
             gameUI.ShowStar(3);
             curLevelData.alpha = 1f;
+            
+            // Unlock Character
+            DataCenter.Instance.GetStoreData().characterData[curLevelData.unlockCharNum].isUnlocked = true;
         }
+        
+        // generous condition for test: _finalSummary[2] >= totalNoteCount / 3
         else if (_finalSummary[2] >= totalNoteCount / 3 * 2)
         {
             curLevelData.star = 2;
             curLevelData.alpha = 2 / 3f;
+            
+            // Unlock Character
+            DataCenter.Instance.GetStoreData().characterData[curLevelData.unlockCharNum].isUnlocked = true;
         }
         else
         {
@@ -262,9 +270,10 @@ public abstract class Game : MonoBehaviour
         }
         // Save updated level data into json file
         DataCenter.Instance.SaveData(curLevelData, stageIdx, levelIdx);
-
-        if (levelIdx % 4 == 0)
+        
+        if (levelIdx != 0 && levelIdx % 4 == 0)
         {
+            //Debug.Log("stage clear");
             // boss game clear
             DataCenter.Instance.UpdateStageData(stageIdx);
             DataCenter.Instance.AddStageData();
@@ -272,6 +281,7 @@ public abstract class Game : MonoBehaviour
         }
         else
         {
+            //Debug.Log("normal game clear");
             // normal game clear
             DataCenter.Instance.UpdatePlayerData(stageIdx + 1, levelIdx + 2, coinCount);
         }

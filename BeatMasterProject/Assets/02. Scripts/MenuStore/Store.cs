@@ -29,7 +29,7 @@ public class Store : MonoBehaviour
     /*    [SerializeField]
         private AnimationClip[] _anims;*/
     /*    [SerializeField]*/
-    private Data _gameData;
+    //private Data _gameData;
 
     //private StoreData _currentStoreData;
 
@@ -49,11 +49,11 @@ public class Store : MonoBehaviour
     private void Start()
     {
         //_animator = _popupPanel[0].transform.GetChild(0).GetComponent<Animator>();
-        _isPurchased = new bool[DataCenter.Instance.GetStoreData().characterData.Count];
-        _isUnlocked = new bool[DataCenter.Instance.GetStoreData().characterData.Count];
-        _price = new int[DataCenter.Instance.GetStoreData().characterData.Count];
+        _isPurchased = new bool[DataCenter.Instance.GetStoreData().characterData.Length];
+        _isUnlocked = new bool[DataCenter.Instance.GetStoreData().characterData.Length];
+        _price = new int[DataCenter.Instance.GetStoreData().characterData.Length];
 
-        for (int i = 0; i < DataCenter.Instance.GetStoreData().characterData.Count; i++)
+        for (int i = 0; i < DataCenter.Instance.GetStoreData().characterData.Length; i++)
         {
             _isPurchased[i] = DataCenter.Instance.GetStoreData().characterData[i].isPurchased;
             _isUnlocked[i] = DataCenter.Instance.GetStoreData().characterData[i].isUnlocked;
@@ -64,14 +64,19 @@ public class Store : MonoBehaviour
         UpdatePlayersDataInScene();
         for (int i = 0; i < _character.Length; i++)
         {
+            if (!_isUnlocked[i])
+            {
+                continue;
+            }
+            
             int index = i;
             _character[index].onClick.AddListener(() => SetPurchasePopup(index));
         }
         _dropdown.onValueChanged.AddListener(delegate { ChangeDropdownValue(_dropdown); });
+        
         ClosePanel();
     }
-
-
+    
     private void InitStorePopup()
     {
         foreach (var button in _popupBtn)
@@ -85,18 +90,36 @@ public class Store : MonoBehaviour
         ClosePanel();
     }
 
+    // 해금되었을 때만 호출
     private void SetPurchasePopup(int charNum)
     {
         _popupPanel[0].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ((Image)_character[charNum].targetGraphic).sprite;
         _popupPanel[0].SetActive(true);
-        if (!_isPurchased[charNum])
+        
+        // 구매 안 한 상태일 때 구매하기 버튼 노출
+        if (!_isPurchased[charNum] && _isUnlocked[charNum])
         {
             //_currentChar = charNum;
             _ifPurchased.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = _price[charNum].ToString();
+            _ifPurchased.transform.GetChild(1).gameObject.SetActive(true);
+
             UnityAction UA;
             UA = new UnityAction(() => PurchaseCharacter(charNum));
             _popupBtn[0].onClick.AddListener(UA);
         }
+        
+        // 구매했는데 미장착 상태일 때 장착하기 버튼
+        else if (_isPurchased[charNum] && charNum != DataCenter.Instance.GetPlayerData().playerChar)
+        {
+            _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
+            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "장착하기";
+            
+            UnityAction UA;
+            UA = new UnityAction(() => EquipCharacter(charNum));
+            _popupBtn[0].onClick.AddListener(UA);
+        }
+            
+        // 구매했는데 장착 상태일 때
         else
         {
             _ifPurchased.SetActive(false);
@@ -116,12 +139,19 @@ public class Store : MonoBehaviour
         DataCenter.Instance.UpdateStorePurchaseData(charNum);
 
         UpdatePlayersDataInScene();
+        
+        SetPurchasePopup(charNum);
+    }
+
+    private void EquipCharacter(int charNum)
+    {
+        DataCenter.Instance.UpdatePlayerCharData(charNum);
     }
 
     private void UpdatePlayersDataInScene()
     {
         _playerCoin.text = DataCenter.Instance.GetPlayerData().playerItem.ToString();
-        for (int i = 0; i < DataCenter.Instance.GetStoreData().characterData.Count; i++)
+        for (int i = 0; i < DataCenter.Instance.GetStoreData().characterData.Length; i++)
         {
             _isPurchased[i] = DataCenter.Instance.GetStoreData().characterData[i].isPurchased;
             _isUnlocked[i] = DataCenter.Instance.GetStoreData().characterData[i].isUnlocked;
