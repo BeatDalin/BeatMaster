@@ -27,7 +27,7 @@ public class CheckTrackCreator : MonoBehaviour
         // GenerateJumpCheckEvent();
         // GenerateLongCheckEvent();
         // GenerateCheckPointEvent();
-        // GenerateAttackCheckEvent();
+        GenerateAttackCheckEvent();
     }
 
 
