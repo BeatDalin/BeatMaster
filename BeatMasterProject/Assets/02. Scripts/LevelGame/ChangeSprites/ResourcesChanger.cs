@@ -1,27 +1,26 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using SonicBloom.Koreo;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Serialization;
+using UnityEngine.Rendering.Universal;
 
 public class ResourcesChanger : MonoBehaviour
 {
-    [SerializeField] private ChangingResources[] _changingResources;
     private BackgroundMover _backgroundMover;
-    private Renderer _backgroundRenderer;
-    private Material _backgroundMaterial;
     private CameraController _cameraController;
+    private Volume _volume;
+    private ColorAdjustments _colorAdjustments;
     private int _materialIndex;
     private float _defaultSpeed;
     
     private void Awake()
     {
         _backgroundMover = FindObjectOfType<BackgroundMover>();
-        _backgroundRenderer = _backgroundMover.GetComponent<Renderer>();
-        _backgroundMaterial = _backgroundRenderer.material;
         _cameraController = FindObjectOfType<CameraController>();
+        _volume = FindObjectOfType<Volume>();
+        _volume.profile.TryGet(typeof(ColorAdjustments), out _colorAdjustments);
+        _volume.enabled = false;
         Init();
     }
 
@@ -45,7 +44,6 @@ public class ResourcesChanger : MonoBehaviour
         switch (SceneLoadManager.Instance.Scene)
         {
             case SceneLoadManager.SceneType.Level1:
-                ResetMaterialsOffset(_changingResources[0].ChangingMaterials);
                 break;
             case SceneLoadManager.SceneType.Level2:
                 break;
@@ -64,22 +62,23 @@ public class ResourcesChanger : MonoBehaviour
         SetBackgroundSize();
     }
     
+    // 색
+    // -180부터 135까지 45단위로 이동
+    // 빨강:-180 노랑:-135 초록:-90 청록:-45 하늘:0 파랑:45 보라:90 핑크:135   
     private void ChangePostProcessing(float speed)
     {
         if (_defaultSpeed.Equals(speed))
         {
-            _backgroundMover.SetMaterial(_backgroundMaterial);
+            _volume.enabled = false;
             return;
         }
-         
+
+        _volume.enabled = true;
         switch (SceneLoadManager.Instance.Scene)
         {
             case SceneLoadManager.SceneType.Level1:
+                _colorAdjustments.hueShift.value = 60;
                 // 스프라이트 교체
-                _materialIndex %= _changingResources[0].ChangingMaterials.Length;
-                Material changingMaterial = _changingResources[0].ChangingMaterials[_materialIndex];
-                _backgroundMover.SetMaterial(changingMaterial);
-                _materialIndex++;
                 break;
             case SceneLoadManager.SceneType.Level2:
                 break;
@@ -90,16 +89,6 @@ public class ResourcesChanger : MonoBehaviour
         }
     }
     
-    private void ResetMaterialsOffset(Material[] materials)
-    {
-        // BackgroundMover에서 이동한 결과에 의해 원본이 훼손되는 것을 막기위함
-        _backgroundMaterial.mainTextureOffset = Vector2.zero;
-        foreach (var material in materials)
-        {
-            material.mainTextureOffset = Vector2.zero;
-        }
-    }
-
     private void SetBackgroundSize()
     {
         Transform backgroundTrans = _backgroundMover.transform;
