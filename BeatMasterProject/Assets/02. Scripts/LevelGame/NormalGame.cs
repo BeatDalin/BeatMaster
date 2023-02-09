@@ -61,7 +61,7 @@ public class NormalGame : Game
         // Save Point Event Track
         Koreographer.Instance.RegisterForEventsWithTime("Level1_CheckPoint", SaveCheckPoint);
         // Short Note Event Track
-        //Koreographer.Instance.RegisterForEventsWithTime("Level1_JumpCheck", CheckShortEnd);
+        Koreographer.Instance.RegisterForEventsWithTime("Level1_JumpCheck", CheckShortEnd);
         // Attack Note Event Track
         Koreographer.Instance.RegisterForEventsWithTime("Level1_AttackCheck", CheckAttackEnd);
         // Long Note Event Track
@@ -91,8 +91,20 @@ public class NormalGame : Game
     protected override void Init()
     {
         base.Init();
-        _events = SoundManager.instance.playingKoreo.GetTrackByID("Level1_JumpCheck").GetAllEvents();
-        _eventRangeShort = CalculateRange(_events);
+        // Need CurveEvent
+        _events = SoundManager.instance.playingKoreo.GetTrackByID("Level1_Short").GetAllEvents();
+
+        List<KoreographyEvent> rangeEventList = new List<KoreographyEvent>();
+        
+        for (int i = 0; i < _events.Count; i++)
+        {
+            KoreographyEvent ev = new KoreographyEvent();
+            ev.StartSample = _events[i].StartSample - 5000;
+            ev.EndSample = _events[i].EndSample + 5000;
+            rangeEventList.Add(ev);
+        }
+        
+        _eventRangeShort = CalculateRange(rangeEventList);
         _events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
         // Save Point Initialize
@@ -110,6 +122,7 @@ public class NormalGame : Game
         {
             if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey))
             {
+                Debug.Log(sampleTime);
                 PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 _particleController.PlayJumpParticle();
                 isShortKeyCorrect = true;
@@ -123,7 +136,7 @@ public class NormalGame : Game
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isCheckedShort)
         {
             _isCheckedShort= true;
-            Debug.Log($"shortIdx: {shortIdx}");
+            Debug.Log($"JumpIdx: {shortIdx}");
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             shortIdx++;
@@ -163,7 +176,7 @@ public class NormalGame : Game
         {
             _isCheckedAttack = true;
 
-            Debug.Log($"shortIdx: {shortIdx}");
+            Debug.Log($"AttackIdx: {shortIdx}");
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             shortIdx++;
@@ -267,6 +280,7 @@ public class NormalGame : Game
 
             IsLongPressed = false;
             isLongKeyCorrect = false;
+            _animScript.SetEffectBool(false);
         }
     }
 
@@ -330,6 +344,7 @@ public class NormalGame : Game
         // Record Index
         rewindShortIdx = shortIdx;
         rewindLongIdx = longIdx;
+        Debug.Log(rewindShortIdx);
     }
     private void Update()
     {
