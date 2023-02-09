@@ -36,13 +36,15 @@ public struct LevelData
 
     public int star;
     public float alpha;
+    public int unlockCharNum; // 일단은 level 하나 당 한 캐릭터만 해금
     public bool levelClear;
 }
 
 [Serializable]
 public struct StoreData
 {
-    public List<CharacterData> characterData; // 전체 상품 목록(해금 체크를 위함)
+    public int charCount; // 상점 내 모든 캐릭터 수
+    public CharacterData[] characterData; // 모든 캐릭터 목록(해금 체크를 위함)
 }
 
 [Serializable]
@@ -51,8 +53,6 @@ public struct CharacterData
     public int characterNum;
     public int price;
     public bool isPurchased;
-    public int unlockStage; // index
-    public int unlockLevel; // index
     public bool isUnlocked;
 }
 
