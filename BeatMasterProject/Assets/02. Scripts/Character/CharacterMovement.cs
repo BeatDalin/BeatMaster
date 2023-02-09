@@ -40,7 +40,6 @@ public class CharacterMovement : MonoBehaviour
     private float _gravityAccel;
     private float _previousBeatTime = 0;
     private float _currentBeatTime = 0;
-    private float _checkPointCurrentBeatTime = 0f;
 
     [Header("Jump")]
     [SerializeField] private float _jumpHeight = 3f;
@@ -62,7 +61,6 @@ public class CharacterMovement : MonoBehaviour
 
     private Animator _animator;
 
-    public Vector3 _characterPosition;
 
     private float _checkPointCurrentBeatTime = 0f;
 
