@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using DG.Tweening;
 using SonicBloom.Koreo;
 using SonicBloom.Koreo.Players;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,57 +25,28 @@ public class MenuTitleButton : MonoBehaviour
     [SerializeField] private GameObject _settingPopUp;
     [SerializeField] private GameObject _storePopUp;
     [SerializeField] private GameObject _stagePopUp;
-    [SerializeField] private CanvasGroup _loadingPanelGroup;
-
+   
     private int _objectIdx = 0;
-
-
-    private void Awake()
-    {
-    }
 
     private void Start()
     {
+        // Event Register
+        Koreographer.Instance.RegisterForEvents("Title_Track", ChangeScale);
         AddClickListener();
-        Koreographer.Instance.RegisterForEvents(eventID, ChangeScale);
+        
+        if (!SoundManager.instance.musicPlayer.IsPlaying)
+        {
+            SoundManager.instance.musicPlayer.Play();
+        }
     }
 
     private void Update()
     {
-        if (_loadingPanelGroup.alpha == 0)
-        {
-            if (!SoundManager.instance.musicPlayer.IsPlaying)
-            {
-                SoundManager.instance.musicPlayer.Play();
-                _loadingPanelGroup.gameObject.SetActive(false);
-            }
-        }
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             UIManager.instance.ClosePopUp();
         }
     }
-
-    private void ChangeScale(KoreographyEvent evt)
-    {
-        if (_doTweenAnimations[0] == null)
-        {
-            _doTweenAnimations[0] = GameObject.Find("TitleText").GetComponent<DOTweenAnimation>();
-            _doTweenAnimations[1] = GameObject.Find("StageBtn").GetComponent<DOTweenAnimation>();
-            _doTweenAnimations[2] = GameObject.Find("StoreBtn").GetComponent<DOTweenAnimation>();
-            _doTweenAnimations[3] = GameObject.Find("SettingBtn").GetComponent<DOTweenAnimation>();
-            _doTweenAnimations[4] = GameObject.Find("ShotdownBtn").GetComponent<DOTweenAnimation>();
-
-        }
-
-        for (int i = 0; i < _doTweenAnimations.Length; i++)
-        {
-            _doTweenAnimations[i].DORewind();
-            _doTweenAnimations[i].DOPlay();
-        }
-    }
-
 
     /// <summary>
     /// 각 버튼에 클릭 리스너를 달아주는 함수
@@ -174,15 +144,14 @@ public class MenuTitleButton : MonoBehaviour
                 break;
         }
     }
-
-    private void SceneMoveBtn(string sceneName)
+    
+    private void ChangeScale(KoreographyEvent evt)
     {
-        SoundManager.instance.PlaySFX("Touch");
-
-        //temp
-        if (sceneName == "Stage")
+        for (int i = 0; i < _doTweenAnimations.Length; i++)
         {
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
+            _doTweenAnimations[i].DORewind();
+            _doTweenAnimations[i].DOPlay();
+
         }
     }
 }
