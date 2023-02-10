@@ -11,7 +11,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     
     [Header("Scene Load")] 
     [SerializeField] private float _loadingTime = 2f;
-    
+    public bool isLoaded = false;
     [Header("Scene Transition Effect")] 
     private GameObject _loadingCanvas;
     private Canvas _canvas;
@@ -95,8 +95,9 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     /// Once next scene has been loaded, show transition effect to empty the hiding panel. 
     /// </summary>
     /// <returns>WaitForEndOfFrame()</returns>
-    private IEnumerator CoSceneEnter()
+    public IEnumerator CoSceneEnter()
     {
+        isLoaded = true;
         _canvas.worldCamera = Camera.main;
         _loadImage.material.SetFloat(Cutoff, _hideBackground); // filled
         _loadImage.gameObject.SetActive(true);
@@ -108,6 +109,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
             yield return new WaitForEndOfFrame();
         }
         _loadImage.gameObject.SetActive(false);
+        isLoaded = false;
     }
 
     public bool GetTransitionEnd()

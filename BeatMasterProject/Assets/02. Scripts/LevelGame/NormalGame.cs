@@ -8,8 +8,9 @@ using UnityEngine.Serialization;
 public class NormalGame : Game
 {
     public ObjectGenerator objectGenerator;
+    private Anim _playerAnim;
     private ParticleController _particleController;
-    private Anim _animScript;
+    
     [Header("Event Check")]
     private List<KoreographyEvent> _events;
     private int[,] _eventRangeShort;
@@ -24,9 +25,9 @@ public class NormalGame : Game
     private KeyCode _attackNoteKey = KeyCode.RightArrow;
     private KeyCode _longNoteKey = KeyCode.LeftArrow;
     private List<KoreographyEvent> _shortEvent;
-    [Header("MonsterPool")]
+    [Header("Monster Pool")]
     private MonsterPooling _monsterPooling;
-    private CharacterMovement _characterMovement;
+    [Header("Combo System")]
     private ComboSystem _comboSystem;
     private Anim _anim;
     private PlayerData _playerDatas;
@@ -50,7 +51,7 @@ public class NormalGame : Game
         objectGenerator = FindObjectOfType<ObjectGenerator>();
         _particleController = FindObjectOfType<ParticleController>();
         _monsterPooling = FindObjectOfType<MonsterPooling>();
-        _animScript = FindObjectOfType<Anim>();
+        _playerAnim = FindObjectOfType<Anim>();
         _comboSystem = FindObjectOfType<ComboSystem>();
         // Save Point Event Track
         Koreographer.Instance.RegisterForEventsWithTime("Level1_CheckPoint", SaveCheckPoint);
@@ -200,14 +201,14 @@ public class NormalGame : Game
             _comboSystem.IncreaseCombo();
             IsLongPressed = true;
             Debug.Log("Long Key Press");
-            _animScript.SetEffectBool(true);
+            _playerAnim.SetEffectBool(true);
         }
         else if (Input.GetKeyUp(_longNoteKey))
         {
             _comboSystem.ResetCombo();
             IsLongPressed = false;
             Debug.Log("Long Key Up during CheckLongStart");
-            _animScript.SetEffectBool(false);
+            _playerAnim.SetEffectBool(false);
         }
 
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1f && !_isCheckedLong)
@@ -216,7 +217,7 @@ public class NormalGame : Game
             if (!IsLongPressed) // Failed to press at the start of the long note
             {
                 _comboSystem.ResetCombo();
-                _animScript.SetEffectBool(false);
+                _playerAnim.SetEffectBool(false);
                 //=======Rewind 자리=========
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
                 // Rewind(); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
@@ -233,10 +234,11 @@ public class NormalGame : Game
             Debug.Log("Middle KeyUP => Fail!!!");
             _comboSystem.ResetCombo();
             _comboSystem.ResetCurrentAmount();
+            
+            _playerAnim.SetEffectBool(false);
             //==============Rewind 자리==============
             if (!isLongFailed)
             {
-                _animScript.SetEffectBool(false);
                 // Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
             }
@@ -265,7 +267,7 @@ public class NormalGame : Game
                 gameUI.UpdateText(TextType.Item, coinCount);
 
                 _pressedTimeLong = sampleTime;
-                _animScript.SetEffectBool(false);
+                _playerAnim.SetEffectBool(false);
             }
         }
 
@@ -277,6 +279,7 @@ public class NormalGame : Game
             longIdx++;
             if (!isLongKeyCorrect)
             {
+                _playerAnim.SetEffectBool(false);
                 _comboSystem.ResetCombo();
                 _comboSystem.ResetCurrentAmount();
                 Debug.Log("End Key Fail!!!");
@@ -289,7 +292,7 @@ public class NormalGame : Game
 
             IsLongPressed = false;
             isLongKeyCorrect = false;
-            _animScript.SetEffectBool(false);
+            _playerAnim.SetEffectBool(false);
         }
     }
 

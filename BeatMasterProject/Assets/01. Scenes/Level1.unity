@@ -10242,7 +10242,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7
+  orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -10531,7 +10531,7 @@ MonoBehaviour:
   m_Follow: {fileID: 18329010}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 7
+    OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -11036,8 +11036,8 @@ Canvas:
   m_GameObject: {fileID: 1819510384}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 1768320482}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -11132,6 +11132,7 @@ MonoBehaviour:
   goLevelMenuBtn: {fileID: 4399992}
   settingsPanel: {fileID: 264213134}
   settingsCloseBtn: {fileID: 1841679767}
+  character: {fileID: 3864058064846310904}
   _itemText: {fileID: 465278377}
   _deathText: {fileID: 807727887}
 --- !u!1 &1820111829
