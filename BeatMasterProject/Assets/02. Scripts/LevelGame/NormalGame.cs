@@ -24,12 +24,10 @@ public class NormalGame : Game
     private KeyCode _attackNoteKey = KeyCode.RightArrow;
     private KeyCode _longNoteKey = KeyCode.LeftArrow;
     private List<KoreographyEvent> _shortEvent;
-    [Header("MonsterPool")] 
-
+    [Header("MonsterPool")]
     private MonsterPooling _monsterPooling;
-    [Header("SpriteChanger")]
-    private PlayerStatus _playerStatus;
-
+    private CharacterMovement _characterMovement;
+    private ComboSystem _comboSystem;
     private Anim _anim;
     private PlayerData _playerDatas;
 
@@ -41,8 +39,6 @@ public class NormalGame : Game
             if (isLongPressed != value)
             {
                 isLongPressed = value;
-                // TODO
-                // _playerStatus.OnLongPressed(isLongPressed);
             }
         }
     }
@@ -54,8 +50,8 @@ public class NormalGame : Game
         objectGenerator = FindObjectOfType<ObjectGenerator>();
         _particleController = FindObjectOfType<ParticleController>();
         _monsterPooling = FindObjectOfType<MonsterPooling>();
-        _playerStatus = FindObjectOfType<PlayerStatus>();
         _animScript = FindObjectOfType<Anim>();
+        _comboSystem = FindObjectOfType<ComboSystem>();
         // Save Point Event Track
         Koreographer.Instance.RegisterForEventsWithTime("Level1_CheckPoint", SaveCheckPoint);
         // Short Note Event Track
@@ -120,6 +116,9 @@ public class NormalGame : Game
         {
             if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey) && !_characterMovement.isJumping)
             {
+                // 숏노트 체크 
+                Debug.Log(sampleTime);
+                _comboSystem.IncreaseCombo();
                 PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 _particleController.PlayJumpParticle();
                 isShortKeyCorrect = true;
@@ -133,14 +132,16 @@ public class NormalGame : Game
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isCheckedShort)
         {
             _isCheckedShort= true;
+            //Debug.Log($"JumpIdx: {shortIdx}");
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             shortIdx++;
-            // if (!isShortKeyCorrect)
-            // {
-            //     // ================Rewind 자리================
-            //     // Rewind();
-            // }
+            if (!isShortKeyCorrect)
+            {
+                _comboSystem.ResetCombo();
+                // ================Rewind 자리================
+                // Rewind();
+            }
             isShortKeyCorrect = false;
         }
     }
@@ -156,6 +157,7 @@ public class NormalGame : Game
         {
             if (_shortEvent[shortIdx].GetIntValue() == 1 && Input.GetKeyDown(_attackNoteKey))
             {
+                _comboSystem.IncreaseCombo();
                 _particleController.PlayJumpParticle();
                 isShortKeyCorrect = true;
                 IncreaseItem();
@@ -169,14 +171,15 @@ public class NormalGame : Game
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isCheckedAttack)
         {
             _isCheckedAttack = true;
-
+            //Debug.Log($"AttackIdx: {shortIdx}");
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             _monsterPooling.DisableMonster();
             shortIdx++;
             if (!isShortKeyCorrect)
             {
-                //_monsterPooling.DisableMonster();
+                _comboSystem.ResetCombo();
+                _monsterPooling.DisableMonster();
                 // ================Rewind 자리================
                 Rewind();
             }
@@ -194,12 +197,14 @@ public class NormalGame : Game
 
         if (Input.GetKeyDown(_longNoteKey))
         {
+            _comboSystem.IncreaseCombo();
             IsLongPressed = true;
             Debug.Log("Long Key Press");
             _animScript.SetEffectBool(true);
         }
         else if (Input.GetKeyUp(_longNoteKey))
         {
+            _comboSystem.ResetCombo();
             IsLongPressed = false;
             Debug.Log("Long Key Up during CheckLongStart");
             _animScript.SetEffectBool(false);
@@ -210,6 +215,7 @@ public class NormalGame : Game
             _isCheckedLong = true;
             if (!IsLongPressed) // Failed to press at the start of the long note
             {
+                _comboSystem.ResetCombo();
                 _animScript.SetEffectBool(false);
                 //=======Rewind 자리=========
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
@@ -220,11 +226,13 @@ public class NormalGame : Game
     private void CheckLongMiddle(KoreographyEvent evt)
     {
         // if space key is released during long note
+        
         if (IsLongPressed && Input.GetKeyUp(_longNoteKey))
         {
             IsLongPressed = false;
             Debug.Log("Middle KeyUP => Fail!!!");
-
+            _comboSystem.ResetCombo();
+            _comboSystem.ResetCurrentAmount();
             //==============Rewind 자리==============
             if (!isLongFailed)
             {
@@ -232,6 +240,10 @@ public class NormalGame : Game
                 // Rewind( ); // for testing purpose... death 카운트 3번 올라가는 거 방지하려고}
                 isLongFailed = true; // for testing purpose... death 카운트 3번 올라가는 거 방지하려고
             }
+        }
+        else if (IsLongPressed)
+        {
+            _comboSystem.IncreaseComboInProcess(evt.StartSample);
         }
     }
     private void CheckLongEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
@@ -245,6 +257,8 @@ public class NormalGame : Game
             if (!isLongKeyCorrect) // increase item only once
             {
                 Debug.Log("End Key Up => Correct!");
+                _comboSystem.IncreaseCombo();
+                _comboSystem.ResetCurrentAmount();
                 PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 isLongKeyCorrect = true;
                 IncreaseItem();
@@ -263,7 +277,8 @@ public class NormalGame : Game
             longIdx++;
             if (!isLongKeyCorrect)
             {
-
+                _comboSystem.ResetCombo();
+                _comboSystem.ResetCurrentAmount();
                 Debug.Log("End Key Fail!!!");
                 // ===============Rewind==============
                 if (!isLongFailed)
@@ -313,6 +328,7 @@ public class NormalGame : Game
     private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
         check++;
+        //Debug.Log($"SaveCheckPoint {check}");
 
         if (sampleTime > rewindSampleTime)
         {
@@ -326,6 +342,7 @@ public class NormalGame : Game
             checkPointIdx++;
             // Record sample time to play music
             rewindSampleTime = checkPointList[checkPointIdx].StartSample;
+            Debug.Log(rewindSampleTime);
             checkPointVisited[checkPointIdx] = true;
             // Play Particle or Animation
             // ex) particleSystem.Play();
