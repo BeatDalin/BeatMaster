@@ -9,7 +9,7 @@ public class DataCenter : MonoBehaviour
 {
     [SerializeField]
     private Data _gameData; // keep it private, and update it through method using stage & level number
-
+    private PlayerData _playerData;
     private readonly string _fileName = "Data.json"; // file name 
     private string _path => Application.persistentDataPath + '/' + _fileName;
     private static GameObject _go;
@@ -35,7 +35,7 @@ public class DataCenter : MonoBehaviour
         // if you want to find where the json file is located...
         // Debug.Log(Application.persistentDataPath);
     }
-    
+
     public void LoadData()
     {
         if (File.Exists(_path))
@@ -45,6 +45,7 @@ public class DataCenter : MonoBehaviour
 
             string data = stream.ReadToEnd();
             _gameData = JsonUtility.FromJson<Data>(data);
+            _playerData = _gameData.playerData;
             stream.Close();
         }
         else
@@ -63,7 +64,7 @@ public class DataCenter : MonoBehaviour
         _gameData.stageData[stageIdx].levelData[levelIdx] = levelData;
         SaveData();
     }
-    
+
     public LevelData GetLevelData(int stageIdx, int levelIdx)
     {
         return _gameData.stageData[stageIdx].levelData[levelIdx];
@@ -78,28 +79,30 @@ public class DataCenter : MonoBehaviour
     private void CreateData()
     {
         _gameData = new Data();
-        _gameData.playerLv = 1;
-        _gameData.playerStage = 1;
-        _gameData.playerChar = 0; // default character index
+        _playerData = new PlayerData();
+        _playerData.playerLv = 1;
+        _playerData.playerStage = 1;
+        _playerData.playerChar = 0; // default character index
+        _gameData.playerData = _playerData;
         _gameData.stageData = new StageData[1]; // temporally, set array size as 1
         LevelData temp = new LevelData();
         for (int i = 0; i < _gameData.stageData.Length; i++)
         {
-            _gameData.stageData[i].stage = i+1;
+            _gameData.stageData[i].stage = i + 1;
             _gameData.stageData[i].levelData = new LevelData[5];
-            
+
             for (int j = 0; j < _gameData.stageData[i].levelData.Length; j++)
             {
-                temp.level = j+1;
+                temp.level = j + 1;
+                temp.unlockCharNum = j + 1; // clear시 해금할 캐릭터 번호
                 _gameData.stageData[i].levelData[j] = temp;
             }
         }
-        
-        CreateStoreData();
 
+        CreateStoreData();
         SaveData();
     }
-    
+
     /// <summary>
     /// Add new StageData when a boss level is cleared.
     /// </summary>
@@ -108,11 +111,11 @@ public class DataCenter : MonoBehaviour
         // Call AddStageData() when new stage is opened or previous stage's boss level has been cleared.
         var old = _gameData.stageData.ToList(); // convert the old array into a List
         StageData newStage = new StageData(); // create new StageData
-        
+
         // push initial values to the new StageData
         newStage.stage = old.Count + 1;
         newStage.levelData = new LevelData[5];
-        
+
         LevelData temp = new LevelData();
         for (int i = 0; i < 5; i++)
         {
@@ -129,6 +132,7 @@ public class DataCenter : MonoBehaviour
         StageData curStageData = _gameData.stageData[stageIdx];
         curStageData.bossClear = true;
     }
+    
     /// <summary>
     /// Update Data and save updated content to json file.
     /// </summary>
@@ -137,33 +141,27 @@ public class DataCenter : MonoBehaviour
     /// <param name="playerItem">Add this number to player's current item count</param>
     public void UpdatePlayerData(int stageNum, int levelNum, int playerItem = 0)
     {
-        _gameData.playerStage = stageNum;
-        _gameData.playerLv = levelNum;
-        _gameData.playerItem += playerItem;
+        _playerData.playerStage = stageNum;
+        _playerData.playerLv = levelNum;
+        _playerData.playerItem += playerItem;
+        _gameData.playerData = _playerData;
         SaveData();
     }
 
     private void CreateStoreData()
     {
         _gameData.storeData = new StoreData();
+        _gameData.storeData.charCount = 5; // temporary.. 상품 수 5개
+        _gameData.storeData.characterData = new CharacterData[_gameData.storeData.charCount]; 
         
-        _gameData.storeData.itemData = new List<ItemData>(); // 일단 item 3개로 설정. 추후 변경 가능
-        _gameData.storeData.onSaleItem = new List<ItemData>();
-        _gameData.storeData.purchasedItem = new List<ItemData>();
-
-        int equippedIndex = _gameData.playerChar;
-        
-        ItemData item = new ItemData();
-        for (int i = 0; i < 3; i++)
+        CharacterData characterData = new CharacterData();
+        for (int i = 0; i < _gameData.storeData.charCount; i++)
         {
-            item.itemNum = i;
-            item.price = 10;
-            item.isPurchased = false;
-            item.unlockStage = 0;
-            item.unlockLevel = i;
-            item.isUnlocked = false;
-            item.isEquipped = i == equippedIndex ? true : false;
-            _gameData.storeData.itemData.Add(item);
+            characterData.characterNum = i;
+            characterData.price = 10;
+            characterData.isPurchased = i == 0; // 첫 번째 캐릭터는 구매한 상태
+            characterData.isUnlocked = i == 0; // 첫 번째 캐릭터는 해금 상태
+            _gameData.storeData.characterData[i] = characterData;
         }
     }
 
@@ -173,42 +171,28 @@ public class DataCenter : MonoBehaviour
     }
 
     /// <summary>
-    /// StorePopup 오픈, item 구매 후, 장착 후 호출
+    /// 캐릭터 구매 후 CharacterData의 isPurchased 업데이트
+    /// 캐릭터 구매 후 gameData의 playerItem 업데이트
     /// </summary>
-    public void UpdateStoreData()
+    /// <param name="charNum"></param>
+    public void UpdateStorePurchaseData(int charNum)
     {
-        StoreData storeData = _gameData.storeData;
-
-        var tempPurchasedItem = new List<ItemData>();
-        var tempOnSaleItem = new List<ItemData>();
-        
-        int equippedIndex = _gameData.playerChar;
-
-        for (int i = 0; i < storeData.itemData.Count; i++)
-        {
-             var tempItemData = storeData.itemData[i];
-             
-             if (tempItemData.isPurchased)
-             {
-                 tempPurchasedItem.Add(tempItemData);
-             }
-             
-             else if (_gameData.stageData[tempItemData.unlockStage].levelData[tempItemData.unlockLevel].levelClear)
-             {
-                 tempItemData.isUnlocked = true;
-                 tempItemData.isEquipped = i == equippedIndex ? true : false;
-                 
-                 tempOnSaleItem.Add(tempItemData);
-             }
-             
-             storeData.itemData[i] = tempItemData;
-        }
-
-        storeData.purchasedItem = tempPurchasedItem;
-        storeData.onSaleItem = tempOnSaleItem;
-        
-        _gameData.storeData = storeData;
-        
+        _gameData.storeData.characterData[charNum].isPurchased = true;
+        _gameData.playerData.playerItem -= _gameData.storeData.characterData[charNum].price;
         SaveData();
+    }
+
+    /// <summary>
+    /// 캐릭터 장착 후 현재 장착 중인 캐릭터 번호 업데이트
+    // /// </summary>
+    public void UpdatePlayerCharData(int charNum)
+    {
+        _gameData.playerData.playerChar = charNum;
+        SaveData();
+    }
+
+    public PlayerData GetPlayerData()
+    {
+        return _gameData.playerData;
     }
 }

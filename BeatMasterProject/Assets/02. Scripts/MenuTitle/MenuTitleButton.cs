@@ -7,54 +7,54 @@ using SonicBloom.Koreo.Players;
 using UnityEngine;
 using UnityEngine.UI;
 
-enum ButtonName
+public enum MenuButtonName
 {
-    Stage = 0,
+    StartGame = 0,
     Store,
     Setting,
-    ShutDown
+    Quit
+}
+public enum SettingButtonName
+{
+    QualitySetting,
+    SoundSetting,
+    LanguageSetting
 }
 
 public class MenuTitleButton : MonoBehaviour
 {
+    [EventID] public string eventID;
+
     [SerializeField] private DOTweenAnimation[] _doTweenAnimations;
-    [SerializeField] private Button[] _buttons;
+    [SerializeField] private Button[] _menuButtons; // <Title - Menu> Buttons
+    [SerializeField] private Button[] _settingButtons; // <Title - Setting> Buttons
 
-    [SerializeField] private GameObject _settingPopUp;
-    [SerializeField] private GameObject _storePopUp;
-    [SerializeField] private GameObject _stagePopUp;
-    [SerializeField] private CanvasGroup _loadingPanelGroup;
+    [SerializeField] private GameObject _startGamePopUp; // <Panel> Start Game
+    [SerializeField] private GameObject _settingPopUp; // <Panel> Settings
+    [SerializeField] private GameObject _storePopUp; // <Panel> Store
 
-    [SerializeField] private SimpleMusicPlayer _simpleMusicPlayer;
+    [SerializeField] private GameObject _qualitySettingPopUp; // <Panel> QualitySetting
+    [SerializeField] private GameObject _soundSettingPopUp; // <Panel> SoundSetting
+    [SerializeField] private GameObject _languageSettingPopUp; // <Panel> LanguagePanel
+
 
     private int _objectIdx = 0;
 
-    private void Awake()
-    {
-        Koreographer.Instance.GetKoreographyAtIndex(0);
-    }
-
     private void Start()
     {
+        // Event Register
         Koreographer.Instance.RegisterForEvents("Title_Track", ChangeScale);
-
+        
         AddClickListener();
 
-        _simpleMusicPlayer = SoundManager.instance.musicPlayer;
+        if (!SoundManager.instance.musicPlayer.IsPlaying)
+        {
+            SoundManager.instance.musicPlayer.Play();
+        }
     }
 
     private void Update()
     {
-        if (_loadingPanelGroup.alpha == 0)
-        {
-            if (!_simpleMusicPlayer.IsPlaying)
-            {
-                _simpleMusicPlayer.Play();
-                _loadingPanelGroup.gameObject.SetActive(false);
-                
-            }
-        }
-        
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             UIManager.instance.ClosePopUp();
@@ -67,70 +67,140 @@ public class MenuTitleButton : MonoBehaviour
     /// </summary>
     private void AddClickListener()
     {
-        _buttons[(int)ButtonName.Stage].onClick.AddListener(() =>
+        #region Menu Buttons (StartGame, Store, Setting, Quit)
+
+        // <Menu - Button> StartGame
+        _menuButtons[(int)MenuButtonName.StartGame].onClick.AddListener(() =>
         {
-            if (_buttons[(int)ButtonName.Stage].transform.localScale == new Vector3(1, 1, 1))
+            if (_menuButtons[(int)MenuButtonName.StartGame].transform.localScale == new Vector3(1, 1, 1))
             {
-                _buttons[(int)ButtonName.Stage].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete += () =>
+                _menuButtons[(int)MenuButtonName.StartGame].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f)
+                    .onComplete += () =>
                 {
-                    _buttons[(int)ButtonName.Stage].transform.DORewind();
-                    OpenPopUp("Stage");
+                    _menuButtons[(int)MenuButtonName.StartGame].transform.DORewind();
+                    OpenPopUp("StartGame");
                 };
             }
             else
             {
-                OpenPopUp("Stage");            
+                OpenPopUp("StartGame");
             }
         });
-        
-        _buttons[(int)ButtonName.Store].onClick.AddListener(() =>
+
+        // <Menu - Button> Store
+        _menuButtons[(int)MenuButtonName.Store].onClick.AddListener(() =>
         {
-            if (_buttons[(int)ButtonName.Store].transform.localScale == new Vector3(1, 1, 1))
+            if (_menuButtons[(int)MenuButtonName.Store].transform.localScale == new Vector3(1, 1, 1))
             {
-                _buttons[(int)ButtonName.Store].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete += () =>
-                {
-                    _buttons[(int)ButtonName.Store].transform.DORewind();
-                    OpenPopUp("Store");
-                };
+                _menuButtons[(int)MenuButtonName.Store].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete +=
+                    () =>
+                    {
+                        _menuButtons[(int)MenuButtonName.Store].transform.DORewind();
+                        OpenPopUp("Store");
+                    };
             }
             else
             {
                 OpenPopUp("Store");
             }
         });
-        
-        _buttons[(int)ButtonName.Setting].onClick.AddListener(() =>
+
+        // <Menu - Button> Setting
+        _menuButtons[(int)MenuButtonName.Setting].onClick.AddListener(() =>
         {
-            if (_buttons[(int)ButtonName.Setting].transform.localScale == new Vector3(1, 1, 1))
+            if (_menuButtons[(int)MenuButtonName.Setting].transform.localScale == new Vector3(1, 1, 1))
             {
-                _buttons[(int)ButtonName.Setting].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete += () =>
-                {
-                    _buttons[(int)ButtonName.Setting].transform.DORewind();
-                    OpenPopUp("Setting");
-                };
+                _menuButtons[(int)MenuButtonName.Setting].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete +=
+                    () =>
+                    {
+                        _menuButtons[(int)MenuButtonName.Setting].transform.DORewind();
+                        OpenPopUp("Setting");
+                    };
             }
             else
             {
                 OpenPopUp("Setting");
             }
         });
-        
-        _buttons[(int)ButtonName.ShutDown].onClick.AddListener(() =>
+
+        // <Menu - Button> Quit
+        _menuButtons[(int)MenuButtonName.Quit].onClick.AddListener(() =>
         {
-            if (_buttons[(int)ButtonName.ShutDown].transform.localScale == new Vector3(1, 1, 1))
+            if (_menuButtons[(int)MenuButtonName.Quit].transform.localScale == new Vector3(1, 1, 1))
             {
-                _buttons[(int)ButtonName.ShutDown].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete += () =>
-                {
-                    _buttons[(int)ButtonName.ShutDown].transform.DORewind();
-                    SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1MonsterTest);
-                };
+                _menuButtons[(int)MenuButtonName.Quit].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete +=
+                    () =>
+                    {
+                        _menuButtons[(int)MenuButtonName.Quit].transform.DORewind();
+                        OpenPopUp("Quit");
+                    };
             }
             else
             {
-                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1MonsterTest);
+                OpenPopUp("Quit");
             }
         });
+        #endregion
+
+        #region Setting Buttons (Quality, Sound, Language Settings)
+        // <Setting - Button> Quality Settings
+        _settingButtons[(int)SettingButtonName.QualitySetting].onClick.AddListener(() =>
+        {
+            if (_settingButtons[(int)SettingButtonName.QualitySetting].transform.localScale == new Vector3(1, 1, 1))
+            {
+                _settingButtons[(int)SettingButtonName.QualitySetting].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f)
+                        .onComplete +=
+                    () =>
+                    {
+                        _settingButtons[(int)SettingButtonName.QualitySetting].transform.DORewind();
+                        OpenPopUp("QualitySetting");
+                    };
+            }
+            else
+            {
+                OpenPopUp("QualitySetting");
+            }
+        });
+        // <Setting - Button> Sound Settings
+        _settingButtons[(int)SettingButtonName.SoundSetting].onClick.AddListener(() =>
+        {
+            if (_settingButtons[(int)SettingButtonName.SoundSetting].transform.localScale == new Vector3(1, 1, 1))
+            {
+                _settingButtons[(int)SettingButtonName.SoundSetting].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f)
+                        .onComplete +=
+                    () =>
+                    {
+                        _settingButtons[(int)SettingButtonName.SoundSetting].transform.DORewind();
+                        OpenPopUp("SoundSetting");
+                    };
+            }
+            else
+            {
+                OpenPopUp("SoundSetting");
+            }
+        });
+        // <Setting - Button> Quality Settings
+        _settingButtons[(int)SettingButtonName.LanguageSetting].onClick.AddListener(() =>
+        {
+            if (_settingButtons[(int)SettingButtonName.LanguageSetting].transform.localScale == new Vector3(1, 1, 1))
+            {
+                _settingButtons[(int)SettingButtonName.LanguageSetting].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f)
+                        .onComplete +=
+                    () =>
+                    {
+                        _settingButtons[(int)SettingButtonName.LanguageSetting].transform.DORewind();
+                        OpenPopUp("LanguageSetting");
+                    };
+            }
+            else
+            {
+                OpenPopUp("LanguageSetting");
+            }
+        });
+
+        #endregion
     }
+
 
     private void OpenPopUp(string popUpName)
     {
@@ -138,60 +208,37 @@ public class MenuTitleButton : MonoBehaviour
 
         switch (popUpName)
         {
-            case "Stage":
-                UIManager.instance.OpenPopUp(_stagePopUp);
+            case "StartGame":
+                UIManager.instance.OpenPopUp(_startGamePopUp);
                 break;
-            
             case "Store":
                 UIManager.instance.OpenPopUp(_storePopUp);
                 break;
-            
             case "Setting":
                 UIManager.instance.OpenPopUp(_settingPopUp);
                 break;
-            
-            case "ShutDown":
+            case "Quit":
                 Application.Quit();
+                break;
+            
+            case "QualitySetting":
+                UIManager.instance.OpenPopUp(_qualitySettingPopUp);
+                break;
+            case "SoundSetting":
+                UIManager.instance.OpenPopUp(_soundSettingPopUp);
+                break;
+            case "LanguageSetting":
+                UIManager.instance.OpenPopUp(_languageSettingPopUp);
                 break;
         }
     }
 
-    private void SceneMoveBtn(string sceneName)
-    {
-        SoundManager.instance.PlaySFX("Touch");
-        
-        //temp
-        if (sceneName == "Stage")
-        {
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
-        }
-    }
-
-    
     private void ChangeScale(KoreographyEvent evt)
     {
         for (int i = 0; i < _doTweenAnimations.Length; i++)
         {
             _doTweenAnimations[i].DORewind();
             _doTweenAnimations[i].DOPlay();
-
         }
-        // if (_objectIdx == _doTweenAnimations.Length)
-        // {
-        //     _objectIdx = 0;
-        // }
-        //
-        // if (_objectIdx == 0)
-        // {
-        //     _doTweenAnimations[_doTweenAnimations.Length - 1].DORewind();
-        //     _doTweenAnimations[_objectIdx].DOPlay();
-        //     _objectIdx++;
-        // }
-        // else
-        // {
-        //     _doTweenAnimations[_objectIdx - 1].DORewind();
-        //     _doTweenAnimations[_objectIdx].DOPlay();
-        //     _objectIdx++;
-        // }
     }
 }

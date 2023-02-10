@@ -45,12 +45,18 @@ public class MapGenerator : MonoBehaviour
     [Space]
     [Header("Object Generator")]
     [SerializeField] private ObjectGenerator _objectGenerator;
+    [SerializeField] [EventID] private string _longEventID;
+    [SerializeField] private int _longTrackIdx = 0;
+    [SerializeField] private List<KoreographyEvent> _longEventTrack;
 
     private void Awake()
     {
         _objectGenerator = GetComponent<ObjectGenerator>();
+        _longEventTrack = SoundManager.instance.playingKoreo.GetTrackByID(_longEventID).GetAllEvents();
+
         Init(theme);
         GenerateMap();
+        _objectGenerator.PositLongNotify();
     }
 
     private void Init(Theme theme)
@@ -108,7 +114,7 @@ public class MapGenerator : MonoBehaviour
 
             // 경사 타일(1, 2, 3, 4)일 때 타일 위치와 번호 지정
             // 완경사(1, 2)일 때
-            if ((groundType == 1 || prevGroundType == 2))
+            if (groundType == 1 || prevGroundType == 2)
             {
                 gentleSlopeCount++;
 
@@ -217,7 +223,7 @@ public class MapGenerator : MonoBehaviour
             {
                 if (_spdEventList[j].StartSample - 5 < _mapEventList[i].StartSample && _mapEventList[i].StartSample < _spdEventList[j].StartSample + 5)
                 {
-                    if (_spdEventList[j].HasFloatPayload() | (_spdEventList[j].GetTextValue() == "End"))
+                    if (_spdEventList[j].HasFloatPayload() || (_spdEventList[j].GetTextValue() == "End"))
                     {
                         _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 1, new Vector3Int(_tileX, _tileY + 1, 0), _groundYOffset), false);
                         // Locate CheckPoint Animation
@@ -228,6 +234,12 @@ public class MapGenerator : MonoBehaviour
 
             // 이전 타일 타입을 현재 타일 타입으로 갱신
             prevGroundType = groundType;
+            
+            // Record Long Note's Start, End position
+            if (_longTrackIdx < _longEventTrack.Count)
+            {
+                RecordLongPos(_mapEventList[i].StartSample, _longEventTrack[_longTrackIdx], _tileX, _tileY+1);
+            }
         }
 
         // 맵 오른쪽 끝 채우기
@@ -264,5 +276,22 @@ public class MapGenerator : MonoBehaviour
         };
 
         return tileChangeData;
+    }
+
+    private int tempCount = 1;
+    private void RecordLongPos(int mapSample, KoreographyEvent longEvent, int xPos, int yPos)
+    {
+        // Debug.Log($"LongIdx {_longTrackIdx}-{tempCount}, mapSample {mapSample} // longEvent start:{longEvent.StartSample}, end:{longEvent.EndSample}");
+        if (mapSample > longEvent.StartSample - 5 && mapSample < longEvent.StartSample + 5)
+        {
+            _objectGenerator.RecordLongPos(new Vector3Int(xPos, yPos, 0));
+            tempCount++;
+        }
+        else if (mapSample > longEvent.EndSample - 5 && mapSample < longEvent.EndSample + 5)
+        {
+            _objectGenerator.RecordLongPos(new Vector3(xPos, yPos, 0));
+            _longTrackIdx++;
+            tempCount--;
+        }
     }
 }

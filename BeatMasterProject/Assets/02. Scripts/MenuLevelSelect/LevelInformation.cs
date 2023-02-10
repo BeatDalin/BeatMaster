@@ -32,7 +32,7 @@ public class LevelInfo
 public class LevelInformation : MonoBehaviour
 {
     [SerializeField] private GameObject _levelPanel;
-
+    private CanvasGroup _levelCanvasGroup;
     [Header("StageData")]
     public int curStage = 0;
     public int curMaxLevel; // 현재 clear한 레벨 중 가장 높은 레벨 index
@@ -77,7 +77,36 @@ public class LevelInformation : MonoBehaviour
         SetLevelInfo(curMaxLevel+1);
         uiLevel = curMaxLevel + 1;
 
+        // Level Canvas Fade In during Scene Transition Effect is playing
+        _levelCanvasGroup = GetComponent<CanvasGroup>();
+        StartCoroutine(CoFadeIn());
+    }
+
+    private IEnumerator CoFadeIn()
+    {
+        _levelCanvasGroup.alpha = 0;
+        _levelCanvasGroup.blocksRaycasts = false;
         _levelPanel.SetActive(true);
+        yield return new WaitUntil(() => SceneLoadManager.Instance.isLoaded);
+        while (_levelCanvasGroup.alpha < 1f)
+        {
+            _levelCanvasGroup.alpha += 0.003f;
+            yield return new WaitForEndOfFrame();
+        }
+        _levelCanvasGroup.blocksRaycasts = true;
+    }
+
+    private IEnumerator CoFadeOut()
+    {
+        _levelCanvasGroup.alpha = 1;
+        _levelCanvasGroup.blocksRaycasts = true;
+        while (_levelCanvasGroup.alpha > 0f)
+        {
+            _levelCanvasGroup.alpha -= 0.003f;
+            yield return new WaitForEndOfFrame();
+        }
+        _levelCanvasGroup.blocksRaycasts = false;
+        _levelPanel.SetActive(false);
     }
     
     private void SetLevelInfo(int levelNum)
@@ -110,6 +139,7 @@ public class LevelInformation : MonoBehaviour
 
     public void OnClickStartBtn()
     {
+        StartCoroutine(CoFadeOut());
         SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1);
     }
 
@@ -125,6 +155,7 @@ public class LevelInformation : MonoBehaviour
 
     public void OnClickTitleBtn()
     {
+        StartCoroutine(CoFadeOut());
         SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Title);
     }
     

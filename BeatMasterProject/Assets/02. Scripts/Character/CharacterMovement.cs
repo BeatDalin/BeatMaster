@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +24,7 @@ public class CharacterMovement : MonoBehaviour
             if (_moveSpeed == 0)
             {
                 _moveSpeed = value;
+                _resourcesChanger.SetDefaultSpeed(_moveSpeed);
                 return;
             }
 
@@ -50,13 +52,21 @@ public class CharacterMovement : MonoBehaviour
     private float _jumpEndY, _jumpMidY;
     private bool _canGroundCheck = true;
     private bool _canJump = true;
-    private bool _isJumping;
+    public bool isJumping;
 
     [Header("Ray")]
     [SerializeField] private Transform _rayOriginPoint;
     [SerializeField] private LayerMask _tileLayer;
     [SerializeField] private float _rayDistanceOffset = 0.2f;
     [SerializeField] private float _positionYOffset;
+
+    private Animator _animator;
+    
+
+    private void Awake()
+    {
+        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
+    }
 
     private void Start()
     {
@@ -69,6 +79,8 @@ public class CharacterMovement : MonoBehaviour
         _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
 
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
+
+        MoveSpeed = 2f;
     }
 
     private void Update()
@@ -77,8 +89,6 @@ public class CharacterMovement : MonoBehaviour
         {
             GetInput();
         }
-
-        //Attack();
 
         if (_game.curState.Equals(GameState.Pause))
         {
@@ -101,8 +111,7 @@ public class CharacterMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
             SoundManager.instance.PlaySFX("Jump");
-            PlayerStatus.Instance.ChangeStatus(Status.Jump);
-
+            PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);
             if (++_jumpCount >= _maxJumpCount)
             {
                 _canJump = false;
@@ -110,7 +119,7 @@ public class CharacterMovement : MonoBehaviour
 
             _jumpMidY = _jumpHeight;
             _jumpStartPosition = transform.position;
-            _isJumping = true;
+            isJumping = true;
             _canGroundCheck = false;
 
             Invoke("GroundCheckOn", 0.2f);
@@ -176,7 +185,7 @@ public class CharacterMovement : MonoBehaviour
         else
         {
             // 점프 중이 아니고 발 밑에 아무것도 없을 때
-            if (!_isJumping)
+            if (!isJumping)
             {
                 _canJump = false;
                 _gravityAccel += Time.fixedDeltaTime;
@@ -191,16 +200,16 @@ public class CharacterMovement : MonoBehaviour
 
             if (groundCheckHit)
             {
-                _isJumping = false;
+                isJumping = false;
                 _canJump = true;
                 _jumpCount = 0;
                 _gravityAccel = startGravityAccel;
-                PlayerStatus.Instance.ChangeStatus(Status.Run);
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
             }
         }
 
         // 점프 중일 때 캐릭터 y값 설정
-        if (_isJumping)
+        if (isJumping)
         {
             y = GetJumpingY(_rigidbody.position.x - _jumpStartPosition.x, _jumpTileCount) + _jumpStartPosition.y;
         }
@@ -247,7 +256,10 @@ public class CharacterMovement : MonoBehaviour
         {
             MoveSpeed = evt.GetFloatValue();
             _checkPointCurrentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-            _characterPosition = transform.position;
+            if (transform.position.x >= _characterPosition.x)
+            {
+                _characterPosition = transform.position;
+            }
         }
         if (evt.HasTextPayload())
         {
@@ -258,7 +270,7 @@ public class CharacterMovement : MonoBehaviour
             else if (evt.GetTextValue() == "Stop")
             {
                 _canGroundCheck = false;
-                PlayerStatus.Instance.ChangeStatus(Status.Idle);
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
             }
         }
     }

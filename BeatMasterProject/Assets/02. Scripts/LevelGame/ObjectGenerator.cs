@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using SonicBloom.Koreo;
 using UnityEngine;
 
 public class ObjectGenerator : MonoBehaviour
@@ -14,21 +15,22 @@ public class ObjectGenerator : MonoBehaviour
     [Header("Long Note Start/End")] 
     [SerializeField] private GameObject _longObj;
     [SerializeField] private Transform _longObjContainer;
-    [SerializeField] private List<Vector3Int> _longObjPosList;
+    [SerializeField] private List<Vector3> _longObjPosList;
     
     private static readonly int IsPlay = Animator.StringToHash("isPlay");
     
-    // Start is called before the first frame update
-    void Start()
+    public void RecordLongPos(Vector3 pos)
     {
-        
+        _longObjPosList.Add(pos);
     }
 
-    public void RecordLongPos(Vector3Int pos)
+    public void PositLongNotify()
     {
-        // 롱노트 트랙 체크 -> 롱노트 이벤트일 때는 short 페이로드 1로 바꿔줌
-        
-        _longObjPosList.Add(pos);
+        for (int i = 0; i < _longObjPosList.Count; i++)
+        {
+            var item = Instantiate(_longObj, _longObjPosList[i], Quaternion.identity);
+            item.transform.SetParent(_longObjContainer);
+        }
     }
     
         
@@ -49,4 +51,5 @@ public class ObjectGenerator : MonoBehaviour
     {
         _checkPointAnim[idx].SetTrigger(IsPlay);
     }
+    
 }

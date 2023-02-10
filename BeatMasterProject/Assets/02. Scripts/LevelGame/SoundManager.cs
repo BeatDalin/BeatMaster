@@ -28,6 +28,8 @@ public class SoundManager : MonoBehaviour
     public SimpleMusicPlayer musicPlayer;
     public string clipName;
 
+    public Koreography[] koreographies; // An array of Koreography assets
+
     private void Awake()
     {
         if (instance == null)
@@ -37,23 +39,16 @@ public class SoundManager : MonoBehaviour
         }
         else
         {
+            
             Destroy(this.gameObject);
         }
 
         musicPlayer = GetComponentInChildren<SimpleMusicPlayer>();
-        playingKoreo = Koreographer.Instance.GetKoreographyAtIndex(0);
-
-        
         musicPlayer.TryGetComponent(typeof(AudioSource), out Component audioSource);
         if (audioSource)
         {
             _bgmPlayer = audioSource as AudioSource;
         }
-    }
-
-    private void Start()
-    {
-        ChangeKoreo(SceneLoadManager.Instance.Scene);
     }
 
     // BGM
@@ -82,63 +77,87 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-
-    public void StopBGM()
-    {
-        _bgmPlayer.Stop();
-    }
-
     // SFX
     public void PlaySFX(string sfxName)
     {
-        for (int i = 0; i < _sfx.Length; i++)
+        switch (sfxName)
         {
-            if (sfxName == _sfx[i].name) // SFX 배열에서 이름이 같은 곡 검사
-            {
-                for (int x = 0; i < _sfxPlayer.Length; x++)
-                {
-                    if (!_sfxPlayer[x].isPlaying) // 재생 중이지 않은 sfxPlayer 검사
-                    {
-                        _sfxPlayer[x].clip = _sfx[i].clip;
-                        _sfxPlayer[x].Play();
-                        return;
-                    }
-                }
-            }
+            case "Jump":
+                _sfxPlayer[0].clip = _sfx[0].clip;
+                _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
+                break;
+            case "Attack":
+                _sfxPlayer[1].clip = _sfx[1].clip;
+                _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
+                break;
+            case "Hit":
+                _sfxPlayer[2].clip = _sfx[2].clip;
+                _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
+                break;
+            case "Touch":
+                _sfxPlayer[3].clip = _sfx[3].clip;
+                _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
+                break;
         }
+        
+        
+        
+        // for (int i = 0; i < _sfx.Length; i++)
+        // {
+        //     if (sfxName == _sfx[i].name) // SFX 배열에서 이름이 같은 곡 검사
+        //     {
+        //         for (int x = 0; i < _sfxPlayer.Length; x++)
+        //         {
+        //             if (!_sfxPlayer[x].isPlaying) // 재생 중이지 않은 sfxPlayer 검사
+        //             {
+        //                 _sfxPlayer[x].clip = _sfx[i].clip;
+        //                 _sfxPlayer[x].PlayOneShot(_sfxPlayer[x].clip);
+        //                 return;
+        //             }
+        //         }
+        //     }
+        // }
     }
 
-    // 각 씬별로 KoreoGraphy 바꾸는 기능
-    public void ChangeKoreo(Enum currentScene)
+    /// <summary>
+    /// Clears Koreo EventRegister, Unloads previous Koreography, Set new Koreography and MusicPlayer for next scene. 
+    /// </summary>
+    /// <param name="currentScene">Enum SceneType</param>
+    public void ChangeKoreo(SceneLoadManager.SceneType currentScene)
     {
-        //playingKoreo = Resources.Load<Koreography>($"KoreoGraphys/{currentScene.ToString()}");
+        Koreographer.Instance.ClearEventRegister(); // Clear Events before moving scenes!!!
+        // Unload Koreography before moving scene
+        if (Koreographer.Instance.GetNumLoadedKoreography() > 0)
+        {
+            Koreographer.Instance.UnloadKoreography(playingKoreo);
+        }
         switch (currentScene)
         {
             case SceneLoadManager.SceneType.Title: // Title 씬
             {
-                playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Title");
+                playingKoreo = koreographies[0];
+                // playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Title");
                 musicPlayer.LoadSong(playingKoreo, 0, false);
                 break;
             }
             case SceneLoadManager.SceneType.LevelSelect: // LevelSelect 씬
             {
-                playingKoreo = Resources.Load<Koreography>("KoreoGraphys/LevelSelect");
+                playingKoreo = koreographies[1];
+                // playingKoreo = Resources.Load<Koreography>("KoreoGraphys/LevelSelect");
                 musicPlayer.LoadSong(playingKoreo, 0, true);
                 break;
             }
             case SceneLoadManager.SceneType.Level1: // Level1 씬
             {
-                playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
-                musicPlayer.LoadSong(playingKoreo, 0, false);
-                break;
-            }
-            case SceneLoadManager.SceneType.Level1MonsterTest: // Level1 씬
-            {
-                playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
+                playingKoreo = koreographies[2];
+                // playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
                 musicPlayer.LoadSong(playingKoreo, 0, false);
                 break;
             }
         }
+        // Load next scene's Koreography
+        Koreographer.Instance.LoadKoreography(playingKoreo);
         clipName = musicPlayer.GetCurrentClipName();
+
     }
 }
