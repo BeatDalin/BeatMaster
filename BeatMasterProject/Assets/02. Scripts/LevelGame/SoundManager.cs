@@ -80,21 +80,43 @@ public class SoundManager : MonoBehaviour
     // SFX
     public void PlaySFX(string sfxName)
     {
-        for (int i = 0; i < _sfx.Length; i++)
+        switch (sfxName)
         {
-            if (sfxName == _sfx[i].name) // SFX 배열에서 이름이 같은 곡 검사
-            {
-                for (int x = 0; i < _sfxPlayer.Length; x++)
-                {
-                    if (!_sfxPlayer[x].isPlaying) // 재생 중이지 않은 sfxPlayer 검사
-                    {
-                        _sfxPlayer[x].clip = _sfx[i].clip;
-                        _sfxPlayer[x].Play();
-                        return;
-                    }
-                }
-            }
+            case "Jump":
+                _sfxPlayer[0].clip = _sfx[0].clip;
+                _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
+                break;
+            case "Attack":
+                _sfxPlayer[1].clip = _sfx[1].clip;
+                _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
+                break;
+            case "Hit":
+                _sfxPlayer[2].clip = _sfx[2].clip;
+                _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
+                break;
+            case "Touch":
+                _sfxPlayer[3].clip = _sfx[3].clip;
+                _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
+                break;
         }
+        
+        
+        
+        // for (int i = 0; i < _sfx.Length; i++)
+        // {
+        //     if (sfxName == _sfx[i].name) // SFX 배열에서 이름이 같은 곡 검사
+        //     {
+        //         for (int x = 0; i < _sfxPlayer.Length; x++)
+        //         {
+        //             if (!_sfxPlayer[x].isPlaying) // 재생 중이지 않은 sfxPlayer 검사
+        //             {
+        //                 _sfxPlayer[x].clip = _sfx[i].clip;
+        //                 _sfxPlayer[x].PlayOneShot(_sfxPlayer[x].clip);
+        //                 return;
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     /// <summary>
