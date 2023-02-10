@@ -2,11 +2,16 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingPopUp : MonoBehaviour
+public class PopUpManagement : MonoBehaviour
 {
     [SerializeField] private Button _exitBtn;
 
     private void Start()
+    {
+        AddListener();
+    }
+
+    public void AddListener()
     {
         _exitBtn.onClick.AddListener(() =>
         {
@@ -24,4 +29,7 @@ public class SettingPopUp : MonoBehaviour
             };
         });
     }
+    
+    
+    
 }

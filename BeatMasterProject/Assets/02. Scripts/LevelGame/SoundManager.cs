@@ -158,5 +158,6 @@ public class SoundManager : MonoBehaviour
         // Load next scene's Koreography
         Koreographer.Instance.LoadKoreography(playingKoreo);
         clipName = musicPlayer.GetCurrentClipName();
+
     }
 }
