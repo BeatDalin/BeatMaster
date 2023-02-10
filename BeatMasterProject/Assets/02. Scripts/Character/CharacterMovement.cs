@@ -8,14 +8,12 @@ using UnityEngine.Serialization;
 public class CharacterMovement : MonoBehaviour
 {
     private Game _game;
-    private Rigidbody2D _rigidbody;
     private ResourcesChanger _resourcesChanger;
+    private Rigidbody2D _rigidbody;
     private Vector3 _characterPosition;
 
     [Header("Music")]
     [EventID] public string speedEventID;
-    public float gravityScale;
-    public float startGravityAccel;
     [SerializeField] private float _moveSpeed;
     public float MoveSpeed
     {
@@ -35,6 +33,8 @@ public class CharacterMovement : MonoBehaviour
             }
         }
     }
+    public float gravityScale;
+    public float startGravityAccel;
     private float _gravityAccel;
     private float _previousBeatTime = 0;
     private float _currentBeatTime = 0;
@@ -56,14 +56,17 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private Transform _rayOriginPoint;
     [SerializeField] private LayerMask _tileLayer;
     [SerializeField] private float _rayDistanceOffset = 0.2f;
-    [SerializeField] private float _positionOffsetY;
+    [SerializeField] private float _positionYOffset;
 
     private void Start()
     {
         _characterPosition = transform.position;
         _game = FindObjectOfType<Game>();
-        _rigidbody = GetComponent<Rigidbody2D>();
         _resourcesChanger = FindObjectOfType<ResourcesChanger>();
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _rigidbody.bodyType = RigidbodyType2D.Kinematic;
+        _rigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
+        _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
 
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
     }
@@ -119,20 +122,30 @@ public class CharacterMovement : MonoBehaviour
                 if (jumpEndCheckHit)
                 {
                     _jumpTileCount = i;
-                    float yGap = jumpEndCheckHit.point.y - _jumpStartPosition.y;
+
+                    switch (_jumpTileCount)
+                    {
+                        case 3:
+                            _jumpMidY = 2f;
+                            break;
+                        case 4:
+                            _jumpMidY = 2.25f;
+                            break;
+                        case 5:
+                            _jumpMidY = 2.5f;
+                            break;
+                        default: // _jumpTileCount 2
+                            _jumpMidY = 1.75f;
+                            break;
+                    }
+
+                    float yGap = jumpEndCheckHit.point.y - (_jumpStartPosition.y - _positionYOffset);
                     _jumpMidY += yGap * _jumpGapRate;
 
+                    Debug.Log(_jumpMidY);
                     break;
                 }
             }
-            //RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + _jumpTileCount, 100f), Vector2.down, 1000, _tileLayer);
-
-            //if (jumpEndCheckHit)
-            //{
-            //    float yGap = jumpEndCheckHit.point.y - _jumpStartPosition.y;
-
-            //    _jumpMidY += yGap * _jumpGapRate;
-            //}
         }
     }
 
@@ -158,7 +171,7 @@ public class CharacterMovement : MonoBehaviour
         // 땅 위에 있을 때
         if (positionCheckHit)
         {
-            y = positionCheckHit.point.y + _positionOffsetY;
+            y = positionCheckHit.point.y + _positionYOffset;
         }
         else
         {
@@ -207,10 +220,6 @@ public class CharacterMovement : MonoBehaviour
 
         switch (jumpTileCount)
         {
-            case 2:
-                a = (_jumpEndY - (2 * _jumpMidY)) / 2;
-                b = _jumpMidY - a;
-                break;
             case 3:
                 a = ((2 * _jumpEndY) - (4 * _jumpMidY)) / 9;
                 b = (_jumpEndY - (9 * a)) / 3;
@@ -223,9 +232,9 @@ public class CharacterMovement : MonoBehaviour
                 a = ((2 * _jumpEndY) - (4 * _jumpMidY)) / 25;
                 b = (_jumpEndY - (25 * a)) / 5;
                 break;
-            default: // jumpTileCount 1
-                a = 2 * _jumpEndY - 4 * _jumpMidY;
-                b = _jumpEndY - a;
+            default: // jumpTileCount 2
+                a = (_jumpEndY - (2 * _jumpMidY)) / 2;
+                b = _jumpMidY - a;
                 break;
         }
 
