@@ -20,6 +20,10 @@ public class CheckTrackCreator : MonoBehaviour
 
     [Header("Check Point Track")] public KoreographyTrack spdTrack;
     public KoreographyTrack checkPointTrack;
+    
+    [Header("Sync Attack and Long Note")]
+    public List<KoreographyEvent> shortEvents;
+    public List<KoreographyEvent> longEvents;
 
     private void Start()
     {
@@ -27,6 +31,7 @@ public class CheckTrackCreator : MonoBehaviour
         // GenerateJumpCheckEvent();
         // GenerateLongCheckEvent();
         // GenerateCheckPointEvent();
+        // SyncAttackLong();
         // GenerateAttackCheckEvent();
     }
 
@@ -107,6 +112,33 @@ public class CheckTrackCreator : MonoBehaviour
             koreoEvent.StartSample = spdEvents[i].StartSample;
             koreoEvent.EndSample = spdEvents[i].EndSample;
             checkPointTrack.AddEvent(koreoEvent);
+        }
+    }
+
+    private void SyncAttackLong()
+    {
+        longEvents = longTrack.GetAllEvents();
+        shortEvents = shortTrack.GetAllEvents();
+        int longIdx = 0;
+        int longEndSample = 0;
+        for (int i = 0; i < shortEvents.Count; i++)
+        {
+            // Long의 start sample은 반드시 0으로
+            if (shortEvents[i].StartSample == longEvents[longIdx].StartSample)
+            {
+                var pay = new IntPayload();
+                pay.IntVal = 0;
+                shortEvents[i].Payload = pay;
+                longEndSample = longEvents[longIdx].EndSample;
+                longIdx++;
+            }
+            // long 노트 중간의 short note
+            else if (shortEvents[i].StartSample <= longEndSample)
+            {
+                var pay = new IntPayload();
+                pay.IntVal = 1;
+                shortEvents[i].Payload = pay;
+            }
         }
     }
 }

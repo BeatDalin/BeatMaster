@@ -48,8 +48,4 @@ public class BackgroundMover : MonoBehaviour
         transform.position = tempVec;
     }
 
-    public void SetMaterial(Material changingMaterial)
-    {
-        _myRenderer.material = changingMaterial;
-    }
 }

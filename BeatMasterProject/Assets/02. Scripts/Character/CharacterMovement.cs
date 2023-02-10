@@ -70,12 +70,12 @@ public class CharacterMovement : MonoBehaviour
 
     private void Start()
     {
-        _moveSpeed = 2f;
         _characterPosition = transform.position;
         _game = FindObjectOfType<Game>();
         _rigidbody = GetComponent<Rigidbody2D>();
-
         _resourcesChanger = FindObjectOfType<ResourcesChanger>();
+        
+        MoveSpeed = 2f;
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
     }
 
