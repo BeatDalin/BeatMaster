@@ -21,7 +21,6 @@ public class ObjectGenerator : MonoBehaviour
     
     public void RecordLongPos(Vector3 pos)
     {
-        Debug.Log("Record Long Pos");
         _longObjPosList.Add(pos);
     }
 

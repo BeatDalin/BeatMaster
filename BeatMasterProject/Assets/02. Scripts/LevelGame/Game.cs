@@ -75,8 +75,8 @@ public abstract class Game : MonoBehaviour
 
     protected virtual void Start()
     {
-        StartWithDelay();
-
+        // StartWithDelay();
+        StartCoroutine(CoStartWithDelay());
         Koreographer.Instance.RegisterForEvents(_spdEventID, CheckEnd);
     }
 
@@ -97,26 +97,30 @@ public abstract class Game : MonoBehaviour
 
     protected void StartWithDelay(int startSample = 0)
     {
+        StartCoroutine(SceneLoadManager.Instance.CoSceneEnter());
         StartCoroutine(CoStartWithDelay(startSample));
     }
 
     protected IEnumerator CoStartWithDelay(int startSample = 0)
     {
         // UI Timer
-        gameUI.timePanel.SetActive(true);
-        // Wait for Scene Transition to end
-        yield return new WaitWhile(() => !SceneLoadManager.Instance.GetTransitionEnd());
-        int waitTime = 3;
-        while (waitTime > 0)
-        {
-            gameUI.UpdateText(TextType.Time, waitTime);
-            waitTime--;
-            yield return new WaitForSeconds(1);
-        }
+        // gameUI.timePanel.SetActive(true);
+        // // Wait for Scene Transition to end
+        // yield return new WaitWhile(() => !SceneLoadManager.Instance.GetTransitionEnd());
+        // int waitTime = 3;
+        // while (waitTime > 0)
+        // {
+        //     gameUI.UpdateText(TextType.Time, waitTime);
+        //     waitTime--;
+        //     yield return new WaitForSeconds(1);
+        // }
         gameUI.timePanel.SetActive(false);
+
+        yield return new WaitUntil(() => SceneLoadManager.Instance.isLoaded);
+        
         // Music Play & Game Start
         startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
-
+        yield return new WaitForSeconds(1f);
         SoundManager.instance.PlayBGM(true, startSample);
         curState = GameState.Play;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
@@ -290,9 +294,9 @@ public abstract class Game : MonoBehaviour
     public void PauseGame()
     {
         // Get current sample for RestartGame()
-        curSample = SoundManager.instance.musicPlayer.GetSampleTimeForClip(SoundManager.instance.clipName);
-        SoundManager.instance.PlayBGM(false);
         curState = GameState.Pause;
+        curSample = SoundManager.instance.musicPlayer.GetSampleTimeForClip(SoundManager.instance.clipName);
+        SoundManager.instance.PlayBGM(false, curSample);
     }
 
     public void ContinueGame()

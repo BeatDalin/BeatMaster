@@ -62,6 +62,9 @@ public abstract class GameUI : MonoBehaviour
 
     [SerializeField] protected Button settingsCloseBtn;
 
+    [Header("Player Character")]
+    [SerializeField] protected GameObject character;
+    
     #region Abstract Function
 
     public abstract void UpdateText(TextType type, int number);
@@ -78,6 +81,7 @@ public abstract class GameUI : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Escape) && game.curState == GameState.Pause &&
                  UIManager.instance.popUpStack.Count == 1)
         {
+            character.SetActive(true);
             UIManager.instance.ClosePopUp();
             game.ContinueGame();
         }
@@ -87,6 +91,7 @@ public abstract class GameUI : MonoBehaviour
     {
         UIManager.instance.OpenPopUp(pausePanel);
         game.PauseGame();
+        character.SetActive(false);
     }
 
     public virtual void InitUI()
@@ -106,10 +111,15 @@ public abstract class GameUI : MonoBehaviour
         // Button Events
         continueBtn.onClick.AddListener(() =>
         {
+            character.SetActive(true);
             UIManager.instance.ClosePopUp();
             game.ContinueGame();
         });
-        restartBtn.onClick.AddListener(() => SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene));
+        restartBtn.onClick.AddListener(() =>
+        {   
+            character.SetActive(false);
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
+        });
         goLevelMenuBtn.onClick.AddListener(() =>
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect));
         //settings
