@@ -27,7 +27,6 @@ public class NormalGame : Game
     [Header("MonsterPool")] 
 
     private MonsterPooling _monsterPooling;
-    private CharacterMovement _characterMovement;
     [Header("SpriteChanger")]
     private PlayerStatus _playerStatus;
 
@@ -122,7 +121,6 @@ public class NormalGame : Game
         {
             if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey))
             {
-                Debug.Log(sampleTime);
                 PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 _particleController.PlayJumpParticle();
                 isShortKeyCorrect = true;
@@ -136,7 +134,6 @@ public class NormalGame : Game
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isCheckedShort)
         {
             _isCheckedShort= true;
-            Debug.Log($"JumpIdx: {shortIdx}");
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             shortIdx++;
@@ -161,9 +158,7 @@ public class NormalGame : Game
             if (_shortEvent[shortIdx].GetIntValue() == 1 && Input.GetKeyDown(_attackNoteKey))
             {
                 _particleController.PlayJumpParticle();
-                Debug.Log(evt.GetIntValue());
                 isShortKeyCorrect = true;
-                _monsterPooling.DisableMonster();
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, coinCount);
                 _pressedTime = sampleTime; // record the sample time when the button was pressed
@@ -176,15 +171,15 @@ public class NormalGame : Game
         {
             _isCheckedAttack = true;
 
-            Debug.Log($"AttackIdx: {shortIdx}");
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
+            _monsterPooling.DisableMonster();
             shortIdx++;
             if (!isShortKeyCorrect)
             {
-                _monsterPooling.DisableMonster();
+                //_monsterPooling.DisableMonster();
                 // ================Rewind 자리================
-                // Rewind();
+                Rewind();
             }
             isShortKeyCorrect = false;
         }
@@ -320,7 +315,6 @@ public class NormalGame : Game
     private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
         check++;
-        Debug.Log($"SaveCheckPoint {check}");
 
         if (sampleTime > rewindSampleTime)
         {
@@ -334,8 +328,6 @@ public class NormalGame : Game
             checkPointIdx++;
             // Record sample time to play music
             rewindSampleTime = checkPointList[checkPointIdx].StartSample;
-            Debug.Log(rewindSampleTime);
-            Debug.Log($"{checkPointIdx}");
             checkPointVisited[checkPointIdx] = true;
             // Play Particle or Animation
             // ex) particleSystem.Play();
@@ -344,7 +336,6 @@ public class NormalGame : Game
         // Record Index
         rewindShortIdx = shortIdx;
         rewindLongIdx = longIdx;
-        Debug.Log(rewindShortIdx);
     }
     private void Update()
     {

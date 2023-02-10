@@ -246,7 +246,10 @@ public class CharacterMovement : MonoBehaviour
         {
             MoveSpeed = evt.GetFloatValue();
             _checkPointCurrentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-            _characterPosition = transform.position;
+            if (transform.position.x >= _characterPosition.x)
+            {
+                _characterPosition = transform.position;
+            }
         }
         if (evt.HasTextPayload())
         {

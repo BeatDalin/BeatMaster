@@ -1,3 +1,4 @@
+using System;
 using SonicBloom.Koreo;
 using SonicBloom.Koreo.Players;
 using System.Collections;
@@ -65,8 +66,11 @@ public abstract class Game : MonoBehaviour
     private int[] _shortSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from long notes
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
 
+    protected CharacterMovement _characterMovement;
+
     protected virtual void Awake()
     {
+        _characterMovement = FindObjectOfType<CharacterMovement>();
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
         Koreographer.Instance.ClearEventRegister(); // Initialize Koreographer Event Regiser
         // Data
@@ -116,8 +120,8 @@ public abstract class Game : MonoBehaviour
         gameUI.timePanel.SetActive(false);
         // Music Play & Game Start
         startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
-
         SoundManager.instance.PlayBGM(true, startSample);
+        _characterMovement.RewindPosition();
         curState = GameState.Play;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
     }
@@ -290,9 +294,9 @@ public abstract class Game : MonoBehaviour
     public void PauseGame()
     {
         // Get current sample for RestartGame()
-        curSample = SoundManager.instance.musicPlayer.GetSampleTimeForClip(SoundManager.instance.clipName);
-        SoundManager.instance.PlayBGM(false);
         curState = GameState.Pause;
+        curSample = SoundManager.instance.musicPlayer.GetSampleTimeForClip(SoundManager.instance.clipName);
+        SoundManager.instance.PlayBGM(false, curSample);
     }
 
     public void ContinueGame()
