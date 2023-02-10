@@ -24,12 +24,9 @@ public class NormalGame : Game
     private KeyCode _attackNoteKey = KeyCode.RightArrow;
     private KeyCode _longNoteKey = KeyCode.LeftArrow;
     private List<KoreographyEvent> _shortEvent;
-    [Header("MonsterPool")] 
-
+    [Header("MonsterPool")]
     private MonsterPooling _monsterPooling;
     private CharacterMovement _characterMovement;
-    
-    private PlayerStatus _playerStatus;
     private ComboSystem _comboSystem;
     private Anim _anim;
     private PlayerData _playerDatas;
@@ -42,8 +39,6 @@ public class NormalGame : Game
             if (isLongPressed != value)
             {
                 isLongPressed = value;
-                // TODO
-                // _playerStatus.OnLongPressed(isLongPressed);
             }
         }
     }
@@ -55,8 +50,6 @@ public class NormalGame : Game
         objectGenerator = FindObjectOfType<ObjectGenerator>();
         _particleController = FindObjectOfType<ParticleController>();
         _monsterPooling = FindObjectOfType<MonsterPooling>();
-        _characterMovement = FindObjectOfType<CharacterMovement>();
-        _playerStatus = FindObjectOfType<PlayerStatus>();
         _animScript = FindObjectOfType<Anim>();
         _comboSystem = FindObjectOfType<ComboSystem>();
         // Save Point Event Track
@@ -121,7 +114,7 @@ public class NormalGame : Game
 
         if (!isShortKeyCorrect)
         {
-            if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey))
+            if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey) && !_characterMovement.isJumping)
             {
                 // 숏노트 체크 
                 Debug.Log(sampleTime);
@@ -166,9 +159,7 @@ public class NormalGame : Game
             {
                 _comboSystem.IncreaseCombo();
                 _particleController.PlayJumpParticle();
-                Debug.Log(evt.GetIntValue());
                 isShortKeyCorrect = true;
-                _monsterPooling.DisableMonster();
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, coinCount);
                 _pressedTime = sampleTime; // record the sample time when the button was pressed
@@ -183,13 +174,14 @@ public class NormalGame : Game
             //Debug.Log($"AttackIdx: {shortIdx}");
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
+            _monsterPooling.DisableMonster();
             shortIdx++;
             if (!isShortKeyCorrect)
             {
                 _comboSystem.ResetCombo();
                 _monsterPooling.DisableMonster();
                 // ================Rewind 자리================
-                // Rewind();
+                Rewind();
             }
             isShortKeyCorrect = false;
         }
@@ -307,7 +299,6 @@ public class NormalGame : Game
         curState = GameState.Pause;
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
-        _monsterPooling.ReArrange();
         //curSample = (int)_monsterPooling.currentPlayerTime;
         _characterMovement.RewindPosition();
         ContinueGame(); // wait 3 sec and start
@@ -352,7 +343,6 @@ public class NormalGame : Game
             // Record sample time to play music
             rewindSampleTime = checkPointList[checkPointIdx].StartSample;
             Debug.Log(rewindSampleTime);
-            //Debug.Log($"{checkPointIdx}");
             checkPointVisited[checkPointIdx] = true;
             // Play Particle or Animation
             // ex) particleSystem.Play();
@@ -361,7 +351,6 @@ public class NormalGame : Game
         // Record Index
         rewindShortIdx = shortIdx;
         rewindLongIdx = longIdx;
-        //Debug.Log(rewindShortIdx);
     }
     private void Update()
     {
