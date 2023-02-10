@@ -24,9 +24,9 @@ public class NormalGame : Game
     private KeyCode _attackNoteKey = KeyCode.RightArrow;
     private KeyCode _longNoteKey = KeyCode.LeftArrow;
     private List<KoreographyEvent> _shortEvent;
-    [Header("MonsterPool")]
+    [Header("Monster Pool")]
     private MonsterPooling _monsterPooling;
-    private CharacterMovement _characterMovement;
+    [Header("Combo System")]
     private ComboSystem _comboSystem;
     private Anim _anim;
     private PlayerData _playerDatas;
