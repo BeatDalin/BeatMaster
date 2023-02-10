@@ -54,7 +54,6 @@ public class NormalGame : Game
         objectGenerator = FindObjectOfType<ObjectGenerator>();
         _particleController = FindObjectOfType<ParticleController>();
         _monsterPooling = FindObjectOfType<MonsterPooling>();
-        _characterMovement = FindObjectOfType<CharacterMovement>();
         _playerStatus = FindObjectOfType<PlayerStatus>();
         _animScript = FindObjectOfType<Anim>();
         // Save Point Event Track
@@ -119,7 +118,7 @@ public class NormalGame : Game
 
         if (!isShortKeyCorrect)
         {
-            if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey))
+            if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey) && !_characterMovement.isJumping)
             {
                 PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 _particleController.PlayJumpParticle();
@@ -285,7 +284,6 @@ public class NormalGame : Game
         curState = GameState.Pause;
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
-        _monsterPooling.ReArrange();
         //curSample = (int)_monsterPooling.currentPlayerTime;
         _characterMovement.RewindPosition();
         ContinueGame(); // wait 3 sec and start

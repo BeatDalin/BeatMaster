@@ -12,10 +12,11 @@ public class Monster : MonoBehaviour
 
     [SerializeField] private Rigidbody2D _rigidbody2D;
     [SerializeField] private Animator _animator;
-    [SerializeField] private Animation _anim;
+    [SerializeField] private DOTweenAnimation _doTweenAnimation;
 
     private SpriteRenderer _spriteRenderer;
     private GameState _curState;
+    [SerializeField] private Vector3 _originalPos;
 
     private void Start()
     {
@@ -28,6 +29,7 @@ public class Monster : MonoBehaviour
         if (col.collider.name.Equals("Ground Tilemap"))
         {
             _rigidbody2D.isKinematic = true;
+            _originalPos = transform.localPosition;
         }
     }
 
@@ -36,14 +38,37 @@ public class Monster : MonoBehaviour
         if (isGainCoin)
         {
             isGainCoin = false;
-            _animator.SetBool("Hit", true);
-
+            
+            _doTweenAnimation.transform.DOLocalMove(new Vector3(transform.localPosition.x + 3f,transform.localPosition.y + 3f,0), 0.1f).onPlay += () =>
+            {
+                _doTweenAnimation.transform.DOLocalRotate(new Vector3(180f, 0f, 0f), 0.3f).onPlay += () =>
+                {
+                    _spriteRenderer.DOFade(0f, 0.3f).onComplete += () =>
+                    {
+                        _doTweenAnimation.DORewind();
+                        Destroy(transform.GetChild(0).gameObject);
+                        transform.position = _originalPos;
+                        transform.rotation = Quaternion.identity;
+                    };
+                };
+            };
+            
             //StartCoroutine(CoWaitAnimation());
         }
         else
         {
-            _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 0);
-            //gameObject.SetActive(false);
+            _doTweenAnimation.transform.DOLocalMove(new Vector3(transform.localPosition.x + 3f,transform.localPosition.y + 3f,0), 0.1f).onPlay += () =>
+            {
+                _doTweenAnimation.transform.DOLocalRotate(new Vector3(180f, 0f, 0f), 0.3f).onPlay += () =>
+                {
+                    _spriteRenderer.DOFade(0f, 0.3f).onComplete += () =>
+                    {
+                        _doTweenAnimation.DORewind();
+                        transform.position = _originalPos;
+                        transform.rotation = Quaternion.identity;
+                    };
+                };
+            };
         }
     }
 

@@ -52,7 +52,7 @@ public class CharacterMovement : MonoBehaviour
     private float _jumpEndY, _jumpMidY;
     private bool _canGroundCheck = true;
     private bool _canJump = true;
-    private bool _isJumping;
+    public bool isJumping;
 
     [Header("Ray")]
     [SerializeField] private Transform _rayOriginPoint;
@@ -115,7 +115,7 @@ public class CharacterMovement : MonoBehaviour
 
             _jumpMidY = _jumpHeight;
             _jumpStartPosition = transform.position;
-            _isJumping = true;
+            isJumping = true;
             _canGroundCheck = false;
 
             Invoke("GroundCheckOn", 0.2f);
@@ -171,7 +171,7 @@ public class CharacterMovement : MonoBehaviour
         else
         {
             // 점프 중이 아니고 발 밑에 아무것도 없을 때
-            if (!_isJumping)
+            if (!isJumping)
             {
                 _canJump = false;
                 _gravityAccel += Time.fixedDeltaTime;
@@ -186,7 +186,7 @@ public class CharacterMovement : MonoBehaviour
 
             if (groundCheckHit)
             {
-                _isJumping = false;
+                isJumping = false;
                 _canJump = true;
                 _jumpCount = 0;
                 _gravityAccel = startGravityAccel;
@@ -195,7 +195,7 @@ public class CharacterMovement : MonoBehaviour
         }
 
         // 점프 중일 때 캐릭터 y값 설정
-        if (_isJumping)
+        if (isJumping)
         {
             y = GetJumpingY(_rigidbody.position.x - _jumpStartPosition.x, _jumpTileCount) + _jumpStartPosition.y;
         }

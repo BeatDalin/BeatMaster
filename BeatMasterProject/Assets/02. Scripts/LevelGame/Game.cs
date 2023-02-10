@@ -68,9 +68,12 @@ public abstract class Game : MonoBehaviour
 
     protected CharacterMovement _characterMovement;
 
+    protected MonsterPooling _monsterPooling;
+
     protected virtual void Awake()
     {
         _characterMovement = FindObjectOfType<CharacterMovement>();
+        _monsterPooling = FindObjectOfType<MonsterPooling>();
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
         Koreographer.Instance.ClearEventRegister(); // Initialize Koreographer Event Regiser
         // Data
@@ -115,12 +118,19 @@ public abstract class Game : MonoBehaviour
         {
             gameUI.UpdateText(TextType.Time, waitTime);
             waitTime--;
+            
+            if (waitTime == 1)
+            {
+                // Active Monster
+                _monsterPooling.ReArrange();
+            }
             yield return new WaitForSeconds(1);
         }
         gameUI.timePanel.SetActive(false);
         // Music Play & Game Start
         startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
         SoundManager.instance.PlayBGM(true, startSample);
+        // Rewind Character Position
         _characterMovement.RewindPosition();
         curState = GameState.Play;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
