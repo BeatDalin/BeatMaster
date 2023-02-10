@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -51,9 +52,11 @@ public class LevelInformation : MonoBehaviour
     [SerializeField] private Vector3[] _mapPos;
     [SerializeField] private GameObject[] _moveBtn;
     [SerializeField] private GameObject[] _camPos;
+    [SerializeField] private GameObject _clearImg;
+    [SerializeField] private GameObject[] _starImg;
     private readonly String[] _levelDescription =
     {
-        "첫 번째\n발걸음을\n떼어보세요", "두 번째\n발걸음을\n떼어보세요", "세 번째\n발걸음을\n떼어보세요", "네 번째\n발걸음을\n떼어보세요"
+        "설레는\n첫 번째\n모험!", "도시에서는\n어떤 일이\n일어날까?", "난 기쁠 때\n리듬과\n모래바람을 타", "음악과 함께라면\n추위도\n무섭지 않아!"
     };
     
     private void Awake()
@@ -76,8 +79,6 @@ public class LevelInformation : MonoBehaviour
 
         SetLevelInfo(curMaxLevel+1);
         uiLevel = curMaxLevel + 1;
-
-        _levelPanel.SetActive(true);
     }
     
     private void SetLevelInfo(int levelNum)
@@ -90,8 +91,25 @@ public class LevelInformation : MonoBehaviour
         _moveBtn[0].SetActive(levelNum != 0);
         _moveBtn[1].SetActive(levelNum != _maxLevelNum);
         
+        // clear Img
+        if (curStageData[levelNum].levelClear)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (i < curStageData[levelNum].star)
+                {
+                   _starImg[i].SetActive(true);
+                }
+                else
+                {
+                    _starImg[i].SetActive(false);
+                }
+            }
+        }
+        _clearImg.SetActive(curStageData[levelNum].levelClear);
+        
         // Camera
-        _mainCam.transform.position = Vector3.MoveTowards(_mainCam.transform.position, _levelInfo[levelNum].camPos, 10f);
+        //_mainCam.transform.position = Vector3.MoveTowards(_mainCam.transform.position, _levelInfo[levelNum].camPos, 10f);
         
         // locked Img
         _lockedPanel.SetActive(_levelInfo[levelNum].isLocked);
@@ -101,8 +119,7 @@ public class LevelInformation : MonoBehaviour
         _levelTitle.text = "LEVEL " + currLevel;
         
         // map position
-        _maskTarget.GetComponent<RectTransform>().localPosition =
-            new Vector3(_levelInfo[levelNum].mapPos.x, _levelInfo[levelNum].mapPos.y, 0);
+        _maskTarget.GetComponent<RectTransform>().localPosition = _levelInfo[levelNum].mapPos;
         
         // description Txt
         _description.text = _levelInfo[levelNum].levelDescription;
@@ -110,21 +127,41 @@ public class LevelInformation : MonoBehaviour
 
     public void OnClickStartBtn()
     {
-        SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1);
+        SoundManager.instance.PlaySFX("Touch");
+
+        switch (uiLevel)
+        {
+            case 0:
+                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1);
+                break;
+            case 1:
+                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level2);
+                break;
+            case 2:
+                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level3);
+                break;
+            case 3:
+                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level4);
+                break;
+        }
+        
     }
 
     public void OnClickLeftBtn()
     {
+        SoundManager.instance.PlaySFX("Touch");
         SetLevelInfo(--uiLevel);
     }
 
     public void OnClickRightBtn()
-    {
-       SetLevelInfo(++uiLevel);
+    { 
+        SoundManager.instance.PlaySFX("Touch");
+        SetLevelInfo(++uiLevel);
     }
 
     public void OnClickTitleBtn()
     {
+        SoundManager.instance.PlaySFX("Touch");
         SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Title);
     }
     
