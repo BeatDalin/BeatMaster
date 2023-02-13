@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -366,6 +366,7 @@ MonoBehaviour:
   _jumpHeight: 2.2
   _jumpTileCount: 3
   _jumpGapRate: 0.25
+  isJumping: 0
   _rayOriginPoint: {fileID: 3864058065308963663}
   _tileLayer:
     serializedVersion: 2
@@ -1001,6 +1002,7 @@ MonoBehaviour:
   _shortEventList: []
   _monsterPrefab: {fileID: 3003763203973727308, guid: 367c90cd1e9064c43bbfaafbc81f3d4a, type: 3}
   _tilePos: []
+  _monsterIdx: 0
 --- !u!4 &199611011
 Transform:
   m_ObjectHideFlags: 0
@@ -9893,7 +9895,7 @@ MonoBehaviour:
   m_Follow: {fileID: 18329010}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 5
+    OrthographicSize: 10
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -10242,7 +10244,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -10531,7 +10533,7 @@ MonoBehaviour:
   m_Follow: {fileID: 18329010}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 5
+    OrthographicSize: 10
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -10805,7 +10807,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2

@@ -46,6 +46,18 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         _canvas.worldCamera = Camera.main;
     }
 
+    
+    
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    public static void FirstLoad()
+    {
+        if (SceneManager.GetActiveScene().name.CompareTo("PreTitle") != 0)
+        { 
+            SceneManager.LoadScene("PreTitle");
+        }
+    }
+    
+    
     public void LoadLevelAsync(SceneType sceneType)
     {
         Scene = sceneType;
