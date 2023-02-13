@@ -96,7 +96,7 @@ public class ObjectGenerator : MonoBehaviour
         _checkPointObj.transform.position = _checkPointPos[_checkPointIdx];
         _checkPointVisited[_checkPointIdx] = true;
         _checkPointAnim.SetTrigger(IsPlay); // Play Animation
-        return checkPointList[_checkPointIdx].StartSample; 
+        return checkPointList[_checkPointIdx].StartSample;
     }
     // public void PositCheckPoint(int xPos, int yPos)
     // {

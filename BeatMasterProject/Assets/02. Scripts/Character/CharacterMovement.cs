@@ -87,7 +87,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_game.curState == GameState.Play || _game.curState == GameState.End)
+        if (_game.curState == GameState.Play)
         {
             Move();
         }
@@ -277,11 +277,7 @@ public class CharacterMovement : MonoBehaviour
         }
         if (evt.HasTextPayload())
         {
-            if (evt.GetTextValue() == "End")
-            {
-                _game.curState = GameState.End;
-            }
-            else if (evt.GetTextValue() == "Stop")
+            if (evt.GetTextValue() == "Stop")
             {
                 _canGroundCheck = false;
                 PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);

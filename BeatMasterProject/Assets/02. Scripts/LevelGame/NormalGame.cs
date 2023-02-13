@@ -322,12 +322,8 @@ public class NormalGame : Game
         }
     }
 
-    private int check = 0;
     private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
-        check++;
-        //Debug.Log($"SaveCheckPoint {check}");
-
         if (sampleTime > rewindSampleTime)
         {
             // DisableMonster Clear
@@ -340,9 +336,10 @@ public class NormalGame : Game
             // checkPointIdx++;
             // Record sample time to play music
             // rewindSampleTime = checkPointList[checkPointIdx].StartSample;
-            // Debug.Log(rewindSampleTime);
+            
             // checkPointVisited[checkPointIdx] = true;
             rewindSampleTime = objectGenerator.MoveCheckPointForward();
+            // Debug.Log(rewindSampleTime);
             // Play Particle or Animation
             
             // objectGenerator.PlayCheckAnim(checkPointIdx);
