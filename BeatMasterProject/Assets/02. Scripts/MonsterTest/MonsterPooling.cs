@@ -40,7 +40,9 @@ public class MonsterPooling : MonoBehaviour
         _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
         _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_shortEventID).GetAllEvents();
 
+        Debug.Log(Camera.main.name);
         coinScreenPos = Camera.main.ScreenToWorldPoint(coinPos.position);
+        Debug.Log(coinScreenPos);
 
         for (int i = 0; i < _shortEventList.Count; i++)
         {

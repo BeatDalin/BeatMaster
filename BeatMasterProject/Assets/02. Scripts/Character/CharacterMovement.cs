@@ -180,12 +180,10 @@ public class CharacterMovement : MonoBehaviour
             _currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
             
             x = transform.position.x + (_currentBeatTime - _previousBeatTime) * MoveSpeed;
-            y = 0f;
             _previousBeatTime = _currentBeatTime;
         }
         else
         {
-            Debug.Log("checkPoint Position  " + _characterPosition);
             transform.position = _characterPosition;
             isPaused = false;
         }
@@ -298,7 +296,7 @@ public class CharacterMovement : MonoBehaviour
         // 땅 위에 있을 때
         if (positionCheckHit)
         {
-            y = positionCheckHit.point.y + _positionOffsetY;
+            y = positionCheckHit.point.y + _positionYOffset;
         }
         _characterPosition = new Vector3(_characterPosition.x, y, 0f);
         transform.position = _characterPosition;
