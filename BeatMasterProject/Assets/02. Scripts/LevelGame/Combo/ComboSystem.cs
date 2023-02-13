@@ -13,7 +13,11 @@ public class ComboSystem : MonoBehaviour
     [SerializeField] private int _increasingAmount = 10000;
     [SerializeField] private GameObject _comboTextPrefab; 
     [SerializeField] private ushort _combo;
-    
+    [Header("OutLine Effect")]
+    private SpriteRenderer _characterSprite;
+    private Material _defaultMat;
+    [SerializeField] private Material _outLineMat;
+    private ushort _showEffectNum = 10;
     
     private int _currentAmount;
     private Transform _characterTransform;
@@ -24,6 +28,10 @@ public class ComboSystem : MonoBehaviour
     private void Awake()
     {
         _characterTransform = FindObjectOfType<CharacterMovement>().transform;
+        _characterSprite = _characterTransform.GetChild(0).GetComponent<SpriteRenderer>();
+        _defaultMat = _characterSprite.material;
+        // Set Texture based on current character
+        // _outLineMat.SetTexture("_MainTex", texture to push....);
     }
 
     void Start()
@@ -35,6 +43,10 @@ public class ComboSystem : MonoBehaviour
     {
         _combo++;
         ShowCombo();
+        if (_combo >= _showEffectNum)
+        {
+            _characterSprite.material = _outLineMat;
+        }
     }
 
     public void IncreaseComboInProcess(int startSample)
@@ -52,6 +64,7 @@ public class ComboSystem : MonoBehaviour
         _combo = 0;
         ResetCurrentAmount();
         // 콤보가 끊기는 연출
+        _characterSprite.material = _defaultMat;
     }
 
     public void ResetCurrentAmount()

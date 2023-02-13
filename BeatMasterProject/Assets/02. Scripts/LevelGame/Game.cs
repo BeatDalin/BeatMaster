@@ -67,7 +67,6 @@ public abstract class Game : MonoBehaviour
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
 
     protected CharacterMovement _characterMovement;
-
     protected MonsterPooling _monsterPooling;
 
     protected virtual void Awake()
