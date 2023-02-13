@@ -256,11 +256,11 @@ public class MapGenerator : MonoBehaviour
         // 맵 왼쪽 끝 채우기
         for (int i = -1; i >= -15; i--)
         {
-            _groundTilemap.SetTile(GetTileChangeData(_TileType.Top, 0, new Vector3Int(i, 0, 0), _groundYOffset), false);
+            _groundTilemap.SetTile(GetTileChangeData(_TileType.Top, 0, new Vector3Int(i, 0, 0), 0), false);
 
             for (int j = -1; j >= -10; j--)
             {
-                _groundTilemap.SetTile(GetTileChangeData(_TileType.Under, 0, new Vector3Int(i, j, 0), _groundYOffset), false);
+                _groundTilemap.SetTile(GetTileChangeData(_TileType.Under, 0, new Vector3Int(i, j, 0), 0), false);
             }
         }
     }
