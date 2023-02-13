@@ -185,6 +185,8 @@ public class CharacterMovement : MonoBehaviour
         else
         {
             transform.position = _characterPosition;
+            x = transform.position.x + (_currentBeatTime - _checkPointCurrentBeatTime) * MoveSpeed;
+            _previousBeatTime = _currentBeatTime;
             isPaused = false;
         }
         
@@ -268,12 +270,10 @@ public class CharacterMovement : MonoBehaviour
     {
         if (evt.HasFloatPayload())
         {
+            _characterPosition = transform.position;
             MoveSpeed = evt.GetFloatValue();
             _checkPointCurrentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-            if (transform.position.x >= _characterPosition.x)
-            {
-                _characterPosition = transform.position;
-            }
+            Debug.Log(_checkPointCurrentBeatTime);
         }
         if (evt.HasTextPayload())
         {
@@ -300,7 +300,8 @@ public class CharacterMovement : MonoBehaviour
         }
         _characterPosition = new Vector3(_characterPosition.x, y, 0f);
         transform.position = _characterPosition;
+        _previousBeatTime = 0;
         _currentBeatTime = _checkPointCurrentBeatTime;
-        _previousBeatTime = _checkPointCurrentBeatTime;
+        //_previousBeatTime = _checkPointCurrentBeatTime;
     }
 }
