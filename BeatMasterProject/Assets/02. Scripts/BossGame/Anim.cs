@@ -11,7 +11,7 @@ public enum CharacterStatus
     Jump,
     Attack,
     Damage,
-    Die
+    //Die
 }
 
 public enum CharacterNum
@@ -26,39 +26,36 @@ public class Anim : MonoBehaviour
 {
     [SerializeField] private GameObject _hammer;
 
-    [SerializeField] private Animator[] _animators;
-    private Animator _anim;
+    protected Animator[] _animators;
+    protected Animator _anim;
 
-    private Animator _effectAnim;
-    [SerializeField] private Animator _jumpAnim;
+    protected Animator _effectAnim;
 
-    /*    [SerializeField]
-        private RuntimeAnimatorController[] _animatorController;*/
-    private RuntimeAnimatorController _value;
-    Dictionary<string, RuntimeAnimatorController> AnimatorDic = new Dictionary<string, RuntimeAnimatorController>();
+    private RuntimeAnimatorController _charAnimator;
+
+    private Dictionary<string, RuntimeAnimatorController> _animatorDic = new Dictionary<string, RuntimeAnimatorController>();
+
     // Start is called before the first frame update
-    private void Awake()
+    protected virtual void Awake()
     {
         _animators = GetComponentsInChildren<Animator>();
         _anim = _animators[0];
-        if (_animators.Length > 1) //수정예정
-        {
-            _effectAnim = _animators[1];
-        }
     }
 
-    private RuntimeAnimatorController GetDic(string _key)
+    protected virtual RuntimeAnimatorController GetAnimatorDic(string _key)
     {
-        if (AnimatorDic.TryGetValue(_key, out _value))
-            return AnimatorDic[_key];
-        _value = Resources.Load<RuntimeAnimatorController>(_key);
-        AnimatorDic.Add(_key, _value);
-        return _value;
+        if (_animatorDic.TryGetValue(_key, out _charAnimator))
+        {
+            return _animatorDic[_key];
+        }
+        _charAnimator = Resources.Load<RuntimeAnimatorController>("Animator/" + _key);
+        _animatorDic.Add(_key, _charAnimator);
+        return _charAnimator;
     }
 
     public void ChangeCharacterAnim(int charNum)
     {
-        _anim.runtimeAnimatorController = GetDic(Enum.GetName(typeof(CharacterNum), charNum));
+        _anim.runtimeAnimatorController = GetAnimatorDic(Enum.GetName(typeof(CharacterNum), charNum));
     }
 
     public void StatusJudge(CharacterStatus crnStat)
@@ -85,14 +82,14 @@ public class Anim : MonoBehaviour
                 Damage();
                 break;
 
-            case CharacterStatus.Die:
-                Die();
-                break;
+                /*case CharacterStatus.Die:
+                    Die();
+                    break;*/
         }
     }
 
 
-    public void Attack()
+    protected virtual void Attack()
     {
         /*GameObject hammerClone = Instantiate(_hammer, _hammer.transform.position, _hammer.transform.rotation);
         _anim.Play("2_Attack_Normal", -1, 0f);
@@ -100,20 +97,16 @@ public class Anim : MonoBehaviour
         _anim.Play("Attack");
     }
 
-    public void Jump()
+    protected virtual void Jump()
     {
         //anim.SetBool("Attack", false);
         /*        _anim.SetTrigger("Jump");
                 _anim.SetBool("Run", true);
                 _anim.SetBool("Idle", false);*/
         _anim.Play("Jump");
-        if (_animators.Length > 1)
-        {
-            ShowJumpEffect();
-        }
     }
 
-    public void Damage()
+    protected virtual void Damage()
     {
         /*        _anim.SetTrigger("Die");
                 _anim.SetBool("Run", false);
@@ -121,35 +114,24 @@ public class Anim : MonoBehaviour
         _anim.Play("Damage");
     }
 
-    public void Die()
+    protected virtual void Die()
     {
         _anim.SetTrigger("Die");
         _anim.SetBool("Run", false);
         _anim.SetBool("Idle", false);
     }
 
-    public void Run()
+    protected virtual void Run()
     {
         /*_anim.SetBool("Run", true);
         _anim.SetBool("Idle", false);*/
         _anim.Play("Run");
     }
 
-    public void Idle()
+    protected virtual void Idle()
     {
         /*_anim.SetBool("Run", false);
         _anim.SetBool("Idle", true);*/
         _anim.Play("Idle");
-    }
-
-
-    private void ShowJumpEffect()
-    {
-        _jumpAnim.transform.position = transform.position; // set position of 
-        _jumpAnim.Play("JumpDustEffect");
-    }
-    public void SetEffectBool(bool isLong)
-    {
-        _effectAnim.SetBool("isLongNote", isLong);
     }
 }
