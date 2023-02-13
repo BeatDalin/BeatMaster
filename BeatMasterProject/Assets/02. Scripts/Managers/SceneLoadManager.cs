@@ -65,11 +65,6 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         StartCoroutine(CoSceneTransition());
     }
 
-    public void RestartGame()
-    {
-        StartCoroutine(CoLoadLevelAsync());
-    }
-
     private IEnumerator CoLoadLevelAsync()
     {
         AsyncOperation async = SceneManager.LoadSceneAsync(Scene.ToString());
