@@ -132,7 +132,7 @@ public class DataCenter : MonoBehaviour
         StageData curStageData = _gameData.stageData[stageIdx];
         curStageData.bossClear = true;
     }
-    
+
     /// <summary>
     /// Update Data and save updated content to json file.
     /// </summary>
@@ -151,9 +151,9 @@ public class DataCenter : MonoBehaviour
     private void CreateStoreData()
     {
         _gameData.storeData = new StoreData();
-        _gameData.storeData.charCount = 5; // temporary.. 상품 수 5개
-        _gameData.storeData.characterData = new CharacterData[_gameData.storeData.charCount]; 
-        
+        _gameData.storeData.charCount = Enum.GetValues(typeof(CharacterNum)).Length;
+        _gameData.storeData.characterData = new CharacterData[_gameData.storeData.charCount];
+
         CharacterData characterData = new CharacterData();
         for (int i = 0; i < _gameData.storeData.charCount; i++)
         {
