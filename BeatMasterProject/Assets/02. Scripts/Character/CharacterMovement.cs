@@ -123,7 +123,7 @@ public class CharacterMovement : MonoBehaviour
 
         _jumpMidY = _jumpHeight;
         _jumpStartPosition = transform.position;
-        _canJump = (++_jumpCount < _maxJumpCount) ? true : false;
+        _canJump = ++_jumpCount < _maxJumpCount;
         isJumping = true;
         _canGroundCheck = false;
 
