@@ -16,10 +16,11 @@ public enum CharacterStatus
 
 public enum CharacterNum
 {
-    Corgi,
-    Tri_Corgi,
-    Corgi_Notail,
-    Tri_Corgi_Notail,
+    Corgi, //<-기본
+    //Tri_Corgi,
+    //    Corgi_Notail,
+    Tri_Corgi_Notail,//<- 또다른 기본
+    Duck
 }
 
 public class Anim : MonoBehaviour
