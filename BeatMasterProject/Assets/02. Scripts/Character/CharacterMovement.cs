@@ -43,9 +43,9 @@ public class CharacterMovement : MonoBehaviour
     private float _checkPointCurrentBeatTime = 0f;
 
     [Header("Jump")]
-    [SerializeField] private float _jumpHeight = 3f;
-    [SerializeField] private int _jumpTileCount = 2;
-    [SerializeField] private float _jumpGapRate = 0.25f;
+    [SerializeField] private float _jumpGapRate = 0.5f;
+    private float _jumpHeight = 1.75f;
+    private int _jumpTileCount = 2;
     private const int _maxJumpCount = 1;
     private int _jumpCount;
     private Vector2 _jumpStartPosition;
@@ -56,31 +56,13 @@ public class CharacterMovement : MonoBehaviour
 
     [Header("Ray")]
     [SerializeField] private Transform _rayOriginPoint;
-    [SerializeField] private LayerMask _tileLayer;
     [SerializeField] private float _rayDistanceOffset = 0.2f;
     [SerializeField] private float _positionYOffset;
-
-    private Animator _animator;
-    
-
-    private void Awake()
-    {
-        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
-    }
+    private LayerMask _tileLayer;
 
     private void Start()
     {
-        _characterPosition = transform.position;
-        _game = FindObjectOfType<Game>();
-        _resourcesChanger = FindObjectOfType<ResourcesChanger>();
-        _rigidbody = GetComponent<Rigidbody2D>();
-        _rigidbody.bodyType = RigidbodyType2D.Kinematic;
-        _rigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
-        _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
-
-        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
-
-        MoveSpeed = 2f;
+        Init();
     }
 
     private void Update()
@@ -105,55 +87,70 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
+    private void Init()
+    {
+        _game = FindObjectOfType<Game>();
+        _resourcesChanger = FindObjectOfType<ResourcesChanger>();
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _rigidbody.bodyType = RigidbodyType2D.Kinematic;
+        _rigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
+        _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        _tileLayer = LayerMask.GetMask("Ground");
+        _characterPosition = transform.position;
+        MoveSpeed = 2f;
+
+        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
+    }
+
     private void GetInput()
     {
-        // 점프 입력
         if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
-            SoundManager.instance.PlaySFX("Jump");
-            PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);
-            if (++_jumpCount >= _maxJumpCount)
+            Jump();
+        }
+    }
+
+    private void Jump()
+    {
+        SoundManager.instance.PlaySFX("Jump");
+        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);
+
+        _jumpMidY = _jumpHeight;
+        _jumpStartPosition = transform.position;
+        _canJump = (++_jumpCount < _maxJumpCount) ? true : false;
+        isJumping = true;
+        _canGroundCheck = false;
+
+        Invoke("GroundCheckOn", 0.2f);
+
+        for (int i = 2; i <= 5; i++)
+        {
+            RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down, 1000, _tileLayer);
+
+            if (jumpEndCheckHit)
             {
-                _canJump = false;
-            }
+                _jumpTileCount = i;
 
-            _jumpMidY = _jumpHeight;
-            _jumpStartPosition = transform.position;
-            isJumping = true;
-            _canGroundCheck = false;
-
-            Invoke("GroundCheckOn", 0.2f);
-
-            for (int i = 2; i <= 5; i++)
-            {
-                RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down, 1000, _tileLayer);
-
-                if (jumpEndCheckHit)
+                switch (_jumpTileCount)
                 {
-                    _jumpTileCount = i;
-
-                    switch (_jumpTileCount)
-                    {
-                        case 3:
-                            _jumpMidY = 2f;
-                            break;
-                        case 4:
-                            _jumpMidY = 2.25f;
-                            break;
-                        case 5:
-                            _jumpMidY = 2.5f;
-                            break;
-                        default: // _jumpTileCount 2
-                            _jumpMidY = 1.75f;
-                            break;
-                    }
-
-                    float yGap = jumpEndCheckHit.point.y - (_jumpStartPosition.y - _positionYOffset);
-                    _jumpMidY += yGap * _jumpGapRate;
-
-                    Debug.Log(_jumpMidY);
-                    break;
+                    case 3:
+                        _jumpMidY = 2f;
+                        break;
+                    case 4:
+                        _jumpMidY = 2.25f;
+                        break;
+                    case 5:
+                        _jumpMidY = 2.5f;
+                        break;
+                    default: // _jumpTileCount 2
+                        _jumpMidY = 1.75f;
+                        break;
                 }
+
+                float yGap = jumpEndCheckHit.point.y - (_jumpStartPosition.y - _positionYOffset);
+                _jumpMidY += yGap * _jumpGapRate;
+
+                break;
             }
         }
     }
