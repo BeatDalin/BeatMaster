@@ -96,7 +96,7 @@ public class NormalGame : Game
         }
 
         _eventRangeShort = CalculateRange(rangeEventList);
-        _events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
+        _events = SoundManager.instance.playingKoreo.GetTrackByID("Level1_LongCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
         
     }
@@ -297,12 +297,13 @@ public class NormalGame : Game
         curState = GameState.Pause;
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
-        //curSample = (int)_monsterPooling.currentPlayerTime;
-        _characterMovement.RewindPosition();
+        _playerAnim.SetEffectBool(false); // Stop booster animation
+        
+        _characterMovement.RewindPosition(); // Relocate player
         ContinueGame(); // wait 3 sec and start
-        DecreaseItem(5);
+        DecreaseItem(10);
         gameUI.UpdateText(TextType.Item, coinCount);
-        int death = IncreaseDeath(); // increase dea    th count
+        int death = IncreaseDeath(); // increase death count
         gameUI.UpdateText(TextType.Death, death);
         shortIdx = rewindShortIdx;
         longIdx = rewindLongIdx;

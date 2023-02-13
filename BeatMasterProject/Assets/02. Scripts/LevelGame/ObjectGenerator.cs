@@ -17,15 +17,14 @@ public class ObjectGenerator : MonoBehaviour
     private Animator _checkPointAnim;
     [SerializeField] private List<KoreographyEvent> checkPointList;
     [SerializeField] private List<Vector3> _checkPointPos;
-    private int _checkPointIdx=0;
+    private int _checkPointIdx;
     [SerializeField] private bool[] _checkPointVisited;
-    // protected int checkPointIdx = -1;
-    // [SerializeField] private List<Animator> _checkPointAnim = new List<Animator>();
 
-    
     [Header("Short Note Obstacles")]
-    [SerializeField] private GameObject _shortObj;
+    [SerializeField] private GameObject _obstacleObj;
+    [SerializeField] private Transform _obstacleContainer;
     [SerializeField] private List<Vector3> _shortObjPosList;
+
     [Header("Long Note Start/End")] 
     [SerializeField] private GameObject _longObj;
     [SerializeField] private Transform _longObjContainer;
@@ -43,6 +42,11 @@ public class ObjectGenerator : MonoBehaviour
         // Check Point Initialize
         _checkPointIdx = -1;
         _checkPointVisited = new bool[checkPointList.Count];
+    }
+
+    private void Start()
+    {
+        PositLongNotify();
     }
 
     public void RecordShortPos(Vector3 pos)
@@ -71,8 +75,8 @@ public class ObjectGenerator : MonoBehaviour
 
     public void PositObstacles(float xPos, float yPos)
     {
-        var obstacle = Instantiate(_starObj, new Vector3(xPos, yPos, 0), Quaternion.identity);
-        obstacle.transform.SetParent(_itemContainer);
+        var obstacle = Instantiate(_obstacleObj, new Vector3(xPos + 1, yPos + 0.5f, 0), Quaternion.identity);
+        obstacle.transform.SetParent(_obstacleContainer);
         // _objectGenerator.RecordShortPos(new Vector3(_tileX, _tileY + _groundYOffset));
         // _objectGenerator.PositObstacles(_tileX, _tileY + _groundYOffset);
     }

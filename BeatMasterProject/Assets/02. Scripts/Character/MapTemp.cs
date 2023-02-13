@@ -335,10 +335,16 @@ public class MapTemp : MonoBehaviour
                 //{
                 //    Instantiate(actionEffects[1], new Vector3(xPosition + xOffset, yOffset, 0f), Quaternion.identity);
                 //}
+                
             }
-            // Record position, Posit Object
-            _objectGenerator.RecordShortPos(new Vector3(xPosition + xOffset, yPosition, 0));
-            _objectGenerator.PositObstacles(xPosition + xOffset, (float)yPosition);
+
+            if (_shortEventList[i].GetIntValue() == 0)
+            {
+                // Record position, Posit Object
+                _objectGenerator.RecordShortPos(new Vector3(xPosition + xOffset, yPosition, 0));
+                _objectGenerator.PositObstacles(xPosition + xOffset, yPosition);
+            }
+            
         }
     }
 
