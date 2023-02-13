@@ -14,7 +14,7 @@ public enum TextType
 public abstract class GameUI : MonoBehaviour
 {
     [Header("Game")]
-    [SerializeField] protected Game game;
+    protected Game game;
 
     [Header("Result UI")]
     [SerializeField] protected GameObject finalPanel;
