@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -8,8 +9,7 @@ using UnityEngine.UI;
 public class Store : MonoBehaviour
 {
     [SerializeField]
-    private Button[] _character;
-    //private Sprite[] _sprite;
+    private Button _char;
 
     [SerializeField]
     private GameObject[] _popupPanel; //panels 0:_purchasePanel, 1:_noMoneyPanel
@@ -19,74 +19,59 @@ public class Store : MonoBehaviour
     private Text _playerCoin;
     [SerializeField]
     private GameObject _ifPurchased;
-
-    //private int _currentChar;
-    [SerializeField]
-    private Dropdown _dropdown;
     [SerializeField]
     private Anim _anim;
+
     //private Animator _animator;
-    /*    [SerializeField]
-        private AnimationClip[] _anims;*/
-    /*    [SerializeField]*/
-    //private Data _gameData;
 
-    //private StoreData _currentStoreData;
+    [SerializeField]
+    private GameObject _content;
 
-    private int[] _price;
-    //구매 여부 판단 변수 
-    private bool[] _isPurchased;
-    private bool[] _isUnlocked;
-    //private PlayerData _playerDatas; //0: playerStage, 1: playerLv, 2:playerItem(coin) 3:playerChar
+    private Sprite _charSprite;
+    private Dictionary<string, Sprite> _spriteDic = new Dictionary<string, Sprite>();
+    private Button[] _character;
+    private StoreData _storeData;
+
 
     private void Awake()
     {
         DataCenter.Instance.LoadData();
-        //_currentStoreData = DataCenter.Instance.GetStoreData();
-        //각 변수에 맞는 데이터들 받아오기
     }
 
     private void Start()
     {
         //_animator = _popupPanel[0].transform.GetChild(0).GetComponent<Animator>();
-        _isPurchased = new bool[DataCenter.Instance.GetStoreData().characterData.Length];
-        _isUnlocked = new bool[DataCenter.Instance.GetStoreData().characterData.Length];
-        _price = new int[DataCenter.Instance.GetStoreData().characterData.Length];
-
-        for (int i = 0; i < DataCenter.Instance.GetStoreData().characterData.Length; i++)
-        {
-            _isPurchased[i] = DataCenter.Instance.GetStoreData().characterData[i].isPurchased;
-            _isUnlocked[i] = DataCenter.Instance.GetStoreData().characterData[i].isUnlocked;
-            _price[i] = DataCenter.Instance.GetStoreData().characterData[i].price;
-        }
-        //_playerChar = _gameData.playerChar;
 
         UpdatePlayersDataInScene();
-        for (int i = 0; i < _character.Length; i++)
+        _storeData = DataCenter.Instance.GetStoreData();
+
+        _character = new Button[_storeData.characterData.Length];
+        for (int i = 0; i < _storeData.characterData.Length; i++)
         {
-            if (!_isUnlocked[i])
-            {
-                continue;
-            }
-            
             int index = i;
-            _character[index].onClick.AddListener(() => SetPurchasePopup(index));
+
+            _character[index] = Instantiate(_char, _content.transform);
+            _character[index].transform.GetComponent<Image>().sprite = ChangeCharacterSprite(index);
+            _character[index].transform.GetChild(0).GetComponent<Text>().text = _storeData.characterData[i].price.ToString();
+            if (_storeData.characterData[i].isUnlocked)
+            {
+                _character[index].onClick.AddListener(() => SetPurchasePopup(index));
+            }
         }
-        _dropdown.onValueChanged.AddListener(delegate { ChangeDropdownValue(_dropdown); });
-        
         ClosePanel();
     }
-    
+
     private void InitStorePopup()
     {
+        _storeData = DataCenter.Instance.GetStoreData();
+        _ifPurchased.transform.GetChild(0).GetComponent<Button>().interactable = true;
+        _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "구매하기";
         foreach (var button in _popupBtn)
         {
             button.onClick.RemoveAllListeners();
         }
         _ifPurchased.SetActive(true);
         _popupPanel[0].SetActive(false);
-        //_currentChar = -1;
-        _dropdown.value = 0;
         ClosePanel();
     }
 
@@ -95,41 +80,42 @@ public class Store : MonoBehaviour
     {
         _popupPanel[0].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ((Image)_character[charNum].targetGraphic).sprite;
         _popupPanel[0].SetActive(true);
-        
+
         // 구매 안 한 상태일 때 구매하기 버튼 노출
-        if (!_isPurchased[charNum] && _isUnlocked[charNum])
+        if (!_storeData.characterData[charNum].isPurchased && _storeData.characterData[charNum].isUnlocked)
         {
-            //_currentChar = charNum;
-            _ifPurchased.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = _price[charNum].ToString();
+            _ifPurchased.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = _storeData.characterData[charNum].price.ToString();
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(true);
 
             UnityAction UA;
             UA = new UnityAction(() => PurchaseCharacter(charNum));
             _popupBtn[0].onClick.AddListener(UA);
         }
-        
+
         // 구매했는데 미장착 상태일 때 장착하기 버튼
-        else if (_isPurchased[charNum] && charNum != DataCenter.Instance.GetPlayerData().playerChar)
+        else if (_storeData.characterData[charNum].isPurchased && charNum != DataCenter.Instance.GetPlayerData().playerChar)
         {
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
             _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "장착하기";
-            
+
             UnityAction UA;
             UA = new UnityAction(() => EquipCharacter(charNum));
             _popupBtn[0].onClick.AddListener(UA);
         }
-            
+
         // 구매했는데 장착 상태일 때
         else
         {
-            _ifPurchased.SetActive(false);
+            _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
+            _ifPurchased.transform.GetChild(0).GetComponent<Button>().interactable = false;
+            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "장착 중";
         }
         _anim.ChangeCharacterAnim(charNum);
     }
 
     private void PurchaseCharacter(int charNum)
     {
-        int price = _price[charNum];
+        int price = _storeData.characterData[charNum].price;
         if (price > DataCenter.Instance.GetPlayerData().playerItem)
         {
             _popupPanel[1].SetActive(true);
@@ -139,7 +125,7 @@ public class Store : MonoBehaviour
         DataCenter.Instance.UpdateStorePurchaseData(charNum);
 
         UpdatePlayersDataInScene();
-        
+
         SetPurchasePopup(charNum);
     }
 
@@ -151,11 +137,6 @@ public class Store : MonoBehaviour
     private void UpdatePlayersDataInScene()
     {
         _playerCoin.text = DataCenter.Instance.GetPlayerData().playerItem.ToString();
-        for (int i = 0; i < DataCenter.Instance.GetStoreData().characterData.Length; i++)
-        {
-            _isPurchased[i] = DataCenter.Instance.GetStoreData().characterData[i].isPurchased;
-            _isUnlocked[i] = DataCenter.Instance.GetStoreData().characterData[i].isUnlocked;
-        }
     }
 
     private void ClosePanel()
@@ -166,11 +147,14 @@ public class Store : MonoBehaviour
         }
     }
 
-    private void ChangeDropdownValue(Dropdown select)
+    private Sprite ChangeCharacterSprite(int charNum)
     {
-        int op = select.value;
-        //_animator.Play(Enum.GetName(typeof(CharacterStatus), op));
-        PlayerStatus.Instance.ChangeStatus((CharacterStatus)op);
+        string _key = Enum.GetName(typeof(CharacterNum), charNum);
+        if (_spriteDic.TryGetValue(_key, out _charSprite))
+            return _spriteDic[_key];
+        _charSprite = Resources.Load<Sprite>("Sprite/" + _key);
+        _spriteDic.Add(_key, _charSprite);
+        return _charSprite;
     }
 
     #region ifFix
