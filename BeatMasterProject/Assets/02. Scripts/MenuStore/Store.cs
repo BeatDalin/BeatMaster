@@ -151,7 +151,9 @@ public class Store : MonoBehaviour
     {
         string _key = Enum.GetName(typeof(CharacterNum), charNum);
         if (_spriteDic.TryGetValue(_key, out _charSprite))
+        {
             return _spriteDic[_key];
+        }
         _charSprite = Resources.Load<Sprite>("Sprite/" + _key);
         _spriteDic.Add(_key, _charSprite);
         return _charSprite;
