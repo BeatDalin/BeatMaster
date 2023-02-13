@@ -20,7 +20,7 @@ public class MonsterPooling : MonoBehaviour
     [SerializeField] private List<Vector3> _tilePos = new List<Vector3>();
     private int _checkPointIdx = 0;
     private int _deleteMonsterCount;
-    private int _monsterIdx;
+    [SerializeField] private int _monsterIdx;
     private int _count;
 
     private void Awake()
@@ -55,8 +55,12 @@ public class MonsterPooling : MonoBehaviour
     public void DisableMonster()
     {
         monsterList[_monsterIdx].GetComponent<Monster>().ShowAnim();
-        monsterList[_monsterIdx].SetActive(false);
         _monsterIdx++;
+    }
+
+    public void MissMonster()
+    {
+        monsterList[_monsterIdx].GetComponent<Monster>().DisableMonster();
     }
 
     public void AddTilePos(float posX, float posY)
@@ -73,7 +77,8 @@ public class MonsterPooling : MonoBehaviour
     {
         for (int i = _count; i < _monsterIdx; i++)
         {
-            monsterList[i].SetActive(true);
+            monsterList[i].GetComponent<Monster>().ChangeAlpha(true);
+            //monsterList[i].SetActive(true);
         }
 
         _monsterIdx = _count;

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -220,6 +220,66 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a2bbee9f612e4161b9d5d36fb5d0c87, type: 3}
+--- !u!1 &584421751
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 584421754}
+  - component: {fileID: 584421753}
+  - component: {fileID: 584421752}
+  m_Layer: 0
+  m_Name: TouchEffectPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &584421752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584421751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1939c0083ed144b99a2aa4334498d52a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultTime: 0.01
+--- !u!114 &584421753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584421751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f60f2db4b9244cfb93732b24be7b390, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolingPrefab: {fileID: 7368994942055723, guid: 64de812f07c5d44e08687e2ce9530433, type: 3}
+  initCount: 70
+--- !u!4 &584421754
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584421751}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &687157621
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,6 +359,7 @@ GameObject:
   - component: {fileID: 841026012}
   - component: {fileID: 841026011}
   - component: {fileID: 841026014}
+  - component: {fileID: 841026015}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -405,6 +466,23 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &841026015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841026010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd60e1b7f395ae34f95524f4bb5ddbad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 0}
+  _setWidth: 1920
+  _setHeight: 1080
+  _deviceWidth: 0
+  _deviceHeight: 0
 --- !u!1 &1691863706
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,6 +628,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _loadingTime: 2
+  isLoaded: 0
   _loadImage: {fileID: 0}
 --- !u!4 &1868571255
 Transform:
@@ -777,7 +856,7 @@ PrefabInstance:
     - target: {fileID: 1735572402370116573, guid: cae8134d38f5dcf49a9d45b9c53a6fda, type: 3}
       propertyPath: _sfx.Array.data[3].clip
       value: 
-      objectReference: {fileID: 8300000, guid: 6a80078f6fc6a42dfb959e3447ed72e3, type: 3}
+      objectReference: {fileID: 8300000, guid: c901e75905dc340199e0518328c4c263, type: 3}
     - target: {fileID: 1735572402370116573, guid: cae8134d38f5dcf49a9d45b9c53a6fda, type: 3}
       propertyPath: _sfx.Array.data[3].name
       value: Touch

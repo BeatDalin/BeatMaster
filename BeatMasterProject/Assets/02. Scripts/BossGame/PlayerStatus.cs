@@ -44,7 +44,7 @@ public class PlayerStatus : MonoBehaviour
 
         if (_hp == 0)
         {
-            ChangeStatus(CharacterStatus.Die);
+            //ChangeStatus(CharacterStatus.Die);
             _bossGameUI.ShowFinalPanel();
         }
     }

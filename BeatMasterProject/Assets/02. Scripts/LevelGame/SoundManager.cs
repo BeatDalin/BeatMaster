@@ -131,6 +131,8 @@ public class SoundManager : MonoBehaviour
         {
             Koreographer.Instance.UnloadKoreography(playingKoreo);
         }
+
+        _bgmPlayer.loop = false;
         switch (currentScene)
         {
             case SceneLoadManager.SceneType.Title: // Title 씬
@@ -138,6 +140,7 @@ public class SoundManager : MonoBehaviour
                 playingKoreo = koreographies[0];
                 // playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Title");
                 musicPlayer.LoadSong(playingKoreo, 0, false);
+                _bgmPlayer.loop = true;
                 break;
             }
             case SceneLoadManager.SceneType.LevelSelect: // LevelSelect 씬
@@ -145,6 +148,7 @@ public class SoundManager : MonoBehaviour
                 playingKoreo = koreographies[1];
                 // playingKoreo = Resources.Load<Koreography>("KoreoGraphys/LevelSelect");
                 musicPlayer.LoadSong(playingKoreo, 0, true);
+                _bgmPlayer.loop = true;
                 break;
             }
             case SceneLoadManager.SceneType.Level1: // Level1 씬
@@ -158,5 +162,6 @@ public class SoundManager : MonoBehaviour
         // Load next scene's Koreography
         Koreographer.Instance.LoadKoreography(playingKoreo);
         clipName = musicPlayer.GetCurrentClipName();
+
     }
 }

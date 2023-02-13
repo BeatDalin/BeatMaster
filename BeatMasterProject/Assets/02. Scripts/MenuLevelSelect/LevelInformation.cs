@@ -3,9 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 public class LevelInfo
 {
@@ -34,7 +32,7 @@ public class LevelInfo
 public class LevelInformation : MonoBehaviour
 {
     [SerializeField] private GameObject _levelPanel;
-
+    private CanvasGroup _levelCanvasGroup;
     [Header("StageData")]
     public int curStage = 0;
     public int curMaxLevel; // 현재 clear한 레벨 중 가장 높은 레벨 index
@@ -83,15 +81,45 @@ public class LevelInformation : MonoBehaviour
         
         AddLevelBtnListener();
         _levelBtns.SetActive(true);
+        
+        _levelCanvasGroup = GetComponent<CanvasGroup>();
+        StartCoroutine(CoFadeIn());
     }
-    
+
     private void AddLevelBtnListener()
     {
         for (int i = 0; i < _levelBtn.Length; i++)
         {
             var levelNum = i;
-            _levelBtn[i].onClick.AddListener(()=>SetLevelInfo(levelNum));
+            _levelBtn[i].onClick.AddListener(() => SetLevelInfo(levelNum));
         }
+    }
+
+    private IEnumerator CoFadeIn()
+    {
+        _levelCanvasGroup.alpha = 0;
+        _levelCanvasGroup.blocksRaycasts = false;
+        _levelPanel.SetActive(true);
+        yield return new WaitUntil(() => SceneLoadManager.Instance.isLoaded);
+        while (_levelCanvasGroup.alpha < 1f)
+        {
+            _levelCanvasGroup.alpha += 0.003f;
+            yield return new WaitForEndOfFrame();
+        }
+        _levelCanvasGroup.blocksRaycasts = true;
+    }
+
+    private IEnumerator CoFadeOut()
+    {
+        _levelCanvasGroup.alpha = 1;
+        _levelCanvasGroup.blocksRaycasts = true;
+        while (_levelCanvasGroup.alpha > 0f)
+        {
+            _levelCanvasGroup.alpha -= 0.003f;
+            yield return new WaitForEndOfFrame();
+        }
+        _levelCanvasGroup.blocksRaycasts = false;
+        _levelPanel.SetActive(false);
     }
     
     private void SetLevelInfo(int levelNum)
@@ -165,6 +193,8 @@ public class LevelInformation : MonoBehaviour
                 SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level4);
                 break;
         }
+        StartCoroutine(CoFadeOut());
+        SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1);
     }
 
     public void OnClickLeftBtn()
@@ -192,6 +222,7 @@ public class LevelInformation : MonoBehaviour
     public void OnClickTitleBtn()
     {
         SoundManager.instance.PlaySFX("Touch");
+        StartCoroutine(CoFadeOut());
         SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Title);
     }
     
