@@ -99,8 +99,7 @@ public class NormalGame : Game
         _eventRangeShort = CalculateRange(rangeEventList);
         _events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
-        // Save Point Initialize
-        checkPointVisited = new bool[checkPointList.Count];
+        
     }
 
     private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
@@ -339,14 +338,15 @@ public class NormalGame : Game
                 _monsterPooling.ResetPool();
             }
             // Entered new check point
-            checkPointIdx++;
+            // checkPointIdx++;
             // Record sample time to play music
-            rewindSampleTime = checkPointList[checkPointIdx].StartSample;
-            Debug.Log(rewindSampleTime);
-            checkPointVisited[checkPointIdx] = true;
+            // rewindSampleTime = checkPointList[checkPointIdx].StartSample;
+            // Debug.Log(rewindSampleTime);
+            // checkPointVisited[checkPointIdx] = true;
+            rewindSampleTime = objectGenerator.MoveCheckPointForward();
             // Play Particle or Animation
-            // ex) particleSystem.Play();
-            objectGenerator.PlayCheckAnim(checkPointIdx);
+            
+            // objectGenerator.PlayCheckAnim(checkPointIdx);
         }
         // Record Index
         rewindShortIdx = shortIdx;
