@@ -113,7 +113,7 @@ public abstract class GameUI : MonoBehaviour
         }
 
         // Button Events
-        pauseBtn.onClick.AddListener(()=> OpenPause());
+        pauseBtn.onClick.AddListener(() => OpenPause());
         continueBtn.onClick.AddListener(() =>
         {
             character.SetActive(true);
