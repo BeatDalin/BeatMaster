@@ -35,7 +35,9 @@ public class MenuTitleButton : MonoBehaviour
     [SerializeField] private GameObject _qualitySettingPopUp; // <Panel> QualitySetting
     [SerializeField] private GameObject _soundSettingPopUp; // <Panel> SoundSetting
     [SerializeField] private GameObject _languageSettingPopUp; // <Panel> LanguagePanel
-    
+
+    [SerializeField] private Button _settingCloseBtn;
+
     private int _objectIdx = 0;
 
     private void Start()
@@ -196,7 +198,7 @@ public class MenuTitleButton : MonoBehaviour
             }
         });
 
-        //_settingCloseBtn.onClick.AddListener(() => UIManager.instance.ClosePopUp());
+        _settingCloseBtn.onClick.AddListener(() => UIManager.instance.ClosePopUp());
 
         #endregion
     }
