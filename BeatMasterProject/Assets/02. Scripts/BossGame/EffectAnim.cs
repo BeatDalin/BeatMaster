@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class EffectAnim : Anim
 {
-    [SerializeField] Animator _jumpAnim;
+    [SerializeField] private Animator _jumpAnim;
     protected override void Awake()
     {
         base.Awake();
-        _effectAnim = _animators[1];
+        effectAnim = animators[1];
     }
     // Start is called before the first frame update
     protected override void Attack()
@@ -45,6 +45,6 @@ public class EffectAnim : Anim
     }
     public void SetEffectBool(bool isLong)
     {
-        _effectAnim.SetBool("isLongNote", isLong);
+        effectAnim.SetBool("isLongNote", isLong);
     }
 }

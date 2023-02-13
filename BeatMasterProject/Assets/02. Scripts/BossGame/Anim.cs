@@ -26,10 +26,10 @@ public class Anim : MonoBehaviour
 {
     [SerializeField] private GameObject _hammer;
 
-    protected Animator[] _animators;
-    protected Animator _anim;
+    protected Animator[] animators;
+    protected Animator anim;
 
-    protected Animator _effectAnim;
+    protected Animator effectAnim;
 
     private RuntimeAnimatorController _charAnimator;
 
@@ -38,8 +38,8 @@ public class Anim : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Awake()
     {
-        _animators = GetComponentsInChildren<Animator>();
-        _anim = _animators[0];
+        animators = GetComponentsInChildren<Animator>();
+        anim = animators[0];
     }
 
     protected virtual RuntimeAnimatorController GetAnimatorDic(string _key)
@@ -55,7 +55,7 @@ public class Anim : MonoBehaviour
 
     public void ChangeCharacterAnim(int charNum)
     {
-        _anim.runtimeAnimatorController = GetAnimatorDic(Enum.GetName(typeof(CharacterNum), charNum));
+        anim.runtimeAnimatorController = GetAnimatorDic(Enum.GetName(typeof(CharacterNum), charNum));
     }
 
     public void StatusJudge(CharacterStatus crnStat)
@@ -94,7 +94,7 @@ public class Anim : MonoBehaviour
         /*GameObject hammerClone = Instantiate(_hammer, _hammer.transform.position, _hammer.transform.rotation);
         _anim.Play("2_Attack_Normal", -1, 0f);
         hammerClone.GetComponent<Animator>().SetTrigger("Attack");*/
-        _anim.Play("Attack");
+        anim.Play("Attack");
     }
 
     protected virtual void Jump()
@@ -103,7 +103,7 @@ public class Anim : MonoBehaviour
         /*        _anim.SetTrigger("Jump");
                 _anim.SetBool("Run", true);
                 _anim.SetBool("Idle", false);*/
-        _anim.Play("Jump");
+        anim.Play("Jump");
     }
 
     protected virtual void Damage()
@@ -111,27 +111,27 @@ public class Anim : MonoBehaviour
         /*        _anim.SetTrigger("Die");
                 _anim.SetBool("Run", false);
                 _anim.SetBool("Idle", false);*/
-        _anim.Play("Damage");
+        anim.Play("Damage");
     }
 
     protected virtual void Die()
     {
-        _anim.SetTrigger("Die");
-        _anim.SetBool("Run", false);
-        _anim.SetBool("Idle", false);
+        anim.SetTrigger("Die");
+        anim.SetBool("Run", false);
+        anim.SetBool("Idle", false);
     }
 
     protected virtual void Run()
     {
         /*_anim.SetBool("Run", true);
         _anim.SetBool("Idle", false);*/
-        _anim.Play("Run");
+        anim.Play("Run");
     }
 
     protected virtual void Idle()
     {
         /*_anim.SetBool("Run", false);
         _anim.SetBool("Idle", true);*/
-        _anim.Play("Idle");
+        anim.Play("Idle");
     }
 }
