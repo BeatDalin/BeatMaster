@@ -82,8 +82,8 @@ public abstract class Game : MonoBehaviour
 
     protected virtual void Start()
     {
-        StartWithDelay();
-
+        // StartWithDelay();
+        StartCoroutine(CoStartWithDelay());
         Koreographer.Instance.RegisterForEvents(_spdEventID, CheckEnd);
     }
 
@@ -104,15 +104,30 @@ public abstract class Game : MonoBehaviour
 
     protected void StartWithDelay(int startSample = 0)
     {
+        StartCoroutine(SceneLoadManager.Instance.CoSceneEnter());
         StartCoroutine(CoStartWithDelay(startSample));
     }
 
     protected IEnumerator CoStartWithDelay(int startSample = 0)
     {
         // UI Timer
+        // gameUI.timePanel.SetActive(true);
+        // // Wait for Scene Transition to end
+        // yield return new WaitWhile(() => !SceneLoadManager.Instance.GetTransitionEnd());
+        // int waitTime = 3;
+        // while (waitTime > 0)
+        // {
+        //     gameUI.UpdateText(TextType.Time, waitTime);
+        //     waitTime--;
+        //     yield return new WaitForSeconds(1);
+        // }
+
+
         gameUI.timePanel.SetActive(true);
         // Wait for Scene Transition to end
-        yield return new WaitWhile(() => !SceneLoadManager.Instance.GetTransitionEnd());
+        // yield return new WaitWhile(() => !SceneLoadManager.Instance.GetTransitionEnd());
+
+        yield return new WaitUntil(() => SceneLoadManager.Instance.isLoaded);
         int waitTime = 3;
         while (waitTime > 0)
         {
@@ -121,19 +136,21 @@ public abstract class Game : MonoBehaviour
             
             if (waitTime == 1)
             {
-                // Active Monster
+                // Activate Monster
                 _monsterPooling.ReArrange();
             }
             yield return new WaitForSeconds(1);
         }
         gameUI.timePanel.SetActive(false);
-        // Music Play & Game Start
-        startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
-        SoundManager.instance.PlayBGM(true, startSample);
+        
         // Rewind Character Position
         _characterMovement.RewindPosition();
         curState = GameState.Play;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+
+        // Music Play & Game Start
+        startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
+        SoundManager.instance.PlayBGM(true, startSample);
     }
 
     protected int[,] CalculateRange(List<KoreographyEvent> koreographyEvents)
