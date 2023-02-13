@@ -842,6 +842,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
+--- !u!224 &119198673 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6676748889830466105, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
+  m_PrefabInstance: {fileID: 119198672}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &126352209
 GameObject:
   m_ObjectHideFlags: 0
@@ -982,8 +987,9 @@ MonoBehaviour:
   _mapEventList: []
   _shortEventList: []
   _monsterPrefab: {fileID: 3003763203973727308, guid: 367c90cd1e9064c43bbfaafbc81f3d4a, type: 3}
-  _tilePos: []
   _monsterIdx: 0
+  coinPos: {fileID: 119198673}
+  _tilePos: []
 --- !u!4 &199611011
 Transform:
   m_ObjectHideFlags: 0
@@ -1421,7 +1427,7 @@ MonoBehaviour:
   _stageIdx: 0
   _levelIdx: 0
   coinCount: 0
-  objectGenerator: {fileID: 1860435643}
+  objectGenerator: {fileID: 1005781690}
 --- !u!4 &612035090
 Transform:
   m_ObjectHideFlags: 0
