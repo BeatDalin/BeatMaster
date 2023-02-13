@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+
 public class LevelInfo
 {
     public int levelNum; // 레벨 index
@@ -42,9 +43,12 @@ public class LevelInformation : MonoBehaviour
     public int uiLevel;
     
     private readonly LevelInfo[] _levelInfo = new LevelInfo[4];
-    
-    [Header("Level UI Info")]
+
+    [Header("Level UI Info")] 
     [SerializeField] private Camera _mainCam;
+    [SerializeField] private GameObject _levelBtns;
+    [SerializeField] private Button[] _levelBtn;
+
     [SerializeField] private GameObject _maskTarget;
     [SerializeField] private Text _levelTitle;
     [SerializeField] private Text _description;
@@ -66,7 +70,7 @@ public class LevelInformation : MonoBehaviour
         for (int i = 0; i <= _maxLevelNum; i++)
         {
             curStageData[i] = DataCenter.Instance.GetLevelData(curStage, i);
-            _levelInfo[i] = new LevelInfo(i, _levelDescription[i], _mapPos[i], _camPos[i].gameObject.transform.position);
+            _levelInfo[i] = new LevelInfo(i, _levelDescription[i], _mapPos[i], _camPos[i+1].gameObject.transform.position);
             
             if (i > 0)
             {
@@ -75,14 +79,25 @@ public class LevelInformation : MonoBehaviour
             }
         }
         
-        curMaxLevel = GetMaxLevelInStage();
-
-        SetLevelInfo(curMaxLevel+1);
-        uiLevel = curMaxLevel + 1;
+        curMaxLevel = GetMaxLevelInStage(); 
+        
+        AddLevelBtnListener();
+        _levelBtns.SetActive(true);
+    }
+    
+    private void AddLevelBtnListener()
+    {
+        for (int i = 0; i < _levelBtn.Length; i++)
+        {
+            var levelNum = i;
+            _levelBtn[i].onClick.AddListener(()=>SetLevelInfo(levelNum));
+        }
     }
     
     private void SetLevelInfo(int levelNum)
     {
+        _levelBtns.SetActive(false);
+        
         // levelNum 최댓 최솟값 한정
         levelNum = levelNum > _maxLevelNum ? _maxLevelNum : levelNum;
         levelNum = levelNum < 0 ? 0 : levelNum;
@@ -109,20 +124,26 @@ public class LevelInformation : MonoBehaviour
         _clearImg.SetActive(curStageData[levelNum].levelClear);
         
         // Camera
-        //_mainCam.transform.position = Vector3.MoveTowards(_mainCam.transform.position, _levelInfo[levelNum].camPos, 10f);
+        _mainCam.orthographicSize = 5f;
+        _mainCam.transform.position = 
+            Vector3.MoveTowards(_mainCam.transform.position, _levelInfo[levelNum].camPos, 10f);
         
         // locked Img
         _lockedPanel.SetActive(_levelInfo[levelNum].isLocked);
         
         // levelTitle Txt
-        int currLevel = _levelInfo[levelNum].levelNum + 1;
-        _levelTitle.text = "LEVEL " + currLevel;
+        int curLevel = _levelInfo[levelNum].levelNum + 1;
+        _levelTitle.text = "LEVEL " + curLevel;
         
         // map position
         _maskTarget.GetComponent<RectTransform>().localPosition = _levelInfo[levelNum].mapPos;
         
         // description Txt
         _description.text = _levelInfo[levelNum].levelDescription;
+
+        uiLevel = _levelInfo[levelNum].levelNum;
+        
+        _levelPanel.SetActive(true);
     }
 
     public void OnClickStartBtn()
@@ -144,19 +165,28 @@ public class LevelInformation : MonoBehaviour
                 SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level4);
                 break;
         }
-        
     }
 
     public void OnClickLeftBtn()
     {
         SoundManager.instance.PlaySFX("Touch");
-        SetLevelInfo(--uiLevel);
+        SetLevelInfo(uiLevel-1);
     }
 
     public void OnClickRightBtn()
     { 
         SoundManager.instance.PlaySFX("Touch");
-        SetLevelInfo(++uiLevel);
+        SetLevelInfo(uiLevel+1);
+    }
+
+    public void OnClickCloseBtn()
+    {
+        SoundManager.instance.PlaySFX("Touch");
+        _mainCam.orthographicSize = 8f;
+        _mainCam.transform.position = _camPos[0].transform.position;
+        _levelPanel.SetActive(false);
+        _levelBtns.SetActive(true);
+
     }
 
     public void OnClickTitleBtn()
