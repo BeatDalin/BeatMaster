@@ -17,7 +17,7 @@ public class CharacterMovement : MonoBehaviour
     [EventID] public string speedEventID;
     [SerializeField] private float _moveSpeed;
 
-    private bool isPaused;
+    private bool _isPaused;
     public float MoveSpeed
     {
         get => _moveSpeed;
@@ -75,7 +75,7 @@ public class CharacterMovement : MonoBehaviour
         }
         else
         {
-            isPaused = true;
+            _isPaused = true;
         }
 
         // if (_game.curState.Equals(GameState.Pause))
@@ -175,7 +175,7 @@ public class CharacterMovement : MonoBehaviour
         float x = 0f;
         float y = 0f;
         
-        if (!isPaused)
+        if (!_isPaused)
         {
             _currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
             
@@ -187,7 +187,7 @@ public class CharacterMovement : MonoBehaviour
             transform.position = _characterPosition;
             x = transform.position.x + (_currentBeatTime - _checkPointCurrentBeatTime) * MoveSpeed;
             _previousBeatTime = _currentBeatTime;
-            isPaused = false;
+            _isPaused = false;
         }
         
         // 점프 중이 아닐 때 캐릭터의 y값 설정

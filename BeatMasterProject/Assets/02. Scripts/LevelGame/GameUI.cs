@@ -149,10 +149,10 @@ public abstract class GameUI : MonoBehaviour
 
     public void ChangeOutLineColor(BeatResult result)
     {
-        StartCoroutine(WaitForSetActive(result));
+        StartCoroutine(CoWaitForSetActive(result));
     }
 
-    IEnumerator WaitForSetActive(BeatResult result)
+    private IEnumerator CoWaitForSetActive(BeatResult result)
     {
         switch (result)
         {
@@ -190,7 +190,7 @@ public abstract class GameUI : MonoBehaviour
         _failOutline.SetActive(false);
     }
 
-    IEnumerator StartParticle()
+    private IEnumerator CoStartParticle()
     {
         int i = 0;
         while (i != _particleSystemsList.Count - 1)
