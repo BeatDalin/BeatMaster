@@ -37,7 +37,7 @@ public class ParticleSystemReverseSimulationSuperSimple : MonoBehaviour
         particleSystems[0].Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         for (int i = particleSystems.Length - 1; i >= 0; i--)
         {
-            bool useAutoRandomSeed = particleSystems[i].useAutoRandomSeed;
+            //bool useAutoRandomSeed = particleSystems[i].useAutoRandomSeed;
             particleSystems[i].useAutoRandomSeed = false;
 
             particleSystems[i].Play(false);
@@ -48,7 +48,7 @@ public class ParticleSystemReverseSimulationSuperSimple : MonoBehaviour
             float currentSimulationTime = startTime + simulationTimes[i];
             particleSystems[i].Simulate(currentSimulationTime, false, false, true);
 
-            particleSystems[i].useAutoRandomSeed = useAutoRandomSeed;
+            //particleSystems[i].useAutoRandomSeed = useAutoRandomSeed;
 
             if (currentSimulationTime < 0.0f)
             {

@@ -18,6 +18,8 @@ public class CharacterMovement : MonoBehaviour
     public float gravityScale;
     public float startGravityAccel;
     [SerializeField] private float _moveSpeed;
+
+    private bool isPaused;
     public float MoveSpeed
     {
         get => _moveSpeed;
@@ -84,6 +86,10 @@ public class CharacterMovement : MonoBehaviour
         if (_game.curState.Equals(GameState.Play))
         {
             GetInput();
+        }
+        else
+        {
+            isPaused = true;
         }
 
         // if (_game.curState.Equals(GameState.Pause))
@@ -155,7 +161,16 @@ public class CharacterMovement : MonoBehaviour
     /// </summary>
     private void Move()
     {
-        _currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
+        if (!isPaused)
+        {
+            _currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
+        }
+        else
+        {
+            Debug.Log("checkPoint Position  " + _characterPosition);
+            transform.position = _characterPosition;
+            isPaused = false;
+        }
         float x = transform.position.x + (_currentBeatTime - _previousBeatTime) * MoveSpeed;
         float y = 0f;
         _previousBeatTime = _currentBeatTime;
@@ -267,6 +282,14 @@ public class CharacterMovement : MonoBehaviour
 
     public void RewindPosition()
     {
+        RaycastHit2D positionCheckHit = Physics2D.Raycast(_characterPosition, Vector2.down, 1000f, _tileLayer);
+        float y = 0f;
+        // 땅 위에 있을 때
+        if (positionCheckHit)
+        {
+            y = positionCheckHit.point.y + _positionOffsetY;
+        }
+        _characterPosition = new Vector3(_characterPosition.x, y, 0f);
         transform.position = _characterPosition;
         _currentBeatTime = _checkPointCurrentBeatTime;
         _previousBeatTime = _checkPointCurrentBeatTime;
