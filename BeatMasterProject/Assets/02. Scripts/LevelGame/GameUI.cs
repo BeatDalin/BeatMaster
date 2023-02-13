@@ -51,6 +51,7 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] public Text timeCount;
 
     [Header("Pause UI")]
+    [SerializeField] protected Button pauseBtn;
     [SerializeField] protected GameObject pausePanel;
     [SerializeField] protected Button continueBtn;
     [SerializeField] protected Button restartBtn;
@@ -72,26 +73,29 @@ public abstract class GameUI : MonoBehaviour
     #endregion
 
 
-    protected virtual void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape) && game.curState == GameState.Play)
-        {
-            OpenPause();
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape) && game.curState == GameState.Pause &&
-                 UIManager.instance.popUpStack.Count == 1)
-        {
-            character.SetActive(true);
-            UIManager.instance.ClosePopUp();
-            game.ContinueGame();
-        }
-    }
+    // protected virtual void Update()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Escape) && game.curState == GameState.Play)
+    //     {
+    //         OpenPause();
+    //     }
+    //     else if (Input.GetKeyDown(KeyCode.Escape) && game.curState == GameState.Pause &&
+    //              UIManager.instance.popUpStack.Count == 1)
+    //     {
+    //         character.SetActive(true);
+    //         UIManager.instance.ClosePopUp();
+    //         game.ContinueGame();
+    //     }
+    // }
 
     protected void OpenPause()
     {
-        UIManager.instance.OpenPopUp(pausePanel);
-        game.PauseGame();
-        character.SetActive(false);
+        if (game.curState.Equals(GameState.Play))
+        {
+            UIManager.instance.OpenPopUp(pausePanel);
+            game.PauseGame();
+            character.SetActive(false);
+        }
     }
 
     public virtual void InitUI()
@@ -109,6 +113,7 @@ public abstract class GameUI : MonoBehaviour
         }
 
         // Button Events
+        pauseBtn.onClick.AddListener(()=> OpenPause());
         continueBtn.onClick.AddListener(() =>
         {
             character.SetActive(true);
@@ -121,13 +126,19 @@ public abstract class GameUI : MonoBehaviour
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
         });
         goLevelMenuBtn.onClick.AddListener(() =>
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect));
+        {
+            character.SetActive(false);
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
+        });
         //settings
         goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPopUp(settingsPanel));
         settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePopUp(); });
 
         goLevelAfterGameBtn.onClick.AddListener(() =>
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect));
+        {
+            character.SetActive(false);
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
+        });
 
         restartAfterGameBtn.onClick.AddListener(() =>
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene));
