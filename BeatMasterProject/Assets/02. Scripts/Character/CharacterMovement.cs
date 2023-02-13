@@ -9,14 +9,12 @@ using UnityEngine.Serialization;
 public class CharacterMovement : MonoBehaviour
 {
     private Game _game;
-    private Rigidbody2D _rigidbody;
     private ResourcesChanger _resourcesChanger;
+    private Rigidbody2D _rigidbody;
     private Vector3 _characterPosition;
 
     [Header("Music")]
     [EventID] public string speedEventID;
-    public float gravityScale;
-    public float startGravityAccel;
     [SerializeField] private float _moveSpeed;
 
     private bool isPaused;
@@ -39,15 +37,17 @@ public class CharacterMovement : MonoBehaviour
             }
         }
     }
+    public float gravityScale;
+    public float startGravityAccel;
     private float _gravityAccel;
     private float _previousBeatTime = 0;
     private float _currentBeatTime = 0;
     private float _checkPointCurrentBeatTime = 0f;
 
     [Header("Jump")]
-    [SerializeField] private float _jumpHeight = 3f;
-    [SerializeField] private int _jumpTileCount = 2;
-    [SerializeField] private float _jumpGapRate = 0.25f;
+    [SerializeField] private float _jumpGapRate = 0.5f;
+    private float _jumpHeight = 1.75f;
+    private int _jumpTileCount = 2;
     private const int _maxJumpCount = 1;
     private int _jumpCount;
     private Vector2 _jumpStartPosition;
@@ -58,27 +58,13 @@ public class CharacterMovement : MonoBehaviour
 
     [Header("Ray")]
     [SerializeField] private Transform _rayOriginPoint;
-    [SerializeField] private LayerMask _tileLayer;
     [SerializeField] private float _rayDistanceOffset = 0.2f;
-    [SerializeField] private float _positionOffsetY;
-
-    private Animator _animator;
-    
-
-    private void Awake()
-    {
-        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
-    }
+    [SerializeField] private float _positionYOffset;
+    private LayerMask _tileLayer;
 
     private void Start()
     {
-        _characterPosition = transform.position;
-        _game = FindObjectOfType<Game>();
-        _rigidbody = GetComponent<Rigidbody2D>();
-        _resourcesChanger = FindObjectOfType<ResourcesChanger>();
-        
-        MoveSpeed = 2f;
-        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
+        Init();
     }
 
     private void Update()
@@ -107,46 +93,71 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
+    private void Init()
+    {
+        _game = FindObjectOfType<Game>();
+        _resourcesChanger = FindObjectOfType<ResourcesChanger>();
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _rigidbody.bodyType = RigidbodyType2D.Kinematic;
+        _rigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
+        _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        _tileLayer = LayerMask.GetMask("Ground");
+        _characterPosition = transform.position;
+        MoveSpeed = 2f;
+
+        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
+    }
+
     private void GetInput()
     {
-        // 점프 입력
         if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
-            SoundManager.instance.PlaySFX("Jump");
-            PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);
-            if (++_jumpCount >= _maxJumpCount)
+            Jump();
+        }
+    }
+
+    private void Jump()
+    {
+        SoundManager.instance.PlaySFX("Jump");
+        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);
+
+        _jumpMidY = _jumpHeight;
+        _jumpStartPosition = transform.position;
+        _canJump = (++_jumpCount < _maxJumpCount) ? true : false;
+        isJumping = true;
+        _canGroundCheck = false;
+
+        Invoke("GroundCheckOn", 0.2f);
+
+        for (int i = 2; i <= 5; i++)
+        {
+            RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down, 1000, _tileLayer);
+
+            if (jumpEndCheckHit)
             {
-                _canJump = false;
-            }
+                _jumpTileCount = i;
 
-            _jumpMidY = _jumpHeight;
-            _jumpStartPosition = transform.position;
-            isJumping = true;
-            _canGroundCheck = false;
-
-            Invoke("GroundCheckOn", 0.2f);
-
-            for (int i = 2; i <= 5; i++)
-            {
-                RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down, 1000, _tileLayer);
-
-                if (jumpEndCheckHit)
+                switch (_jumpTileCount)
                 {
-                    _jumpTileCount = i;
-                    float yGap = jumpEndCheckHit.point.y - _jumpStartPosition.y;
-                    _jumpMidY += yGap * _jumpGapRate;
-
-                    break;
+                    case 3:
+                        _jumpMidY = 2f;
+                        break;
+                    case 4:
+                        _jumpMidY = 2.25f;
+                        break;
+                    case 5:
+                        _jumpMidY = 2.5f;
+                        break;
+                    default: // _jumpTileCount 2
+                        _jumpMidY = 1.75f;
+                        break;
                 }
+
+                float yGap = jumpEndCheckHit.point.y - (_jumpStartPosition.y - _positionYOffset);
+                _jumpMidY += yGap * _jumpGapRate;
+
+                break;
             }
-            //RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + _jumpTileCount, 100f), Vector2.down, 1000, _tileLayer);
-
-            //if (jumpEndCheckHit)
-            //{
-            //    float yGap = jumpEndCheckHit.point.y - _jumpStartPosition.y;
-
-            //    _jumpMidY += yGap * _jumpGapRate;
-            //}
         }
     }
 
@@ -185,7 +196,7 @@ public class CharacterMovement : MonoBehaviour
         // 땅 위에 있을 때
         if (positionCheckHit)
         {
-            y = positionCheckHit.point.y + _positionOffsetY;
+            y = positionCheckHit.point.y + _positionYOffset;
         }
         else
         {
@@ -234,10 +245,6 @@ public class CharacterMovement : MonoBehaviour
 
         switch (jumpTileCount)
         {
-            case 2:
-                a = (_jumpEndY - (2 * _jumpMidY)) / 2;
-                b = _jumpMidY - a;
-                break;
             case 3:
                 a = ((2 * _jumpEndY) - (4 * _jumpMidY)) / 9;
                 b = (_jumpEndY - (9 * a)) / 3;
@@ -250,9 +257,9 @@ public class CharacterMovement : MonoBehaviour
                 a = ((2 * _jumpEndY) - (4 * _jumpMidY)) / 25;
                 b = (_jumpEndY - (25 * a)) / 5;
                 break;
-            default: // jumpTileCount 1
-                a = 2 * _jumpEndY - 4 * _jumpMidY;
-                b = _jumpEndY - a;
+            default: // jumpTileCount 2
+                a = (_jumpEndY - (2 * _jumpMidY)) / 2;
+                b = _jumpMidY - a;
                 break;
         }
 
