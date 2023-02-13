@@ -28,7 +28,6 @@ public class NormalGame : Game
     private ComboSystem _comboSystem;
     private EffectAnim _playerAnim;
     private PlayerData _playerDatas;
-
     public bool IsLongPressed
     {
         get => isLongPressed;

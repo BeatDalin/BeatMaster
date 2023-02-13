@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -241,7 +241,7 @@ MonoBehaviour:
   _moveSpeed: 0
   gravityScale: 0.06
   startGravityAccel: 0
-  _jumpGapRate: 0.25
+  _jumpGapRate: 0.5
   isJumping: 0
   _rayOriginPoint: {fileID: 3864058065308963663}
   _rayDistanceOffset: 0.2
@@ -842,6 +842,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
+--- !u!224 &119198673 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6676748889830466105, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
+  m_PrefabInstance: {fileID: 119198672}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &126352209
 GameObject:
   m_ObjectHideFlags: 0
@@ -982,8 +987,9 @@ MonoBehaviour:
   _mapEventList: []
   _shortEventList: []
   _monsterPrefab: {fileID: 3003763203973727308, guid: 367c90cd1e9064c43bbfaafbc81f3d4a, type: 3}
-  _tilePos: []
   _monsterIdx: 0
+  coinPos: {fileID: 119198673}
+  _tilePos: []
 --- !u!4 &199611011
 Transform:
   m_ObjectHideFlags: 0
@@ -1419,7 +1425,7 @@ MonoBehaviour:
   _stageIdx: 0
   _levelIdx: 0
   coinCount: 0
-  objectGenerator: {fileID: 1860435643}
+  objectGenerator: {fileID: 1005781690}
 --- !u!4 &612035090
 Transform:
   m_ObjectHideFlags: 0
@@ -1787,7 +1793,7 @@ MonoBehaviour:
   _interactionTiles:
   - {fileID: 11400000, guid: 7e877a6e4b306d5419d1825d9c61dc20, type: 2}
   - {fileID: 11400000, guid: 55a4e7756a2f3d14093d6eb3c9695761, type: 2}
-  - {fileID: 11400000, guid: 4a78dc54f54643c48b0f65b411d8a44a, type: 2}
+  - {fileID: 11400000, guid: 802914fd3e355224d87a42f5db5b7953, type: 2}
 --- !u!4 &1005781689
 Transform:
   m_ObjectHideFlags: 0
@@ -7024,7 +7030,7 @@ MonoBehaviour:
   m_Follow: {fileID: 18329010}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 5
+    OrthographicSize: 4
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -7048,7 +7054,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1549678536}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.5, z: -10}
+  m_LocalPosition: {x: 0, y: 3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7068,9 +7074,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16549d75c543af4fab6b915f049d2d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _offset: {x: 0, y: 3.5, z: -10}
-  _minOrthoSize: 5
-  _maxOrthoSize: 10
+  _offset: {x: 0, y: 2, z: -10}
+  _minOrthoSize: 4
+  _maxOrthoSize: 6
   _speedEventID: Level1_Spd
 --- !u!1 &1625267935
 GameObject:
@@ -7182,7 +7188,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 4
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -7206,7 +7212,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1653310224}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.5, z: -10}
+  m_LocalPosition: {x: 0, y: 3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7229,7 +7235,7 @@ MonoBehaviour:
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 0
   m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 2
+  m_UpdateMethod: 0
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
@@ -7301,7 +7307,7 @@ MonoBehaviour:
   m_ZDamping: 0.1
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
-  m_ScreenY: 0.55
+  m_ScreenY: 0.58
   m_CameraDistance: 10
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0.4
@@ -7365,9 +7371,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16549d75c543af4fab6b915f049d2d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _offset: {x: 0, y: 3.5, z: -10}
-  _minOrthoSize: 5
-  _maxOrthoSize: 10
+  _offset: {x: 0, y: 2, z: -10}
+  _minOrthoSize: 4
+  _maxOrthoSize: 6
   _speedEventID: Level1_Spd
 --- !u!114 &1686695924
 MonoBehaviour:
@@ -7391,7 +7397,7 @@ MonoBehaviour:
   m_Follow: {fileID: 18329010}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 5
+    OrthographicSize: 4
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -7415,7 +7421,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1686695922}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.5, z: -10}
+  m_LocalPosition: {x: 0, y: 3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7666,7 +7672,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 4
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -7690,7 +7696,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1768320477}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.5, z: -10}
+  m_LocalPosition: {x: 0, y: 3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8425,7 +8431,7 @@ MonoBehaviour:
   m_ZDamping: 0.1
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
-  m_ScreenY: 0.55
+  m_ScreenY: 0.58
   m_CameraDistance: 10
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0.4

@@ -6,21 +6,27 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour
 {
+    [Header("Variable")]
     public bool isGainCoin;
 
-    public Transform position;
+    [Header("Transform")]
+    [SerializeField] private Vector3 _originalPos;
 
+    [Header("Physics")]
     [SerializeField] private Rigidbody2D _rigidbody2D;
+    
+    [Header("Animation")]
     [SerializeField] private Animator _animator;
     [SerializeField] private DOTweenAnimation _doTweenAnimation;
 
     private SpriteRenderer _spriteRenderer;
     private GameState _curState;
-    [SerializeField] private Vector3 _originalPos;
+    private Coin _coin;
 
     private void Start()
     {
         _curState = GameState.Idle;
+        _coin = transform.GetChild(0).GetComponent<Coin>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -33,7 +39,7 @@ public class Monster : MonoBehaviour
         }
     }
 
-    public void ShowAnim()
+    public void ShowAnim(Vector2 movePos)
     {
         if (isGainCoin)
         {
@@ -46,14 +52,12 @@ public class Monster : MonoBehaviour
                     _spriteRenderer.DOFade(0f, 0.3f).onComplete += () =>
                     {
                         _doTweenAnimation.DORewind();
-                        Destroy(transform.GetChild(0).gameObject);
+                        _coin.MoveCoin(movePos);
                         transform.position = _originalPos;
                         transform.rotation = Quaternion.identity;
                     };
                 };
             };
-            
-            //StartCoroutine(CoWaitAnimation());
         }
         else
         {
@@ -87,18 +91,5 @@ public class Monster : MonoBehaviour
         {
             _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 0);
         }
-    }
-
-    IEnumerator CoWaitAnimation()
-    {
-        ChangeAlpha(false);
-        _animator.SetBool("Hit", false);
-        while (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Coin"))
-        {
-            Debug.Log("기다리는중");
-            yield return null;
-        }
-        
-        Destroy(transform.GetChild(0).gameObject);
     }
 }
