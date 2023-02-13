@@ -61,6 +61,9 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected GameObject settingsPanel;
 
     [SerializeField] protected Button settingsCloseBtn;
+    
+    [SerializeField] private List<ParticleSystem> _particleSystemsList = new List<ParticleSystem>();
+
 
     #region Abstract Function
 
@@ -136,6 +139,7 @@ public abstract class GameUI : MonoBehaviour
                 TextMove("Perfect");
                 _judgeText.DOColor(_perfectColor, 0.1f);
                 _perfectOutline.SetActive(true);
+                //StartCoroutine(StartParticle());
                 break;
 
             case BeatResult.Fast:
@@ -163,6 +167,17 @@ public abstract class GameUI : MonoBehaviour
         _fastOutline.SetActive(false);
         _slowOutline.SetActive(false);
         _failOutline.SetActive(false);
+    }
+
+    IEnumerator StartParticle()
+    {
+        int i = 0;
+        while (i != _particleSystemsList.Count - 1)
+        {
+            _particleSystemsList[i].Play();
+            yield return new WaitForSeconds(0.1f);
+            i++;
+        }
     }
 
     private void TextMove(string input)

@@ -86,11 +86,11 @@ public class CharacterMovement : MonoBehaviour
             GetInput();
         }
 
-        if (_game.curState.Equals(GameState.Pause))
-        {
-            _currentBeatTime = _checkPointCurrentBeatTime;
-            _previousBeatTime = _checkPointCurrentBeatTime;
-        }
+        // if (_game.curState.Equals(GameState.Pause))
+        // {
+        //     _currentBeatTime = _checkPointCurrentBeatTime;
+        //     _previousBeatTime = _checkPointCurrentBeatTime;
+        // }
     }
 
     private void FixedUpdate()
@@ -268,5 +268,7 @@ public class CharacterMovement : MonoBehaviour
     public void RewindPosition()
     {
         transform.position = _characterPosition;
+        _currentBeatTime = _checkPointCurrentBeatTime;
+        _previousBeatTime = _checkPointCurrentBeatTime;
     }
 }

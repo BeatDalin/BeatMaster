@@ -24,13 +24,9 @@ public class NormalGame : Game
     private KeyCode _attackNoteKey = KeyCode.RightArrow;
     private KeyCode _longNoteKey = KeyCode.LeftArrow;
     private List<KoreographyEvent> _shortEvent;
-    [Header("MonsterPool")]
-    private MonsterPooling _monsterPooling;
-    private CharacterMovement _characterMovement;
     private ComboSystem _comboSystem;
     private Anim _anim;
     private PlayerData _playerDatas;
-
     public bool IsLongPressed
     {
         get => isLongPressed;
@@ -49,7 +45,6 @@ public class NormalGame : Game
         base.Awake();
         objectGenerator = FindObjectOfType<ObjectGenerator>();
         _particleController = FindObjectOfType<ParticleController>();
-        _monsterPooling = FindObjectOfType<MonsterPooling>();
         _animScript = FindObjectOfType<Anim>();
         _comboSystem = FindObjectOfType<ComboSystem>();
         // Save Point Event Track
