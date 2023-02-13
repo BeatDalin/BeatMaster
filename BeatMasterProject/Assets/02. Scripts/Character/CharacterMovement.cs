@@ -161,9 +161,16 @@ public class CharacterMovement : MonoBehaviour
     /// </summary>
     private void Move()
     {
+        float x = 0f;
+        float y = 0f;
+        
         if (!isPaused)
         {
             _currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
+            
+            x = transform.position.x + (_currentBeatTime - _previousBeatTime) * MoveSpeed;
+            y = 0f;
+            _previousBeatTime = _currentBeatTime;
         }
         else
         {
@@ -171,10 +178,7 @@ public class CharacterMovement : MonoBehaviour
             transform.position = _characterPosition;
             isPaused = false;
         }
-        float x = transform.position.x + (_currentBeatTime - _previousBeatTime) * MoveSpeed;
-        float y = 0f;
-        _previousBeatTime = _currentBeatTime;
-
+        
         // 점프 중이 아닐 때 캐릭터의 y값 설정
         RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
 
