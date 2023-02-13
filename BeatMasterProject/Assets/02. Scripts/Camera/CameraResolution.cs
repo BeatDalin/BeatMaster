@@ -26,6 +26,8 @@ public class CameraResolution : MonoBehaviour
     {
         _deviceWidth = Screen.width;
         _deviceHeight = Screen.height;
+
+        Debug.Log("기본해상도" + _deviceWidth +" "+ _deviceHeight);
         
         Screen.SetResolution(_setWidth, (int)(((float)_deviceHeight / _deviceWidth) * _setWidth), true);
 
@@ -34,6 +36,8 @@ public class CameraResolution : MonoBehaviour
         {
             // 새로운 너비 
             float newWidth = ((float)_setWidth / _setHeight) / ((float)_deviceWidth / _deviceHeight);
+
+            Debug.Log("바뀐 해상도 : " + newWidth);
             // 새로운 Rect 적용
             _camera.rect = new Rect((1f - newWidth) / 2f, 0f, newWidth, 1f);
         }
@@ -43,6 +47,8 @@ public class CameraResolution : MonoBehaviour
         {
             // 새로운 높이
             float newHeight = ((float)_deviceWidth / _deviceHeight) / ((float)_setWidth / _setHeight);
+
+            Debug.Log("바뀐 해상도 : " + newHeight);
             // 새로운 Rect 적용
             _camera.rect = new Rect(0f, (1f - newHeight) / 2f, 1f, newHeight);
         }
