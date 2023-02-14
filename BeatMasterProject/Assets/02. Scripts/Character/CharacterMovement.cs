@@ -56,6 +56,8 @@ public class CharacterMovement : MonoBehaviour
     private bool _canJump = true;
     public bool isJumping;
 
+
+
     [Header("Ray")]
     [SerializeField] private Transform _rayOriginPoint;
     [SerializeField] private float _rayDistanceOffset = 0.2f;
@@ -174,11 +176,11 @@ public class CharacterMovement : MonoBehaviour
     {
         float x = 0f;
         float y = 0f;
-        
+
         if (!_isPaused)
         {
             _currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-            
+
             x = transform.position.x + (_currentBeatTime - _previousBeatTime) * MoveSpeed;
             _previousBeatTime = _currentBeatTime;
         }
@@ -189,7 +191,7 @@ public class CharacterMovement : MonoBehaviour
             _previousBeatTime = _currentBeatTime;
             _isPaused = false;
         }
-        
+
         // 점프 중이 아닐 때 캐릭터의 y값 설정
         RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
 
@@ -220,7 +222,10 @@ public class CharacterMovement : MonoBehaviour
                 _canJump = true;
                 _jumpCount = 0;
                 _gravityAccel = startGravityAccel;
-                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                if (PlayerStatus.Instance.playerStatus != CharacterStatus.FastIdle)
+                {
+                    PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                }
             }
         }
 

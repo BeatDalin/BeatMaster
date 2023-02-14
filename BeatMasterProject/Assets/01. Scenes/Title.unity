@@ -911,6 +911,11 @@ MonoBehaviour:
   optionalRotationMode: 0
   optionalScrambleMode: 0
   optionalString: 
+--- !u!1 &292869921 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 570282143, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
+  m_PrefabInstance: {fileID: 1232773038}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &309057331
 GameObject:
   m_ObjectHideFlags: 0
@@ -1426,11 +1431,6 @@ MonoBehaviour:
   _setHeight: 1080
   _deviceWidth: 0
   _deviceHeight: 0
---- !u!224 &774698744 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 975284239890128541, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
-  m_PrefabInstance: {fileID: 1232773038}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &793018655
 GameObject:
   m_ObjectHideFlags: 0
@@ -2505,6 +2505,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 86793283}
     m_Modifications:
+    - target: {fileID: 570282144, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1020596154451282657, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -2532,7 +2536,7 @@ PrefabInstance:
     - target: {fileID: 1307316755915448422, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
       propertyPath: _popupPanel.Array.data[2]
       value: 
-      objectReference: {fileID: 570282143}
+      objectReference: {fileID: 292869921}
     - target: {fileID: 1307316756407843955, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
       propertyPath: m_SizeDelta.x
       value: 400
@@ -2583,7 +2587,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7229101829795051014, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7229101829801889178, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
       propertyPath: m_Enabled

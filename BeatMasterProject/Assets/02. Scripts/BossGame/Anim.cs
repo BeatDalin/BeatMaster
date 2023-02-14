@@ -11,6 +11,7 @@ public enum CharacterStatus
     Jump,
     Attack,
     Damage,
+    FastIdle,
     //Die
 }
 
@@ -83,6 +84,10 @@ public class Anim : MonoBehaviour
                 Damage();
                 break;
 
+            case CharacterStatus.FastIdle:
+                FastIdle();
+                break;
+
                 /*case CharacterStatus.Die:
                     Die();
                     break;*/
@@ -133,6 +138,11 @@ public class Anim : MonoBehaviour
     {
         /*_anim.SetBool("Run", false);
         _anim.SetBool("Idle", true);*/
+        anim.Play("Idle");
+    }
+
+    protected virtual void FastIdle()
+    {
         anim.Play("Idle");
     }
 }

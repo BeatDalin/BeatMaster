@@ -28,6 +28,7 @@ public class NormalGame : Game
     private ComboSystem _comboSystem;
     private EffectAnim _playerAnim;
     private PlayerData _playerDatas;
+
     public bool IsLongPressed
     {
         get => isLongPressed;
@@ -98,7 +99,7 @@ public class NormalGame : Game
         _eventRangeShort = CalculateRange(rangeEventList);
         _events = SoundManager.instance.playingKoreo.GetTrackByID("Level1_LongCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
-        
+
     }
 
     private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
@@ -196,6 +197,7 @@ public class NormalGame : Game
             _comboSystem.IncreaseCombo();
             IsLongPressed = true;
             Debug.Log("Long Key Press");
+            PlayerStatus.Instance.ChangeStatus(CharacterStatus.FastIdle);
             _playerAnim.SetEffectBool(true);
         }
         else if (Input.GetKeyUp(_longNoteKey))
@@ -222,7 +224,6 @@ public class NormalGame : Game
     private void CheckLongMiddle(KoreographyEvent evt)
     {
         // if space key is released during long note
-
         if (IsLongPressed && Input.GetKeyUp(_longNoteKey))
         {
             IsLongPressed = false;
@@ -249,6 +250,7 @@ public class NormalGame : Game
         {
             _isCheckedLong = false; // initialize before a curve value becomes 1
         }
+
         if (IsLongPressed && Input.GetKeyUp(_longNoteKey))
         {
             if (!isLongKeyCorrect) // increase item only once
@@ -256,7 +258,6 @@ public class NormalGame : Game
                 Debug.Log("End Key Up => Correct!");
                 _comboSystem.IncreaseCombo();
                 _comboSystem.ResetCurrentAmount();
-                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 isLongKeyCorrect = true;
                 IncreaseItem();
                 gameUI.UpdateText(TextType.Item, coinCount);
@@ -271,6 +272,7 @@ public class NormalGame : Game
         {
             _isCheckedLong = true;
             CheckBeatResult(longResult, longIdx, isLongKeyCorrect, _pressedTimeLong, _eventRangeLong); // Record Result
+            PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
             longIdx++;
             if (!isLongKeyCorrect)
             {
@@ -298,7 +300,7 @@ public class NormalGame : Game
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
         _playerAnim.SetEffectBool(false); // Stop booster animation
-        
+
         _characterMovement.RewindPosition(); // Relocate player
         ContinueGame(); // wait 3 sec and start
         DecreaseItem(10);
@@ -337,12 +339,12 @@ public class NormalGame : Game
             // checkPointIdx++;
             // Record sample time to play music
             // rewindSampleTime = checkPointList[checkPointIdx].StartSample;
-            
+
             // checkPointVisited[checkPointIdx] = true;
             rewindSampleTime = objectGenerator.MoveCheckPointForward();
             // Debug.Log(rewindSampleTime);
             // Play Particle or Animation
-            
+
             // objectGenerator.PlayCheckAnim(checkPointIdx);
         }
         // Record Index
