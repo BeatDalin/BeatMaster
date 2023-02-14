@@ -46,7 +46,7 @@ public class NormalGame : Game
         base.Awake();
         objectGenerator = FindObjectOfType<ObjectGenerator>();
         _particleController = FindObjectOfType<ParticleController>();
-        _monsterPooling = FindObjectOfType<MonsterPooling>();
+        monsterPooling = FindObjectOfType<MonsterPooling>();
         _playerAnim = FindObjectOfType<EffectAnim>();
         _comboSystem = FindObjectOfType<ComboSystem>();
         // Save Point Event Track
@@ -111,7 +111,7 @@ public class NormalGame : Game
 
         if (!isShortKeyCorrect)
         {
-            if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey) && !_characterMovement.isJumping)
+            if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey) && !characterMovement.isJumping)
             {
                 // 숏노트 체크 
                 Debug.Log(sampleTime);
@@ -171,12 +171,12 @@ public class NormalGame : Game
             //Debug.Log($"AttackIdx: {shortIdx}");
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
-            _monsterPooling.DisableMonster();
+            monsterPooling.DisableMonster();
             shortIdx++;
             if (!isShortKeyCorrect)
             {
                 _comboSystem.ResetCombo();
-                _monsterPooling.DisableMonster();
+                monsterPooling.DisableMonster();
                 // ================Rewind 자리================
                 Rewind();
             }
@@ -299,7 +299,7 @@ public class NormalGame : Game
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
         //curSample = (int)_monsterPooling.currentPlayerTime;
-        _characterMovement.RewindPosition();
+        characterMovement.RewindPosition();
         ContinueGame(); // wait 3 sec and start
         DecreaseItem(5);
         gameUI.UpdateText(TextType.Item, coinCount);
@@ -335,7 +335,8 @@ public class NormalGame : Game
             // sampleTime = 0 이면 첫시작이므로 ResetPool 안해도됨
             if (evt.StartSample != 0)
             {
-                _monsterPooling.ResetPool();
+                monsterPooling.ResetPool();
+                rewindTime.ClearRewindList();
             }
             // Entered new check point
             checkPointIdx++;
@@ -357,5 +358,7 @@ public class NormalGame : Game
         {
             Rewind();
         }
+        
+        
     }
 }
