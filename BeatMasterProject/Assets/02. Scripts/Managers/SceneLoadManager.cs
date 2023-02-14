@@ -8,12 +8,12 @@ using UnityEngine.UI;
 public class SceneLoadManager : Singleton<SceneLoadManager>
 {
     public SceneType Scene { get; private set; }
-    
-    [Header("Scene Load")] 
-    [SerializeField] private float _loadingTime = 2f;
+
+    [Header("Scene Load")] [SerializeField]
+    private float _loadingTime = 2f;
+
     public bool isLoaded = false;
-    [Header("Scene Transition Effect")] 
-    private GameObject _loadingCanvas;
+    [Header("Scene Transition Effect")] private GameObject _loadingCanvas;
     private Canvas _canvas;
     [SerializeField] private Image _loadImage;
     private static readonly int Cutoff = Shader.PropertyToID("_Cutoff");
@@ -41,9 +41,22 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
             _loadImage = _loadingCanvas.GetComponentInChildren<Image>();
             _loadImage.material.SetFloat(Cutoff, _hideBackground); // filled
         }
+
         _loadImage.gameObject.SetActive(false);
         _canvas = _loadingCanvas.GetComponent<Canvas>();
         _canvas.worldCamera = Camera.main;
+    }
+
+    // 어느 씬에서 Play를 해도 PreTitle 씬부터 시작하도록 하기 위해 사용~
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void FirstLoad()
+    {
+#if UNITY_EDITOR
+        if (SceneManager.GetActiveScene().name.CompareTo("PreTitle") != 0)
+        {
+            SceneManager.LoadScene("PreTitle");
+        }
+#endif
     }
 
     public void LoadLevelAsync(SceneType sceneType)
@@ -57,16 +70,16 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     {
         AsyncOperation async = SceneManager.LoadSceneAsync(Scene.ToString());
         yield return new WaitForSeconds(_loadingTime);
-        
+
         if (async.progress < 1f)
         {
             // loading bar if you want
             yield return null;
         }
-        
+
         StartCoroutine(CoSceneEnter());
     }
-    
+
     /// <summary>
     /// Start from unfilled image and show transition effect. After showing transition effect, start loading next scene.
     /// </summary>
@@ -80,9 +93,11 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         while (_loadImage.material.GetFloat(Cutoff) > _hideBackground)
         {
             _loadImage.material.SetFloat(Cutoff,
-                Mathf.MoveTowards(_loadImage.material.GetFloat(Cutoff), _hideBackground, _transitionSpd * Time.deltaTime));
+                Mathf.MoveTowards(_loadImage.material.GetFloat(Cutoff), _hideBackground,
+                    _transitionSpd * Time.deltaTime));
             yield return new WaitForEndOfFrame();
         }
+
         StartCoroutine(CoLoadLevelAsync());
     }
 
@@ -99,10 +114,12 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         // Empty and show background
         while (_loadImage.material.GetFloat(Cutoff) < _showBackground)
         {
-            _loadImage.material.SetFloat(Cutoff, 
-                Mathf.MoveTowards(_loadImage.material.GetFloat(Cutoff), _showBackground, _transitionSpd * Time.deltaTime));
+            _loadImage.material.SetFloat(Cutoff,
+                Mathf.MoveTowards(_loadImage.material.GetFloat(Cutoff), _showBackground,
+                    _transitionSpd * Time.deltaTime));
             yield return new WaitForEndOfFrame();
         }
+
         _loadImage.gameObject.SetActive(false);
         isLoaded = false;
     }

@@ -62,6 +62,9 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _positionYOffset;
     private LayerMask _tileLayer;
 
+    private RewindTime _rewindTime;
+
+
     private void Start()
     {
         Init();
@@ -87,7 +90,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_game.curState == GameState.Play || _game.curState == GameState.End)
+        if (_game.curState == GameState.Play)
         {
             Move();
         }
@@ -95,6 +98,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void Init()
     {
+        _rewindTime = FindObjectOfType<RewindTime>();
         _game = FindObjectOfType<Game>();
         _resourcesChanger = FindObjectOfType<ResourcesChanger>();
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -273,15 +277,12 @@ public class CharacterMovement : MonoBehaviour
             _characterPosition = transform.position;
             MoveSpeed = evt.GetFloatValue();
             _checkPointCurrentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
+            //_rewindTime.RecordCheckPoint(_characterPosition);
             Debug.Log(_checkPointCurrentBeatTime);
         }
         if (evt.HasTextPayload())
         {
-            if (evt.GetTextValue() == "End")
-            {
-                _game.curState = GameState.End;
-            }
-            else if (evt.GetTextValue() == "Stop")
+            if (evt.GetTextValue() == "Stop")
             {
                 _canGroundCheck = false;
                 PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
@@ -298,10 +299,39 @@ public class CharacterMovement : MonoBehaviour
         {
             y = positionCheckHit.point.y + _positionYOffset;
         }
+        
         _characterPosition = new Vector3(_characterPosition.x, y, 0f);
         transform.position = _characterPosition;
         _previousBeatTime = 0;
         _currentBeatTime = _checkPointCurrentBeatTime;
+
+        //StartCoroutine(Rewind(y));
+        
         //_previousBeatTime = _checkPointCurrentBeatTime;
+    }
+    
+    public IEnumerator Rewind(float y)
+    {
+        _rewindTime.isRecord = false;
+        while (_rewindTime.rewindPos.Count != 0)
+        {
+            transform.position = Vector3.Lerp(_rewindTime.rewindPos[0], transform.position, Time.deltaTime);
+            //transform.position = _rewindTime.rewindPos[0];
+            _rewindTime.rewindPos.RemoveAt(0);
+            yield return null;
+        }
+        _rewindTime.StopRewind();
+        _characterPosition = new Vector3(_characterPosition.x, y, 0f);
+        transform.position = _characterPosition;
+        _previousBeatTime = 0;
+        _currentBeatTime = _checkPointCurrentBeatTime;
+    }
+
+    private IEnumerator SetPos(Vector3 position)
+    {
+        while (transform.position != position)
+        {
+            yield return null;
+        }
     }
 }

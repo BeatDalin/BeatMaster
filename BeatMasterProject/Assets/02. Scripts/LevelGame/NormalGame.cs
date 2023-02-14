@@ -3,7 +3,6 @@ using SonicBloom.Koreo;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class NormalGame : Game
 {
@@ -28,6 +27,9 @@ public class NormalGame : Game
     private ComboSystem _comboSystem;
     private EffectAnim _playerAnim;
     private PlayerData _playerDatas;
+
+    public Vector2 currentCheckPoint = Vector2.zero;
+    public bool isUpdateCheckPoint = false;
     public bool IsLongPressed
     {
         get => isLongPressed;
@@ -46,7 +48,7 @@ public class NormalGame : Game
         base.Awake();
         objectGenerator = FindObjectOfType<ObjectGenerator>();
         _particleController = FindObjectOfType<ParticleController>();
-        _monsterPooling = FindObjectOfType<MonsterPooling>();
+        monsterPooling = FindObjectOfType<MonsterPooling>();
         _playerAnim = FindObjectOfType<EffectAnim>();
         _comboSystem = FindObjectOfType<ComboSystem>();
         // Save Point Event Track
@@ -96,10 +98,9 @@ public class NormalGame : Game
         }
 
         _eventRangeShort = CalculateRange(rangeEventList);
-        _events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
+        _events = SoundManager.instance.playingKoreo.GetTrackByID("Level1_LongCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
-        // Save Point Initialize
-        checkPointVisited = new bool[checkPointList.Count];
+        
     }
 
     private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
@@ -111,7 +112,7 @@ public class NormalGame : Game
 
         if (!isShortKeyCorrect)
         {
-            if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey) && !_characterMovement.isJumping)
+            if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey) && !characterMovement.isJumping)
             {
                 // 숏노트 체크 
                 Debug.Log(sampleTime);
@@ -171,12 +172,12 @@ public class NormalGame : Game
             //Debug.Log($"AttackIdx: {shortIdx}");
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
-            _monsterPooling.DisableMonster();
+            monsterPooling.DisableMonster();
             shortIdx++;
             if (!isShortKeyCorrect)
             {
                 _comboSystem.ResetCombo();
-                _monsterPooling.DisableMonster();
+                monsterPooling.DisableMonster();
                 // ================Rewind 자리================
                 Rewind();
             }
@@ -297,13 +298,14 @@ public class NormalGame : Game
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Damage);
         curState = GameState.Pause;
         SoundManager.instance.PlayBGM(false); // pause
-        curSample = rewindSampleTime;
+        //curSample = rewindSampleTime;
         //curSample = (int)_monsterPooling.currentPlayerTime;
-        _characterMovement.RewindPosition();
+        _playerAnim.SetEffectBool(false); // Stop booster animation
+        characterMovement.RewindPosition(); // Relocate player
         ContinueGame(); // wait 3 sec and start
-        DecreaseItem(5);
+        DecreaseItem(10);
         gameUI.UpdateText(TextType.Item, coinCount);
-        int death = IncreaseDeath(); // increase dea    th count
+        int death = IncreaseDeath(); // increase death count
         gameUI.UpdateText(TextType.Death, death);
         shortIdx = rewindShortIdx;
         longIdx = rewindLongIdx;
@@ -323,34 +325,36 @@ public class NormalGame : Game
         }
     }
 
-    private int check = 0;
     private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
-        check++;
-        //Debug.Log($"SaveCheckPoint {check}");
-
+        Debug.Log("checkpoint Function");
         if (sampleTime > rewindSampleTime)
         {
+            Debug.Log("checkpoint if State");
             // DisableMonster Clear
             // sampleTime = 0 이면 첫시작이므로 ResetPool 안해도됨
             if (evt.StartSample != 0)
             {
-                _monsterPooling.ResetPool();
+                monsterPooling.ResetPool();
+                //rewindTime.ClearRewindList();
             }
             // Entered new check point
-            checkPointIdx++;
+            // checkPointIdx++;
             // Record sample time to play music
-            rewindSampleTime = checkPointList[checkPointIdx].StartSample;
-            Debug.Log(rewindSampleTime);
-            checkPointVisited[checkPointIdx] = true;
+            // rewindSampleTime = checkPointList[checkPointIdx].StartSample;
+            
+            // checkPointVisited[checkPointIdx] = true;
+            //rewindSampleTime = objectGenerator.MoveCheckPointForward();
+            // Debug.Log(rewindSampleTime);
             // Play Particle or Animation
-            // ex) particleSystem.Play();
-            objectGenerator.PlayCheckAnim(checkPointIdx);
+            
+            // objectGenerator.PlayCheckAnim(checkPointIdx);
+            // Record Index
+            rewindShortIdx = shortIdx;
+            rewindLongIdx = longIdx;
         }
-        // Record Index
-        rewindShortIdx = shortIdx;
-        rewindLongIdx = longIdx;
     }
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
