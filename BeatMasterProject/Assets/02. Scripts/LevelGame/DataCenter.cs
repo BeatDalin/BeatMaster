@@ -171,7 +171,7 @@ public class DataCenter : MonoBehaviour
     {
         CharacterData[] tempCharacterData = _gameData.storeData.characterData;
 
-        int[] charPrice = {10, 15, 20, 1};
+        int[] charPrice = {10, 15, 20};
         
         for (int i = 0; i < _gameData.storeData.charCount; i++)
         {
