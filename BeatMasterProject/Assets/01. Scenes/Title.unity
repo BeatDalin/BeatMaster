@@ -911,11 +911,6 @@ MonoBehaviour:
   optionalRotationMode: 0
   optionalScrambleMode: 0
   optionalString: 
---- !u!1 &292869921 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 570282143, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
-  m_PrefabInstance: {fileID: 1232773038}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &309057331
 GameObject:
   m_ObjectHideFlags: 0
@@ -1100,6 +1095,11 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &509728093 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6720820865783801306, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
+  m_PrefabInstance: {fileID: 1232773038}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &513451716
 GameObject:
   m_ObjectHideFlags: 0
@@ -2505,6 +2505,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 86793283}
     m_Modifications:
+    - target: {fileID: 1232773049, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
+      propertyPath: m_AllowSwitchOff
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307316755915448422, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
+      propertyPath: _popupPanel.Array.data[0]
+      value: 
+      objectReference: {fileID: 509728093}
+    - target: {fileID: 3234837953441048761, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -122
+      objectReference: {fileID: 0}
+    - target: {fileID: 3825011986048074973, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229101829795051015, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229101830298265208, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229101830558304874, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8343041490184714668, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2593,7 +2621,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: StorePopUp
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8343041490184714669, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2106120499, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
 --- !u!224 &1232773039 stripped
 RectTransform:

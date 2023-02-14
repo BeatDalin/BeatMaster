@@ -23,7 +23,7 @@ public class Store : MonoBehaviour
     [SerializeField]
     private Anim _anim;
 
-    [SerializeField] private Toggle[] _toggles;
+    [SerializeField] private Toggle[] _toggles; //0: charBtn, 1:itemBtn
 
     //private Animator _animator;
 
@@ -57,9 +57,10 @@ public class Store : MonoBehaviour
         SetCharBtn();
         SetItemBtn();
 
+        _toggles[0].isOn = true;
+        ShowStoreList(0);
         _toggles[0].onValueChanged.AddListener(delegate { ShowStoreList(0);});
         _toggles[1].onValueChanged.AddListener(delegate { ShowStoreList(1);});
-
         ClosePanel();
     }
 
@@ -80,10 +81,17 @@ public class Store : MonoBehaviour
             }
             else
             {
-                _character[index].onClick.AddListener(()=> _popupPanel[2].SetActive(true));
-                _popupPanel[2].transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "을 깨고 와주세요!";
+                _character[index].onClick.AddListener(()=> SetTextInUnlockChar(index));
+                
             }
         }
+    }
+
+    private void SetTextInUnlockChar(int index)
+    {
+        _popupPanel[2].SetActive(true);
+        _popupPanel[2].transform.GetChild(0).GetChild(1).GetComponent<Text>().text =
+                    (_storeData.characterData[index].unlockStage+1)+" - "+ (_storeData.characterData[index].unlockLevel + 1) + "을 깨고 와주세요!";
     }
 
     private void SetItemBtn()
@@ -108,11 +116,14 @@ public class Store : MonoBehaviour
         // 현재 캐릭터 + 장착 중인 아이템 보여주는 부분(추후 수정 필요)
         int charNum = DataCenter.Instance.GetPlayerData().playerChar;
         _selectArea[1].transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = ((Image)_character[charNum].targetGraphic).sprite;
+
     }
     
     // 선택한 탭에 따라 캐릭터/아이템 리스트를 보여준다.
     private void ShowStoreList(int toggleNum)
     {
+/*        _toggles[toggleNum].isOn = true;
+        _toggles[toggleNum - 1 < 0 ? 1 : 0].isOn = false;*/
         _selectArea[toggleNum].SetActive(true);
         _selectArea[toggleNum - 1 < 0 ? 1 : 0].SetActive(false);
     }
@@ -128,6 +139,10 @@ public class Store : MonoBehaviour
         }
         _ifPurchased.SetActive(true);
         _popupPanel[0].SetActive(false);
+
+        /*        _toggles[0].isOn = true;
+                _toggles[1].isOn = false;*/
+
         ClosePanel();
     }
 
@@ -136,10 +151,10 @@ public class Store : MonoBehaviour
     // 해금되었을 때만 호출
     private void SetPurchasePopup(int charNum)
     {
-        _popupPanel[0].transform.GetChild(1).gameObject.SetActive(false);
+        _popupPanel[0].transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
         
-        _popupPanel[0].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ((Image)_character[charNum].targetGraphic).sprite;
-        _popupPanel[0].transform.GetChild(0).gameObject.SetActive(true);
+        _popupPanel[0].transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = ((Image)_character[charNum].targetGraphic).sprite;
+        _popupPanel[0].transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
         
         _popupPanel[0].SetActive(true);
 
@@ -205,8 +220,8 @@ public class Store : MonoBehaviour
         int itemNum = (int)itemName;
         _popupPanel[0].transform.GetChild(0).gameObject.SetActive(false);
             
-       _popupPanel[0].transform.GetChild(1).GetComponent<Image>().sprite = _item[itemNum].transform.GetChild(0).GetComponent<Image>().sprite;
-       _popupPanel[0].transform.GetChild(1).gameObject.SetActive(true);
+       _popupPanel[0].transform.GetChild(0).GetChild(1).GetComponent<Image>().sprite = _item[itemNum].transform.GetChild(0).GetComponent<Image>().sprite;
+       _popupPanel[0].transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
 
        _popupPanel[0].SetActive(true);
 
