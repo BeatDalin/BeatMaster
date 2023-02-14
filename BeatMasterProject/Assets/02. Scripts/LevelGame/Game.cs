@@ -36,9 +36,9 @@ public abstract class Game : MonoBehaviour
     protected int rewindShortIdx;
     protected int rewindLongIdx;
     protected int rewindSampleTime = -1;
-    [SerializeField] protected List<KoreographyEvent> checkPointList;
-    [SerializeField] protected bool[] checkPointVisited;
-    protected int checkPointIdx = -1;
+    // [SerializeField] protected List<KoreographyEvent> checkPointList;
+    // [SerializeField] protected bool[] checkPointVisited;
+    // protected int checkPointIdx = -1;
 
     [Header("Result Check")]
     public BeatResult[] longResult;
@@ -95,12 +95,9 @@ public abstract class Game : MonoBehaviour
         isLongPressed = false;
         isLongKeyCorrect = false;
         coinCount = 0;
-        // Save Point
-        checkPointList = SoundManager.instance.playingKoreo.GetTrackByID("Level1_CheckPoint").GetAllEvents();
         rewindShortIdx = 0;
         rewindLongIdx = 0;
         rewindSampleTime = -1;
-        checkPointIdx = -1;
     }
 
     protected void StartWithDelay(int startSample = 0)
