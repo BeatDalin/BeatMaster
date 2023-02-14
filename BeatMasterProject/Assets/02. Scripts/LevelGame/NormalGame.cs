@@ -96,10 +96,9 @@ public class NormalGame : Game
         }
 
         _eventRangeShort = CalculateRange(rangeEventList);
-        _events = SoundManager.instance.playingKoreo.GetTrackByID("LongJumpCheckEnd").GetAllEvents();
+        _events = SoundManager.instance.playingKoreo.GetTrackByID("Level1_LongCheckEnd").GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
-        // Save Point Initialize
-        checkPointVisited = new bool[checkPointList.Count];
+        
     }
 
     private void CheckShortEnd(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
@@ -298,12 +297,13 @@ public class NormalGame : Game
         curState = GameState.Pause;
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
-        //curSample = (int)_monsterPooling.currentPlayerTime;
-        _characterMovement.RewindPosition();
+        _playerAnim.SetEffectBool(false); // Stop booster animation
+        
+        _characterMovement.RewindPosition(); // Relocate player
         ContinueGame(); // wait 3 sec and start
-        DecreaseItem(5);
+        DecreaseItem(10);
         gameUI.UpdateText(TextType.Item, coinCount);
-        int death = IncreaseDeath(); // increase dea    th count
+        int death = IncreaseDeath(); // increase death count
         gameUI.UpdateText(TextType.Death, death);
         shortIdx = rewindShortIdx;
         longIdx = rewindLongIdx;
@@ -323,12 +323,8 @@ public class NormalGame : Game
         }
     }
 
-    private int check = 0;
     private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
-        check++;
-        //Debug.Log($"SaveCheckPoint {check}");
-
         if (sampleTime > rewindSampleTime)
         {
             // DisableMonster Clear
@@ -338,14 +334,16 @@ public class NormalGame : Game
                 _monsterPooling.ResetPool();
             }
             // Entered new check point
-            checkPointIdx++;
+            // checkPointIdx++;
             // Record sample time to play music
-            rewindSampleTime = checkPointList[checkPointIdx].StartSample;
-            Debug.Log(rewindSampleTime);
-            checkPointVisited[checkPointIdx] = true;
+            // rewindSampleTime = checkPointList[checkPointIdx].StartSample;
+            
+            // checkPointVisited[checkPointIdx] = true;
+            rewindSampleTime = objectGenerator.MoveCheckPointForward();
+            // Debug.Log(rewindSampleTime);
             // Play Particle or Animation
-            // ex) particleSystem.Play();
-            objectGenerator.PlayCheckAnim(checkPointIdx);
+            
+            // objectGenerator.PlayCheckAnim(checkPointIdx);
         }
         // Record Index
         rewindShortIdx = shortIdx;
