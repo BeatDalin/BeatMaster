@@ -3,7 +3,6 @@ using SonicBloom.Koreo;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class NormalGame : Game
 {
@@ -28,6 +27,9 @@ public class NormalGame : Game
     private ComboSystem _comboSystem;
     private EffectAnim _playerAnim;
     private PlayerData _playerDatas;
+
+    public Vector2 currentCheckPoint = Vector2.zero;
+    public bool isUpdateCheckPoint = false;
     public bool IsLongPressed
     {
         get => isLongPressed;
@@ -46,7 +48,7 @@ public class NormalGame : Game
         base.Awake();
         objectGenerator = FindObjectOfType<ObjectGenerator>();
         _particleController = FindObjectOfType<ParticleController>();
-        _monsterPooling = FindObjectOfType<MonsterPooling>();
+        monsterPooling = FindObjectOfType<MonsterPooling>();
         _playerAnim = FindObjectOfType<EffectAnim>();
         _comboSystem = FindObjectOfType<ComboSystem>();
         // Save Point Event Track
@@ -110,7 +112,7 @@ public class NormalGame : Game
 
         if (!isShortKeyCorrect)
         {
-            if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey) && !_characterMovement.isJumping)
+            if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey) && !characterMovement.isJumping)
             {
                 // 숏노트 체크 
                 Debug.Log(sampleTime);
@@ -170,12 +172,12 @@ public class NormalGame : Game
             //Debug.Log($"AttackIdx: {shortIdx}");
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
-            _monsterPooling.DisableMonster();
+            monsterPooling.DisableMonster();
             shortIdx++;
             if (!isShortKeyCorrect)
             {
                 _comboSystem.ResetCombo();
-                _monsterPooling.DisableMonster();
+                monsterPooling.DisableMonster();
                 // ================Rewind 자리================
                 Rewind();
             }
@@ -296,10 +298,10 @@ public class NormalGame : Game
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Damage);
         curState = GameState.Pause;
         SoundManager.instance.PlayBGM(false); // pause
-        curSample = rewindSampleTime;
+        //curSample = rewindSampleTime;
+        //curSample = (int)_monsterPooling.currentPlayerTime;
         _playerAnim.SetEffectBool(false); // Stop booster animation
-        
-        _characterMovement.RewindPosition(); // Relocate player
+        characterMovement.RewindPosition(); // Relocate player
         ContinueGame(); // wait 3 sec and start
         DecreaseItem(10);
         gameUI.UpdateText(TextType.Item, coinCount);
@@ -325,13 +327,16 @@ public class NormalGame : Game
 
     private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
+        Debug.Log("checkpoint Function");
         if (sampleTime > rewindSampleTime)
         {
+            Debug.Log("checkpoint if State");
             // DisableMonster Clear
             // sampleTime = 0 이면 첫시작이므로 ResetPool 안해도됨
             if (evt.StartSample != 0)
             {
-                _monsterPooling.ResetPool();
+                monsterPooling.ResetPool();
+                //rewindTime.ClearRewindList();
             }
             // Entered new check point
             // checkPointIdx++;
@@ -339,16 +344,17 @@ public class NormalGame : Game
             // rewindSampleTime = checkPointList[checkPointIdx].StartSample;
             
             // checkPointVisited[checkPointIdx] = true;
-            rewindSampleTime = objectGenerator.MoveCheckPointForward();
+            //rewindSampleTime = objectGenerator.MoveCheckPointForward();
             // Debug.Log(rewindSampleTime);
             // Play Particle or Animation
             
             // objectGenerator.PlayCheckAnim(checkPointIdx);
+            // Record Index
+            rewindShortIdx = shortIdx;
+            rewindLongIdx = longIdx;
         }
-        // Record Index
-        rewindShortIdx = shortIdx;
-        rewindLongIdx = longIdx;
     }
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))

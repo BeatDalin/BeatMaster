@@ -33,9 +33,9 @@ public abstract class Game : MonoBehaviour
     public int curSample;
 
     [Header("Check Point")]
-    protected int rewindShortIdx;
+    [SerializeField] protected int rewindShortIdx;
     protected int rewindLongIdx;
-    protected int rewindSampleTime = -1;
+    [SerializeField] protected int rewindSampleTime = -1;
     // [SerializeField] protected List<KoreographyEvent> checkPointList;
     // [SerializeField] protected bool[] checkPointVisited;
     // protected int checkPointIdx = -1;
@@ -66,13 +66,15 @@ public abstract class Game : MonoBehaviour
     private int[] _shortSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from long notes
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
 
-    protected CharacterMovement _characterMovement;
-    protected MonsterPooling _monsterPooling;
+    protected CharacterMovement characterMovement;
+    protected MonsterPooling monsterPooling;
+    protected RewindTime rewindTime;
 
     protected virtual void Awake()
     {
-        _characterMovement = FindObjectOfType<CharacterMovement>();
-        _monsterPooling = FindObjectOfType<MonsterPooling>();
+        rewindTime = FindObjectOfType<RewindTime>();
+        characterMovement = FindObjectOfType<CharacterMovement>();
+        monsterPooling = FindObjectOfType<MonsterPooling>();
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
         Koreographer.Instance.ClearEventRegister(); // Initialize Koreographer Event Regiser
         // Data
@@ -133,14 +135,14 @@ public abstract class Game : MonoBehaviour
             if (waitTime == 1)
             {
                 // Activate Monster
-                _monsterPooling.ReArrange();
+                monsterPooling.ReArrange();
             }
             yield return new WaitForSeconds(1);
         }
         gameUI.timePanel.SetActive(false);
         
         // Rewind Character Position
-        _characterMovement.RewindPosition();
+        characterMovement.RewindPosition();
         curState = GameState.Play;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
 
