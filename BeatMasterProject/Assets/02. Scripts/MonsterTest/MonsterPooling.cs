@@ -44,22 +44,28 @@ public class MonsterPooling : MonoBehaviour
         _coinScreenPos = Camera.main.ScreenToWorldPoint(coinPos.position);
         Debug.Log(_coinScreenPos);
 
+        Invoke("SpawnMonster", 0.3f);
+    }
+
+    private void SpawnMonster()
+    {
         for (int i = 0; i < _shortEventList.Count; i++)
         {
-            for (int j = 0; j < _mapEventList.Count; j++)
+            if (_shortEventList[i].GetIntValue() == 1)
             {
-                if (_mapEventList[j].EndSample - 5 <= _shortEventList[i].EndSample &&
-                    _shortEventList[i].EndSample <= _mapEventList[j].EndSample + 5)
-                {
-                    if (_shortEventList[i].GetIntValue() == 1)
-                    {
-                        GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[j].x + 1f, _tilePos[j].y + 2f), Quaternion.identity, transform);
-                        
-                        monsterList.Add(g);
-                    }
-                    break;
-                }
+                GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 2f), Quaternion.identity, transform);
+
+                monsterList.Add(g);
             }
+            //for (int j = 0; j < _mapEventList.Count; j++)
+            //{
+            //    if (_mapEventList[j].EndSample - 5 <= _shortEventList[i].EndSample &&
+            //        _shortEventList[i].EndSample <= _mapEventList[j].EndSample + 5)
+            //    {
+
+            //        break;
+            //    }
+            //}
         }
     }
 

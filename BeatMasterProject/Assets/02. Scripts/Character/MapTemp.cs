@@ -229,10 +229,7 @@ public class MapTemp : MonoBehaviour
                 }
             }
 
-            // 최종 결정된 타일 위치와 번호로 타일을 배치하고 적 위치를 저장한다.
-            // 적 위치 저장
-            _monsterPooling.AddTilePos(_tileX, _tileY + _groundYOffset);
-
+            // 최종 결정된 타일 위치와 번호로 타일을 배치
             // 최상단 타일 배치
             _groundTilemap.SetTile(GetTileChangeData(_TileType.GroundTop, groundIndex, new Vector3Int(_tileX, _tileY, 0), new Vector3(0f, _groundYOffset, 0f)), false);
 
@@ -324,6 +321,8 @@ public class MapTemp : MonoBehaviour
                 float yOffset = shortHit.point.y;
 
                 _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0, new Vector3Int(xPosition, 0, 0), new Vector3(xOffset, yOffset, 0f)), false);
+                
+                //Instantiate(actionEffects[_shortEventList[i].GetIntValue()], new Vector3(xPosition + xOffset, yOffset, 0f), Quaternion.identity);
                 //if (_shortEventList[i].GetIntValue() == 0)
                 //{
                 //    Instantiate(actionEffects[0], new Vector3(xPosition + xOffset, yOffset, 0f), Quaternion.identity);
@@ -332,6 +331,8 @@ public class MapTemp : MonoBehaviour
                 //{
                 //    Instantiate(actionEffects[1], new Vector3(xPosition + xOffset, yOffset, 0f), Quaternion.identity);
                 //}
+
+                _monsterPooling.AddTilePos(xPosition + xOffset, yOffset);
             }
         }
     }
