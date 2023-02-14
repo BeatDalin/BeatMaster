@@ -36,11 +36,16 @@ public class ObjectGenerator : MonoBehaviour
     [SerializeField] private GameObject _longObj;
     [SerializeField] private Transform _longObjContainer;
     [SerializeField] private List<Vector3> _longObjPosList;
+
+    private CharacterMovement _characterMovement;
+    private Game _game;
     
     private static readonly int IsPlay = Animator.StringToHash("isPlay");
 
     private void Awake()
     {
+        _game = FindObjectOfType<Game>();
+        _characterMovement = FindObjectOfType<CharacterMovement>();
         // Get Events of Map
         _mapEvents = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
         // Get Events of Check Point
@@ -156,6 +161,16 @@ public class ObjectGenerator : MonoBehaviour
     // }
 
     #endregion
-    
-    
+
+    private void Update()
+    {
+        if (_checkPointPos.Count - 1 > _checkPointIdx)
+        {
+            if (_characterMovement.transform.position.x > _checkPointPos[_checkPointIdx + 1].x)
+            {
+                _game.curSample = checkPointList[_checkPointIdx + 1].StartSample;
+                MoveCheckPointForward();
+            }
+        }
+    }
 }
