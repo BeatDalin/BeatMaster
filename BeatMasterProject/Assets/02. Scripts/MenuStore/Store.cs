@@ -13,7 +13,7 @@ public class Store : MonoBehaviour
     private Button _itemBtn;
 
     [SerializeField]
-    private GameObject[] _popupPanel; //panels 0:_purchasePanel, 1:_noMoneyPanel
+    private GameObject[] _popupPanel; //panels 0:_purchasePanel, 1:_noMoneyPanel, 2: _lockedPanel
     [SerializeField]
     private Button[] _popupBtn; //buttons 0:_purchaseBtn, 1:_closeBtn
     [SerializeField]
@@ -77,6 +77,11 @@ public class Store : MonoBehaviour
             if (_storeData.characterData[i].isUnlocked)
             {
                 _character[index].onClick.AddListener(() => SetPurchasePopup(index));
+            }
+            else
+            {
+                _character[index].onClick.AddListener(()=> _popupPanel[2].SetActive(true));
+                _popupPanel[2].transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "을 깨고 와주세요!";
             }
         }
     }
