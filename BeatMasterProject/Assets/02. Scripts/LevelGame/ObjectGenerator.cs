@@ -45,7 +45,7 @@ public class ObjectGenerator : MonoBehaviour
         _checkPointObj = Instantiate(_checkPointPrefab, Vector3.zero, Quaternion.identity);
         _checkPointAnim = _checkPointObj.GetComponent<Animator>();
         // Check Point Initialize
-        _checkPointIdx = 0;
+        _checkPointIdx = -1;
         _checkPointVisited = new bool[checkPointList.Count];
     }
 
@@ -123,10 +123,13 @@ public class ObjectGenerator : MonoBehaviour
 
     private void Update()
     {
-        if (_characterMovement.transform.position.x > _checkPointPos[_checkPointIdx].x)
+        if (_checkPointPos.Count - 1 > _checkPointIdx)
         {
-            _game.curSample = checkPointList[_checkPointIdx].StartSample;
-            MoveCheckPointForward();
+            if (_characterMovement.transform.position.x > _checkPointPos[_checkPointIdx + 1].x)
+            {
+                _game.curSample = checkPointList[_checkPointIdx + 1].StartSample;
+                MoveCheckPointForward();
+            }
         }
     }
 }
