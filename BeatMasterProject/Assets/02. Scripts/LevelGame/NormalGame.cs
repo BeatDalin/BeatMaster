@@ -2,9 +2,7 @@ using System;
 using SonicBloom.Koreo;
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine.Utility;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class NormalGame : Game
 {
@@ -327,7 +325,7 @@ public class NormalGame : Game
         }
     }
 
-    private void O(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
+    private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
         Debug.Log("checkpoint Function");
         if (sampleTime > rewindSampleTime)
