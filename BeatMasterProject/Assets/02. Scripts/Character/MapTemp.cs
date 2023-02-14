@@ -53,11 +53,14 @@ public class MapTemp : MonoBehaviour
     private float _groundYOffset = 0f;
     private LayerMask _tileLayer;
 
+    [Header("Objects")]
     private MonsterPooling _monsterPooling;
     private ObjectGenerator _objectGenerator;
 
     private void Awake()
     {
+        _monsterPooling = FindObjectOfType<MonsterPooling>();
+        _objectGenerator = GetComponent<ObjectGenerator>();
         Init(theme);
         GenerateMap();
 
@@ -255,8 +258,8 @@ public class MapTemp : MonoBehaviour
                     if (_spdEventList[j].HasFloatPayload() | (_spdEventList[j].GetTextValue() == "End"))
                     {
                         _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 1, new Vector3Int(_tileX, _tileY + 1, 0), new Vector3(0f, _groundYOffset, 0f)), false);
-                        // Locate CheckPoint Animation
-                        _objectGenerator.PositCheckPoint(_tileX, _tileY + 1);
+                        // Record CheckPoint Animation
+                        _objectGenerator.RecordCheckPoint(_tileX, _tileY + 1);
                     }
                 }
             }
@@ -296,7 +299,7 @@ public class MapTemp : MonoBehaviour
     private void GenerateShortNoteTile()
     {
         int xPosition = 0;
-
+        float yPosition = 0;
         for (int i = 0; i < _shortEventList.Count; i++)
         {
             int shortSample = _shortEventList[i].StartSample;
@@ -321,9 +324,9 @@ public class MapTemp : MonoBehaviour
 
             if (shortHit)
             {
-                float yOffset = shortHit.point.y;
+                yPosition = shortHit.point.y;
 
-                _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0, new Vector3Int(xPosition, 0, 0), new Vector3(xOffset, yOffset, 0f)), false);
+                _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0, new Vector3Int(xPosition, 0, 0), new Vector3(xOffset, yPosition, 0f)), false);
                 //if (_shortEventList[i].GetIntValue() == 0)
                 //{
                 //    Instantiate(actionEffects[0], new Vector3(xPosition + xOffset, yOffset, 0f), Quaternion.identity);
@@ -332,7 +335,16 @@ public class MapTemp : MonoBehaviour
                 //{
                 //    Instantiate(actionEffects[1], new Vector3(xPosition + xOffset, yOffset, 0f), Quaternion.identity);
                 //}
+                
             }
+
+            if (_shortEventList[i].GetIntValue() == 0)
+            {
+                // Record position, Posit Object
+                _objectGenerator.RecordShortPos(new Vector3(xPosition + xOffset, yPosition, 0));
+                _objectGenerator.PositObstacles(xPosition + xOffset, yPosition);
+            }
+            
         }
     }
 
@@ -340,6 +352,8 @@ public class MapTemp : MonoBehaviour
     {
         int startXPosition = 0;
         int endXPosition = 0;
+        float startYPosition = 0f;
+        float endYPosition= 0f;
 
         for (int i = 0; i < _longEventList.Count; i++)
         {
@@ -381,10 +395,11 @@ public class MapTemp : MonoBehaviour
 
             if (longStartHit)
             {
-                float yOffset = longStartHit.point.y;
+                startYPosition = longStartHit.point.y;
                 
-                _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 2, new Vector3Int(startXPosition, 0, 0), new Vector3(startXOffset, yOffset, 0f)), false);
+                _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 2, new Vector3Int(startXPosition, 0, 0), new Vector3(startXOffset, startYPosition, 0f)), false);
                 //Instantiate(actionEffects[2], new Vector3(startXPosition + startXOffset, yOffset, 0f), Quaternion.identity);
+                _objectGenerator.RecordLongPos(new Vector3(startXPosition + startXOffset, startYPosition, 0));
             }
 
             //Debug.DrawRay(new Vector2(endXPosition + endXOffset, 100f), Vector2.down * 1000, Color.blue, 100f);
@@ -392,11 +407,13 @@ public class MapTemp : MonoBehaviour
 
             if (longEndHit)
             {
-                float yOffset = longEndHit.point.y;
+                endYPosition = longEndHit.point.y;
                 
-                _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 2, new Vector3Int(endXPosition, 0, 0), new Vector3(endXOffset, yOffset, 0f)), false);
+                _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 2, new Vector3Int(endXPosition, 0, 0), new Vector3(endXOffset, endYPosition, 0f)), false);
                 //Instantiate(actionEffects[2], new Vector3(endXPosition + endXOffset, yOffset, 0f), Quaternion.identity);
+                _objectGenerator.RecordLongPos(new Vector3(endXPosition + endXOffset, endYPosition, 0));
             }
+            
         }
     }
 
