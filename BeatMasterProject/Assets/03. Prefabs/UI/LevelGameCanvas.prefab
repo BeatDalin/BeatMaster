@@ -210,17 +210,15 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6676748890584332818}
-  - {fileID: 6676748890203517418}
+  m_Children: []
   m_Father: {fileID: 6676748890091097787}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -120, y: 0}
   m_SizeDelta: {x: 60, y: 60}
-  m_Pivot: {x: 0, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6676748889830466107
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -769,6 +767,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6676748889830466105}
+  - {fileID: 6676748890584332818}
+  - {fileID: 6676748890203517418}
   m_Father: {fileID: 6676748891086764737}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -931,8 +931,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6676748890294561053}
-  m_Father: {fileID: 6676748889830466105}
-  m_RootOrder: 1
+  m_Father: {fileID: 6676748890091097787}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -1594,8 +1594,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6676748889830466105}
-  m_RootOrder: 0
+  m_Father: {fileID: 6676748890091097787}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -2609,6 +2609,7 @@ MonoBehaviour:
   goLevelMenuBtn: {fileID: 6676748890748035021}
   settingsPanel: {fileID: 6676748890495626811}
   settingsCloseBtn: {fileID: 6676748891058336034}
+  _particleSystemsList: []
   character: {fileID: 0}
   _itemText: {fileID: 6676748890294561052}
   _deathText: {fileID: 6676748889948868538}

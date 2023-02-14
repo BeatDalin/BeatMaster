@@ -6,8 +6,9 @@ using UnityEngine.Rendering;
 [CreateAssetMenu(menuName = "SpritesForm", fileName = "Level")]
 public class ChangingResources : ScriptableObject
 {
-    [SerializeField] private Monster[] _changingMonsters;
-    public Monster[] ChangingMonsters { get => _changingMonsters; private set => _changingMonsters = value; }
-    [SerializeField] private ParticleSystem[] _changingParticles;
-    public ParticleSystem[] ChangingParticles { get => _changingParticles; private set => _changingParticles = value; }
+    //hue, saturation, lightness
+    [SerializeField] private int[] _hueValues;
+    public int[] HueValues { get => _hueValues; private set => _hueValues = value; }
+    [SerializeField] private int[] _satValues;
+    public int[] SatValues { get => _satValues; private set => _satValues = value; }
 }
