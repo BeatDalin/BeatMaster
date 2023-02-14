@@ -2,6 +2,7 @@ using System;
 using SonicBloom.Koreo;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine.Utility;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -28,6 +29,9 @@ public class NormalGame : Game
     private ComboSystem _comboSystem;
     private EffectAnim _playerAnim;
     private PlayerData _playerDatas;
+
+    public Vector2 currentCheckPoint = Vector2.zero;
+    public bool isUpdateCheckPoint = false;
     public bool IsLongPressed
     {
         get => isLongPressed;
@@ -296,11 +300,9 @@ public class NormalGame : Game
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Damage);
         curState = GameState.Pause;
         SoundManager.instance.PlayBGM(false); // pause
-        curSample = rewindSampleTime;
+        //curSample = rewindSampleTime;
         //curSample = (int)_monsterPooling.currentPlayerTime;
-        characterMovement.RewindPosition();
         _playerAnim.SetEffectBool(false); // Stop booster animation
-        
         characterMovement.RewindPosition(); // Relocate player
         ContinueGame(); // wait 3 sec and start
         DecreaseItem(10);
@@ -325,16 +327,18 @@ public class NormalGame : Game
         }
     }
 
-    private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
+    private void O(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
+        Debug.Log("checkpoint Function");
         if (sampleTime > rewindSampleTime)
         {
+            Debug.Log("checkpoint if State");
             // DisableMonster Clear
             // sampleTime = 0 이면 첫시작이므로 ResetPool 안해도됨
             if (evt.StartSample != 0)
             {
                 monsterPooling.ResetPool();
-                rewindTime.ClearRewindList();
+                //rewindTime.ClearRewindList();
             }
             // Entered new check point
             // checkPointIdx++;
@@ -342,23 +346,22 @@ public class NormalGame : Game
             // rewindSampleTime = checkPointList[checkPointIdx].StartSample;
             
             // checkPointVisited[checkPointIdx] = true;
-            rewindSampleTime = objectGenerator.MoveCheckPointForward();
+            //rewindSampleTime = objectGenerator.MoveCheckPointForward();
             // Debug.Log(rewindSampleTime);
             // Play Particle or Animation
             
             // objectGenerator.PlayCheckAnim(checkPointIdx);
+            // Record Index
+            rewindShortIdx = shortIdx;
+            rewindLongIdx = longIdx;
         }
-        // Record Index
-        rewindShortIdx = shortIdx;
-        rewindLongIdx = longIdx;
     }
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
             Rewind();
         }
-        
-        
     }
 }

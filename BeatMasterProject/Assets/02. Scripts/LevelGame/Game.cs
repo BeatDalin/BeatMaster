@@ -33,9 +33,9 @@ public abstract class Game : MonoBehaviour
     public int curSample;
 
     [Header("Check Point")]
-    protected int rewindShortIdx;
+    [SerializeField] protected int rewindShortIdx;
     protected int rewindLongIdx;
-    protected int rewindSampleTime = -1;
+    [SerializeField] protected int rewindSampleTime = -1;
     // [SerializeField] protected List<KoreographyEvent> checkPointList;
     // [SerializeField] protected bool[] checkPointVisited;
     // protected int checkPointIdx = -1;

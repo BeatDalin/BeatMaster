@@ -277,7 +277,7 @@ public class CharacterMovement : MonoBehaviour
             _characterPosition = transform.position;
             MoveSpeed = evt.GetFloatValue();
             _checkPointCurrentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-            _rewindTime.RecordCheckPoint(_characterPosition);
+            //_rewindTime.RecordCheckPoint(_characterPosition);
             Debug.Log(_checkPointCurrentBeatTime);
         }
         if (evt.HasTextPayload())
@@ -305,7 +305,7 @@ public class CharacterMovement : MonoBehaviour
         _previousBeatTime = 0;
         _currentBeatTime = _checkPointCurrentBeatTime;
 
-        StartCoroutine(Rewind(y));
+        //StartCoroutine(Rewind(y));
         
         //_previousBeatTime = _checkPointCurrentBeatTime;
     }
