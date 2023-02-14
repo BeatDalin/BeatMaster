@@ -3,13 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DataCenter : MonoBehaviour
 {
     [SerializeField]
     private Data _gameData; // keep it private, and update it through method using stage & level number
     private PlayerData _playerData;
+    private ItemData[] itemData;
     private readonly string _fileName = "Data.json"; // file name 
     private string _path => Application.persistentDataPath + '/' + _fileName;
     private static GameObject _go;
@@ -84,6 +87,9 @@ public class DataCenter : MonoBehaviour
         _playerData.playerLv = 1;
         _playerData.playerStage = 1;
         _playerData.playerChar = 0; // default character index
+        _playerData.itemData = new int[Enum.GetValues(typeof(StoreData.ItemPart)).Length]; // 부위별(index) 현재 장착중인 item(value)
+        _playerData.itemData = Enumerable.Repeat(-1, Enum.GetValues(typeof(StoreData.ItemPart)).Length).ToArray(); // 미장착 상태일 때 -1
+
         _gameData.playerData = _playerData;
         _gameData.stageData = new StageData[1]; // temporally, set array size as 1
         LevelData temp = new LevelData();
@@ -154,29 +160,79 @@ public class DataCenter : MonoBehaviour
         _gameData.storeData = new StoreData();
         _gameData.storeData.charCount = Enum.GetValues(typeof(CharacterNum)).Length;
         _gameData.storeData.characterData = new CharacterData[_gameData.storeData.charCount];
+        CreateCharacterData();
+        
+        _gameData.storeData.itemCount = Enum.GetValues(typeof(StoreData.ItemName)).Length;
+        _gameData.storeData.itemData = new ItemData[_gameData.storeData.itemCount];
+        CreateItemData();
+    }
+    
+    private void CreateCharacterData()
+    {
+        CharacterData[] tempCharacterData = _gameData.storeData.characterData;
 
-        CharacterData characterData = new CharacterData();
+        int[] charPrice = {10, 15, 20, 1};
+        
         for (int i = 0; i < _gameData.storeData.charCount; i++)
         {
-            characterData.characterNum = i;
-            characterData.price = 10;
-            characterData.isPurchased = i == 0; // 첫 번째 캐릭터는 구매한 상태
-            characterData.isUnlocked = i == 0; // 첫 번째 캐릭터는 해금 상태
-            _gameData.storeData.characterData[i] = characterData;
+            tempCharacterData[i].characterNum = i;
+            tempCharacterData[i].price = charPrice[i];
+            tempCharacterData[i].unlockStage = 0;
+            tempCharacterData[i].unlockLevel = i == 0 ? -1 : i - 1;
+            tempCharacterData[i].isPurchased = i == 0;
+            tempCharacterData[i].isUnlocked = i == 0;
         }
+
+        _gameData.storeData.characterData = tempCharacterData;
     }
 
+    private void CreateItemData()
+    {
+        ItemData[] tempItemData = _gameData.storeData.itemData;
+        
+        StoreData.ItemName[] itemList = (StoreData.ItemName[])Enum.GetValues(typeof(StoreData.ItemName));
+        StoreData.ItemPart[] itemParts =
+        {
+            StoreData.ItemPart.Background,
+            StoreData.ItemPart.Neck,
+            StoreData.ItemPart.Face,
+            StoreData.ItemPart.Head,
+            StoreData.ItemPart.Head,
+            StoreData.ItemPart.Head,
+            StoreData.ItemPart.Head,
+            StoreData.ItemPart.Background,
+            StoreData.ItemPart.Head,
+            StoreData.ItemPart.Background
+        };
+        int[] itemPrice = { 10, 10, 10, 20, 20, 30 };
+        
+        for (int i = 0; i < _gameData.storeData.itemCount; i++)
+        {
+            tempItemData[i].itemName = itemList[i];
+            tempItemData[i].itemPart = itemParts[i];
+            tempItemData[i].isUnlocked = (int)tempItemData[i].itemName < (int)StoreData.ItemName.Crown; // crown전까지 unlocked true
+            tempItemData[i].price = tempItemData[i].isUnlocked ?  itemPrice[i] : 0;
+            tempItemData[i].isPurchased = false;
+        }
+
+        _gameData.storeData.itemData = tempItemData;
+    }
+    
     public StoreData GetStoreData()
     {
         return _gameData.storeData;
     }
+    public ItemData[] GetItemData()
+    {
+        return _gameData.storeData.itemData;
+    }
 
     /// <summary>
     /// 캐릭터 구매 후 CharacterData의 isPurchased 업데이트
-    /// 캐릭터 구매 후 gameData의 playerItem 업데이트
+    /// 캐릭터 구매 후 playerData의 playerItem 업데이트
     /// </summary>
     /// <param name="charNum"></param>
-    public void UpdateStorePurchaseData(int charNum)
+    public void UpdateCharacterPurchaseData(int charNum)
     {
         _gameData.storeData.characterData[charNum].isPurchased = true;
         _gameData.playerData.playerItem -= _gameData.storeData.characterData[charNum].price;
@@ -191,7 +247,31 @@ public class DataCenter : MonoBehaviour
         _gameData.playerData.playerChar = charNum;
         SaveData();
     }
-
+    
+    /// <summary>
+    /// 아이템 구매 후 ItemData의 isPurchased 업데이트
+    /// 아이템 구매 후 playerData의 itemData 업데이트
+    /// </summary>
+    /// <param name="itemName"></param>
+    public void UpdateItemPurchaseData(StoreData.ItemName itemName)
+    {
+        _gameData.storeData.itemData[(int)itemName].isPurchased = true;
+        _gameData.playerData.playerItem -= _gameData.storeData.itemData[(int)itemName].price;
+        SaveData();
+    }
+    
+    /// <summary>
+    /// 아이템 장착 후 현재 장착 중인 아이템 업데이트 
+    /// </summary>
+    /// <param name="itemPart"></param>
+    /// <param name="itemName"></param>
+    public void UpdatePlayerItemData(StoreData.ItemPart itemPart, StoreData.ItemName itemName)
+    {
+        Debug.Log((int)itemPart);
+        _gameData.playerData.itemData[(int)itemPart] = (int)itemName;
+        SaveData();
+    }
+    
     public PlayerData GetPlayerData()
     {
         return _gameData.playerData;

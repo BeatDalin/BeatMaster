@@ -191,7 +191,7 @@ public class LevelInformation : MonoBehaviour
                 break;
         }
         // StartCoroutine(CoFadeOut());
-        SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1);
+        // SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1);
     }
 
     public void OnClickLeftBtn()
