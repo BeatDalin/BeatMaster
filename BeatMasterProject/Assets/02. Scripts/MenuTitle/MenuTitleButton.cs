@@ -3,22 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using SonicBloom.Koreo;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum MenuButtonName
+public enum MenuButtonName // Title 씬의 버튼들
 {
-    StartGame = 0,
+    Play = 0,
     Setting,
     Store,
-    Quit
 }
 
-public enum SettingButtonName
+public enum SettingButtonName // Setting Panel의 버튼들
 {
-    QualitySetting,
-    SoundSetting,
-    LanguageSetting
+    Sound = 0,
+    Quality,
+    Leave
 }
 
 public class MenuTitleButton : MonoBehaviour
@@ -26,17 +26,26 @@ public class MenuTitleButton : MonoBehaviour
     [EventID] public string eventID;
 
     [SerializeField] private DOTweenAnimation[] _doTweenAnimations;
+
+    [Header("==== Title Buttons ====")] 
     [SerializeField] private Button[] _menuButtons; // <Title - Menu> Buttons
+
+    [Header("==== Title Panel ====")]
+    [SerializeField] private GameObject _settingPanel; // <Panel> Settings
+    [SerializeField] private GameObject _storePanel; // <Panel> Store
+
+    [Header("==== Setting Panel Buttons ====")] 
     [SerializeField] private Button[] _settingButtons; // <Title - Setting> Buttons
 
-    [SerializeField] private GameObject _startGamePopUp; // <Panel> Start Game
-    [SerializeField] private GameObject _settingPopUp; // <Panel> Settings
-    [SerializeField] private GameObject _storePopUp; // <Panel> Store
+    [Header("==== Setting Panel ====")] 
+    [SerializeField] private GameObject _soundSettingPanel; // <Panel> SoundSetting\
+    [SerializeField] private GameObject _qualitySettingPanel; // <Panel> QualitySetting
+    [SerializeField] private GameObject _leavePanel; // <Panel> LeavePopUp
 
-    [SerializeField] private GameObject _qualitySettingPopUp; // <Panel> QualitySetting
-    [SerializeField] private GameObject _soundSettingPopUp; // <Panel> SoundSetting
-    [SerializeField] private GameObject _languageSettingPopUp; // <Panel> LanguagePanel
+    [Header("==== Close Button ====")] 
+    [SerializeField] private Button _closeButton;
 
+    [SerializeField] private float _fadeTime = 1f; // Panel Fade 타임
 
     private int _objectIdx = 0;
 
@@ -63,188 +72,91 @@ public class MenuTitleButton : MonoBehaviour
 
     /// <summary>
     /// 각 버튼에 클릭 리스너를 달아주는 함수
-    /// 눌린것을 표현하기 위해서 DOScale을 사용하고 완료되면 DORewind로 원래 Scale로 돌아오게함
     /// </summary>
     private void AddClickListener()
     {
-        #region Menu Buttons (StartGame, Store, Setting, Quit)
+        #region Menu Buttons (StartGame, Store, Setting)
 
         // <Menu - Button> StartGame
-        _menuButtons[(int)MenuButtonName.StartGame].onClick.AddListener(() =>
+        _menuButtons[(int)MenuButtonName.Play].onClick.AddListener(() =>
         {
-            OpenPopUp("StartGame");
-            #region legacy
-
-            // if (_menuButtons[(int)MenuButtonName.StartGame].transform.localScale == new Vector3(1, 1, 1))
-            // {
-            //     _menuButtons[(int)MenuButtonName.StartGame].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f)
-            //         .onComplete += () =>
-            //     {
-            //         _menuButtons[(int)MenuButtonName.StartGame].transform.DORewind();
-            //         OpenPopUp("StartGame");
-            //     };
-            // }
-            // else
-            // {
-            //     OpenPopUp("StartGame");
-            // }
-
-            #endregion
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
-
         // <Menu - Button> Store
-        _menuButtons[(int)MenuButtonName.Store].onClick.AddListener(() =>
-        {
-            OpenPopUp("Store");
-            
-            // if (_menuButtons[(int)MenuButtonName.Store].transform.localScale == new Vector3(1, 1, 1))
-            // {
-            //     _menuButtons[(int)MenuButtonName.Store].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete +=
-            //         () =>
-            //         {
-            //             _menuButtons[(int)MenuButtonName.Store].transform.DORewind();
-            //             OpenPopUp("Store");
-            //         };
-            // }
-            // else
-            // {
-            //     OpenPopUp("Store");
-            // }
-        });
-
+        _menuButtons[(int)MenuButtonName.Store].onClick.AddListener(() => { OpenPanelFadeIn(_storePanel); });
         // <Menu - Button> Setting
-        _menuButtons[(int)MenuButtonName.Setting].onClick.AddListener(() =>
-        {
-            OpenPopUp("Setting");
-
-            // if (_menuButtons[(int)MenuButtonName.Setting].transform.localScale == new Vector3(1, 1, 1))
-            // {
-            //     _menuButtons[(int)MenuButtonName.Setting].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete +=
-            //         () =>
-            //         {
-            //             _menuButtons[(int)MenuButtonName.Setting].transform.DORewind();
-            //             OpenPopUp("Setting");
-            //         };
-            // }
-            // else
-            // {
-            //     OpenPopUp("Setting");
-            // }
-        });
-
-        // <Menu - Button> Quit
-        // _menuButtons[(int)MenuButtonName.Quit].onClick.AddListener(() =>
-        // {
-        //     if (_menuButtons[(int)MenuButtonName.Quit].transform.localScale == new Vector3(1, 1, 1))
-        //     {
-        //         _menuButtons[(int)MenuButtonName.Quit].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete +=
-        //             () =>
-        //             {
-        //                 _menuButtons[(int)MenuButtonName.Quit].transform.DORewind();
-        //                 OpenPopUp("Quit");
-        //             };
-        //     }
-        //     else
-        //     {
-        //         OpenPopUp("Quit");
-        //     }
-        // });
+        _menuButtons[(int)MenuButtonName.Setting].onClick.AddListener(() => { OpenPanelFadeIn(_settingPanel); });
 
         #endregion
 
-        #region Setting Buttons (Quality, Sound, Language Settings)
+        #region Setting Buttons (Sound, Quality, Leave)
 
-        // <Setting - Button> Quality Settings
-        _settingButtons[(int)SettingButtonName.QualitySetting].onClick.AddListener(() =>
-        {
-            if (_settingButtons[(int)SettingButtonName.QualitySetting].transform.localScale == new Vector3(1, 1, 1))
-            {
-                _settingButtons[(int)SettingButtonName.QualitySetting].transform
-                        .DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f)
-                        .onComplete +=
-                    () =>
-                    {
-                        _settingButtons[(int)SettingButtonName.QualitySetting].transform.DORewind();
-                        OpenPopUp("QualitySetting");
-                    };
-            }
-            else
-            {
-                OpenPopUp("QualitySetting");
-            }
-        });
-        // <Setting - Button> Sound Settings
-        _settingButtons[(int)SettingButtonName.SoundSetting].onClick.AddListener(() =>
-        {
-            if (_settingButtons[(int)SettingButtonName.SoundSetting].transform.localScale == new Vector3(1, 1, 1))
-            {
-                _settingButtons[(int)SettingButtonName.SoundSetting].transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f)
-                        .onComplete +=
-                    () =>
-                    {
-                        _settingButtons[(int)SettingButtonName.SoundSetting].transform.DORewind();
-                        OpenPopUp("SoundSetting");
-                    };
-            }
-            else
-            {
-                OpenPopUp("SoundSetting");
-            }
-        });
-        // <Setting - Button> Quality Settings
-        _settingButtons[(int)SettingButtonName.LanguageSetting].onClick.AddListener(() =>
-        {
-            if (_settingButtons[(int)SettingButtonName.LanguageSetting].transform.localScale == new Vector3(1, 1, 1))
-            {
-                _settingButtons[(int)SettingButtonName.LanguageSetting].transform
-                        .DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f)
-                        .onComplete +=
-                    () =>
-                    {
-                        _settingButtons[(int)SettingButtonName.LanguageSetting].transform.DORewind();
-                        OpenPopUp("LanguageSetting");
-                    };
-            }
-            else
-            {
-                OpenPopUp("LanguageSetting");
-            }
-        });
+        // // <Setting - Button> Sound Settings
+        // _settingButtons[(int)SettingButtonName.Sound].onClick.AddListener(() => { OpenPopUp("SoundSetting"); });
+        // // <Setting - Button> Quality Settings
+        // _settingButtons[(int)SettingButtonName.Quality].onClick
+        //     .AddListener(() => { OpenPopUp("QualitySetting"); });
+        // // <Setting - Button> Leave
+        // _settingButtons[(int)SettingButtonName.Leave].onClick.AddListener(() => { OpenPopUp("Leave"); });
 
         #endregion
+        
     }
 
-
-    private void OpenPopUp(string popUpName)
+    public void OpenPanelFadeIn(GameObject panelName)
     {
-        SoundManager.instance.PlaySFX("Touch");
-
-        switch (popUpName)
-        {
-            case "StartGame":
-                UIManager.instance.OpenPopUp(_startGamePopUp);
-                break;
-            case "Store":
-                UIManager.instance.OpenPopUp(_storePopUp);
-                break;
-            case "Setting":
-                UIManager.instance.OpenPopUp(_settingPopUp);
-                break;
-            case "Quit":
-                Application.Quit();
-                break;
-
-            case "QualitySetting":
-                UIManager.instance.OpenPopUp(_qualitySettingPopUp);
-                break;
-            case "SoundSetting":
-                UIManager.instance.OpenPopUp(_soundSettingPopUp);
-                break;
-            case "LanguageSetting":
-                UIManager.instance.OpenPopUp(_languageSettingPopUp);
-                break;
-        }
+        panelName.SetActive(true);
+        panelName.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
     }
+
+    public void ClosePanelFadeOut(GameObject panelName)
+    {
+        panelName.GetComponent<RectTransform>().DOLocalMove(new Vector3(Screen.width, 0, 0), 0.4f).onComplete += () =>
+        {
+            panelName.SetActive(false);
+        };
+    }
+
+
+    // private void OpenPopUp(string popUpName)
+    // {
+    //     SoundManager.instance.PlaySFX("Touch");
+    //
+    //     switch (popUpName)
+    //     {
+    //         case "StartGame":
+    //             if (!_playPanel.activeSelf)
+    //             {
+    //                 _playPanel.SetActive(true);
+    //             }
+    //
+    //             break;
+    //         case "Store":
+    //             if (!_storePanel.activeSelf)
+    //             {
+    //                 _storePanel.SetActive(true);
+    //             }
+    //
+    //             break;
+    //         case "Setting":
+    //             if (!_settingPanel.activeSelf)
+    //             {
+    //                 _settingPanel.SetActive(true);
+    //             }
+    //
+    //             //UIManager.instance.OpenPopUp(_settingPopUp);
+    //             break;
+    //         case "SoundSetting":
+    //             //UIManager.instance.OpenPopUp(_soundSettingPopUp);
+    //             break;
+    //         case "QualitySetting":
+    //             //UIManager.instance.OpenPopUp(_qualitySettingPopUp);
+    //             break;
+    //         case "Leave":
+    //             //UIManager.instance.OpenPopUp(_leavePopUp);
+    //             break;
+    //     }
+    // }
 
     private void ChangeScale(KoreographyEvent evt)
     {
