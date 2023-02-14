@@ -14,13 +14,21 @@ public class MonsterPooling : MonoBehaviour
     [SerializeField] private List<KoreographyEvent> _mapEventList = new List<KoreographyEvent>();
     [SerializeField] private List<KoreographyEvent> _shortEventList = new List<KoreographyEvent>();
 
-    [Header("No ObjectPool")] 
+    [Header("Variable")] 
     [SerializeField] private GameObject _monsterPrefab;
+    [SerializeField] private int _monsterIdx;
+    [SerializeField] private Camera _camera;
 
+    [Header("Transform")]
+    public RectTransform coinPos;
+    
+    [Header("Tile")]
     [SerializeField] private List<Vector3> _tilePos = new List<Vector3>();
+
+    private Vector3 _coinScreenPos;
+
     private int _checkPointIdx = 0;
     private int _deleteMonsterCount;
-    [SerializeField] private int _monsterIdx;
     private int _count;
 
     private void Awake()
@@ -32,6 +40,13 @@ public class MonsterPooling : MonoBehaviour
     {
         _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
         _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_shortEventID).GetAllEvents();
+
+        Debug.Log(_camera.name);
+        _coinScreenPos = _camera.WorldToScreenPoint(coinPos.position);
+        Debug.Log(_coinScreenPos);
+
+        _coinScreenPos = _camera.ScreenToWorldPoint(_coinScreenPos);
+        Debug.Log(_coinScreenPos);
 
         for (int i = 0; i < _shortEventList.Count; i++)
         {
@@ -54,13 +69,8 @@ public class MonsterPooling : MonoBehaviour
 
     public void DisableMonster()
     {
-        monsterList[_monsterIdx].GetComponent<Monster>().ShowAnim();
+        monsterList[_monsterIdx].GetComponent<Monster>().ShowAnim(_coinScreenPos);
         _monsterIdx++;
-    }
-
-    public void MissMonster()
-    {
-        monsterList[_monsterIdx].GetComponent<Monster>().DisableMonster();
     }
 
     public void AddTilePos(float posX, float posY)

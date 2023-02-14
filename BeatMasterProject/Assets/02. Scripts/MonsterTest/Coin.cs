@@ -1,12 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine.Utility;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class Coin : MonoBehaviour
 {
-    private void DisableCoin()
+    public void MoveCoin(Vector2 movePos)
     {
-        Destroy(gameObject);
+        transform.DOLocalMove(movePos, 1f).onComplete += () =>
+        {
+            Destroy(gameObject);
+        };
     }
 }
