@@ -17,7 +17,9 @@ public class CharacterMovement : MonoBehaviour
     [EventID] public string speedEventID;
     [SerializeField] private float _moveSpeed;
 
-    private bool _isPaused;
+    [SerializeField] private bool _isPaused;
+    [SerializeField] private bool _isFailed;
+    
     public float MoveSpeed
     {
         get => _moveSpeed;
@@ -43,6 +45,7 @@ public class CharacterMovement : MonoBehaviour
     private float _previousBeatTime = 0;
     private float _currentBeatTime = 0;
     private float _checkPointCurrentBeatTime = 0f;
+    private float _pauseBeatTime = 0f;
 
     [Header("Jump")]
     [SerializeField] private float _jumpGapRate = 0.5f;
@@ -72,14 +75,43 @@ public class CharacterMovement : MonoBehaviour
 
     private void Update()
     {
-        if (_game.curState.Equals(GameState.Play))
+
+        switch (_game.curState)
         {
-            GetInput();
+            case GameState.Play:
+                GetInput();
+                _previousBeatTime = _currentBeatTime;
+                break;
+            
+            case GameState.Rewind:
+                _isFailed = true;
+                break;
+            
+            case GameState.Pause:
+                _isPaused = true;
+                break;
         }
-        else
+        // if (_game.curState.Equals(GameState.Play))
+        // {
+        //     GetInput();
+        //     _previousBeatTime = _currentBeatTime;
+        // }
+        //
+        // if (_game.curState.Equals(GameState.Rewind))
+        // {
+        //     _isFailed = true;
+        // }
+        //
+        // if (_game.curState.Equals(GameState.Pause))
+        // {
+        //     _isPaused = true;
+        // }
+
+        if (Koreographer.Instance.GetMusicBeatTime() != 0)
         {
-            _isPaused = true;
+            _pauseBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
         }
+
 
         // if (_game.curState.Equals(GameState.Pause))
         // {
@@ -179,21 +211,34 @@ public class CharacterMovement : MonoBehaviour
         float x = 0f;
         float y = 0f;
         
-        if (!_isPaused)
+        if (!_isFailed && !_isPaused) //안멈추고 진행중일때
         {
+            // Debug.Log("안멈춤");
             _currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
             
             x = transform.position.x + (_currentBeatTime - _previousBeatTime) * MoveSpeed;
+            // Debug.Log("currentBeat" + _currentBeatTime);
+            // Debug.Log("previousBeat" + _previousBeatTime);
+            // Debug.Log(x);
             _previousBeatTime = _currentBeatTime;
         }
-        else
+        else if(_isFailed) //실패하고 다시 시작할때
         {
+            //Debug.Log("실패");
             transform.position = _characterPosition;
             x = transform.position.x + (_currentBeatTime - _checkPointCurrentBeatTime) * MoveSpeed;
             _previousBeatTime = _currentBeatTime;
+            _isFailed = false;
+        }
+        else //멈췄다가 다시 시작할때
+        {
+            //Debug.Log("멈춤");
+            //Debug.Log(_pauseBeatTime);
+            x = transform.position.x + (_currentBeatTime - _pauseBeatTime) * MoveSpeed;
+            _previousBeatTime = _currentBeatTime;
             _isPaused = false;
         }
-        
+
         // 점프 중이 아닐 때 캐릭터의 y값 설정
         RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
 
@@ -278,7 +323,6 @@ public class CharacterMovement : MonoBehaviour
             MoveSpeed = evt.GetFloatValue();
             _checkPointCurrentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
             //_rewindTime.RecordCheckPoint(_characterPosition);
-            Debug.Log(_checkPointCurrentBeatTime);
         }
         if (evt.HasTextPayload())
         {

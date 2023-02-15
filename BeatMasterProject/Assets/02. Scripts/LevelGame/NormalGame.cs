@@ -125,7 +125,7 @@ public class NormalGame : Game
             if (!isShortKeyCorrect)
             {
                 // ================Rewind 자리================
-                // Rewind();
+                Rewind();
             }
             isShortKeyCorrect = false;
         }
@@ -173,7 +173,6 @@ public class NormalGame : Game
             }
             if (!isShortKeyCorrect)
             {
-                monsterPooling.DisableMonster();
                 // ================Rewind 자리================
                 Rewind();
             }
@@ -186,13 +185,14 @@ public class NormalGame : Game
         if (_isCheckedLong && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
         {
             _isCheckedLong = false; // initialize before a curve value becomes 1
+            Debug.Log("CheckLongStart" + sampleTime);
         }
 
         if (Input.GetKeyDown(_longNoteKey))
         {
             isLongPressed = true;
             _comboSystem.IncreaseCombo(); 
-            Debug.Log("Long Key Press");
+            Debug.Log("Long Key Press" + sampleTime);
             _playerAnim.SetEffectBool(true);
         }
         else if (Input.GetKeyUp(_longNoteKey))
@@ -209,7 +209,7 @@ public class NormalGame : Game
             if (!isLongPressed) // Failed to press at the start of the long note
             {
                 //=======Rewind 자리=========
-                // Rewind();
+                Rewind();
             }
         }
     }
@@ -222,7 +222,7 @@ public class NormalGame : Game
             Debug.Log("Middle KeyUP => Fail!!!");
             _playerAnim.SetEffectBool(false);
             //==============Rewind 자리==============
-            // Rewind();
+            Rewind();
         }
         else if (isLongPressed)
         {
@@ -272,7 +272,7 @@ public class NormalGame : Game
             {
                 Debug.Log("End Key Fail!!!");
                 // ===============Rewind==============
-                // Rewind();
+                Rewind();
             }
             isLongPressed = false;
             isLongKeyCorrect = false;
@@ -283,7 +283,7 @@ public class NormalGame : Game
     {
         isRewinding = true;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Damage);
-        curState = GameState.Pause;
+        curState = GameState.Rewind;
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
         _playerAnim.SetEffectBool(false); // Stop booster animation
