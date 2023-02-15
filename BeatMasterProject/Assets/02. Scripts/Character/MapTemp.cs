@@ -340,9 +340,13 @@ public class MapTemp : MonoBehaviour
 
             if (_shortEventList[i].GetIntValue() == 0)
             {
-                // Record position, Posit Object
+                // Record position
                 _objectGenerator.RecordShortPos(new Vector3(xPosition + xOffset, yPosition, 0));
-                _objectGenerator.PositObstacles(xPosition + xOffset, yPosition);
+                if (int.Parse(_mapEventList[xPosition + 2].GetTextValue()) != 5)
+                {
+                    // Posit object only when next tile is not empty tile
+                    _objectGenerator.PositObstacles(xPosition + xOffset, yPosition);
+                }
             }
             
         }
