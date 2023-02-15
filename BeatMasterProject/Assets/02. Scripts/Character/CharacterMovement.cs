@@ -13,6 +13,8 @@ public class CharacterMovement : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private Vector3 _characterPosition;
 
+    private TouchInputManager _touchInputManager;
+    
     [Header("Music")]
     [EventID] public string speedEventID;
     [SerializeField] private float _moveSpeed;
@@ -53,7 +55,7 @@ public class CharacterMovement : MonoBehaviour
     private Vector2 _jumpStartPosition;
     private float _jumpEndY, _jumpMidY;
     private bool _canGroundCheck = true;
-    private bool _canJump = true;
+    public bool _canJump = true;
     public bool isJumping;
 
     [Header("Ray")]
@@ -64,6 +66,10 @@ public class CharacterMovement : MonoBehaviour
 
     private RewindTime _rewindTime;
 
+    private void Awake()
+    {
+        _touchInputManager = FindObjectOfType<TouchInputManager>();
+    }
 
     private void Start()
     {
@@ -118,6 +124,12 @@ public class CharacterMovement : MonoBehaviour
         {
             Jump();
         }
+
+        if (_touchInputManager.isJumpTouch && _canJump)
+        {
+            Jump();
+        }
+        
     }
 
     private void Jump()

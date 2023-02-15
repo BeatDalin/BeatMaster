@@ -30,6 +30,8 @@ public class NormalGame : Game
     private EffectAnim _playerAnim;
     private PlayerData _playerDatas;
 
+    private TouchInputManager _touchInputManager;
+    
     protected override void Awake()
     {
         base.Awake();
@@ -57,6 +59,8 @@ public class NormalGame : Game
         _playerDatas = DataCenter.Instance.GetPlayerData();
 
         _playerAnim.ChangeCharacterAnim(_playerDatas.playerChar);
+
+        _touchInputManager = FindObjectOfType<TouchInputManager>();
     }
 
     protected override void Start()
@@ -98,7 +102,7 @@ public class NormalGame : Game
 
         if (!isShortKeyCorrect)
         {
-            if (_shortEvent[shortIdx].GetIntValue() == 0 && Input.GetKeyDown(_jumpNoteKey) && !characterMovement.isJumping)
+            if (_shortEvent[shortIdx].GetIntValue() == 0 && (Input.GetKeyDown(_jumpNoteKey) || _touchInputManager.isJumpTouch) && !characterMovement.isJumping)
             {
                 isShortKeyCorrect = true;
                 PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
@@ -140,7 +144,7 @@ public class NormalGame : Game
 
         if (!isShortKeyCorrect)
         {
-            if (_shortEvent[shortIdx].GetIntValue() == 1 && Input.GetKeyDown(_attackNoteKey))
+            if (_shortEvent[shortIdx].GetIntValue() == 1 && (Input.GetKeyDown(_attackNoteKey) || _touchInputManager.isAttackTouch))
             {
                 _comboSystem.IncreaseCombo();
                 _particleController.PlayJumpParticle();
