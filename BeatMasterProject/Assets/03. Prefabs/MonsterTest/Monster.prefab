@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6378428621272857973}
   - component: {fileID: 4553432830243929760}
   - component: {fileID: 872915895793271827}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Monster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -365,6 +365,10 @@ PrefabInstance:
     - target: {fileID: 7397218863573384310, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
       propertyPath: m_Name
       value: Coin
+      objectReference: {fileID: 0}
+    - target: {fileID: 7397218863573384310, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
