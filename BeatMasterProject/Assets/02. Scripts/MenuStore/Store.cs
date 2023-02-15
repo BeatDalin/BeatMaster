@@ -42,6 +42,7 @@ public class Store : MonoBehaviour
     private Button[] _character;
     private Button[] _item;
     private StoreData _storeData;
+    private ItemData[] _itemData;
 
     private void Awake()
     {
@@ -54,10 +55,11 @@ public class Store : MonoBehaviour
 
         UpdatePlayersDataInScene();
         _storeData = DataCenter.Instance.GetStoreData();
+        //_itemData=DataCenter.Instance.GetItemData();
         SetCharBtn();
         SetItemBtn();
 
-        _toggles[0].isOn = true;
+        //_toggles[0].isOn = true;
         ShowStoreList(0);
         _toggles[0].onValueChanged.AddListener(delegate { ShowStoreList(0);});
         _toggles[1].onValueChanged.AddListener(delegate { ShowStoreList(1);});
@@ -131,6 +133,7 @@ public class Store : MonoBehaviour
     private void InitStorePopup()
     {
         _storeData = DataCenter.Instance.GetStoreData();
+        //_itemData = DataCenter.Instance.GetItemData();
         _ifPurchased.transform.GetChild(0).GetComponent<Button>().interactable = true;
         _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "구매하기";
         foreach (var button in _popupBtn)
@@ -218,7 +221,7 @@ public class Store : MonoBehaviour
     private void SetItemPopup(StoreData.ItemPart itemPart, StoreData.ItemName itemName)
     {
         int itemNum = (int)itemName;
-        _popupPanel[0].transform.GetChild(0).gameObject.SetActive(false);
+        _popupPanel[0].transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
             
        _popupPanel[0].transform.GetChild(0).GetChild(1).GetComponent<Image>().sprite = _item[itemNum].transform.GetChild(0).GetComponent<Image>().sprite;
        _popupPanel[0].transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
