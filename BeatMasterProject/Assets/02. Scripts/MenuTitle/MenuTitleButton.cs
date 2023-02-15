@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using SonicBloom.Koreo;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -105,8 +104,11 @@ public class MenuTitleButton : MonoBehaviour
 
     public void OpenPanelFadeIn(GameObject panelName)
     {
-        panelName.SetActive(true);
-        panelName.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
+        if (!panelName.activeSelf)
+        {
+            panelName.SetActive(true);
+            panelName.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
+        }
     }
 
     public void ClosePanelFadeOut(GameObject panelName)
