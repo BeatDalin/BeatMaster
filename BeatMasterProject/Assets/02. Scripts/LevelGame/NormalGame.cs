@@ -66,7 +66,6 @@ public class NormalGame : Game
     protected override void Start()
     {
         base.Start();
-        //PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
         Init();
     }
 
@@ -129,7 +128,7 @@ public class NormalGame : Game
             if (!isShortKeyCorrect)
             {
                 // ================Rewind 자리================
-                // Rewind();
+                Rewind();
             }
             isShortKeyCorrect = false;
         }
@@ -212,21 +211,21 @@ public class NormalGame : Game
             _isCheckedLong = true;
             if (!isLongPressed) // Failed to press at the start of the long note
             {
-                //=======Rewind 자리=========
-                // Rewind();
+                //==============Rewind 자리==============
+                Rewind();
             }
         }
     }
     private void CheckLongMiddle(KoreographyEvent evt)
     {
         // if action key is released during long note
-        if (isLongPressed && Input.GetKeyUp(_longNoteKey))
+        if (isLongPressed && !Input.GetKey(_longNoteKey))
         {
             isLongPressed = false;
             Debug.Log("Middle KeyUP => Fail!!!");
             _playerAnim.SetEffectBool(false);
             //==============Rewind 자리==============
-            // Rewind();
+            Rewind();
         }
         else if (isLongPressed)
         {
@@ -276,7 +275,7 @@ public class NormalGame : Game
             {
                 Debug.Log("End Key Fail!!!");
                 // ===============Rewind==============
-                // Rewind();
+                Rewind();
             }
             isLongPressed = false;
             isLongKeyCorrect = false;
@@ -295,7 +294,7 @@ public class NormalGame : Game
         ContinueGame(); // wait 3 sec and start
         // Item, Death, Combo
         gameUI.UpdateText(TextType.Item, DecreaseItem(5));
-        gameUI.UpdateText(TextType.Death, IncreaseDeath());// increase death count
+        IncreaseDeath(); // increase death count
         _comboSystem.ResetCombo();
         _comboSystem.ResetCurrentAmount();
         // Reset Array Index
