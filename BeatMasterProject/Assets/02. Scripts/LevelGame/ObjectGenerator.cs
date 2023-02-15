@@ -22,13 +22,12 @@ public class ObjectGenerator : MonoBehaviour
     private Animator _checkPointAnim;
     [SerializeField] private List<Vector3> _checkPointPos;
     private int _checkPointIdx;
-    [SerializeField] private bool[] _checkPointVisited;
 
     [Header("Short Note Obstacles")]
     [SerializeField] private GameObject _obstObj;
     [SerializeField] private Transform _obstContainer;
     [SerializeField] private List<Vector3> _obstPosList;
-    private List<Obstacle> _obstacleScripts;
+    private List<Obstacle> _obstacleScripts = new List<Obstacle>();
     private int _obsIdx;
     [SerializeField] private int[] _obstacleCounts;
 
@@ -37,15 +36,13 @@ public class ObjectGenerator : MonoBehaviour
     [SerializeField] private Transform _longObjContainer;
     [SerializeField] private List<Vector3> _longObjPosList;
 
-    private CharacterMovement _characterMovement;
-    private Game _game;
+    // private CharacterMovement _characterMovement;
+    // private Game _game;
     
     private static readonly int IsPlay = Animator.StringToHash("isPlay");
 
     private void Awake()
     {
-        _game = FindObjectOfType<Game>();
-        _characterMovement = FindObjectOfType<CharacterMovement>();
         // Get Events of Map
         _mapEvents = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
         // Get Events of Check Point
@@ -55,7 +52,6 @@ public class ObjectGenerator : MonoBehaviour
         _checkPointAnim = _checkPointObj.GetComponent<Animator>();
         // Check Point Initialize
         _checkPointIdx = -1;
-        _checkPointVisited = new bool[_checkPointList.Count];
         // ObstacleCount array to count the number of obstacles before checkPoints
         _obsIdx = 0;
         _obstacleCounts = new int[_checkPointList.Count];
@@ -122,7 +118,6 @@ public class ObjectGenerator : MonoBehaviour
 
     
     #region CheckPoint
-
     /// <summary>
     /// Record Check Point's Location, Enroll 
     /// </summary>
@@ -131,8 +126,6 @@ public class ObjectGenerator : MonoBehaviour
     public void RecordCheckPoint(int xPos, int yPos)
     {
         _checkPointPos.Add(new Vector3(xPos, yPos, 0)); // Record position
-        
-        //_obstacleCounts[_checkPointPos.Count - 1] = _obstacleScripts.Count > 0 ? _obstacleScripts.Count - 1 : 0;
     }
     
     /// <summary>
@@ -144,33 +137,9 @@ public class ObjectGenerator : MonoBehaviour
     {
         _checkPointIdx++;
         _checkPointObj.transform.position = _checkPointPos[_checkPointIdx];
-        _checkPointVisited[_checkPointIdx] = true;
+        // _checkPointVisited[_checkPointIdx] = true;
         _checkPointAnim.SetTrigger(IsPlay); // Play Animation
         return _checkPointList[_checkPointIdx].StartSample;
     }
-    // public void PositCheckPoint(int xPos, int yPos)
-    // {
-    //     var effect = Instantiate(_checkPointObj, new Vector3Int(xPos, yPos + 1, 0), Quaternion.identity);
-    //     _checkPointAnim.Add(effect.GetComponent<Animator>());
-    // }
-    
-    
-    // public void PlayCheckAnim(int idx)
-    // {
-    //     _checkPointAnim[idx].SetTrigger(IsPlay);
-    // }
-
     #endregion
-
-    private void Update()
-    {
-        if (_checkPointPos.Count - 1 > _checkPointIdx)
-        {
-            if (_characterMovement.transform.position.x > _checkPointPos[_checkPointIdx + 1].x)
-            {
-                _game.curSample = checkPointList[_checkPointIdx + 1].StartSample;
-                MoveCheckPointForward();
-            }
-        }
-    }
 }
