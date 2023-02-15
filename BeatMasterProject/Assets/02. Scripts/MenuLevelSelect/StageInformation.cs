@@ -6,6 +6,7 @@ using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using ColorUtility = UnityEngine.ColorUtility;
 
 public class StageInfo
 {
@@ -72,18 +73,16 @@ public class StageInformation : MonoBehaviour
             _stageInfo[i] = new StageInfo(i, _stageDescription[i], _mapPos[i], _camPos[i+1].gameObject.transform.position);
         }
         
-        AddStageBtnListener();
-        _stageBtns.SetActive(true);
-    }
-
-    private void AddStageBtnListener()
-    {
+        // Add StageBtn Listener
         for (int i = 0; i < _stageBtn.Length; i++)
         {
             var stageNum = i;
             _stageBtn[i].onClick.AddListener(() => SetStageInfo(stageNum));
         }
+
+        _stageBtns.SetActive(true);
     }
+
 
     // private IEnumerator CoFadeIn()
     // {
@@ -147,6 +146,7 @@ public class StageInformation : MonoBehaviour
             Vector3.MoveTowards(_mainCam.transform.position, _stageInfo[stageNum].camPos, 10f);
         
         // Toggles
+        _levelToggles[0].isOn = true;
         SetToggleStatus(_levelToggles, stageNum);
         
         // StageTitle Txt
@@ -161,6 +161,9 @@ public class StageInformation : MonoBehaviour
 
         uiStage = _stageInfo[stageNum].stageNum;
         
+        // Toggles
+        SetToggleStatus(_levelToggles, uiStage);
+        
         _stagePanel.SetActive(true);
     }
     
@@ -170,16 +173,27 @@ public class StageInformation : MonoBehaviour
         {
             LevelData levelData = DataCenter.Instance.GetLevelData(stageNum, i);
             
-            toggles[i].GetComponent<Toggle>().interactable = levelData.isUnlocked;
-            toggles[i].transform.GetChild(2).gameObject.SetActive(levelData.isUnlocked);
-            toggles[i].transform.GetChild(0).GetComponent<Image>().sprite = _toggleSprite[levelData.isUnlocked ? 0 : 1];
-            Debug.Log("level "+i+" "+levelData.isUnlocked);
+            toggles[i].GetComponent<Toggle>().interactable = levelData.isUnlocked; // 클릭 막기
+            toggles[i].transform.GetChild(0).GetComponent<Image>().sprite = _toggleSprite[levelData.isUnlocked ? 0 : 1]; // 잠금 여부에 따라 toggle sprite 변경
+            toggles[i].transform.GetChild(2).gameObject.SetActive(levelData.isUnlocked); // Text 영역
+            Debug.Log("stage"+ stageNum+" level "+i+" "+levelData.isUnlocked);
 
             if (levelData.isUnlocked)
             {
-                toggles[i].transform.GetChild(0).gameObject.SetActive(!toggles[i].isOn);
-                toggles[i].transform.GetChild(1).gameObject.SetActive(toggles[i].isOn);
+                toggles[i].transform.GetChild(0).gameObject.SetActive(!toggles[i].isOn); // Shadow 끄고
+                toggles[i].transform.GetChild(1).gameObject.SetActive(toggles[i].isOn); 
             }
+            else
+            {
+                toggles[i].transform.GetChild(0).gameObject.SetActive(true); // Shadow 키고
+                toggles[i].transform.GetChild(1).gameObject.SetActive(false);   // isOn Object 끔
+            }
+        
+            // else // 잠긴 상태면
+            // {
+            //     toggles[i].transform.GetChild(0).gameObject.SetActive(!toggles[i].isOn); // Shadow 키고
+            //     toggles[i].transform.GetChild(1).gameObject.SetActive(toggles[i].isOn); // isOn Object 끔
+            // }
         }
     }
 
