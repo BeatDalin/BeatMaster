@@ -15,9 +15,9 @@ MonoBehaviour:
   mEventID: Level1_CheckPoint
   mEventList:
   - mStartSample: 0
-    mEndSample: 3586
-  - mStartSample: 957292
-    mEndSample: 957292
+    mEndSample: 2000
+  - mStartSample: 935780
+    mEndSample: 935780
   - mStartSample: 1731731
     mEndSample: 1731731
   - mStartSample: 3183804
@@ -54,31 +54,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  - mCurveData:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  _CurvePayloadIdxs: 0000000001000000
+  _CurvePayloadIdxs: 00000000
   _FloatPayloads: []
   _FloatPayloadIdxs: 
   _GradientPayloads: []
@@ -86,7 +62,8 @@ MonoBehaviour:
   _IntPayloads:
   - mIntVal: 0
   - mIntVal: 0
-  _IntPayloadIdxs: 0200000003000000
+  - mIntVal: 0
+  _IntPayloadIdxs: 010000000200000003000000
   _SpectrumPayloads: []
   _SpectrumPayloadIdxs: 
   _TextPayloads: []
