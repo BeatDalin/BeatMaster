@@ -165,6 +165,7 @@ public class NormalGame : Game
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             monsterPooling.DisableMonster();
+            _isShortVisited[shortIdx] = true;
             if (!isRewinding)
             {
                 // increase index only when Rewind() has not been called
@@ -245,7 +246,7 @@ public class NormalGame : Game
                 _comboSystem.IncreaseCombo();
                 _comboSystem.ResetCurrentAmount();
                 // Increase coin only once!
-                if (!_isLongVisited[shortIdx])
+                if (!_isLongVisited[longIdx])
                 {
                     _isLongVisited[longIdx] = true;
                     IncreaseItem();
@@ -261,6 +262,7 @@ public class NormalGame : Game
         {
             _isCheckedLong = true;
             CheckBeatResult(longResult, longIdx, isLongKeyCorrect, _pressedTimeLong, _eventRangeLong); // Record Result
+            _isLongVisited[longIdx] = true;
             if (!isRewinding)
             {
                 // increase index only when Rewind() has not been called
