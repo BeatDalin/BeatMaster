@@ -62,7 +62,6 @@ public class NormalGame : Game
     protected override void Start()
     {
         base.Start();
-        //PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
         Init();
     }
 
@@ -173,6 +172,7 @@ public class NormalGame : Game
             }
             if (!isShortKeyCorrect)
             {
+                monsterPooling.DisableMonster();
                 // ================Rewind 자리================
                 Rewind();
             }
@@ -185,14 +185,13 @@ public class NormalGame : Game
         if (_isCheckedLong && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
         {
             _isCheckedLong = false; // initialize before a curve value becomes 1
-            Debug.Log("CheckLongStart" + sampleTime);
         }
 
         if (Input.GetKeyDown(_longNoteKey))
         {
             isLongPressed = true;
             _comboSystem.IncreaseCombo(); 
-            Debug.Log("Long Key Press" + sampleTime);
+            Debug.Log("Long Key Press");
             _playerAnim.SetEffectBool(true);
         }
         else if (Input.GetKeyUp(_longNoteKey))
@@ -208,7 +207,7 @@ public class NormalGame : Game
             _isCheckedLong = true;
             if (!isLongPressed) // Failed to press at the start of the long note
             {
-                //=======Rewind 자리=========
+                //==============Rewind 자리==============
                 Rewind();
             }
         }
@@ -216,7 +215,7 @@ public class NormalGame : Game
     private void CheckLongMiddle(KoreographyEvent evt)
     {
         // if action key is released during long note
-        if (isLongPressed && Input.GetKeyUp(_longNoteKey))
+        if (isLongPressed && !Input.GetKey(_longNoteKey))
         {
             isLongPressed = false;
             Debug.Log("Middle KeyUP => Fail!!!");
@@ -283,7 +282,7 @@ public class NormalGame : Game
     {
         isRewinding = true;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Damage);
-        curState = GameState.Rewind;
+        curState = GameState.Pause;
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
         _playerAnim.SetEffectBool(false); // Stop booster animation
@@ -291,7 +290,7 @@ public class NormalGame : Game
         ContinueGame(); // wait 3 sec and start
         // Item, Death, Combo
         gameUI.UpdateText(TextType.Item, DecreaseItem(5));
-        gameUI.UpdateText(TextType.Death, IncreaseDeath());// increase death count
+        IncreaseDeath(); // increase death count
         _comboSystem.ResetCombo();
         _comboSystem.ResetCurrentAmount();
         // Reset Array Index
