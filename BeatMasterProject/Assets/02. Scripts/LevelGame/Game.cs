@@ -17,6 +17,7 @@ public enum GameState
     Idle,
     Play,
     Pause,
+    Rewind,
     End
 }
 
@@ -92,6 +93,7 @@ public abstract class Game : MonoBehaviour
         isLongPressed = false;
         isLongKeyCorrect = false;
         coinCount = 0;
+        deathCount = 0;
         rewindShortIdx = 0;
         rewindLongIdx = 0;
         rewindSampleTime = -1;
@@ -138,7 +140,10 @@ public abstract class Game : MonoBehaviour
         gameUI.timePanel.SetActive(false);
         
         // Rewind Character Position
-        characterMovement.RewindPosition();
+        if (curState.Equals(GameState.Rewind))
+        {
+            characterMovement.RewindPosition();
+        }
         curState = GameState.Play;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
         isRewinding = false;
@@ -196,6 +201,7 @@ public abstract class Game : MonoBehaviour
         {
             SummarizeResult();
             RateResult(_stageIdx, _levelIdx);
+            gameUI.UpdateText(TextType.Death, deathCount);// increase death count
             gameUI.ShowFinalResult(_finalSummary, totalNoteCount, _stageIdx, _levelIdx); // for testing purpose ...
         }
         else if (message == "Stop")
@@ -295,7 +301,7 @@ public abstract class Game : MonoBehaviour
         // Push data into current level's data
         if (_finalSummary[2] == totalNoteCount)
         {
-            gameUI.ShowStar(3);
+            curLevelData.star = 3;
             curLevelData.alpha = 1f;
             
             // Unlock Character

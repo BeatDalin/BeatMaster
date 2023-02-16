@@ -57,10 +57,11 @@ public class MapTemp : MonoBehaviour
     private MonsterPooling _monsterPooling;
     private ObjectGenerator _objectGenerator;
 
+
+    //[Header("TempVariable")] public Dictionary<int, int> longNoteTilePos = new Dictionary<int, int>();
+
     private void Awake()
     {
-        _monsterPooling = FindObjectOfType<MonsterPooling>();
-        _objectGenerator = GetComponent<ObjectGenerator>();
         Init(theme);
         GenerateMap();
 
@@ -162,8 +163,8 @@ public class MapTemp : MonoBehaviour
             if (groundType == _GroundType.Empty)
             {
                 _tileX += 1;
-                _monsterPooling.AddTilePos(_tileX, _tileY);
-                _objectGenerator.PositItems(_tileX, _tileY + 2);
+                // _monsterPooling.AddTilePos(_tileX, _tileY);
+                _objectGenerator.PositItems(_tileX, _tileY + 2); // posit star item
                 prevGroundType = groundType;
 
                 continue;
@@ -234,7 +235,7 @@ public class MapTemp : MonoBehaviour
 
             // 최종 결정된 타일 위치와 번호로 타일을 배치하고 적 위치를 저장한다.
             // 적 위치 저장
-            _monsterPooling.AddTilePos(_tileX, _tileY + _groundYOffset);
+            // _monsterPooling.AddTilePos(_tileX, _tileY + _groundYOffset);
 
             // 최상단 타일 배치
             _groundTilemap.SetTile(GetTileChangeData(_TileType.GroundTop, groundIndex, new Vector3Int(_tileX, _tileY, 0), new Vector3(0f, _groundYOffset, 0f)), false);
@@ -327,6 +328,8 @@ public class MapTemp : MonoBehaviour
                 yPosition = shortHit.point.y;
 
                 _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0, new Vector3Int(xPosition, 0, 0), new Vector3(xOffset, yPosition, 0f)), false);
+                _monsterPooling.AddTilePos(xPosition + xOffset, yPosition);
+                
                 //if (_shortEventList[i].GetIntValue() == 0)
                 //{
                 //    Instantiate(actionEffects[0], new Vector3(xPosition + xOffset, yOffset, 0f), Quaternion.identity);
@@ -418,6 +421,7 @@ public class MapTemp : MonoBehaviour
                 _objectGenerator.RecordLongPos(new Vector3(endXPosition + endXOffset, endYPosition, 0));
             }
             
+            //longNoteTilePos.Add(startXPosition, endXPosition);
         }
     }
 

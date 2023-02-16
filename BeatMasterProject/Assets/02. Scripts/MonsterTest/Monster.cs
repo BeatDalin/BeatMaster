@@ -39,7 +39,7 @@ public class Monster : MonoBehaviour
         }
     }
 
-    public void ShowAnim(Vector2 movePos)
+    public void ShowAnim(Vector2 movePos, GameObject coinParent)
     {
         if (isGainCoin)
         {
@@ -52,7 +52,7 @@ public class Monster : MonoBehaviour
                     _spriteRenderer.DOFade(0f, 0.3f).onComplete += () =>
                     {
                         _doTweenAnimation.DORewind();
-                        _coin.MoveCoin(movePos);
+                        _coin.MoveCoin(movePos, coinParent);
                         transform.position = _originalPos;
                         transform.rotation = Quaternion.identity;
                     };
