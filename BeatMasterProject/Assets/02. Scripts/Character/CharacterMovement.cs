@@ -1,12 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Cinemachine.Utility;
 using UnityEngine;
 using SonicBloom.Koreo;
-using SonicBloom.Koreo.Players;
-using UnityEngine.Assertions.Must;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
