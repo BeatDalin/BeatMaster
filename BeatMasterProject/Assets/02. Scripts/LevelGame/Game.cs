@@ -1,11 +1,8 @@
 using System;
 using SonicBloom.Koreo;
-using SonicBloom.Koreo.Players;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public enum BeatResult
 {
@@ -20,25 +17,29 @@ public enum GameState
     Idle,
     Play,
     Pause,
+    Rewind,
     End
 }
 
 public abstract class Game : MonoBehaviour
 {
     [SerializeField] protected GameUI gameUI; // LevelGameUI or BossGameUI will come in.
-    [SerializeField][EventID] private string _spdEventID;
-
+    protected CharacterMovement characterMovement;
+    protected MonsterPooling monsterPooling;
+    
     [Header("Game Play")]
     public GameState curState = GameState.Idle;
     public int curSample;
+    protected bool isRewinding;
+    [Header("Check Game End")]
+    [SerializeField][EventID] private string _spdEventID;
 
     [Header("Check Point")]
+    [SerializeField] [EventID] private string _checkPointID;
     [SerializeField] protected int rewindShortIdx;
-    protected int rewindLongIdx;
+    [SerializeField] protected int rewindLongIdx;
     [SerializeField] protected int rewindSampleTime = -1;
-    // [SerializeField] protected List<KoreographyEvent> checkPointList;
-    // [SerializeField] protected bool[] checkPointVisited;
-    // protected int checkPointIdx = -1;
+    protected ObjectGenerator objectGenerator;
 
     [Header("Result Check")]
     public BeatResult[] longResult;
@@ -48,14 +49,11 @@ public abstract class Game : MonoBehaviour
     [SerializeField] protected int longIdx = 0;
     protected bool isLongPressed = false;
     protected bool isLongKeyCorrect = false;
-    // short notes
+    // short notes (jump, attack)
     [SerializeField] protected int shortIdx = 0;
-    //protected bool isShortKeyPressed = false; // To prevent double check...
     protected bool isShortKeyCorrect = false;
-
     // death
     [SerializeField] protected int deathCount = 0;
-    protected bool isLongFailed = false; // for testing purpose ....
 
     [Header("Data")]
     [SerializeField] private int _stageIdx; // Stage number-1 : This is an index!!!
@@ -66,17 +64,17 @@ public abstract class Game : MonoBehaviour
     private int[] _shortSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from long notes
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
 
-    protected CharacterMovement characterMovement;
-    protected MonsterPooling monsterPooling;
-    protected RewindTime rewindTime;
 
     protected virtual void Awake()
     {
-        rewindTime = FindObjectOfType<RewindTime>();
         characterMovement = FindObjectOfType<CharacterMovement>();
         monsterPooling = FindObjectOfType<MonsterPooling>();
+        objectGenerator = FindObjectOfType<ObjectGenerator>();
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
         Koreographer.Instance.ClearEventRegister(); // Initialize Koreographer Event Regiser
+        // Save Point Event Track
+        Koreographer.Instance.RegisterForEventsWithTime(_checkPointID, SaveCheckPoint);
+        
         // Data
         DataCenter.Instance.LoadData();
     }
@@ -84,7 +82,7 @@ public abstract class Game : MonoBehaviour
     protected virtual void Start()
     {
         // StartWithDelay();
-        StartCoroutine(CoStartWithDelay());
+        StartCoroutine(CoStartWithDelay(0));
         Koreographer.Instance.RegisterForEvents(_spdEventID, CheckEnd);
     }
 
@@ -95,9 +93,11 @@ public abstract class Game : MonoBehaviour
         isLongPressed = false;
         isLongKeyCorrect = false;
         coinCount = 0;
+        deathCount = 0;
         rewindShortIdx = 0;
         rewindLongIdx = 0;
         rewindSampleTime = -1;
+        isRewinding = false;
     }
 
     protected void StartWithDelay(int startSample = 0)
@@ -120,11 +120,9 @@ public abstract class Game : MonoBehaviour
         //     yield return new WaitForSeconds(1);
         // }
 
-
         gameUI.timePanel.SetActive(true);
         // Wait for Scene Transition to end
         // yield return new WaitWhile(() => !SceneLoadManager.Instance.GetTransitionEnd());
-
         yield return new WaitUntil(() => SceneLoadManager.Instance.isLoaded);
         int waitTime = 3;
         while (waitTime > 0)
@@ -142,13 +140,39 @@ public abstract class Game : MonoBehaviour
         gameUI.timePanel.SetActive(false);
         
         // Rewind Character Position
-        characterMovement.RewindPosition();
+        if (curState.Equals(GameState.Rewind))
+        {
+            characterMovement.RewindPosition();
+        }
         curState = GameState.Play;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+        isRewinding = false;
 
         // Music Play & Game Start
         startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
         SoundManager.instance.PlayBGM(true, startSample);
+    }
+
+    private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
+    {
+        if (evt.StartSample > rewindSampleTime)
+        {
+            // Entered new check point
+            Debug.Log($"SaveCheckPoint: Sample {sampleTime} > Rewind {rewindSampleTime}");
+            // DisableMonster Clear
+            if (evt.StartSample != 0)
+            {
+                monsterPooling.ResetPool();
+                //rewindTime.ClearRewindList();
+            }
+            // Record sample time to play music
+            curSample = objectGenerator.MoveCheckPointForward();
+            rewindSampleTime = curSample;
+            
+            // Record Index
+            rewindShortIdx = shortIdx;
+            rewindLongIdx = longIdx;
+        }
     }
 
     protected int[,] CalculateRange(List<KoreographyEvent> koreographyEvents)
@@ -177,6 +201,7 @@ public abstract class Game : MonoBehaviour
         {
             SummarizeResult();
             RateResult(_stageIdx, _levelIdx);
+            gameUI.UpdateText(TextType.Death, deathCount);// increase death count
             gameUI.ShowFinalResult(_finalSummary, totalNoteCount, _stageIdx, _levelIdx); // for testing purpose ...
         }
         else if (message == "Stop")
@@ -276,7 +301,7 @@ public abstract class Game : MonoBehaviour
         // Push data into current level's data
         if (_finalSummary[2] == totalNoteCount)
         {
-            gameUI.ShowStar(3);
+            curLevelData.star = 3;
             curLevelData.alpha = 1f;
             
             // Unlock Character

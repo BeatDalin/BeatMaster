@@ -1,9 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using SonicBloom.Koreo;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
@@ -12,12 +9,15 @@ public class CharacterMovement : MonoBehaviour
     private ResourcesChanger _resourcesChanger;
     private Rigidbody2D _rigidbody;
     private Vector3 _characterPosition;
+    private TouchInputManager _touchInputManager;
 
-    [Header("Music")]
+    [Header("Music")] 
     [EventID] public string speedEventID;
     [SerializeField] private float _moveSpeed;
 
     private bool _isPaused;
+    private bool _isFailed;
+
     public float MoveSpeed
     {
         get => _moveSpeed;
@@ -37,12 +37,14 @@ public class CharacterMovement : MonoBehaviour
             }
         }
     }
+
     public float gravityScale;
     public float startGravityAccel;
     private float _gravityAccel;
     private float _previousBeatTime = 0;
     private float _currentBeatTime = 0;
     private float _checkPointCurrentBeatTime = 0f;
+    private float _pauseBeatTime = 0f;
 
     [Header("Jump")]
     [SerializeField] private float _jumpGapRate = 0.25f;
@@ -56,14 +58,18 @@ public class CharacterMovement : MonoBehaviour
     private bool _canGroundCheck = true;
     private bool _canJump = true;
     public bool isJumping;
+    public bool isLongNote = false; // a variable set as true when CheckLongStart() is called
 
-    [Header("Ray")]
+    [Header("Ray")] 
     [SerializeField] private Transform _rayOriginPoint;
     [SerializeField] private float _rayDistanceOffset = 0.2f;
     [SerializeField] private float _positionYOffset;
     private LayerMask _tileLayer;
 
     private RewindTime _rewindTime;
+
+    public Vector3 lastPosition;
+    public float lastBeatTime;
 
 
     private void Start()
@@ -73,27 +79,23 @@ public class CharacterMovement : MonoBehaviour
 
     private void Update()
     {
-        if (_game.curState.Equals(GameState.Play))
+        if (SoundManager.instance.musicPlayer.IsPlaying)
         {
             GetInput();
-        }
-        else
-        {
-            _isPaused = true;
-        }
-
-        // if (_game.curState.Equals(GameState.Pause))
-        // {
-        //     _currentBeatTime = _checkPointCurrentBeatTime;
-        //     _previousBeatTime = _checkPointCurrentBeatTime;
-        // }
-    }
-
-    private void FixedUpdate()
-    {
-        if (_game.curState == GameState.Play)
-        {
             Move();
+        }
+
+        if (_isFailed) //실패하고 다시 시작할때
+        {
+            //Debug.Log("실패");
+            transform.position = _characterPosition;
+            _previousBeatTime = _currentBeatTime;
+            _isFailed = false;
+        }
+        
+        if (_game.curState.Equals(GameState.Rewind))
+        {
+            _isFailed = true;
         }
     }
 
@@ -102,6 +104,7 @@ public class CharacterMovement : MonoBehaviour
         _rewindTime = FindObjectOfType<RewindTime>();
         _game = FindObjectOfType<Game>();
         _resourcesChanger = FindObjectOfType<ResourcesChanger>();
+        _touchInputManager = FindObjectOfType<TouchInputManager>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _rigidbody.bodyType = RigidbodyType2D.Kinematic;
         _rigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
@@ -115,7 +118,12 @@ public class CharacterMovement : MonoBehaviour
 
     private void GetInput()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
+        // isLongNote prevents jumping during checking long notes
+        if (!isLongNote && _touchInputManager.CheckLeftTouch() && _canJump)
+        {
+            Jump();
+        }
+        else if (!isLongNote && Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
             Jump();
         }
@@ -138,7 +146,8 @@ public class CharacterMovement : MonoBehaviour
         //Debug.DrawRay(new Vector2(_jumpStartPosition.x, 100f), Vector2.down * 1000f, Color.yellow, 10f);
         for (int i = 2; i <= 5; i++)
         {
-            RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down, 1000, _tileLayer);
+            RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down,
+                1000, _tileLayer);
 
             //Debug.DrawRay(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down * 1000f, Color.blue, 10f);
             if (jumpEndCheckHit)
@@ -183,22 +192,98 @@ public class CharacterMovement : MonoBehaviour
     {
         float x = 0f;
         float y = 0f;
-        
-        if (!_isPaused)
+
+        float beatTime = (float)Koreographer.Instance.GetMusicBeatTime();
+
+        if (beatTime != 0f)
         {
-            _currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-            
-            x = transform.position.x + (_currentBeatTime - _previousBeatTime) * MoveSpeed;
-            _previousBeatTime = _currentBeatTime;
+            float deltaBeatTime = beatTime - lastBeatTime;
+            float deltaPosition = deltaBeatTime * MoveSpeed;
+            Vector3 newPosition = lastPosition + transform.right * deltaPosition;
+            //transform.position = newPosition;
+
+            x = newPosition.x;
+
+            // 이동한 위치 저장
+            lastPosition = newPosition;
+            lastBeatTime = beatTime;
+
+            RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down,
+                -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
+
+            // 땅 위에 있을 때
+            if (positionCheckHit)
+            {
+                y = positionCheckHit.point.y + _positionYOffset;
+            }
+            else
+            {
+                // 점프 중이 아니고 발 밑에 아무것도 없을 때
+                if (!isJumping)
+                {
+                    _canJump = false;
+                    _gravityAccel += Time.fixedDeltaTime;
+                    y = _rigidbody.position.y + Physics2D.gravity.y * gravityScale * _gravityAccel;
+                }
+            }
+
+            // 점프하고 나서 다시 땅에 다다랐는지 체크
+            if (_canGroundCheck)
+            {
+                RaycastHit2D groundCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down,
+                    -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
+
+                if (groundCheckHit)
+                {
+                    isJumping = false;
+                    _canJump = true;
+                    _jumpCount = 0;
+                    _gravityAccel = startGravityAccel;
+                    if (PlayerStatus.Instance.playerStatus != CharacterStatus.FastIdle)
+                    {
+                        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                    }
+                }
+            }
+
+            // 점프 중일 때 캐릭터 y값 설정
+            if (isJumping)
+            {
+                y = GetJumpingY(_rigidbody.position.x - _jumpStartPosition.x, _jumpTileCount) + _jumpStartPosition.y;
+            }
+
+            // 최종적으로 계산된 x, y로 캐릭터 이동
+            _rigidbody.MovePosition(new Vector2(x, y));
         }
-        else
-        {
-            transform.position = _characterPosition;
-            x = transform.position.x + (_currentBeatTime - _checkPointCurrentBeatTime) * MoveSpeed;
-            _previousBeatTime = _currentBeatTime;
-            _isPaused = false;
-        }
-        
+
+        // if (!_isFailed && !_isPaused) //안멈추고 진행중일때
+        // {
+        //     // Debug.Log("안멈춤");
+        //     _currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
+        //     
+        //     x = transform.position.x + (_currentBeatTime - _previousBeatTime) * MoveSpeed;
+        //     // Debug.Log("currentBeat" + _currentBeatTime);
+        //     // Debug.Log("previousBeat" + _previousBeatTime);
+        //     // Debug.Log(x);
+        //     _previousBeatTime = _currentBeatTime;
+        // }
+        // else if(_isFailed) //실패하고 다시 시작할때
+        // {
+        //     //Debug.Log("실패");
+        //     transform.position = _characterPosition;
+        //     x = transform.position.x + (_currentBeatTime - _checkPointCurrentBeatTime) * MoveSpeed;
+        //     _previousBeatTime = _currentBeatTime;
+        //     _isFailed = false;
+        // }
+        // else //멈췄다가 다시 시작할때
+        // {
+        //     //Debug.Log("멈춤");
+        //     //Debug.Log(_pauseBeatTime);
+        //     x = transform.position.x + (_currentBeatTime - _pauseBeatTime) * MoveSpeed;
+        //     _previousBeatTime = _currentBeatTime;
+        //     _isPaused = false;
+        // }
+
         // 점프 중이 아닐 때 캐릭터의 y값 설정
         RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
         
@@ -283,8 +368,8 @@ public class CharacterMovement : MonoBehaviour
             MoveSpeed = evt.GetFloatValue();
             _checkPointCurrentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
             //_rewindTime.RecordCheckPoint(_characterPosition);
-            Debug.Log(_checkPointCurrentBeatTime);
         }
+
         if (evt.HasTextPayload())
         {
             if (evt.GetTextValue() == "Stop")
@@ -304,17 +389,17 @@ public class CharacterMovement : MonoBehaviour
         {
             y = positionCheckHit.point.y + _positionYOffset;
         }
-        
+
         _characterPosition = new Vector3(_characterPosition.x, y, 0f);
         transform.position = _characterPosition;
         _previousBeatTime = 0;
         _currentBeatTime = _checkPointCurrentBeatTime;
 
         //StartCoroutine(Rewind(y));
-        
+
         //_previousBeatTime = _checkPointCurrentBeatTime;
     }
-    
+
     public IEnumerator Rewind(float y)
     {
         _rewindTime.isRecord = false;
@@ -325,6 +410,7 @@ public class CharacterMovement : MonoBehaviour
             _rewindTime.rewindPos.RemoveAt(0);
             yield return null;
         }
+
         _rewindTime.StopRewind();
         _characterPosition = new Vector3(_characterPosition.x, y, 0f);
         transform.position = _characterPosition;

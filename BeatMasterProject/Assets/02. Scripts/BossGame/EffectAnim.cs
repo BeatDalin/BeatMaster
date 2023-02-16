@@ -5,6 +5,7 @@ using UnityEngine;
 public class EffectAnim : Anim
 {
     [SerializeField] private Animator _jumpAnim;
+    [SerializeField] private GameObject _vehicle;
     protected override void Awake()
     {
         base.Awake();
@@ -25,18 +26,26 @@ public class EffectAnim : Anim
     protected override void Damage()
     {
         base.Damage();
+        _vehicle.SetActive(false);
     }
 
     protected override void Run()
     {
         base.Run();
+        _vehicle.SetActive(false);
     }
 
     protected override void Idle()
     {
         base.Idle();
+        _vehicle.SetActive(false);
     }
 
+    protected override void FastIdle()
+    {
+        base.FastIdle();
+        _vehicle.SetActive(true);
+    }
 
     private void ShowJumpEffect()
     {

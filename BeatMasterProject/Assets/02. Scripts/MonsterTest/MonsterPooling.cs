@@ -7,6 +7,7 @@ using UnityEngine;
 public class MonsterPooling : MonoBehaviour
 {
     public List<GameObject> monsterList = new List<GameObject>();
+    public GameObject coinParent;
 
     [Space][Header("Event")]
     [SerializeField] [EventID] private string _mapEventID;
@@ -25,7 +26,7 @@ public class MonsterPooling : MonoBehaviour
     [Header("Tile")]
     [SerializeField] private List<Vector3> _tilePos = new List<Vector3>();
 
-    private Vector3 _coinScreenPos;
+    private Vector2 _coinScreenPos;
 
     private int _checkPointIdx = 0;
     private int _deleteMonsterCount;
@@ -40,13 +41,12 @@ public class MonsterPooling : MonoBehaviour
     {
         _mapEventList = SoundManager.instance.playingKoreo.GetTrackByID(_mapEventID).GetAllEvents();
         _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_shortEventID).GetAllEvents();
-
-        Debug.Log(_camera.name);
-        _coinScreenPos = _camera.WorldToScreenPoint(coinPos.position);
+        
+        _coinScreenPos = _camera.ScreenToWorldPoint(coinPos.position);
         Debug.Log(_coinScreenPos);
 
-        _coinScreenPos = _camera.ScreenToWorldPoint(_coinScreenPos);
-        Debug.Log(_coinScreenPos);
+        // _coinScreenPos = _camera.WorldToScreenPoint(_coinScreenPos);
+        // Debug.Log(_coinScreenPos);
 
         Invoke("SpawnMonster", 0.3f);
     }
@@ -61,21 +61,13 @@ public class MonsterPooling : MonoBehaviour
 
                 monsterList.Add(g);
             }
-            //for (int j = 0; j < _mapEventList.Count; j++)
-            //{
-            //    if (_mapEventList[j].EndSample - 5 <= _shortEventList[i].EndSample &&
-            //        _shortEventList[i].EndSample <= _mapEventList[j].EndSample + 5)
-            //    {
-
-            //        break;
-            //    }
-            //}
         }
+
     }
 
     public void DisableMonster()
     {
-        monsterList[_monsterIdx].GetComponent<Monster>().ShowAnim(_coinScreenPos);
+        monsterList[_monsterIdx].GetComponent<Monster>().ShowAnim(_coinScreenPos, coinParent);
         _monsterIdx++;
     }
 
@@ -98,5 +90,18 @@ public class MonsterPooling : MonoBehaviour
         }
 
         _monsterIdx = _count;
+    }
+    
+    private void SpawnMonster()
+    {
+        for (int i = 0; i < _shortEventList.Count; i++)
+        {
+            if (_shortEventList[i].GetIntValue() == 1)
+            {
+                GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 2f), Quaternion.identity, transform);
+
+                monsterList.Add(g);
+            }
+        }
     }
 }

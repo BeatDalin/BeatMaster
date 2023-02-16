@@ -15,7 +15,8 @@ public struct PlayerData
     public int playerStage; // Player's current max stage number
     public int playerLv; // Player's current max level in playerStage number
     public int playerItem; // Player's item(coin) count
-    public int playerChar;   // Player's current Character index
+    public int playerChar; // Player's current Character index
+    public int[] itemData; // equipped items [itemPart(enum), itemNum -1 == nothing] 
 }
 
 [Serializable]
@@ -43,14 +44,51 @@ public struct LevelData
 [Serializable]
 public struct StoreData
 {
+    public enum ItemPart
+    {
+        Background = 0,
+        Neck,
+        Face,
+        Head,
+    }
+
+    public enum ItemName
+    {
+        Balloon = 0,
+        Ribbon,
+        Sunglasses,
+        SantaHat,
+        MagicianHat,
+        Crown,
+        RabbitBand,
+        Medal,
+        FlowerCrown,
+        Pet,
+        Empty = 99,
+    }
+
     public int charCount; // 상점 내 모든 캐릭터 수
+    public int itemCount; // 상점 내 모든 아이템 수
     public CharacterData[] characterData; // 모든 캐릭터 목록(해금 체크를 위함)
+    public ItemData[] itemData; // 모든 아이템 목록
 }
 
 [Serializable]
 public struct CharacterData
 {
     public int characterNum;
+    public int price;
+    public int unlockStage;
+    public int unlockLevel;
+    public bool isPurchased;
+    public bool isUnlocked;
+}
+
+[Serializable]
+public struct ItemData
+{
+    public StoreData.ItemName itemName;
+    public StoreData.ItemPart itemPart;
     public int price;
     public bool isPurchased;
     public bool isUnlocked;

@@ -58,10 +58,11 @@ public class MapTemp : MonoBehaviour
     private MonsterPooling _monsterPooling;
     private ObjectGenerator _objectGenerator;
 
+
+    //[Header("TempVariable")] public Dictionary<int, int> longNoteTilePos = new Dictionary<int, int>();
+
     private void Awake()
     {
-        _monsterPooling = FindObjectOfType<MonsterPooling>();
-        _objectGenerator = GetComponent<ObjectGenerator>();
         Init(theme);
         GenerateMap();
 
@@ -163,8 +164,7 @@ public class MapTemp : MonoBehaviour
             if (groundType == _GroundType.Empty)
             {
                 _tileX += 1;
-                //_monsterPooling.AddTilePos(_tileX, _tileY);
-                _objectGenerator.PositItems(_tileX, _tileY + 2);
+                _objectGenerator.PositItems(_tileX, _tileY + 2); // posit star item
                 prevGroundType = groundType;
 
                 continue;
@@ -333,9 +333,13 @@ public class MapTemp : MonoBehaviour
 
             if (_shortEventList[i].GetIntValue() == 0)
             {
-                // Record position, Posit Object
+                // Record position
                 _objectGenerator.RecordShortPos(new Vector3(xPosition + xOffset, yPosition, 0));
-                _objectGenerator.PositObstacles(xPosition + xOffset, yPosition);
+                if (int.Parse(_mapEventList[xPosition + 2].GetTextValue()) != 5)
+                {
+                    // Posit object only when next tile is not empty tile
+                    _objectGenerator.PositObstacles(xPosition + xOffset, yPosition);
+                }
             }
         }
     }
@@ -405,6 +409,8 @@ public class MapTemp : MonoBehaviour
                 Instantiate(_noteObjects[2], new Vector3(endXPosition + endXOffset, endYPosition, 0f), Quaternion.identity);
                 _objectGenerator.RecordLongPos(new Vector3(endXPosition + endXOffset, endYPosition, 0));
             }
+            
+            // longNoteTilePos.Add(startXPosition, endXPosition);
         }
     }
 

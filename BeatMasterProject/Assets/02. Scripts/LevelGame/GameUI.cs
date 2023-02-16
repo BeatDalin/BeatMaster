@@ -217,15 +217,15 @@ public abstract class GameUI : MonoBehaviour
     public void ShowFinalResult(int[] finalResultSummary, int total, int stageIdx, int levelIdx)
     {
         finalPanel.SetActive(true);
-
-        finalFast.DOCounter(0, finalResultSummary[1], 1).onComplete += () =>
+        pauseBtn.interactable = false;
+        finalSlow.DOCounter(0, finalResultSummary[3], 1).onComplete += () =>
         {
-            finalFast.text = $"{finalResultSummary[1]}/{total}";
+            finalSlow.text = $"{finalResultSummary[3]}/{total}";
 
-            finalSlow.DOCounter(0, finalResultSummary[3], 1).onComplete += () =>
+            finalFast.DOCounter(0, finalResultSummary[1], 1).onComplete += () =>
             {
-                finalSlow.text = $"{finalResultSummary[3]}/{total}";
-
+                finalFast.text = $"{finalResultSummary[1]}/{total}";
+                
                 finalPerfect.DOCounter(0, finalResultSummary[2], 1).onComplete += () =>
                 {
                     finalPerfect.text = $"{finalResultSummary[2]}/{total}";
