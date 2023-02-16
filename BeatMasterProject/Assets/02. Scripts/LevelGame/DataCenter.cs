@@ -161,18 +161,18 @@ public class DataCenter : MonoBehaviour
         _gameData.storeData.charCount = Enum.GetValues(typeof(CharacterNum)).Length;
         _gameData.storeData.characterData = new CharacterData[_gameData.storeData.charCount];
         CreateCharacterData();
-        
+
         _gameData.storeData.itemCount = Enum.GetValues(typeof(StoreData.ItemName)).Length;
         _gameData.storeData.itemData = new ItemData[_gameData.storeData.itemCount];
         CreateItemData();
     }
-    
+
     private void CreateCharacterData()
     {
         CharacterData[] tempCharacterData = _gameData.storeData.characterData;
 
-        int[] charPrice = {10, 15, 20};
-        
+        int[] charPrice = { 0, 15, 20 };
+
         for (int i = 0; i < _gameData.storeData.charCount; i++)
         {
             tempCharacterData[i].characterNum = i;
@@ -189,7 +189,7 @@ public class DataCenter : MonoBehaviour
     private void CreateItemData()
     {
         ItemData[] tempItemData = _gameData.storeData.itemData;
-        
+
         StoreData.ItemName[] itemList = (StoreData.ItemName[])Enum.GetValues(typeof(StoreData.ItemName));
         StoreData.ItemPart[] itemParts =
         {
@@ -202,22 +202,23 @@ public class DataCenter : MonoBehaviour
             StoreData.ItemPart.Head,
             StoreData.ItemPart.Background,
             StoreData.ItemPart.Head,
-            StoreData.ItemPart.Background
+            StoreData.ItemPart.Background,
+            StoreData.ItemPart.Background,
         };
         int[] itemPrice = { 10, 10, 10, 20, 20, 30 };
-        
+
         for (int i = 0; i < _gameData.storeData.itemCount; i++)
         {
             tempItemData[i].itemName = itemList[i];
             tempItemData[i].itemPart = itemParts[i];
             tempItemData[i].isUnlocked = (int)tempItemData[i].itemName < (int)StoreData.ItemName.Crown; // crown전까지 unlocked true
-            tempItemData[i].price = tempItemData[i].isUnlocked ?  itemPrice[i] : 0;
+            tempItemData[i].price = tempItemData[i].isUnlocked ? itemPrice[i] : 0;
             tempItemData[i].isPurchased = false;
         }
 
         _gameData.storeData.itemData = tempItemData;
     }
-    
+
     public StoreData GetStoreData()
     {
         return _gameData.storeData;
@@ -247,7 +248,7 @@ public class DataCenter : MonoBehaviour
         _gameData.playerData.playerChar = charNum;
         SaveData();
     }
-    
+
     /// <summary>
     /// 아이템 구매 후 ItemData의 isPurchased 업데이트
     /// 아이템 구매 후 playerData의 itemData 업데이트
@@ -259,7 +260,7 @@ public class DataCenter : MonoBehaviour
         _gameData.playerData.playerItem -= _gameData.storeData.itemData[(int)itemName].price;
         SaveData();
     }
-    
+
     /// <summary>
     /// 아이템 장착 후 현재 장착 중인 아이템 업데이트 
     /// </summary>
@@ -271,7 +272,7 @@ public class DataCenter : MonoBehaviour
         _gameData.playerData.itemData[(int)itemPart] = (int)itemName;
         SaveData();
     }
-    
+
     public PlayerData GetPlayerData()
     {
         return _gameData.playerData;
