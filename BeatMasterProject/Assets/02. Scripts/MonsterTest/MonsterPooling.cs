@@ -45,11 +45,9 @@ public class MonsterPooling : MonoBehaviour
         _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_shortEventID).GetAllEvents();
         
         _coinScreenPos = _camera.ScreenToWorldPoint(coinPos.position);
-
-        // _coinScreenPos = _camera.WorldToScreenPoint(_coinScreenPos);
-        // Debug.Log(_coinScreenPos);
-
-        Invoke("SpawnMonster", 0.3f);
+        
+        StartCoroutine(CoWaitForList());
+        //Invoke("SpawnMonster", 0.3f);
         // for (int i = 0; i < _shortEventList.Count; i++)
         // {
         //     for (int j = 0; j < _mapEventList.Count; j++)
@@ -67,6 +65,16 @@ public class MonsterPooling : MonoBehaviour
         //         }
         //     }
         // }
+    }
+
+    IEnumerator CoWaitForList()
+    {
+        while (_tilePos.Count == 0)
+        {
+            yield return null;
+            Debug.Log("타일 리스트 기다리는 중");
+        }
+        SpawnMonster();
     }
 
     public void DisableMonster()
