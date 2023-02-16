@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Serialization;
 
 public class ResourcesChanger : MonoBehaviour
 {
+    public float DefaultSpeed { get; private set; }
     [SerializeField] private ChangingResources[] _changingResources;
     [SerializeField] private AnimationCurve _hueCurve;
     [SerializeField] private float _lerpTime = 1f;
     private BackgroundMover _backgroundMover;
-    private CameraController _cameraController;
     private Volume _volume;
     private ColorAdjustments _colorAdjustments;
     private int _materialIndex;
-    private float _defaultSpeed;
     private int _resourceIndex;
     private int _hueIndex;
     private int _satIndex;
@@ -26,7 +26,6 @@ public class ResourcesChanger : MonoBehaviour
     private void Awake()
     {
         _backgroundMover = FindObjectOfType<BackgroundMover>();
-        _cameraController = FindObjectOfType<CameraController>();
         _volume = FindObjectOfType<Volume>();
         _volume.profile.TryGet(typeof(ColorAdjustments), out _colorAdjustments);
         Init();
@@ -40,36 +39,24 @@ public class ResourcesChanger : MonoBehaviour
     public void OnSpeedChanged(float speed)
     {
         ChangePostProcessing(speed);
-        SetBackgroundSize();
+        _backgroundMover.SetBackgroundSize(speed);
     }
     
     private void ChangePostProcessing(float speed)
     {
         _hueIndex %= _changingResources[_resourceIndex].HueValues.Length;
 
-        
         StartCoroutine(CoHueShift(speed));
-    }
-    
-    private void SetBackgroundSize()
-    {
-        Transform backgroundTrans = _backgroundMover.transform;
-        backgroundTrans.localScale = backgroundTrans.localScale.x.Equals(_cameraController.MinOrthoSize)
-            ? backgroundTrans.localScale * _cameraController.MinOrthoSize / _cameraController.MaxOrthoSize
-            : backgroundTrans.localScale * _cameraController.MaxOrthoSize / _cameraController.MinOrthoSize;
     }
 
     private IEnumerator CoHueShift(float speed)
     {
         float timer = 0f;
-        float h = 0f;
-        float s = 0f;
-        float v = 0f;
+        float h, s, v;
         
         Color.RGBToHSV(_colorAdjustments.colorFilter.value, out h, out s, out v);
-        Debug.Log($" h : {h} s : {s} v : {v}");
 
-        if (_defaultSpeed.Equals(speed))
+        if (DefaultSpeed.Equals(speed))
         {
             while (_lerpTime > timer)
             {
@@ -109,7 +96,7 @@ public class ResourcesChanger : MonoBehaviour
 
     public void SetDefaultSpeed(float moveSpeed)
     {
-        _defaultSpeed = moveSpeed;
+        DefaultSpeed = moveSpeed;
     }
 
     public void ResetPostProcessing()
