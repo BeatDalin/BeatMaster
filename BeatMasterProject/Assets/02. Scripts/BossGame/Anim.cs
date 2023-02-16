@@ -55,7 +55,7 @@ public class Anim : MonoBehaviour
         return _charAnimator;
     }
 
-    public void ChangeCharacterAnim(int charNum)
+   public void ChangeCharacterAnim(int charNum)
     {
         anim.runtimeAnimatorController = GetAnimatorDic(Enum.GetName(typeof(CharacterNum), charNum));
     }

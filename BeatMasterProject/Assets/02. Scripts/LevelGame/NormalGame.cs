@@ -31,6 +31,8 @@ public class NormalGame : Game
     private EffectAnim _playerAnim;
     private PlayerData _playerDatas;
 
+    [SerializeField]
+    private ChangeCharSprite _changeChar;
     protected override void Awake()
     {
         base.Awake();
@@ -58,6 +60,7 @@ public class NormalGame : Game
 
         _playerDatas = DataCenter.Instance.GetPlayerData();
         _playerAnim.ChangeCharacterAnim(_playerDatas.playerChar);
+        _changeChar.ChangeItemInItemScroll(_playerDatas);
     }
 
     protected override void Start()
@@ -248,7 +251,6 @@ public class NormalGame : Game
             {
                 isLongKeyCorrect = true;
                 Debug.Log("End Key Up => Correct!");
-                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 // Combo
                 _comboSystem.IncreaseCombo();
                 _comboSystem.ResetCurrentAmount();
@@ -269,11 +271,11 @@ public class NormalGame : Game
         {
             _isCheckedLong = true;
             CheckBeatResult(longResult, longIdx, isLongKeyCorrect, _pressedTimeLong, _eventRangeLong); // Record Result
-            PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
             _isLongVisited[longIdx] = true;
             if (!isRewinding)
             {
                 // increase index only when Rewind() has not been called
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
                 longIdx++;
             }
             if (!isLongKeyCorrect)
