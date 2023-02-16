@@ -49,15 +49,27 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private int _longTrackIdx = 0;
     [SerializeField] private List<KoreographyEvent> _longEventTrack;
 
+    //[Header("TempVariable")] private MapTemp _mapTemp;
+
     private void Awake()
     {
         _objectGenerator = GetComponent<ObjectGenerator>();
         _longEventTrack = SoundManager.instance.playingKoreo.GetTrackByID(_longEventID).GetAllEvents();
+        //_mapTemp = FindObjectOfType<MapTemp>();
 
         Init(theme);
         GenerateMap();
         _objectGenerator.PositLongNotify();
+       // DisableLongNoteTile();
     }
+
+    // private void DisableLongNoteTile()
+    // {
+    //     foreach (var key in _mapTemp.longNoteTilePos)
+    //     {
+    //         _groundTilemap.SetColor(new Vector3Int(key.Key, 0,0), Color.clear);
+    //     }
+    // }
 
     private void Init(Theme theme)
     {
@@ -181,7 +193,6 @@ public class MapGenerator : MonoBehaviour
 
             // 최상단 타일 배치
             _groundTilemap.SetTile(GetTileChangeData(_TileType.Top, groundIndex, new Vector3Int(_tileX, _tileY, 0), _groundYOffset), false);
-
             // 밑 영역 타일들 배치
             for (int j = _tileY - 1; j >= -10; j--)
             {

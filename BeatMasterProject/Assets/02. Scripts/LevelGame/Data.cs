@@ -63,9 +63,10 @@ public struct StoreData
         RabbitBand,
         Medal,
         FlowerCrown,
-        Empty
+        Pet,
+        Empty = 99,
     }
-    
+
     public int charCount; // 상점 내 모든 캐릭터 수
     public int itemCount; // 상점 내 모든 아이템 수
     public CharacterData[] characterData; // 모든 캐릭터 목록(해금 체크를 위함)
