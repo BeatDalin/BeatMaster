@@ -22,7 +22,6 @@ public class ComboSystem : MonoBehaviour
     [ColorUsage(true,true)]
     [SerializeField] private Color[] _colorsHDR; // Colors will be set in Inspector
     private static readonly int OutLineColor = Shader.PropertyToID("_Color");
-    private Coroutine _colorChangeCoroutine;
     
     // 확인용 SerializeField
     private float _timer;
