@@ -25,7 +25,7 @@ public class TouchAnimation : MonoBehaviour
             if (Vector2.Distance(touchPos, objectPos) <= _spriteRenderer.bounds.extents.x && _animStart == false)
             {
                 _animStart = true;
-                int op = UnityEngine.Random.Range(1, Enum.GetValues(typeof(CharacterStatus)).Length);
+                int op = UnityEngine.Random.Range(1, Enum.GetValues(typeof(CharacterStatus)).Length-1);
                 PlayerStatus.Instance.ChangeStatus((CharacterStatus)op);
                 Invoke("ResetAnimation", 3f);
             }

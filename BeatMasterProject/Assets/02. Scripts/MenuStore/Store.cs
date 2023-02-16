@@ -23,6 +23,9 @@ public class Store : MonoBehaviour
     [SerializeField]
     private Anim _anim;
 
+    [SerializeField]
+    private ChangeCharSprite _changeChar;
+
     [SerializeField] private Toggle[] _toggles; //0: charBtn, 1:itemBtn
 
     //private Animator _animator;
@@ -36,13 +39,6 @@ public class Store : MonoBehaviour
     [SerializeField]
     private GameObject _itemContent;
 
-    [SerializeField]
-    private GameObject[] _characterItemPos; //0: Corgi, 1:Tri_Corgi_Notail, 2:Duck 
-    //0:Background, 1: Nect, 2: Face, 3: Head, 4: Crown
-
-    private Sprite _charSprite;
-    private Sprite _itemSprite;
-    private Dictionary<string, Sprite> _spriteDic = new Dictionary<string, Sprite>();
     private Button[] _character;
     private Button[] _item;
     private StoreData _storeData;
@@ -63,8 +59,6 @@ public class Store : MonoBehaviour
         SetCharBtn();
         SetItemBtn();
 
-        //_toggles[0].isOn = true;
-        /*        _toggles[0].isOn = false;*/
         ShowStoreList(0);
         _toggles[0].onValueChanged.AddListener(delegate { ShowStoreList(0); });
         _toggles[1].onValueChanged.AddListener(delegate { ShowStoreList(1); });
@@ -79,7 +73,7 @@ public class Store : MonoBehaviour
             int index = i;
 
             _character[index] = Instantiate(_char, _charContent.transform);
-            _character[index].transform.GetComponent<Image>().sprite = ChangeCharacterSprite(index);
+            _character[index].transform.GetComponent<Image>().sprite = _changeChar.ChangeCharacterSprite(index);
             _character[index].transform.GetChild(0).GetComponent<Text>().text =
                 _storeData.characterData[i].price.ToString();
             if (_storeData.characterData[i].isUnlocked)
@@ -108,7 +102,7 @@ public class Store : MonoBehaviour
             int index = i;
 
             _item[index] = Instantiate(_itemBtn, _itemContent.transform);
-            _item[index].transform.GetChild(0).GetComponent<Image>().sprite = ChangeItemSprite((StoreData.ItemName)index);
+            _item[index].transform.GetChild(0).GetComponent<Image>().sprite = _changeChar.ChangeItemSprite((StoreData.ItemName)index);
             _item[index].transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
                 _storeData.itemData[index].price.ToString();
             if (_storeData.itemData[index].isUnlocked)
@@ -118,38 +112,17 @@ public class Store : MonoBehaviour
                     SetItemPopup(_storeData.itemData[index].itemPart, _storeData.itemData[index].itemName));
             }
         }
-        ChangeItemInItemScroll();
+        _changeChar.ChangeItemInItemScroll(_playerData);
     }
 
     private void ChangeCharacterInItemScroll()
     {
-        _selectArea[1].transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = ChangeCharacterSprite(_playerData.playerChar);
-    }
-
-    private void ChangeItemInItemScroll()
-    {
-        for (int i = 0; i < _playerData.itemData.Length; i++)
-        {
-            if (_playerData.itemData[i] != -1)
-            {
-                _characterItemPos[_playerData.playerChar < 2 ? 0 : 1].transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = ChangeItemSprite((StoreData.ItemName)_playerData.itemData[i]);
-                _characterItemPos[_playerData.playerChar < 2 ? 0 : 1].transform.GetChild(i).gameObject.SetActive(true);
-            }
-            else
-            {
-                _characterItemPos[_playerData.playerChar < 2 ? 0 : 1].transform.GetChild(i).gameObject.SetActive(false);
-            }
-        }
-        _characterItemPos[_playerData.playerChar < 2 ? 0 : 1].SetActive(true);
+        _selectArea[1].transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = _changeChar.ChangeCharacterSprite(_playerData.playerChar);
     }
 
     // 선택한 탭에 따라 캐릭터/아이템 리스트를 보여준다.
     private void ShowStoreList(int toggleNum)
     {
-        /*        _toggles[toggleNum].isOn = true;
-                _toggles[toggleNum - 1 < 0 ? 1 : 0].isOn = false;*/
-        /*_toggles[toggleNum].isOn = !_toggles[toggleNum].isOn;
-        _toggles[toggleNum - 1 < 0 ? 1 : 0].isOn = !_toggles[toggleNum - 1 < 0 ? 1 : 0].isOn;*/
         _selectArea[toggleNum].SetActive(true);
         _selectArea[toggleNum - 1 < 0 ? 1 : 0].SetActive(false);
         _playerData = DataCenter.Instance.GetPlayerData();
@@ -163,14 +136,9 @@ public class Store : MonoBehaviour
         _ifPurchased.transform.GetChild(0).GetComponent<Button>().interactable = true;
         _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "구매하기";
         _popupBtn[0].onClick.RemoveAllListeners();
-        ChangeItemInItemScroll();
+        _changeChar.ChangeItemInItemScroll(_playerData);
         _ifPurchased.SetActive(true);
         _popupPanel[0].SetActive(false);
-
-        _characterItemPos[_playerData.playerChar < 2 ? 0 : 1].SetActive(true);
-        _characterItemPos[_playerData.playerChar < 2 ? 1 : 0].SetActive(false);
-        /*        _toggles[0].isOn = true;
-                _toggles[1].isOn = false;*/
     }
 
     #region Character
@@ -224,8 +192,6 @@ public class Store : MonoBehaviour
         DataCenter.Instance.UpdateCharacterPurchaseData(charNum);
 
         UpdatePlayersDataInScene();
-
-        //SetPurchasePopup(charNum);
 
         InitStorePopup();
     }
@@ -293,7 +259,6 @@ public class Store : MonoBehaviour
 
         UpdatePlayersDataInScene();
 
-        //SetItemPopup(itemPart, itemName);
         InitStorePopup();
     }
 
@@ -314,35 +279,10 @@ public class Store : MonoBehaviour
         foreach (var button in _popupBtn)
         {
             button.onClick.AddListener(() => InitStorePopup());
-            //button.onClick.AddListener(delegate { InitStorePopup(); });
         }
     }
 
     #endregion
-
-    private Sprite ChangeCharacterSprite(int charNum)
-    {
-        string _key = Enum.GetName(typeof(CharacterNum), charNum);
-        if (_spriteDic.TryGetValue(_key, out _charSprite))
-        {
-            return _spriteDic[_key];
-        }
-        _charSprite = Resources.Load<Sprite>("Sprite/" + _key);
-        _spriteDic.Add(_key, _charSprite);
-        return _charSprite;
-    }
-
-    private Sprite ChangeItemSprite(StoreData.ItemName itemName)
-    {
-        string _key = itemName.ToString();
-        if (_spriteDic.TryGetValue(_key, out _charSprite))
-        {
-            return _spriteDic[_key];
-        }
-        _itemSprite = Resources.Load<Sprite>("Sprite/" + _key);
-        _spriteDic.Add(_key, _itemSprite);
-        return _itemSprite;
-    }
 
     #region ifFix
     /*

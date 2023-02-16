@@ -39,6 +39,15 @@ public class PlayerStatus : MonoBehaviour
         {
             status = CharacterStatus.FastIdle;
         }
+        if(playerStatus == CharacterStatus.FastIdle)
+        {
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y-0.13f, gameObject.transform.position.z);
+        }
+        else if(status== CharacterStatus.FastIdle)
+        {
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y+ 0.13f, gameObject.transform.position.z);
+        }
+
         playerStatus = status;
         _animation.StatusJudge(playerStatus);
     }
@@ -78,23 +87,6 @@ public class PlayerStatus : MonoBehaviour
         for (var i = 0; i < _spumSpriteList._bodyList.Count; i++)
         {
             _spumSpriteList._bodyList[i].color = _color;
-        }
-    }
-
-    public void OnLongPressed(bool isPressed)
-    {
-        // 플레이어 스프라이트 변경
-        switch (SceneLoadManager.Instance.Scene)
-        {
-            case SceneLoadManager.SceneType.Level1:
-                ChangeStatus(CharacterStatus.Idle);
-                break;
-            case SceneLoadManager.SceneType.Level2:
-                break;
-            case SceneLoadManager.SceneType.Level3:
-                break;
-            case SceneLoadManager.SceneType.Level4:
-                break;
         }
     }
 }
