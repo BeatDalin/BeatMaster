@@ -10,7 +10,6 @@ public class ComboSystem : MonoBehaviour
     [SerializeField] private int _increasingAmount = 10000;
     [SerializeField] private GameObject _comboTextPrefab; 
     [SerializeField] private ushort _combo;
-    private int _currentAmount;
     private Transform _characterTransform;
     [Header("OutLine Effect")]
     [SerializeField] private Material _outLineMat;

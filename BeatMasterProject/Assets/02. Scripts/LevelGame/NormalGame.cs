@@ -98,7 +98,7 @@ public class NormalGame : Game
 
         if (!isShortKeyCorrect)
         {
-            if (_shortEvent[shortIdx].GetIntValue() == 0 && !characterMovement.isJumping &&  (Input.GetKeyDown(_jumpNoteKey) || _touchInputManager.CheckLeftTouch()))
+            if (_shortEvent[shortIdx].GetIntValue() == 0 && !characterMovement.isJumping && (Input.GetKeyDown(_jumpNoteKey) || _touchInputManager.CheckLeftTouch()))
             {
                 isShortKeyCorrect = true;
                 PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
@@ -220,7 +220,7 @@ public class NormalGame : Game
         // if action key is released during long note
         if (isLongPressed)
         {
-            if (_touchInputManager.CheckLeftTouching())
+            if (_touchInputManager.CheckLeftTouching() || Input.GetKey(_longNoteKey))
             {
                 // Keep Touching ...
                 _comboSystem.IncreaseComboInProcess(evt.StartSample);
