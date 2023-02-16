@@ -192,6 +192,7 @@ public class NormalGame : Game
             isLongPressed = true;
             _comboSystem.IncreaseCombo(); 
             Debug.Log("Long Key Press");
+            PlayerStatus.Instance.ChangeStatus(CharacterStatus.FastIdle);
             _playerAnim.SetEffectBool(true);
         }
         else if (Input.GetKeyUp(_longNoteKey))
@@ -261,6 +262,7 @@ public class NormalGame : Game
         {
             _isCheckedLong = true;
             CheckBeatResult(longResult, longIdx, isLongKeyCorrect, _pressedTimeLong, _eventRangeLong); // Record Result
+            PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
             _isLongVisited[longIdx] = true;
             if (!isRewinding)
             {

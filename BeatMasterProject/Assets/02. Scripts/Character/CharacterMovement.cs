@@ -261,7 +261,10 @@ public class CharacterMovement : MonoBehaviour
                     _canJump = true;
                     _jumpCount = 0;
                     _gravityAccel = startGravityAccel;
-                    PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                    if (PlayerStatus.Instance.playerStatus != CharacterStatus.FastIdle)
+                    {
+                        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                    }
                 }
             }
 

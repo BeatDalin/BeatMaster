@@ -11,15 +11,17 @@ public enum CharacterStatus
     Jump,
     Attack,
     Damage,
+    FastIdle,
     //Die
 }
 
 public enum CharacterNum
 {
-    Corgi,
-    Tri_Corgi,
-    Corgi_Notail,
-    Tri_Corgi_Notail,
+    Corgi, //<-기본
+    //Tri_Corgi,
+    //    Corgi_Notail,
+    Tri_Corgi_Notail,//<- 또다른 기본
+    Duck
 }
 
 public class Anim : MonoBehaviour
@@ -82,6 +84,10 @@ public class Anim : MonoBehaviour
                 Damage();
                 break;
 
+            case CharacterStatus.FastIdle:
+                FastIdle();
+                break;
+
                 /*case CharacterStatus.Die:
                     Die();
                     break;*/
@@ -132,6 +138,11 @@ public class Anim : MonoBehaviour
     {
         /*_anim.SetBool("Run", false);
         _anim.SetBool("Idle", true);*/
+        anim.Play("Idle");
+    }
+
+    protected virtual void FastIdle()
+    {
         anim.Play("Idle");
     }
 }
