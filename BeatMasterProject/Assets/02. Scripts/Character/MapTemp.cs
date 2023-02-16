@@ -48,6 +48,7 @@ public class MapTemp : MonoBehaviour
     private List<Tile> _topTiles = new List<Tile>();
     private List<Tile> _underTiles = new List<Tile>();
     [SerializeField] private List<Tile> _interactionTiles = new List<Tile>();
+    [SerializeField] private List<GameObject> _noteObjects = new List<GameObject>();
     private const int _tileCount = 9;
     private int _tileX = -1, _tileY;
     private float _groundYOffset = 0f;
@@ -162,7 +163,7 @@ public class MapTemp : MonoBehaviour
             if (groundType == _GroundType.Empty)
             {
                 _tileX += 1;
-                _monsterPooling.AddTilePos(_tileX, _tileY);
+                //_monsterPooling.AddTilePos(_tileX, _tileY);
                 _objectGenerator.PositItems(_tileX, _tileY + 2);
                 prevGroundType = groundType;
 
@@ -316,18 +317,18 @@ public class MapTemp : MonoBehaviour
                 }
             }
 
-            //Debug.DrawRay(new Vector2(xPosition + xOffset, 100f), Vector2.down * 1000, Color.yellow, 100f);
+            Debug.DrawRay(new Vector2(xPosition + xOffset, 100f), Vector2.down * 1000, Color.yellow, 100f);
             RaycastHit2D shortHit = Physics2D.Raycast(new Vector2(xPosition + xOffset, 100f), Vector2.down, 1000, _tileLayer);
 
             if (shortHit)
             {
                 yPosition = shortHit.point.y;
 
-                //Instantiate(actionEffects[_shortEventList[i].GetIntValue()], new Vector3(xPosition + xOffset, yOffset, 0f), Quaternion.identity);
+                Instantiate(_noteObjects[_shortEventList[i].GetIntValue()], new Vector3(xPosition + xOffset, yPosition, 0f), Quaternion.identity);
 
-                _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0, new Vector3Int(xPosition, 0, 0), new Vector3(xOffset, yPosition, 0f)), false);
+                //_interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0, new Vector3Int(xPosition, 0, 0), new Vector3(xOffset, yPosition, 0f)), false);
 
-                _monsterPooling.AddTilePos(xPosition + xOffset, yOffset);
+                _monsterPooling.AddTilePos(xPosition + xOffset, yPosition);
             }
 
             if (_shortEventList[i].GetIntValue() == 0)
@@ -388,8 +389,8 @@ public class MapTemp : MonoBehaviour
             {
                 startYPosition = longStartHit.point.y;
                 
-                _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 2, new Vector3Int(startXPosition, 0, 0), new Vector3(startXOffset, startYPosition, 0f)), false);
-                //Instantiate(actionEffects[2], new Vector3(startXPosition + startXOffset, yOffset, 0f), Quaternion.identity);
+                //_interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 2, new Vector3Int(startXPosition, 0, 0), new Vector3(startXOffset, startYPosition, 0f)), false);
+                Instantiate(_noteObjects[2], new Vector3(startXPosition + startXOffset, startYPosition, 0f), Quaternion.identity);
                 _objectGenerator.RecordLongPos(new Vector3(startXPosition + startXOffset, startYPosition, 0));
             }
 
@@ -400,8 +401,8 @@ public class MapTemp : MonoBehaviour
             {
                 endYPosition = longEndHit.point.y;
                 
-                _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 2, new Vector3Int(endXPosition, 0, 0), new Vector3(endXOffset, endYPosition, 0f)), false);
-                //Instantiate(actionEffects[2], new Vector3(endXPosition + endXOffset, yOffset, 0f), Quaternion.identity);
+                //_interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 2, new Vector3Int(endXPosition, 0, 0), new Vector3(endXOffset, endYPosition, 0f)), false);
+                Instantiate(_noteObjects[2], new Vector3(endXPosition + endXOffset, endYPosition, 0f), Quaternion.identity);
                 _objectGenerator.RecordLongPos(new Vector3(endXPosition + endXOffset, endYPosition, 0));
             }
         }
