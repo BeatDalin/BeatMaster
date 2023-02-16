@@ -125,11 +125,15 @@ public class CharacterMovement : MonoBehaviour
             Jump();
         }
 
-        if (_touchInputManager.isJumpTouch && _canJump)
+        // 점프 관련 Touch Input !!! 
+        if ((_touchInputManager.touchs.phase == TouchPhase.Began) && _canJump)
         {
-            Jump();
+            if (_touchInputManager.touchs.position.x < _touchInputManager.centerOfScreen)
+            {
+                Jump();
+            }
         }
-        
+
     }
 
     private void Jump()

@@ -101,12 +101,17 @@ public class NormalGame : Game
 
         if (!isShortKeyCorrect)
         {
-            if (_shortEvent[shortIdx].GetIntValue() == 0 && (Input.GetKeyDown(_jumpNoteKey) || _touchInputManager.isJumpTouch) && !characterMovement.isJumping)
+            if (_shortEvent[shortIdx].GetIntValue() == 0 && (Input.GetKeyDown(_jumpNoteKey) || _touchInputManager.touchs.phase == TouchPhase.Began) /*&& !characterMovement.isJumping*/)
             {
-                isShortKeyCorrect = true;
-                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
-                _comboSystem.IncreaseCombo();
-                _particleController.PlayJumpParticle();
+                // 화면 반을 나눠서 터치한 x값이 중앙보다 작을 때 (왼쪽)
+                if (_touchInputManager.touchs.position.x < _touchInputManager.centerOfScreen)
+                {
+                    isShortKeyCorrect = true;
+                    PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
+                    _comboSystem.IncreaseCombo();
+                    _particleController.PlayJumpParticle();
+                }
+
                 // Increase coin only once!
                 if (!_isShortVisited[shortIdx])
                 {
@@ -143,11 +148,15 @@ public class NormalGame : Game
 
         if (!isShortKeyCorrect)
         {
-            if (_shortEvent[shortIdx].GetIntValue() == 1 && (Input.GetKeyDown(_attackNoteKey) || _touchInputManager.isAttackTouch))
+            if (_shortEvent[shortIdx].GetIntValue() == 1 && (Input.GetKeyDown(_attackNoteKey) || (_touchInputManager.touchs.phase == TouchPhase.Began)))
             {
-                _comboSystem.IncreaseCombo();
-                _particleController.PlayJumpParticle();
-                isShortKeyCorrect = true;
+                // 화면 반을 나눠서 터치한 x값이 중앙보다 클 때 (오른쪽)
+                if (_touchInputManager.touchs.position.x > _touchInputManager.centerOfScreen)
+                {
+                    _comboSystem.IncreaseCombo();
+                    _particleController.PlayJumpParticle();
+                    isShortKeyCorrect = true;
+                }
                 // Increase coin only once!
                 if (!_isShortVisited[shortIdx])
                 {
@@ -191,19 +200,25 @@ public class NormalGame : Game
             _isCheckedLong = false; // initialize before a curve value becomes 1
         }
 
-        if (Input.GetKeyDown(_longNoteKey))
+        if (Input.GetKeyDown(_longNoteKey) || _touchInputManager.touchs.phase == TouchPhase.Began)
         {
-            isLongPressed = true;
-            _comboSystem.IncreaseCombo(); 
-            Debug.Log("Long Key Press");
-            _playerAnim.SetEffectBool(true);
+            if (_touchInputManager.touchs.position.x < _touchInputManager.centerOfScreen)
+            {
+                isLongPressed = true;
+                _comboSystem.IncreaseCombo();
+                Debug.Log("Long Key Press");
+                _playerAnim.SetEffectBool(true);
+            }
         }
-        else if (Input.GetKeyUp(_longNoteKey))
+        else if (Input.GetKeyUp(_longNoteKey) || _touchInputManager.touchs.phase == TouchPhase.Ended)
         {
-            isLongPressed = false;
-            _comboSystem.ResetCombo(); // erase it later
-            Debug.Log("Long Key Up during CheckLongStart");
-            _playerAnim.SetEffectBool(false);
+            if (_touchInputManager.touchs.position.x < _touchInputManager.centerOfScreen)
+            {
+                isLongPressed = false;
+                _comboSystem.ResetCombo(); // erase it later
+                Debug.Log("Long Key Up during CheckLongStart");
+                _playerAnim.SetEffectBool(false);
+            }
         }
 
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1f && !_isCheckedLong)
@@ -219,13 +234,16 @@ public class NormalGame : Game
     private void CheckLongMiddle(KoreographyEvent evt)
     {
         // if action key is released during long note
-        if (isLongPressed && !Input.GetKey(_longNoteKey))
+        if (isLongPressed && (!Input.GetKey(_longNoteKey) || (_touchInputManager.touchs.phase == TouchPhase.Ended)))
         {
-            isLongPressed = false;
-            Debug.Log("Middle KeyUP => Fail!!!");
-            _playerAnim.SetEffectBool(false);
-            //==============Rewind 자리==============
-            Rewind();
+            if (_touchInputManager.touchs.position.x < _touchInputManager.centerOfScreen)
+            {
+                isLongPressed = false;
+                Debug.Log("Middle KeyUP => Fail!!!");
+                _playerAnim.SetEffectBool(false);
+                //==============Rewind 자리==============
+                Rewind();
+            }
         }
         else if (isLongPressed)
         {
@@ -238,7 +256,7 @@ public class NormalGame : Game
         {
             _isCheckedLong = false; // initialize before a curve value becomes 1
         }
-        if (isLongPressed && Input.GetKeyUp(_longNoteKey))
+        if (isLongPressed && (Input.GetKeyUp(_longNoteKey) || (_touchInputManager.touchs.phase == TouchPhase.Ended)))
         {
             if (!isLongKeyCorrect)
             {
