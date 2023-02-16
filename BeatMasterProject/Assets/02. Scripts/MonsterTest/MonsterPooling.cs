@@ -91,17 +91,4 @@ public class MonsterPooling : MonoBehaviour
 
         _monsterIdx = _count;
     }
-    
-    private void SpawnMonster()
-    {
-        for (int i = 0; i < _shortEventList.Count; i++)
-        {
-            if (_shortEventList[i].GetIntValue() == 1)
-            {
-                GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 2f), Quaternion.identity, transform);
-
-                monsterList.Add(g);
-            }
-        }
-    }
 }

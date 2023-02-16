@@ -14,10 +14,6 @@ public class CharacterMovement : MonoBehaviour
     [Header("Music")] 
     [EventID] public string speedEventID;
     [SerializeField] private float _moveSpeed;
-
-    private bool _isPaused;
-    private bool _isFailed;
-
     public float MoveSpeed
     {
         get => _moveSpeed;
@@ -37,14 +33,13 @@ public class CharacterMovement : MonoBehaviour
             }
         }
     }
-
     public float gravityScale;
     public float startGravityAccel;
     private float _gravityAccel;
     private float _previousBeatTime = 0;
     private float _currentBeatTime = 0;
     private float _checkPointCurrentBeatTime = 0f;
-    private float _pauseBeatTime = 0f;
+    private bool _isFailed;
 
     [Header("Jump")]
     [SerializeField] private float _jumpGapRate = 0.25f;
@@ -255,77 +250,6 @@ public class CharacterMovement : MonoBehaviour
             // 최종적으로 계산된 x, y로 캐릭터 이동
             _rigidbody.MovePosition(new Vector2(x, y));
         }
-
-        // if (!_isFailed && !_isPaused) //안멈추고 진행중일때
-        // {
-        //     // Debug.Log("안멈춤");
-        //     _currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-        //     
-        //     x = transform.position.x + (_currentBeatTime - _previousBeatTime) * MoveSpeed;
-        //     // Debug.Log("currentBeat" + _currentBeatTime);
-        //     // Debug.Log("previousBeat" + _previousBeatTime);
-        //     // Debug.Log(x);
-        //     _previousBeatTime = _currentBeatTime;
-        // }
-        // else if(_isFailed) //실패하고 다시 시작할때
-        // {
-        //     //Debug.Log("실패");
-        //     transform.position = _characterPosition;
-        //     x = transform.position.x + (_currentBeatTime - _checkPointCurrentBeatTime) * MoveSpeed;
-        //     _previousBeatTime = _currentBeatTime;
-        //     _isFailed = false;
-        // }
-        // else //멈췄다가 다시 시작할때
-        // {
-        //     //Debug.Log("멈춤");
-        //     //Debug.Log(_pauseBeatTime);
-        //     x = transform.position.x + (_currentBeatTime - _pauseBeatTime) * MoveSpeed;
-        //     _previousBeatTime = _currentBeatTime;
-        //     _isPaused = false;
-        // }
-
-        // 점프 중이 아닐 때 캐릭터의 y값 설정
-        RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
-        
-        // 땅 위에 있을 때
-        if (positionCheckHit)
-        {
-            y = positionCheckHit.point.y + _positionYOffset;
-        }
-        else
-        {
-            // 점프 중이 아니고 발 밑에 아무것도 없을 때
-            if (!isJumping)
-            {
-                _canJump = false;
-                _gravityAccel += Time.fixedDeltaTime;
-                y = transform.position.y + Physics2D.gravity.y * gravityScale * _gravityAccel;
-            }
-        }
-
-        // 점프하고 나서 다시 땅에 다다랐는지 체크
-        if (_canGroundCheck)
-        {
-            RaycastHit2D groundCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
-            //Debug.DrawRay(_rayOriginPoint.position, Vector2.down * (-_rayOriginPoint.localPosition.y + _rayDistanceOffset), Color.red, 10f);
-            if (groundCheckHit)
-            {
-                isJumping = false;
-                _canJump = true;
-                _jumpCount = 0;
-                _gravityAccel = startGravityAccel;
-                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
-            }
-        }
-
-        // 점프 중일 때 캐릭터 y값 설정
-        if (isJumping)
-        {
-            y = GetJumpingY(transform.position.x - _jumpStartPosition.x, _jumpTileCount) + _jumpStartPosition.y;
-        }
-
-        // 최종적으로 계산된 x, y로 캐릭터 이동
-        _rigidbody.MovePosition(new Vector2(x, y));
     }
 
     /// <summary>

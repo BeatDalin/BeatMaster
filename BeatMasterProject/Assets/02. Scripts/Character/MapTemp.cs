@@ -317,7 +317,7 @@ public class MapTemp : MonoBehaviour
                 }
             }
 
-            Debug.DrawRay(new Vector2(xPosition + xOffset, 100f), Vector2.down * 1000, Color.yellow, 100f);
+            //Debug.DrawRay(new Vector2(xPosition + xOffset, 100f), Vector2.down * 1000, Color.yellow, 100f);
             RaycastHit2D shortHit = Physics2D.Raycast(new Vector2(xPosition + xOffset, 100f), Vector2.down, 1000, _tileLayer);
 
             if (shortHit)
