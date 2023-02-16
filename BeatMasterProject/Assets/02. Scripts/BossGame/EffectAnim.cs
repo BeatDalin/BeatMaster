@@ -6,6 +6,9 @@ public class EffectAnim : Anim
 {
     [SerializeField] private Animator _jumpAnim;
     [SerializeField] private GameObject _vehicle;
+
+    private Vector3 _charPos;
+
     protected override void Awake()
     {
         base.Awake();
@@ -45,6 +48,8 @@ public class EffectAnim : Anim
     {
         base.FastIdle();
         _vehicle.SetActive(true);
+        _charPos=gameObject.transform.position;
+//        gameObject.transform.position = new Vector3(_charPos.x, _charPos.y + 0.13f, _charPos.z);
     }
 
     private void ShowJumpEffect()
