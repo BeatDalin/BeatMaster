@@ -2,6 +2,7 @@ using System;
 using SonicBloom.Koreo;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class NormalGame : Game
@@ -27,7 +28,6 @@ public class NormalGame : Game
     private List<KoreographyEvent> _shortEvent;
     [Header("Combo System")]
     private ComboSystem _comboSystem;
-    private EffectAnim _playerAnim;
     private PlayerData _playerDatas;
 
     protected override void Awake()
@@ -37,7 +37,7 @@ public class NormalGame : Game
         _particleController = FindObjectOfType<ParticleController>();
         _resourcesChanger = FindObjectOfType<ResourcesChanger>();
         monsterPooling = FindObjectOfType<MonsterPooling>();
-        _playerAnim = FindObjectOfType<EffectAnim>();
+        
         _comboSystem = FindObjectOfType<ComboSystem>();
         // Short Note Event Track
         Koreographer.Instance.RegisterForEventsWithTime("Level1_JumpCheck", CheckJumpEnd);
@@ -172,7 +172,6 @@ public class NormalGame : Game
             }
             if (!isShortKeyCorrect)
             {
-                monsterPooling.DisableMonster();
                 // ================Rewind 자리================
                 Rewind();
             }
@@ -282,7 +281,7 @@ public class NormalGame : Game
     {
         isRewinding = true;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Damage);
-        curState = GameState.Pause;
+        curState = GameState.Rewind;
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
         _playerAnim.SetEffectBool(false); // Stop booster animation

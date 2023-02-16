@@ -116,7 +116,6 @@ public class ObjectGenerator : MonoBehaviour
         }
     }
 
-    
     #region CheckPoint
     /// <summary>
     /// Record Check Point's Location, Enroll 
