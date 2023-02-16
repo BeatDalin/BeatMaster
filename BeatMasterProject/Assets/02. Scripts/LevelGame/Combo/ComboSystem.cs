@@ -76,7 +76,7 @@ public class ComboSystem : MonoBehaviour
     {
         // 콤보 UI를 보여줌
         GameObject comboGo = Instantiate(_comboTextPrefab, _characterTransform.position, Quaternion.Euler(Vector3.zero), transform);
-        ComboText comboText = comboGo.GetComponent<ComboText>(); 
+        ComboText comboText = comboGo.GetComponent<ComboText>();
         comboText.SetText(_combo);
     }
 

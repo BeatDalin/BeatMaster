@@ -11,11 +11,10 @@ public class ResourcesChanger : MonoBehaviour
     [SerializeField] private AnimationCurve _hueCurve;
     [SerializeField] private float _lerpTime = 1f;
     private BackgroundMover _backgroundMover;
-    private CameraController _cameraController;
     private Volume _volume;
     private ColorAdjustments _colorAdjustments;
-    private int _materialIndex;
     private float _defaultSpeed;
+    private int _materialIndex;
     private int _resourceIndex;
     private int _hueIndex;
     private int _satIndex;
@@ -26,7 +25,6 @@ public class ResourcesChanger : MonoBehaviour
     private void Awake()
     {
         _backgroundMover = FindObjectOfType<BackgroundMover>();
-        _cameraController = FindObjectOfType<CameraController>();
         _volume = FindObjectOfType<Volume>();
         _volume.profile.TryGet(typeof(ColorAdjustments), out _colorAdjustments);
         Init();
@@ -40,24 +38,17 @@ public class ResourcesChanger : MonoBehaviour
     public void OnSpeedChanged(float speed)
     {
         ChangePostProcessing(speed);
-        SetBackgroundSize();
+        _backgroundMover.SetBackgroundSize(speed);
     }
     
     private void ChangePostProcessing(float speed)
     {
         _hueIndex %= _changingResources[_resourceIndex].HueValues.Length;
 
-        
         StartCoroutine(CoHueShift(speed));
     }
     
-    private void SetBackgroundSize()
-    {
-        Transform backgroundTrans = _backgroundMover.transform;
-        backgroundTrans.localScale = backgroundTrans.localScale.x.Equals(_cameraController.MinOrthoSize)
-            ? backgroundTrans.localScale * _cameraController.MinOrthoSize / _cameraController.MaxOrthoSize
-            : backgroundTrans.localScale * _cameraController.MaxOrthoSize / _cameraController.MinOrthoSize;
-    }
+    
 
     private IEnumerator CoHueShift(float speed)
     {
