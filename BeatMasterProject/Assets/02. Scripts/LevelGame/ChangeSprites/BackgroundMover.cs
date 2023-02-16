@@ -36,11 +36,11 @@ public class BackgroundMover : MonoBehaviour
     private void Update()
     {
         MoveBackgroundOffset();
-        MoveBackground();
     }
 
     private void LateUpdate()
     {
+        MoveBackground();
     }
     
     public void SetBackgroundSize(float speed)
@@ -85,9 +85,7 @@ public class BackgroundMover : MonoBehaviour
         
         float posY = Mathf.Lerp(tempVec.y, _mainCamBrain.transform.position.y, _ModSpeedY * Time.deltaTime);
         Vector3 goalVec = new Vector3(_characterMovement.transform.position.x, posY, tempVec.z);
-        /*tempVec.x = _characterMovement.transform.position.x;
-        tempVec.y = Mathf.Lerp(tempVec.y, _characterMovement.transform.position.y + _distVec.y,
-            _heightLerp);*/
+        
         transform.position = goalVec;
     }
 

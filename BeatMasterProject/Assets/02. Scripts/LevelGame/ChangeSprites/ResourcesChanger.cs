@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Serialization;
 
 public class ResourcesChanger : MonoBehaviour
 {
+    public float DefaultSpeed { get; private set; }
     [SerializeField] private ChangingResources[] _changingResources;
     [SerializeField] private AnimationCurve _hueCurve;
     [SerializeField] private float _lerpTime = 1f;
     private BackgroundMover _backgroundMover;
     private Volume _volume;
     private ColorAdjustments _colorAdjustments;
-    private float _defaultSpeed;
     private int _materialIndex;
     private int _resourceIndex;
     private int _hueIndex;
@@ -47,20 +48,15 @@ public class ResourcesChanger : MonoBehaviour
 
         StartCoroutine(CoHueShift(speed));
     }
-    
-    
 
     private IEnumerator CoHueShift(float speed)
     {
         float timer = 0f;
-        float h = 0f;
-        float s = 0f;
-        float v = 0f;
+        float h, s, v;
         
         Color.RGBToHSV(_colorAdjustments.colorFilter.value, out h, out s, out v);
-        Debug.Log($" h : {h} s : {s} v : {v}");
 
-        if (_defaultSpeed.Equals(speed))
+        if (DefaultSpeed.Equals(speed))
         {
             while (_lerpTime > timer)
             {
@@ -100,7 +96,7 @@ public class ResourcesChanger : MonoBehaviour
 
     public void SetDefaultSpeed(float moveSpeed)
     {
-        _defaultSpeed = moveSpeed;
+        DefaultSpeed = moveSpeed;
     }
 
     public void ResetPostProcessing()

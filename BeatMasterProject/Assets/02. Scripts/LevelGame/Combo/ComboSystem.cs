@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using SonicBloom.Koreo;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -14,22 +16,23 @@ public class ComboSystem : MonoBehaviour
     [SerializeField] private GameObject _comboTextPrefab; 
     [SerializeField] private ushort _combo;
     [Header("OutLine Effect")]
-    private SpriteRenderer _characterSprite;
-    private Material _defaultMat;
     [SerializeField] private Material _outLineMat;
+
+    private Material _defaultMat;
+    private SpriteRenderer _characterSprite;
+    private CharacterMovement _characterMovement;
+    private ResourcesChanger _resourcesChanger;
+    private int _currentAmount;
+    private int _colorIndex;
     private ushort _showEffectNum = 10;
     
-    private int _currentAmount;
-    private Transform _characterTransform;
-
-    // 확인용 SerializeField
-    private float _timer;
 
     private void Awake()
     {
-        _characterTransform = FindObjectOfType<CharacterMovement>().transform;
-        _characterSprite = _characterTransform.GetChild(0).GetComponent<SpriteRenderer>();
+        _characterMovement = FindObjectOfType<CharacterMovement>();
+        _characterSprite = _characterMovement.transform.GetChild(0).GetComponent<SpriteRenderer>();
         _defaultMat = _characterSprite.material;
+        _resourcesChanger = FindObjectOfType<ResourcesChanger>();
         // Set Texture based on current character
         // _outLineMat.SetTexture("_MainTex", texture to push....);
     }
@@ -42,8 +45,14 @@ public class ComboSystem : MonoBehaviour
     public void IncreaseCombo()
     {
         _combo++;
+        ComboAction();
         ShowCombo();
-        if (_combo >= _showEffectNum)
+    }
+
+    private void ComboAction()
+    {
+        _colorIndex = _combo / _showEffectNum;
+        if (_colorIndex == 1)
         {
             _characterSprite.material = _outLineMat;
         }
@@ -75,11 +84,12 @@ public class ComboSystem : MonoBehaviour
     private void ShowCombo()
     {
         // 콤보 UI를 보여줌
-        GameObject comboGo = Instantiate(_comboTextPrefab, _characterTransform.position, Quaternion.Euler(Vector3.zero), transform);
+        GameObject comboGo = Instantiate(_comboTextPrefab, _characterMovement.transform.position, Quaternion.Euler(Vector3.zero),
+            transform);
         ComboText comboText = comboGo.GetComponent<ComboText>();
-        comboText.SetText(_combo);
-    }
 
-    
+        comboText.SetText(_combo, _colorIndex);
+        comboText.SetPlayerSpeed(_characterMovement.MoveSpeed, _resourcesChanger.DefaultSpeed);
+    }
     
 }
