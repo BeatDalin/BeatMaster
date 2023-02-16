@@ -9,12 +9,14 @@ public class CharacterMovement : MonoBehaviour
     private ResourcesChanger _resourcesChanger;
     private Rigidbody2D _rigidbody;
     private Vector3 _characterPosition;
+    private TouchInputManager _touchInputManager;
 
-    [Header("Music")] [EventID] public string speedEventID;
+    [Header("Music")] 
+    [EventID] public string speedEventID;
     [SerializeField] private float _moveSpeed;
 
-    [SerializeField] private bool _isPaused;
-    [SerializeField] private bool _isFailed;
+    private bool _isPaused;
+    private bool _isFailed;
 
     public float MoveSpeed
     {
@@ -44,7 +46,8 @@ public class CharacterMovement : MonoBehaviour
     private float _checkPointCurrentBeatTime = 0f;
     private float _pauseBeatTime = 0f;
 
-    [Header("Jump")] [SerializeField] private float _jumpGapRate = 0.5f;
+    [Header("Jump")] 
+    [SerializeField] private float _jumpGapRate = 0.5f;
     private float _jumpHeight = 1.75f;
     private int _jumpTileCount = 2;
     private const int _maxJumpCount = 1;
@@ -54,8 +57,10 @@ public class CharacterMovement : MonoBehaviour
     private bool _canGroundCheck = true;
     private bool _canJump = true;
     public bool isJumping;
+    public bool isLongNote = false; // a variable set as true when CheckLongStart() is called
 
-    [Header("Ray")] [SerializeField] private Transform _rayOriginPoint;
+    [Header("Ray")] 
+    [SerializeField] private Transform _rayOriginPoint;
     [SerializeField] private float _rayDistanceOffset = 0.2f;
     [SerializeField] private float _positionYOffset;
     private LayerMask _tileLayer;
@@ -86,49 +91,11 @@ public class CharacterMovement : MonoBehaviour
             _previousBeatTime = _currentBeatTime;
             _isFailed = false;
         }
-
-        // switch (_game.curState)
-        // {
-        //     case GameState.Play:
-        //         
-        //         _previousBeatTime = _currentBeatTime;
-        //         break;
-        //     
-        //     case GameState.Rewind:
-        //         _isFailed = true;
-        //         break;
-        //     
-        //     case GameState.Pause:
-        //         _isPaused = true;
-        //         break;
-        // }
-        // if (_game.curState.Equals(GameState.Play))
-        // {
-        //     GetInput();
-        //     _previousBeatTime = _currentBeatTime;
-        // }
-        //
+        
         if (_game.curState.Equals(GameState.Rewind))
         {
             _isFailed = true;
         }
-        //
-        // if (_game.curState.Equals(GameState.Pause))
-        // {
-        //     _isPaused = true;
-        // }
-
-        // if (Koreographer.Instance.GetMusicBeatTime() != 0)
-        // {
-        //     _pauseBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-        // }
-
-
-        // if (_game.curState.Equals(GameState.Pause))
-        // {
-        //     _currentBeatTime = _checkPointCurrentBeatTime;
-        //     _previousBeatTime = _checkPointCurrentBeatTime;
-        // }
     }
 
     private void Init()
@@ -136,6 +103,7 @@ public class CharacterMovement : MonoBehaviour
         _rewindTime = FindObjectOfType<RewindTime>();
         _game = FindObjectOfType<Game>();
         _resourcesChanger = FindObjectOfType<ResourcesChanger>();
+        _touchInputManager = FindObjectOfType<TouchInputManager>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _rigidbody.bodyType = RigidbodyType2D.Kinematic;
         _rigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
@@ -149,7 +117,12 @@ public class CharacterMovement : MonoBehaviour
 
     private void GetInput()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
+        // isLongNote prevents jumping during checking long notes
+        if (!isLongNote && _touchInputManager.CheckLeftTouch() && _canJump)
+        {
+            Jump();
+        }
+        else if (!isLongNote && Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
             Jump();
         }
