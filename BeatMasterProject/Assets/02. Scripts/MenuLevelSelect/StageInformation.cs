@@ -55,8 +55,8 @@ public class StageInformation : MonoBehaviour
     [SerializeField] private Sprite[] _toggleSprite;
     [SerializeField] private GameObject[] _moveBtn;
     [SerializeField] private GameObject[] _camPos;
-    [SerializeField] private GameObject _clearImg;
-    [SerializeField] private GameObject[] _starImg;
+    // [SerializeField] private GameObject _clearImg;
+    // [SerializeField] private GameObject[] _starImg;
     private readonly String[] _stageDescription =
     {
         "\"설레는 첫 번째 모험!\"", "\"도시에서는 어떤 일이 일어날까?\"", 
@@ -113,8 +113,14 @@ public class StageInformation : MonoBehaviour
     
     private void SetStageInfo(int stageNum)
     {
+        SoundManager.instance.PlaySFX("Touch");
         _stageBtns.SetActive(false);
         
+        // Camera
+        _mainCam.orthographicSize = 5f;
+        _mainCam.transform.position = 
+            Vector3.MoveTowards(_mainCam.transform.position, _stageInfo[stageNum].camPos, 10f);
+
         // levelNum 최댓 최솟값 한정
         stageNum = stageNum > _maxStageNum ? _maxStageNum : stageNum;
         stageNum = stageNum < 0 ? 0 : stageNum;
@@ -123,27 +129,6 @@ public class StageInformation : MonoBehaviour
         _moveBtn[0].SetActive(stageNum != 0);
         _moveBtn[1].SetActive(stageNum != _maxStageNum);
         
-        // clear Img
-        if (curStageData[stageNum].levelClear)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                if (i < curStageData[stageNum].star)
-                {
-                   _starImg[i].SetActive(true);
-                }
-                else
-                {
-                    _starImg[i].SetActive(false);
-                }
-            }
-        }
-        _clearImg.SetActive(curStageData[stageNum].levelClear);
-        
-        // Camera
-        _mainCam.orthographicSize = 5f;
-        _mainCam.transform.position = 
-            Vector3.MoveTowards(_mainCam.transform.position, _stageInfo[stageNum].camPos, 10f);
         
         // Toggles
         _levelToggles[0].isOn = true;
@@ -176,7 +161,7 @@ public class StageInformation : MonoBehaviour
             toggles[i].GetComponent<Toggle>().interactable = levelData.isUnlocked; // 클릭 막기
             toggles[i].transform.GetChild(0).GetComponent<Image>().sprite = _toggleSprite[levelData.isUnlocked ? 0 : 1]; // 잠금 여부에 따라 toggle sprite 변경
             toggles[i].transform.GetChild(2).gameObject.SetActive(levelData.isUnlocked); // Text 영역
-            Debug.Log("stage"+ stageNum+" level "+i+" "+levelData.isUnlocked);
+            //Debug.Log("stage"+ stageNum+" level "+i+" "+levelData.isUnlocked);
 
             if (levelData.isUnlocked)
             {
@@ -188,17 +173,32 @@ public class StageInformation : MonoBehaviour
                 toggles[i].transform.GetChild(0).gameObject.SetActive(true); // Shadow 키고
                 toggles[i].transform.GetChild(1).gameObject.SetActive(false);   // isOn Object 끔
             }
-        
-            // else // 잠긴 상태면
-            // {
-            //     toggles[i].transform.GetChild(0).gameObject.SetActive(!toggles[i].isOn); // Shadow 키고
-            //     toggles[i].transform.GetChild(1).gameObject.SetActive(toggles[i].isOn); // isOn Object 끔
-            // }
+
+            // clear Img
+            if (levelData.levelClear)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    GameObject starImg = toggles[i].transform.GetChild(3).GetChild(j).GetChild(1).gameObject;
+
+                    if (i < levelData.star)
+                    {
+                        starImg.SetActive(true);
+                    }
+                    else
+                    {
+                        starImg.SetActive(false);
+                    }
+                }
+            }
+
+            toggles[i].transform.GetChild(3).gameObject.SetActive(levelData.levelClear);
         }
     }
 
     public void OnToggleValueChange()
     {
+        SoundManager.instance.PlaySFX("Touch");
         SetToggleStatus(_levelToggles, uiStage);
     }
 
@@ -240,13 +240,13 @@ public class StageInformation : MonoBehaviour
 
     public void OnClickLeftBtn()
     {
-        SoundManager.instance.PlaySFX("Touch");
+        // SoundManager.instance.PlaySFX("Touch");
         SetStageInfo(uiStage-1);
     }
 
     public void OnClickRightBtn()
     { 
-        SoundManager.instance.PlaySFX("Touch");
+        // SoundManager.instance.PlaySFX("Touch");
         SetStageInfo(uiStage+1);
     }
 
@@ -265,27 +265,5 @@ public class StageInformation : MonoBehaviour
         SoundManager.instance.PlaySFX("Touch");
         // StartCoroutine(CoFadeOut());
         SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Title);
-    }
-    
-    /// <summary>
-    /// 현재 Stage 내에서 클리어한 최대 level의 index를 반환하는 함수
-    /// </summary>
-    /// <returns>return -1 == level 1 Not Cleared, 0 = level 1 Cleared, 2 == level 3 Cleared</returns>
-    public int GetMaxLevelInStage()
-    {
-        int maxLevel;
-        
-        maxLevel = -1;
-
-        for (int i = _maxStageNum; i >= 0; i--)
-        {
-            if (curStageData[i].levelClear)
-            {
-                maxLevel = i;
-                break;
-            }
-        }
-        
-        return maxLevel;
     }
 }
