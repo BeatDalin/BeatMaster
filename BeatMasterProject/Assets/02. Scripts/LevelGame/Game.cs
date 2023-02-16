@@ -17,6 +17,7 @@ public enum GameState
     Idle,
     Play,
     Pause,
+    Rewind,
     End
 }
 
@@ -139,7 +140,10 @@ public abstract class Game : MonoBehaviour
         gameUI.timePanel.SetActive(false);
         
         // Rewind Character Position
-        characterMovement.RewindPosition();
+        if (curState.Equals(GameState.Rewind))
+        {
+            characterMovement.RewindPosition();
+        }
         curState = GameState.Play;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
         isRewinding = false;

@@ -57,6 +57,9 @@ public class MapTemp : MonoBehaviour
     private MonsterPooling _monsterPooling;
     private ObjectGenerator _objectGenerator;
 
+
+    //[Header("TempVariable")] public Dictionary<int, int> longNoteTilePos = new Dictionary<int, int>();
+
     private void Awake()
     {
         Init(theme);
@@ -418,6 +421,7 @@ public class MapTemp : MonoBehaviour
                 _objectGenerator.RecordLongPos(new Vector3(endXPosition + endXOffset, endYPosition, 0));
             }
             
+            //longNoteTilePos.Add(startXPosition, endXPosition);
         }
     }
 
