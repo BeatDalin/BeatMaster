@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8932960554451926469}
   - component: {fileID: 5768618791738251860}
   - component: {fileID: 9182963615125731903}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ComboText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -186,10 +186,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79a478485f47b60428deffb780ab82ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _distance: 5
+  _minDistance: 5
+  _maxDistance: 7
   _fadeMod: 0.5
-  _minAngle: 60
-  _maxAngle: 131
+  _minAngle: 45
+  _maxAngle: 136
+  _playerSpeed: 0
+  _defaultSpeed: 0
+  _shootMod: 1.5
+  _frontAngle: 75
+  _changeColorMod: 25
+  _hueValues: 0000000078000000c800000068010000
 --- !u!50 &9182963615125731903
 Rigidbody2D:
   serializedVersion: 4

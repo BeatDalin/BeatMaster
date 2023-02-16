@@ -9,13 +9,11 @@ public class CharacterMovement : MonoBehaviour
     private ResourcesChanger _resourcesChanger;
     private Rigidbody2D _rigidbody;
     private Vector3 _characterPosition;
+    private TouchInputManager _touchInputManager;
 
-    [Header("Music")] [EventID] public string speedEventID;
+    [Header("Music")] 
+    [EventID] public string speedEventID;
     [SerializeField] private float _moveSpeed;
-
-    [SerializeField] private bool _isPaused;
-    [SerializeField] private bool _isFailed;
-
     public float MoveSpeed
     {
         get => _moveSpeed;
@@ -35,17 +33,18 @@ public class CharacterMovement : MonoBehaviour
             }
         }
     }
-
     public float gravityScale;
     public float startGravityAccel;
     private float _gravityAccel;
     private float _previousBeatTime = 0;
     private float _currentBeatTime = 0;
     private float _checkPointCurrentBeatTime = 0f;
-    private float _pauseBeatTime = 0f;
+    private bool _isFailed;
 
-    [Header("Jump")] [SerializeField] private float _jumpGapRate = 0.5f;
-    private float _jumpHeight = 1.75f;
+    [Header("Jump")]
+    [SerializeField] private float _jumpGapRate = 0.25f;
+    [SerializeField] private float _jumpHeight = 1.3f;
+    [SerializeField] private float _graphWidth = 1f;
     private int _jumpTileCount = 2;
     private const int _maxJumpCount = 1;
     private int _jumpCount;
@@ -54,8 +53,10 @@ public class CharacterMovement : MonoBehaviour
     private bool _canGroundCheck = true;
     private bool _canJump = true;
     public bool isJumping;
+    public bool isLongNote = false; // a variable set as true when CheckLongStart() is called
 
-    [Header("Ray")] [SerializeField] private Transform _rayOriginPoint;
+    [Header("Ray")] 
+    [SerializeField] private Transform _rayOriginPoint;
     [SerializeField] private float _rayDistanceOffset = 0.2f;
     [SerializeField] private float _positionYOffset;
     private LayerMask _tileLayer;
@@ -86,49 +87,11 @@ public class CharacterMovement : MonoBehaviour
             _previousBeatTime = _currentBeatTime;
             _isFailed = false;
         }
-
-        // switch (_game.curState)
-        // {
-        //     case GameState.Play:
-        //         
-        //         _previousBeatTime = _currentBeatTime;
-        //         break;
-        //     
-        //     case GameState.Rewind:
-        //         _isFailed = true;
-        //         break;
-        //     
-        //     case GameState.Pause:
-        //         _isPaused = true;
-        //         break;
-        // }
-        // if (_game.curState.Equals(GameState.Play))
-        // {
-        //     GetInput();
-        //     _previousBeatTime = _currentBeatTime;
-        // }
-        //
+        
         if (_game.curState.Equals(GameState.Rewind))
         {
             _isFailed = true;
         }
-        //
-        // if (_game.curState.Equals(GameState.Pause))
-        // {
-        //     _isPaused = true;
-        // }
-
-        // if (Koreographer.Instance.GetMusicBeatTime() != 0)
-        // {
-        //     _pauseBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-        // }
-
-
-        // if (_game.curState.Equals(GameState.Pause))
-        // {
-        //     _currentBeatTime = _checkPointCurrentBeatTime;
-        //     _previousBeatTime = _checkPointCurrentBeatTime;
-        // }
     }
 
     private void Init()
@@ -136,6 +99,7 @@ public class CharacterMovement : MonoBehaviour
         _rewindTime = FindObjectOfType<RewindTime>();
         _game = FindObjectOfType<Game>();
         _resourcesChanger = FindObjectOfType<ResourcesChanger>();
+        _touchInputManager = FindObjectOfType<TouchInputManager>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _rigidbody.bodyType = RigidbodyType2D.Kinematic;
         _rigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
@@ -149,7 +113,12 @@ public class CharacterMovement : MonoBehaviour
 
     private void GetInput()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
+        // isLongNote prevents jumping during checking long notes
+        if (!isLongNote && _touchInputManager.CheckLeftTouch() && _canJump)
+        {
+            Jump();
+        }
+        else if (!isLongNote && Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
             Jump();
         }
@@ -161,40 +130,44 @@ public class CharacterMovement : MonoBehaviour
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);
 
         _jumpMidY = _jumpHeight;
+        _jumpEndY = transform.position.y;
         _jumpStartPosition = transform.position;
+        _graphWidth = 1f;
         _canJump = ++_jumpCount < _maxJumpCount;
         isJumping = true;
         _canGroundCheck = false;
 
         Invoke("GroundCheckOn", 0.2f);
-
+        //Debug.DrawRay(new Vector2(_jumpStartPosition.x, 100f), Vector2.down * 1000f, Color.yellow, 10f);
         for (int i = 2; i <= 5; i++)
         {
             RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down,
                 1000, _tileLayer);
 
+            //Debug.DrawRay(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down * 1000f, Color.blue, 10f);
             if (jumpEndCheckHit)
             {
                 _jumpTileCount = i;
 
-                switch (_jumpTileCount)
-                {
-                    case 3:
-                        _jumpMidY = 2f;
-                        break;
-                    case 4:
-                        _jumpMidY = 2.25f;
-                        break;
-                    case 5:
-                        _jumpMidY = 2.5f;
-                        break;
-                    default: // _jumpTileCount 2
-                        _jumpMidY = 1.75f;
-                        break;
-                }
+                /// <summary>
+                /// 점프하는 타일 칸 수에 따라서 점프 높이를 변경
+                /// 최소 칸 수인 2칸일 때 점프 높이 1.3
+                /// 최대 칸 수인 5칸일 때 점프 높이 1.9
+                /// 해당 높이 사이에서 점프 칸 수에 따라 선형보간을 통해 높이 설정
+                /// </summary>
+                _jumpMidY = Mathf.Lerp(1.3f, 1.9f, (_jumpTileCount - 2) / 3f);
+                _jumpEndY = (jumpEndCheckHit.point.y + _positionYOffset) - _jumpStartPosition.y;
+                
+                _jumpMidY += _jumpEndY * _jumpGapRate;
 
-                float yGap = jumpEndCheckHit.point.y - (_jumpStartPosition.y - _positionYOffset);
-                _jumpMidY += yGap * _jumpGapRate;
+                //if (_jumpEndY >= 0)
+                //{
+                //    _graphWidth = Mathf.Lerp(1f, 1f, _jumpEndY);
+                //}
+                //else
+                //{
+                //    _graphWidth = Mathf.Lerp(1f, 1f, -_jumpEndY);
+                //}
 
                 break;
             }
@@ -261,7 +234,10 @@ public class CharacterMovement : MonoBehaviour
                     _canJump = true;
                     _jumpCount = 0;
                     _gravityAccel = startGravityAccel;
-                    PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                    if (PlayerStatus.Instance.playerStatus != CharacterStatus.FastIdle)
+                    {
+                        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                    }
                 }
             }
 
@@ -274,36 +250,6 @@ public class CharacterMovement : MonoBehaviour
             // 최종적으로 계산된 x, y로 캐릭터 이동
             _rigidbody.MovePosition(new Vector2(x, y));
         }
-
-        // if (!_isFailed && !_isPaused) //안멈추고 진행중일때
-        // {
-        //     // Debug.Log("안멈춤");
-        //     _currentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-        //     
-        //     x = transform.position.x + (_currentBeatTime - _previousBeatTime) * MoveSpeed;
-        //     // Debug.Log("currentBeat" + _currentBeatTime);
-        //     // Debug.Log("previousBeat" + _previousBeatTime);
-        //     // Debug.Log(x);
-        //     _previousBeatTime = _currentBeatTime;
-        // }
-        // else if(_isFailed) //실패하고 다시 시작할때
-        // {
-        //     //Debug.Log("실패");
-        //     transform.position = _characterPosition;
-        //     x = transform.position.x + (_currentBeatTime - _checkPointCurrentBeatTime) * MoveSpeed;
-        //     _previousBeatTime = _currentBeatTime;
-        //     _isFailed = false;
-        // }
-        // else //멈췄다가 다시 시작할때
-        // {
-        //     //Debug.Log("멈춤");
-        //     //Debug.Log(_pauseBeatTime);
-        //     x = transform.position.x + (_currentBeatTime - _pauseBeatTime) * MoveSpeed;
-        //     _previousBeatTime = _currentBeatTime;
-        //     _isPaused = false;
-        // }
-
-        // 점프 중이 아닐 때 캐릭터의 y값 설정
     }
 
     /// <summary>
@@ -335,7 +281,7 @@ public class CharacterMovement : MonoBehaviour
                 break;
         }
 
-        return (a * x * x) + (b * x);
+        return (_graphWidth * a * x * x) + (b * x);
     }
 
     private void ChangeMoveSpeed(KoreographyEvent evt)
