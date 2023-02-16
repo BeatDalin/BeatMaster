@@ -45,8 +45,9 @@ public class CharacterMovement : MonoBehaviour
     private float _checkPointCurrentBeatTime = 0f;
 
     [Header("Jump")]
-    [SerializeField] private float _jumpGapRate = 0.5f;
-    private float _jumpHeight = 1.75f;
+    [SerializeField] private float _jumpGapRate = 0.25f;
+    [SerializeField] private float _jumpHeight = 1.3f;
+    [SerializeField] private float _graphWidth = 1f;
     private int _jumpTileCount = 2;
     private const int _maxJumpCount = 1;
     private int _jumpCount;
@@ -126,39 +127,43 @@ public class CharacterMovement : MonoBehaviour
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);
 
         _jumpMidY = _jumpHeight;
+        _jumpEndY = transform.position.y;
         _jumpStartPosition = transform.position;
+        _graphWidth = 1f;
         _canJump = ++_jumpCount < _maxJumpCount;
         isJumping = true;
         _canGroundCheck = false;
 
         Invoke("GroundCheckOn", 0.2f);
-
+        //Debug.DrawRay(new Vector2(_jumpStartPosition.x, 100f), Vector2.down * 1000f, Color.yellow, 10f);
         for (int i = 2; i <= 5; i++)
         {
             RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down, 1000, _tileLayer);
 
+            //Debug.DrawRay(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down * 1000f, Color.blue, 10f);
             if (jumpEndCheckHit)
             {
                 _jumpTileCount = i;
 
-                switch (_jumpTileCount)
-                {
-                    case 3:
-                        _jumpMidY = 2f;
-                        break;
-                    case 4:
-                        _jumpMidY = 2.25f;
-                        break;
-                    case 5:
-                        _jumpMidY = 2.5f;
-                        break;
-                    default: // _jumpTileCount 2
-                        _jumpMidY = 1.75f;
-                        break;
-                }
+                /// <summary>
+                /// 점프하는 타일 칸 수에 따라서 점프 높이를 변경
+                /// 최소 칸 수인 2칸일 때 점프 높이 1.3
+                /// 최대 칸 수인 5칸일 때 점프 높이 1.9
+                /// 해당 높이 사이에서 점프 칸 수에 따라 선형보간을 통해 높이 설정
+                /// </summary>
+                _jumpMidY = Mathf.Lerp(1.3f, 1.9f, (_jumpTileCount - 2) / 3f);
+                _jumpEndY = (jumpEndCheckHit.point.y + _positionYOffset) - _jumpStartPosition.y;
+                
+                _jumpMidY += _jumpEndY * _jumpGapRate;
 
-                float yGap = jumpEndCheckHit.point.y - (_jumpStartPosition.y - _positionYOffset);
-                _jumpMidY += yGap * _jumpGapRate;
+                //if (_jumpEndY >= 0)
+                //{
+                //    _graphWidth = Mathf.Lerp(1f, 1f, _jumpEndY);
+                //}
+                //else
+                //{
+                //    _graphWidth = Mathf.Lerp(1f, 1f, -_jumpEndY);
+                //}
 
                 break;
             }
@@ -196,7 +201,7 @@ public class CharacterMovement : MonoBehaviour
         
         // 점프 중이 아닐 때 캐릭터의 y값 설정
         RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
-
+        
         // 땅 위에 있을 때
         if (positionCheckHit)
         {
@@ -209,7 +214,7 @@ public class CharacterMovement : MonoBehaviour
             {
                 _canJump = false;
                 _gravityAccel += Time.fixedDeltaTime;
-                y = _rigidbody.position.y + Physics2D.gravity.y * gravityScale * _gravityAccel;
+                y = transform.position.y + Physics2D.gravity.y * gravityScale * _gravityAccel;
             }
         }
 
@@ -217,7 +222,7 @@ public class CharacterMovement : MonoBehaviour
         if (_canGroundCheck)
         {
             RaycastHit2D groundCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
-
+            //Debug.DrawRay(_rayOriginPoint.position, Vector2.down * (-_rayOriginPoint.localPosition.y + _rayDistanceOffset), Color.red, 10f);
             if (groundCheckHit)
             {
                 isJumping = false;
@@ -231,7 +236,7 @@ public class CharacterMovement : MonoBehaviour
         // 점프 중일 때 캐릭터 y값 설정
         if (isJumping)
         {
-            y = GetJumpingY(_rigidbody.position.x - _jumpStartPosition.x, _jumpTileCount) + _jumpStartPosition.y;
+            y = GetJumpingY(transform.position.x - _jumpStartPosition.x, _jumpTileCount) + _jumpStartPosition.y;
         }
 
         // 최종적으로 계산된 x, y로 캐릭터 이동
@@ -267,7 +272,7 @@ public class CharacterMovement : MonoBehaviour
                 break;
         }
 
-        return (a * x * x) + (b * x);
+        return (_graphWidth * a * x * x) + (b * x);
     }
 
     private void ChangeMoveSpeed(KoreographyEvent evt)
