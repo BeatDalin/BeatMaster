@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
-using SonicBloom.Koreo;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 
@@ -13,15 +10,19 @@ public class ComboSystem : MonoBehaviour
     [SerializeField] private int _increasingAmount = 10000;
     [SerializeField] private GameObject _comboTextPrefab; 
     [SerializeField] private ushort _combo;
+    private int _currentAmount;
+    private Transform _characterTransform;
     [Header("OutLine Effect")]
     private SpriteRenderer _characterSprite;
     private Material _defaultMat;
     [SerializeField] private Material _outLineMat;
     private ushort _showEffectNum = 10;
+    [Header("OutLine Color")]
+    private bool _isColorChanging;
+    [ColorUsage(true,true)]
+    [SerializeField] private Color[] _colorsHDR; // Colors will be set in Inspector
+    private static readonly int OutLineColor = Shader.PropertyToID("_Color");
     
-    private int _currentAmount;
-    private Transform _characterTransform;
-
     // 확인용 SerializeField
     private float _timer;
 
@@ -37,6 +38,7 @@ public class ComboSystem : MonoBehaviour
     void Start()
     {
         _currentAmount = _increasingAmount;
+        // _colorChangeCoroutine = StartCoroutine(CoChangeOutLineColor());
     }
 
     public void IncreaseCombo()
@@ -46,6 +48,10 @@ public class ComboSystem : MonoBehaviour
         if (_combo >= _showEffectNum)
         {
             _characterSprite.material = _outLineMat;
+            if (!_isColorChanging)
+            {
+                StartCoroutine(CoChangeOutLineColor()); // Start coroutine only once
+            }
         }
     }
 
@@ -78,6 +84,16 @@ public class ComboSystem : MonoBehaviour
         GameObject comboGo = Instantiate(_comboTextPrefab, _characterTransform.position, Quaternion.Euler(Vector3.zero), transform);
         ComboText comboText = comboGo.GetComponent<ComboText>(); 
         comboText.SetText(_combo);
+    }
+
+    private IEnumerator CoChangeOutLineColor()
+    {
+        while (_combo >= _showEffectNum)
+        {
+            _outLineMat.SetColor(OutLineColor, _colorsHDR[Random.Range(0, _colorsHDR.Length)]);
+            yield return new WaitForSeconds(1f);
+        }
+        _isColorChanging = false;
     }
 
     
