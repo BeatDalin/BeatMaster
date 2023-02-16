@@ -6,42 +6,125 @@ using UnityEngine.EventSystems;
 
 public class TouchInputManager : MonoBehaviour
 {
-    // 화면의 중앙 지점 ( width / 2 )
-    public int centerOfScreen;
-    
-    public Touch touchs;
-    private Game _game;
-    
+    [Header("Screen Width")]
+    private int _centerOfScreen;
+    [Header("Touch")]
+    public Touch touch;
+    private Touch _leftTouch;
+    private Touch _leftLongTouch;
+    private Touch _leftTouchEnd; 
+    private Touch _rightTouch;
+
     private void Start()
     {
-        centerOfScreen = Screen.width / 2;
-        _game = FindObjectOfType<Game>();
+        _centerOfScreen = Screen.width / 2;
     }
 
-    private void Update()
+    // private void Update()
+    // {
+    //     // CheckTouch();
+    // }
+    
+    private void CheckTouch()
     {
-        TouchInput();
-    }
-
-    public void TouchInput()
-    {
-        if (_game.curState != GameState.Play)
-        {
-            return;
-        }
-        // 터치가 1개 이상이면
         if (Input.touchCount > 0)
         {
-            //Input.touchCount를 통해 입력받은 숫자만큼 반복
             for (int i = 0; i < Input.touchCount; i++)
             {
-                // UI 클릭 시 터치 이벤트 발생 X
                 if (!EventSystem.current.IsPointerOverGameObject(i))
                 {
-                    touchs = Input.GetTouch(i);
+                    touch = Input.GetTouch(i);
+                    if (touch.position.x <= _centerOfScreen)
+                    {
+                        // Left Half of the Screen
+                    }
+                    else
+                    {
+                        // Right Half of the Screen
+                    }
                 }
             }
         }
+    }
+
+    public bool CheckLeftTouch()
+    {
+        if (Input.touchCount > 0)
+        {
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                _leftTouch = Input.GetTouch(i);
+                if (_leftTouch.position.x <= _centerOfScreen)
+                {
+                    if (_leftTouch.phase == TouchPhase.Began)
+                    {
+                        // Simple One Touch
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public bool CheckLeftTouching()
+    {
+        if (Input.touchCount > 0)
+        {
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                _leftTouch = Input.GetTouch(i);
+                if (_leftTouch.position.x <= _centerOfScreen)
+                {
+                    if (_leftTouch.phase == TouchPhase.Stationary || _leftTouch.phase == TouchPhase.Moved)
+                    {
+                        // Touching....
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public bool CheckLeftTouchEnd()
+    {
+        if (Input.touchCount > 0)
+        {
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                _leftTouch = Input.GetTouch(i);
+                if (_leftTouch.position.x <= _centerOfScreen)
+                {
+                    if (_leftTouch.phase == TouchPhase.Ended)
+                    {
+                        // Touch End
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public bool CheckRightTouch()
+    {
+        if (Input.touchCount > 0)
+        {
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                _rightTouch = Input.GetTouch(i);
+                if (_rightTouch.position.x > _centerOfScreen)
+                {
+                    if (_rightTouch.phase == TouchPhase.Began)
+                    {
+                        // Simple One Touch
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
 

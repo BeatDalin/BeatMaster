@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SonicBloom.Koreo;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
@@ -57,6 +56,7 @@ public class CharacterMovement : MonoBehaviour
     private bool _canGroundCheck = true;
     public bool _canJump = true;
     public bool isJumping;
+    public bool isLongNote = false; // a variable set as true when CheckLongStart() is called
 
     [Header("Ray")]
     [SerializeField] private Transform _rayOriginPoint;
@@ -120,20 +120,15 @@ public class CharacterMovement : MonoBehaviour
 
     private void GetInput()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
+        // isLongNote prevents jumping during checking long notes
+        if (!isLongNote && Input.GetKeyDown(KeyCode.LeftArrow) && _canJump)
         {
             Jump();
         }
-
-        // 점프 관련 Touch Input !!! 
-        if ((_touchInputManager.touchs.phase == TouchPhase.Began) && _canJump)
+        else if (!isLongNote && _touchInputManager.CheckLeftTouch() && _canJump)
         {
-            if (_touchInputManager.touchs.position.x < _touchInputManager.centerOfScreen)
-            {
-                Jump();
-            }
+            Jump();
         }
-
     }
 
     private void Jump()
