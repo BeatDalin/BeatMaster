@@ -1,12 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
-using SonicBloom.Koreo;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 
@@ -15,6 +10,8 @@ public class ComboSystem : MonoBehaviour
     [SerializeField] private int _increasingAmount = 10000;
     [SerializeField] private GameObject _comboTextPrefab; 
     [SerializeField] private ushort _combo;
+    private int _currentAmount;
+    private Transform _characterTransform;
     [Header("OutLine Effect")]
     [SerializeField] private Material _outLineMat;
 
@@ -25,6 +22,11 @@ public class ComboSystem : MonoBehaviour
     private int _currentAmount;
     private int _colorIndex;
     private ushort _showEffectNum = 10;
+    [Header("OutLine Color")]
+    private bool _isColorChanging;
+    [ColorUsage(true,true)]
+    [SerializeField] private Color[] _colorsHDR; // Colors will be set in Inspector
+    private static readonly int OutLineColor = Shader.PropertyToID("_Color");
     
 
     private void Awake()
@@ -40,6 +42,7 @@ public class ComboSystem : MonoBehaviour
     void Start()
     {
         _currentAmount = _increasingAmount;
+        // _colorChangeCoroutine = StartCoroutine(CoChangeOutLineColor());
     }
 
     public void IncreaseCombo()
@@ -55,6 +58,10 @@ public class ComboSystem : MonoBehaviour
         if (_colorIndex == 1)
         {
             _characterSprite.material = _outLineMat;
+            if (!_isColorChanging)
+            {
+                StartCoroutine(CoChangeOutLineColor()); // Start coroutine only once
+            }
         }
     }
 
@@ -92,4 +99,13 @@ public class ComboSystem : MonoBehaviour
         comboText.SetPlayerSpeed(_characterMovement.MoveSpeed, _resourcesChanger.DefaultSpeed);
     }
     
+    private IEnumerator CoChangeOutLineColor()
+    {
+        while (_combo >= _showEffectNum)
+        {
+            _outLineMat.SetColor(OutLineColor, _colorsHDR[Random.Range(0, _colorsHDR.Length)]);
+            yield return new WaitForSeconds(1f);
+        }
+        _isColorChanging = false;
+    }
 }
