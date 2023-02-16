@@ -636,6 +636,7 @@ GameObject:
   - component: {fileID: 270507034}
   - component: {fileID: 270507033}
   - component: {fileID: 270507037}
+  - component: {fileID: 270507038}
   m_Layer: 0
   m_Name: UI Camera
   m_TagString: MainCamera
@@ -782,6 +783,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainCamera: {fileID: 1768320482}
+--- !u!114 &270507038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 270507030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd60e1b7f395ae34f95524f4bb5ddbad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _setWidth: 1920
+  _setHeight: 1080
+  _deviceWidth: 0
+  _deviceHeight: 0
 --- !u!1001 &340208106
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7158,6 +7175,7 @@ GameObject:
   - component: {fileID: 1653310226}
   - component: {fileID: 1653310225}
   - component: {fileID: 1653310228}
+  - component: {fileID: 1653310229}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -7290,6 +7308,22 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1653310229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1653310224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd60e1b7f395ae34f95524f4bb5ddbad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _setWidth: 1920
+  _setHeight: 1080
+  _deviceWidth: 0
+  _deviceHeight: 0
 --- !u!1 &1657311695
 GameObject:
   m_ObjectHideFlags: 3
@@ -7753,7 +7787,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd60e1b7f395ae34f95524f4bb5ddbad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camera: {fileID: 0}
   _setWidth: 1920
   _setHeight: 1080
   _deviceWidth: 0

@@ -16,6 +16,8 @@ public class TouchEffect : MonoBehaviour
 
     [SerializeField] private Color[] _colors;
 
+    [SerializeField] private float othgraphicSize = 3f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +29,8 @@ public class TouchEffect : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ChangeEffectScale();
+        
         transform.Translate(_direction * _moveSpeed);
 
         transform.localScale = Vector2.Lerp(transform.localScale, Vector2.zero, Time.deltaTime * _sizeSpeed);
@@ -43,6 +47,21 @@ public class TouchEffect : MonoBehaviour
 
             ObjectPooling.Instance.ReturnObject(gameObject);
         }
+    }
+
+    private void ChangeEffectScale()
+    {
+        if (othgraphicSize != Camera.main.orthographicSize)
+        {
+            othgraphicSize = Camera.main.orthographicSize;
+            float temp = 3 / othgraphicSize;
+            _minSize = 1 - temp;
+            _maxSize = _minSize + 0.3f;
+
+            _minSize /= 2f;
+            _maxSize /= 2f;
+        }
+        
     }
 
     private void InitEffect()

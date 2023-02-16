@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -973,9 +973,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd60e1b7f395ae34f95524f4bb5ddbad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camera: {fileID: 0}
-  _setWidth: 1920
-  _setHeight: 1080
+  _camera: {fileID: 772309891}
+  _setWidth: 1600
+  _setHeight: 900
   _deviceWidth: 0
   _deviceHeight: 0
 --- !u!1 &793018655
@@ -1833,6 +1833,10 @@ PrefabInstance:
     - target: {fileID: 2882292846210638249, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
       propertyPath: m_SizeDelta.y
       value: 40.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 3234837953441048761, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -68.00003
       objectReference: {fileID: 0}
     - target: {fileID: 3825011986048074973, guid: 4399d5b113e74aa4b8c17dace6ac8591, type: 3}
       propertyPath: m_IsActive
