@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,17 +58,20 @@ public class MapTemp : MonoBehaviour
     [Header("Objects")]
     private MonsterPooling _monsterPooling;
     private ObjectGenerator _objectGenerator;
-
+    
 
     //[Header("TempVariable")] public Dictionary<int, int> longNoteTilePos = new Dictionary<int, int>();
 
     private void Awake()
     {
+        
+        
         Init(theme);
         GenerateMap();
-
-        Invoke("GenerateShortNoteTile", 0.1f);
-        Invoke("GenerateLongNoteTile", 0.1f);
+        
+        StartCoroutine(WaitForSomething());
+        //Invoke("GenerateShortNoteTile", 0.1f);
+        //Invoke("GenerateLongNoteTile", 0.1f);
     }
 
     // 빌드 시 Edit 부분 지울 것
@@ -265,7 +269,6 @@ public class MapTemp : MonoBehaviour
             // 이전 타일 타입을 현재 타일 타입으로 갱신
             prevGroundType = groundType;
         }
-
         FillMapSide();
     }
 
@@ -342,6 +345,13 @@ public class MapTemp : MonoBehaviour
                 }
             }
         }
+    }
+
+    IEnumerator WaitForSomething()
+    {
+        yield return new WaitForSeconds(0.01f);
+        GenerateShortNoteTile();
+        GenerateLongNoteTile();
     }
 
     private void GenerateLongNoteTile()
