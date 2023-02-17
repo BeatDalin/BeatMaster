@@ -185,10 +185,14 @@ public class NormalGame : Game
 
     private void CheckLongStart(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
+        if (!characterMovement.isLongNote)
+        {
+            characterMovement.isLongNote = true; // block jump for now
+        }
+
         if (_isCheckedLong && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
         {
             _isCheckedLong = false; // initialize before a curve value becomes 1
-            characterMovement.isLongNote = true; // block jump for now
         }
 
         if (_touchInputManager.CheckLeftTouch() || Input.GetKeyDown(_longNoteKey))
