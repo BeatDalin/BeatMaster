@@ -349,6 +349,7 @@ public abstract class Game : MonoBehaviour
     {
         // Get current sample for RestartGame()
         curState = GameState.Pause;
+        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
         curSample = SoundManager.instance.musicPlayer.GetSampleTimeForClip(SoundManager.instance.clipName);
         SoundManager.instance.PlayBGM(false, curSample);
     }
