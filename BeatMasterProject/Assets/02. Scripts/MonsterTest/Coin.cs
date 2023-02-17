@@ -1,12 +1,17 @@
+using System;
 using DG.Tweening;
+using UnityEditor;
 using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
     private RectTransform _rectTransform;
+    private MonsterPooling _monsterPooling;
+    
 
     private void Start()
     {
+        _monsterPooling = FindObjectOfType<MonsterPooling>();
         _rectTransform = GetComponent<RectTransform>();
     }
 
@@ -21,5 +26,13 @@ public class Coin : MonoBehaviour
         {
             Destroy(gameObject);
         };
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag.Equals("Player"))
+        {
+            MoveCoin(_monsterPooling._coinScreenPos, _monsterPooling.coinParent);
+        }
     }
 }

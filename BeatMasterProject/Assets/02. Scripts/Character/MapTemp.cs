@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +49,7 @@ public class MapTemp : MonoBehaviour
     private List<Tile> _topTiles = new List<Tile>();
     private List<Tile> _underTiles = new List<Tile>();
     [SerializeField] private List<Tile> _interactionTiles = new List<Tile>();
+    [SerializeField] private List<GameObject> _noteObjects = new List<GameObject>();
     private const int _tileCount = 9;
     private int _tileX = -1, _tileY;
     private float _groundYOffset = 0f;
@@ -56,17 +58,20 @@ public class MapTemp : MonoBehaviour
     [Header("Objects")]
     private MonsterPooling _monsterPooling;
     private ObjectGenerator _objectGenerator;
-
+    
 
     //[Header("TempVariable")] public Dictionary<int, int> longNoteTilePos = new Dictionary<int, int>();
 
     private void Awake()
     {
+        
+        
         Init(theme);
         GenerateMap();
-
-        Invoke("GenerateShortNoteTile", 0.1f);
-        Invoke("GenerateLongNoteTile", 0.1f);
+        
+        StartCoroutine(WaitForSomething());
+        //Invoke("GenerateShortNoteTile", 0.1f);
+        //Invoke("GenerateLongNoteTile", 0.1f);
     }
 
     // 빌드 시 Edit 부분 지울 것
@@ -163,7 +168,6 @@ public class MapTemp : MonoBehaviour
             if (groundType == _GroundType.Empty)
             {
                 _tileX += 1;
-                // _monsterPooling.AddTilePos(_tileX, _tileY);
                 _objectGenerator.PositItems(_tileX, _tileY + 2); // posit star item
                 prevGroundType = groundType;
 
@@ -233,10 +237,7 @@ public class MapTemp : MonoBehaviour
                 }
             }
 
-            // 최종 결정된 타일 위치와 번호로 타일을 배치하고 적 위치를 저장한다.
-            // 적 위치 저장
-            // _monsterPooling.AddTilePos(_tileX, _tileY + _groundYOffset);
-
+            // 최종 결정된 타일 위치와 번호로 타일을 배치
             // 최상단 타일 배치
             _groundTilemap.SetTile(GetTileChangeData(_TileType.GroundTop, groundIndex, new Vector3Int(_tileX, _tileY, 0), new Vector3(0f, _groundYOffset, 0f)), false);
 
@@ -268,7 +269,6 @@ public class MapTemp : MonoBehaviour
             // 이전 타일 타입을 현재 타일 타입으로 갱신
             prevGroundType = groundType;
         }
-
         FillMapSide();
     }
 
@@ -327,18 +327,11 @@ public class MapTemp : MonoBehaviour
             {
                 yPosition = shortHit.point.y;
 
-                _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0, new Vector3Int(xPosition, 0, 0), new Vector3(xOffset, yPosition, 0f)), false);
+                Instantiate(_noteObjects[_shortEventList[i].GetIntValue()], new Vector3(xPosition + xOffset, yPosition, 0f), Quaternion.identity);
+
+                //_interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0, new Vector3Int(xPosition, 0, 0), new Vector3(xOffset, yPosition, 0f)), false);
+
                 _monsterPooling.AddTilePos(xPosition + xOffset, yPosition);
-                
-                //if (_shortEventList[i].GetIntValue() == 0)
-                //{
-                //    Instantiate(actionEffects[0], new Vector3(xPosition + xOffset, yOffset, 0f), Quaternion.identity);
-                //}
-                //else if (_shortEventList[i].GetIntValue() == 1)
-                //{
-                //    Instantiate(actionEffects[1], new Vector3(xPosition + xOffset, yOffset, 0f), Quaternion.identity);
-                //}
-                
             }
 
             if (_shortEventList[i].GetIntValue() == 0)
@@ -351,8 +344,14 @@ public class MapTemp : MonoBehaviour
                     _objectGenerator.PositObstacles(xPosition + xOffset, yPosition);
                 }
             }
-            
         }
+    }
+
+    IEnumerator WaitForSomething()
+    {
+        yield return new WaitForSeconds(0.01f);
+        GenerateShortNoteTile();
+        GenerateLongNoteTile();
     }
 
     private void GenerateLongNoteTile()
@@ -404,8 +403,8 @@ public class MapTemp : MonoBehaviour
             {
                 startYPosition = longStartHit.point.y;
                 
-                _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 2, new Vector3Int(startXPosition, 0, 0), new Vector3(startXOffset, startYPosition, 0f)), false);
-                //Instantiate(actionEffects[2], new Vector3(startXPosition + startXOffset, yOffset, 0f), Quaternion.identity);
+                //_interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 2, new Vector3Int(startXPosition, 0, 0), new Vector3(startXOffset, startYPosition, 0f)), false);
+                Instantiate(_noteObjects[2], new Vector3(startXPosition + startXOffset, startYPosition, 0f), Quaternion.identity);
                 _objectGenerator.RecordLongPos(new Vector3(startXPosition + startXOffset, startYPosition, 0));
             }
 
@@ -416,12 +415,12 @@ public class MapTemp : MonoBehaviour
             {
                 endYPosition = longEndHit.point.y;
                 
-                _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 2, new Vector3Int(endXPosition, 0, 0), new Vector3(endXOffset, endYPosition, 0f)), false);
-                //Instantiate(actionEffects[2], new Vector3(endXPosition + endXOffset, yOffset, 0f), Quaternion.identity);
+                //_interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 2, new Vector3Int(endXPosition, 0, 0), new Vector3(endXOffset, endYPosition, 0f)), false);
+                Instantiate(_noteObjects[2], new Vector3(endXPosition + endXOffset, endYPosition, 0f), Quaternion.identity);
                 _objectGenerator.RecordLongPos(new Vector3(endXPosition + endXOffset, endYPosition, 0));
             }
             
-            //longNoteTilePos.Add(startXPosition, endXPosition);
+            // longNoteTilePos.Add(startXPosition, endXPosition);
         }
     }
 

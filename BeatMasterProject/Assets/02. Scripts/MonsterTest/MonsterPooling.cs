@@ -17,6 +17,7 @@ public class MonsterPooling : MonoBehaviour
 
     [Header("Variable")] 
     [SerializeField] private GameObject _monsterPrefab;
+    [SerializeField] private GameObject _coinPrefab;
     [SerializeField] private int _monsterIdx;
     [SerializeField] private Camera _camera;
 
@@ -26,7 +27,7 @@ public class MonsterPooling : MonoBehaviour
     [Header("Tile")]
     [SerializeField] private List<Vector3> _tilePos = new List<Vector3>();
 
-    private Vector2 _coinScreenPos;
+    public Vector2 _coinScreenPos;
 
     private int _checkPointIdx = 0;
     private int _deleteMonsterCount;
@@ -43,12 +44,9 @@ public class MonsterPooling : MonoBehaviour
         _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_shortEventID).GetAllEvents();
         
         _coinScreenPos = _camera.ScreenToWorldPoint(coinPos.position);
-        Debug.Log(_coinScreenPos);
-
-        // _coinScreenPos = _camera.WorldToScreenPoint(_coinScreenPos);
-        // Debug.Log(_coinScreenPos);
-
-        Invoke("SpawnMonster", 0.3f);
+        
+        StartCoroutine(CoWaitForList());
+        //Invoke("SpawnMonster", 0.3f);
         // for (int i = 0; i < _shortEventList.Count; i++)
         // {
         //     for (int j = 0; j < _mapEventList.Count; j++)
@@ -66,6 +64,16 @@ public class MonsterPooling : MonoBehaviour
         //         }
         //     }
         // }
+    }
+
+    IEnumerator CoWaitForList()
+    {
+        while (_tilePos.Count == 0)
+        {
+            yield return null;
+            Debug.Log("타일 리스트 기다리는 중");
+        }
+        SpawnMonster();
     }
 
     public void DisableMonster()
@@ -102,7 +110,9 @@ public class MonsterPooling : MonoBehaviour
             if (_shortEventList[i].GetIntValue() == 1)
             {
                 GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 2f), Quaternion.identity, transform);
-
+                Instantiate(_coinPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 1f), Quaternion.identity,
+                    transform);
+                
                 monsterList.Add(g);
             }
         }

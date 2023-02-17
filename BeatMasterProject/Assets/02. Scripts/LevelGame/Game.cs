@@ -26,7 +26,8 @@ public abstract class Game : MonoBehaviour
     [SerializeField] protected GameUI gameUI; // LevelGameUI or BossGameUI will come in.
     protected CharacterMovement characterMovement;
     protected MonsterPooling monsterPooling;
-    
+    protected EffectAnim _playerAnim;
+
     [Header("Game Play")]
     public GameState curState = GameState.Idle;
     public int curSample;
@@ -67,6 +68,7 @@ public abstract class Game : MonoBehaviour
 
     protected virtual void Awake()
     {
+        _playerAnim = FindObjectOfType<EffectAnim>();
         characterMovement = FindObjectOfType<CharacterMovement>();
         monsterPooling = FindObjectOfType<MonsterPooling>();
         objectGenerator = FindObjectOfType<ObjectGenerator>();
@@ -108,6 +110,8 @@ public abstract class Game : MonoBehaviour
 
     protected IEnumerator CoStartWithDelay(int startSample = 0)
     {
+        _playerAnim.SetEffectBool(false);
+
         // UI Timer
         // gameUI.timePanel.SetActive(true);
         // // Wait for Scene Transition to end
@@ -130,7 +134,7 @@ public abstract class Game : MonoBehaviour
             gameUI.UpdateText(TextType.Time, waitTime);
             waitTime--;
             
-            if (waitTime == 1)
+            if (waitTime == 1 && curState.Equals(GameState.Rewind))
             {
                 // Activate Monster
                 monsterPooling.ReArrange();
@@ -355,6 +359,7 @@ public abstract class Game : MonoBehaviour
     {
         // Get current sample for RestartGame()
         curState = GameState.Pause;
+        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
         curSample = SoundManager.instance.musicPlayer.GetSampleTimeForClip(SoundManager.instance.clipName);
         SoundManager.instance.PlayBGM(false, curSample);
     }

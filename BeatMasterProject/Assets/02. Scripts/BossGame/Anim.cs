@@ -11,6 +11,7 @@ public enum CharacterStatus
     Jump,
     Attack,
     Damage,
+    FastIdle,
     //Die
 }
 
@@ -54,7 +55,7 @@ public class Anim : MonoBehaviour
         return _charAnimator;
     }
 
-    public void ChangeCharacterAnim(int charNum)
+   public void ChangeCharacterAnim(int charNum)
     {
         anim.runtimeAnimatorController = GetAnimatorDic(Enum.GetName(typeof(CharacterNum), charNum));
     }
@@ -81,6 +82,10 @@ public class Anim : MonoBehaviour
 
             case CharacterStatus.Damage:
                 Damage();
+                break;
+
+            case CharacterStatus.FastIdle:
+                FastIdle();
                 break;
 
                 /*case CharacterStatus.Die:
@@ -133,6 +138,11 @@ public class Anim : MonoBehaviour
     {
         /*_anim.SetBool("Run", false);
         _anim.SetBool("Idle", true);*/
+        anim.Play("Idle");
+    }
+
+    protected virtual void FastIdle()
+    {
         anim.Play("Idle");
     }
 }
