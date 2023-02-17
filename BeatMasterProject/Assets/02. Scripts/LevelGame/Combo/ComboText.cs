@@ -9,13 +9,13 @@ public class ComboText : MonoBehaviour
 {
     [SerializeField] private float _minDistance = 5f;
     [SerializeField] private float _maxDistance = 10f;
+    [SerializeField] private float _minShootMod = 1f;
+    [SerializeField] private float _maxShootMod = 2f;
     [SerializeField] private float _fadeMod = 0.5f;
-    [SerializeField] private int _minAngle = 60;
-    [SerializeField] private int _maxAngle = 131;
+    [SerializeField] private int _minAngle = 15;
+    [SerializeField] private int _maxAngle = 166;
     [SerializeField] private float _playerSpeed;
     [SerializeField] private float _defaultSpeed;
-    [SerializeField] private float _shootMod = 1.5f;
-    [SerializeField] private float _frontAngle = 75f;
     [SerializeField] private float _changeColorMod = 2f;
     [SerializeField] private int[] _hueValues;
     
@@ -100,8 +100,8 @@ public class ComboText : MonoBehaviour
         // x가 cos y가 sin
         int angle = Random.Range(_minAngle, _maxAngle);
         float distance = Random.Range(_minDistance, _maxDistance);
-        distance *= _playerSpeed / _defaultSpeed;
-        distance = angle < _frontAngle ? distance * _shootMod : distance;
+        float shootMod = Random.Range(_minShootMod, _maxShootMod);
+        distance *= _playerSpeed / _defaultSpeed * shootMod;
         Vector2 direction = distance * new Vector2(MathF.Cos(angle * Mathf.Deg2Rad), MathF.Sin(angle * Mathf.Deg2Rad));
         _rigid.velocity = direction;
     }
