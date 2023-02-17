@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using SonicBloom.Koreo;
@@ -94,6 +95,14 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        // if (SoundManager.instance.musicPlayer.IsPlaying)
+        // {
+        //     
+        // }
+    }
+
     private void Init()
     {
         _rewindTime = FindObjectOfType<RewindTime>();
@@ -102,7 +111,7 @@ public class CharacterMovement : MonoBehaviour
         _touchInputManager = FindObjectOfType<TouchInputManager>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _rigidbody.bodyType = RigidbodyType2D.Kinematic;
-        _rigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
+        _rigidbody.interpolation = RigidbodyInterpolation2D.Interpolate;
         _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
         _tileLayer = LayerMask.GetMask("Ground");
         _characterPosition = transform.position;

@@ -220,69 +220,69 @@ public abstract class GameUI : MonoBehaviour
         pauseBtn.interactable = false;
         finalSlow.DOCounter(0, finalResultSummary[3], 1).onComplete += () =>
         {
-            finalSlow.text = $"{finalResultSummary[3]}/{total}";
+            //finalSlow.text = $"{finalResultSummary[3]}/{total}";
 
             finalFast.DOCounter(0, finalResultSummary[1], 1).onComplete += () =>
             {
-                finalFast.text = $"{finalResultSummary[1]}/{total}";
+                //finalFast.text = $"{finalResultSummary[1]}/{total}";
                 
                 finalPerfect.DOCounter(0, finalResultSummary[2], 1).onComplete += () =>
                 {
-                    finalPerfect.text = $"{finalResultSummary[2]}/{total}";
+                    //finalPerfect.text = $"{finalResultSummary[2]}/{total}";
 
                     float temp = (float)finalResultSummary[2] / total;
                     int starCount = (int)Mathf.Ceil(temp * 10);
-
-                    for (int i = 0; i < starCount; i++)
-                    {
-                        if (i == starCount - 1)
-                        {
-                            GameObject g = Instantiate(starPrefab);
-                            g.SetActive(true);
-
-                            g.transform.SetParent(startPos.transform);
-                            g.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
-
-                            g.transform.localScale = new Vector3(0, 0, 0);
-
-                            g.transform.DOScale(new Vector3(1, 1, 1), 1f).SetDelay(_delay).SetEase(Ease.OutBack);
-
-                            g.GetComponent<RectTransform>()
-                                .DOLocalMove(target.localPosition, 1f)
-                                .SetDelay(_delay + 0.5f)
-                                .SetEase(Ease.InBack).onComplete += () =>
-                            {
-                                g.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.Flash).onComplete += () =>
-                                {
-                                    ShowStar(DataCenter.Instance.GetLevelData(stageIdx, levelIdx).star);
-                                };
-                            };
-
-                            _delay += 0.2f;
-                        }
-                        else
-                        {
-                            GameObject g = Instantiate(starPrefab);
-                            g.SetActive(true);
-
-                            g.transform.SetParent(startPos.transform);
-                            g.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
-
-                            g.transform.localScale = new Vector3(0, 0, 0);
-
-                            g.transform.DOScale(new Vector3(1, 1, 1), 1f).SetDelay(_delay).SetEase(Ease.OutBack);
-
-                            g.GetComponent<RectTransform>()
-                                .DOLocalMove(target.localPosition, 1f)
-                                .SetDelay(_delay + 0.5f)
-                                .SetEase(Ease.InBack).onComplete += () =>
-                            {
-                                g.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.Flash);
-                            };
-
-                            _delay += 0.2f;
-                        }
-                    }
+                    ShowStar(DataCenter.Instance.GetLevelData(stageIdx, levelIdx).star);
+                    // for (int i = 0; i < starCount; i++)
+                    // {
+                    //     if (i == starCount - 1)
+                    //     {
+                    //         GameObject g = Instantiate(starPrefab);
+                    //         g.SetActive(true);
+                    //
+                    //         g.transform.SetParent(startPos.transform);
+                    //         g.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+                    //
+                    //         g.transform.localScale = new Vector3(0, 0, 0);
+                    //
+                    //         g.transform.DOScale(new Vector3(1, 1, 1), 1f).SetDelay(_delay).SetEase(Ease.OutBack);
+                    //
+                    //         g.GetComponent<RectTransform>()
+                    //             .DOLocalMove(target.localPosition, 1f)
+                    //             .SetDelay(_delay + 0.5f)
+                    //             .SetEase(Ease.InBack).onComplete += () =>
+                    //         {
+                    //             g.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.Flash).onComplete += () =>
+                    //             {
+                    //                 ShowStar(DataCenter.Instance.GetLevelData(stageIdx, levelIdx).star);
+                    //             };
+                    //         };
+                    //
+                    //         _delay += 0.2f;
+                    //     }
+                    //     else
+                    //     {
+                    //         GameObject g = Instantiate(starPrefab);
+                    //         g.SetActive(true);
+                    //
+                    //         g.transform.SetParent(startPos.transform);
+                    //         g.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+                    //
+                    //         g.transform.localScale = new Vector3(0, 0, 0);
+                    //
+                    //         g.transform.DOScale(new Vector3(1, 1, 1), 1f).SetDelay(_delay).SetEase(Ease.OutBack);
+                    //
+                    //         g.GetComponent<RectTransform>()
+                    //             .DOLocalMove(target.localPosition, 1f)
+                    //             .SetDelay(_delay + 0.5f)
+                    //             .SetEase(Ease.InBack).onComplete += () =>
+                    //         {
+                    //             g.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.Flash);
+                    //         };
+                    //
+                    //         _delay += 0.2f;
+                    //     }
+                    // }
                 };
             };
         };

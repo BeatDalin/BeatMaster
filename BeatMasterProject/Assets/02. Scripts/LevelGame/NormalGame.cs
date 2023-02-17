@@ -2,6 +2,7 @@ using System;
 using SonicBloom.Koreo;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class NormalGame : Game
@@ -28,7 +29,6 @@ public class NormalGame : Game
     private List<KoreographyEvent> _shortEvent;
     [Header("Combo System")]
     private ComboSystem _comboSystem;
-    private EffectAnim _playerAnim;
     private PlayerData _playerDatas;
 
     [SerializeField]
@@ -176,7 +176,6 @@ public class NormalGame : Game
             }
             if (!isShortKeyCorrect)
             {
-                monsterPooling.DisableMonster();
                 // ================Rewind 자리================
                 Rewind();
             }
@@ -186,10 +185,14 @@ public class NormalGame : Game
 
     private void CheckLongStart(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
+        if (!characterMovement.isLongNote)
+        {
+            characterMovement.isLongNote = true; // block jump for now
+        }
+
         if (_isCheckedLong && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
         {
             _isCheckedLong = false; // initialize before a curve value becomes 1
-            characterMovement.isLongNote = true; // block jump for now
         }
 
         if (_touchInputManager.CheckLeftTouch() || Input.GetKeyDown(_longNoteKey))
@@ -294,11 +297,12 @@ public class NormalGame : Game
     {
         isRewinding = true;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Damage);
-        curState = GameState.Pause;
+        curState = GameState.Rewind;
         SoundManager.instance.PlayBGM(false); // pause
         curSample = rewindSampleTime;
         _playerAnim.SetEffectBool(false); // Stop booster animation
         characterMovement.RewindPosition(); // Relocate player
+        characterMovement.isLongNote = false;
         ContinueGame(); // wait 3 sec and start
         // Item, Death, Combo
         gameUI.UpdateText(TextType.Item, DecreaseItem(5));
