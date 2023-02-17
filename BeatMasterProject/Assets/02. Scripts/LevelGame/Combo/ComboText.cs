@@ -21,6 +21,7 @@ public class ComboText : MonoBehaviour
     
     private TextMeshPro _text;
     private Rigidbody2D _rigid;
+    private WaitForEndOfFrame _waitForEndOfFrame;
     private bool _isGoingDown;
     private Color _startColor;
     private Color _goalColor;
@@ -33,6 +34,7 @@ public class ComboText : MonoBehaviour
         _text = GetComponent<TextMeshPro>();
         _rigid = GetComponent<Rigidbody2D>();
         _startColor = _text.faceColor;
+        _waitForEndOfFrame = new WaitForEndOfFrame();
     }
 
     private void Start()
@@ -88,7 +90,7 @@ public class ComboText : MonoBehaviour
                 Color newColor = Color.HSVToRGB(h, s, v);
                 _text.faceColor = newColor;
             }
-            yield return new WaitForEndOfFrame();
+            yield return _waitForEndOfFrame;
         }
 
     }
