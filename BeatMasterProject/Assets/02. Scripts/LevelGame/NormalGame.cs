@@ -298,6 +298,7 @@ public class NormalGame : Game
         curSample = rewindSampleTime;
         _playerAnim.SetEffectBool(false); // Stop booster animation
         characterMovement.RewindPosition(); // Relocate player
+        characterMovement.isLongNote = false;
         ContinueGame(); // wait 3 sec and start
         // Item, Death, Combo
         gameUI.UpdateText(TextType.Item, DecreaseItem(5));

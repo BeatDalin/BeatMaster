@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class TouchEffect : MonoBehaviour
@@ -31,16 +32,8 @@ public class TouchEffect : MonoBehaviour
     {
         ChangeEffectScale();
         
-        transform.Translate(_direction * _moveSpeed);
-
-        transform.localScale = Vector2.Lerp(transform.localScale, Vector2.zero, Time.deltaTime * _sizeSpeed);
-
-        Color color = _sprite.color;
-
-        color.a = Mathf.Lerp(_sprite.color.a, 0, Time.deltaTime * _colorSpeed);
-
-        _sprite.color = color;
-
+        ShowEffect();
+        
         if (_sprite.color.a <= 0.1f)
         {
             InitEffect();
@@ -73,5 +66,18 @@ public class TouchEffect : MonoBehaviour
         transform.localScale = new Vector2(size, size);
 
         _sprite.color = _colors[Random.Range(0, _colors.Length)];
+    }
+
+    private void ShowEffect()
+    {
+        transform.Translate(_direction * _moveSpeed);
+
+        transform.localScale = Vector2.Lerp(transform.localScale, Vector2.zero, Time.deltaTime * _sizeSpeed);
+
+        Color color = _sprite.color;
+
+        color.a = Mathf.Lerp(_sprite.color.a, 0, Time.deltaTime * _colorSpeed);
+
+        _sprite.color = color;
     }
 }
