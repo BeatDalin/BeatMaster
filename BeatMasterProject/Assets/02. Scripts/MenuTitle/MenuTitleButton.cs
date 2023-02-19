@@ -34,13 +34,13 @@ public class MenuTitleButton : MonoBehaviour
     [SerializeField] private GameObject _settingPanel; // <Panel> Settings
     [SerializeField] private GameObject _storePanel; // <Panel> Store
 
-    [Header("==== Setting Panel Buttons ====")] 
-    [SerializeField] private Button[] _settingButtons; // <Title - Setting> Buttons
-
-    [Header("==== Setting Panel ====")] 
-    [SerializeField] private GameObject _soundSettingPanel; // <Panel> SoundSetting\
-    [SerializeField] private GameObject _qualitySettingPanel; // <Panel> QualitySetting
-    [SerializeField] private GameObject _leavePanel; // <Panel> LeavePopUp
+    // [Header("==== Setting Panel Buttons ====")] 
+    // [SerializeField] private Button[] _settingButtons; // <Title - Setting> Buttons
+    //
+    // [Header("==== Setting Panel ====")] 
+    // [SerializeField] private GameObject _soundSettingPanel; // <Panel> SoundSetting\
+    // [SerializeField] private GameObject _qualitySettingPanel; // <Panel> QualitySetting
+    // [SerializeField] private GameObject _leavePanel; // <Panel> LeavePopUp
 
     [Header("==== Close Button ====")] 
     [SerializeField] private Button _closeButton;
@@ -105,8 +105,11 @@ public class MenuTitleButton : MonoBehaviour
 
     public void OpenPanelFadeIn(GameObject panelName)
     {
-        panelName.SetActive(true);
-        panelName.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
+        if (!panelName.activeSelf)
+        {
+            panelName.SetActive(true);
+            panelName.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
+        }
     }
 
     public void ClosePanelFadeOut(GameObject panelName)
