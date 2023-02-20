@@ -24,7 +24,7 @@ public class ComboSystem : ObjectPooling
     private ushort _showEffectNum = 10;
     [Header("OutLine Color")]
     private bool _isColorChanging;
-    [ColorUsage(true,true)]
+    [ColorUsage(true, true)]
     [SerializeField] private Color[] _colorsHDR; // Colors will be set in Inspector
     private static readonly int OutLineColor = Shader.PropertyToID("_Color");
     

@@ -29,7 +29,6 @@ public class ComboText : MonoBehaviour
     private ComboSystem _comboSystem;
     private Color _startColor;
     private Color _goalColor;
-    private bool _isGoingDown;
     private int _hueIndex;
     private float _alpha = 1f;
     private bool _wasCreated;
@@ -49,16 +48,10 @@ public class ComboText : MonoBehaviour
     {
         if (_wasCreated)
         {
-            Debug.Log("Shoot");
             Shoot();
         }
     }
     
-    private void Start()
-    {
-        Debug.Log("Start");      
-    }
-
     private void OnDisable()
     {
         // 초기화
