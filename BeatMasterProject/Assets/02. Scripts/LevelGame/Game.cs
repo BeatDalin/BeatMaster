@@ -65,9 +65,11 @@ public abstract class Game : MonoBehaviour
     private int[] _shortSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from long notes
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
 
+    protected RewindTime _rewindTime;
 
     protected virtual void Awake()
     {
+        _rewindTime = FindObjectOfType<RewindTime>();
         _playerAnim = FindObjectOfType<EffectAnim>();
         characterMovement = FindObjectOfType<CharacterMovement>();
         monsterPooling = FindObjectOfType<MonsterPooling>();
@@ -111,7 +113,6 @@ public abstract class Game : MonoBehaviour
     protected IEnumerator CoStartWithDelay(int startSample = 0)
     {
         _playerAnim.SetEffectBool(false);
-
         // UI Timer
         // gameUI.timePanel.SetActive(true);
         // // Wait for Scene Transition to end
@@ -124,16 +125,24 @@ public abstract class Game : MonoBehaviour
         //     yield return new WaitForSeconds(1);
         // }
 
-        gameUI.timePanel.SetActive(true);
         // Wait for Scene Transition to end
         // yield return new WaitWhile(() => !SceneLoadManager.Instance.GetTransitionEnd());
         yield return new WaitUntil(() => SceneLoadManager.Instance.isLoaded);
+
+        if (_rewindTime.isRewind)
+        {
+            while (!_rewindTime.isRecord)
+            {
+                yield return null;
+            }
+        }
+        gameUI.timePanel.SetActive(true);
+
         int waitTime = 3;
         while (waitTime > 0)
         {
             gameUI.UpdateText(TextType.Time, waitTime);
             waitTime--;
-            
             if (waitTime == 1 && curState.Equals(GameState.Rewind))
             {
                 // Activate Monster
@@ -143,11 +152,11 @@ public abstract class Game : MonoBehaviour
         }
         gameUI.timePanel.SetActive(false);
         
-        // Rewind Character Position
-        if (curState.Equals(GameState.Rewind))
-        {
-            characterMovement.RewindPosition();
-        }
+        // // Rewind Character Position
+        // if (curState.Equals(GameState.Rewind))
+        // {
+        //     characterMovement.RewindPosition();
+        // }
         curState = GameState.Play;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
         isRewinding = false;
@@ -155,8 +164,9 @@ public abstract class Game : MonoBehaviour
         // Music Play & Game Start
         startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
         SoundManager.instance.PlayBGM(true, startSample);
+        
     }
-
+    
     private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
         if (evt.StartSample > rewindSampleTime)

@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 450990}
   - component: {fileID: 19890776}
   - component: {fileID: 19973512}
-  m_Layer: 0
+  - component: {fileID: 648899036}
+  m_Layer: 6
   m_Name: NovaRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 143092}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -34,7 +35,7 @@ Transform:
   - {fileID: 404414}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &19890776
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4699,7 +4700,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: c5845ea8f0f1c1c40ba5fbaa03b385d0, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4750,6 +4750,21 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &648899036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 143092}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e7b8df5112c24fc2944fd6545d11dfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startTime: 0.2
+  simulationSpeedScale: 1
+  isRewindParticle: 0
 --- !u!1 &146436
 GameObject:
   m_ObjectHideFlags: 0
@@ -4761,7 +4776,7 @@ GameObject:
   - component: {fileID: 479764}
   - component: {fileID: 19851914}
   - component: {fileID: 19991930}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9564,7 +9579,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: e5e8b90f8f4803f4daba590e6bc7f6bc, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9626,7 +9640,7 @@ GameObject:
   - component: {fileID: 404414}
   - component: {fileID: 19860986}
   - component: {fileID: 19944366}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HorizontalGlow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14429,7 +14443,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: dc465efe33ad97c42a9a8a3b1d42c7fd, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

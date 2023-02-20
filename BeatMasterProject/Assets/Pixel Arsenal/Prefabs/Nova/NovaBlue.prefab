@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 468758}
   - component: {fileID: 19820238}
   - component: {fileID: 19952520}
-  m_Layer: 0
+  - component: {fileID: 1496332203}
+  m_Layer: 6
   m_Name: NovaBlue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,16 +26,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 121414}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 479830}
   - {fileID: 434896}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &19820238
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -45,7 +46,7 @@ ParticleSystem:
   serializedVersion: 8
   lengthInSec: 2
   simulationSpeed: 1
-  stopAction: 2
+  stopAction: 0
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -4749,6 +4750,21 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &1496332203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 121414}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e7b8df5112c24fc2944fd6545d11dfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startTime: 0.2
+  simulationSpeedScale: 1
+  isRewindParticle: 0
 --- !u!1 &139226
 GameObject:
   m_ObjectHideFlags: 0
@@ -4760,7 +4776,7 @@ GameObject:
   - component: {fileID: 434896}
   - component: {fileID: 19818026}
   - component: {fileID: 19951840}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HorizontalGlow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9624,7 +9640,7 @@ GameObject:
   - component: {fileID: 479830}
   - component: {fileID: 19849942}
   - component: {fileID: 19964732}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public struct Data
@@ -94,3 +95,9 @@ public struct ItemData
     public bool isUnlocked;
 }
 
+[Serializable]
+public struct RewindData
+{
+    public Vector2 rewindPos;
+    public string judgeResult;
+}
