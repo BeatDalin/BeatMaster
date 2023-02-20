@@ -60,6 +60,7 @@ public class NormalGame : Game
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
 
         _playerDatas = DataCenter.Instance.GetPlayerData();
+        
         _playerAnim.ChangeCharacterAnim(_playerDatas.playerChar);
         _changeChar.ChangeItemInItemScroll(_playerDatas);
     }

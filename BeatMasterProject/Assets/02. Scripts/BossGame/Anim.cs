@@ -1,5 +1,4 @@
 using System;
-using SonicBloom.Koreo.Demos;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,6 +41,7 @@ public class Anim : MonoBehaviour
     {
         animators = GetComponentsInChildren<Animator>();
         anim = animators[0];
+        
     }
 
     protected virtual RuntimeAnimatorController GetAnimatorDic(string _key)

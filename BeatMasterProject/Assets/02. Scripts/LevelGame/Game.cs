@@ -328,8 +328,10 @@ public abstract class Game : MonoBehaviour
         {
             curLevelData.star = curLevelData.star > 2 ? curLevelData.star : 2;
             curLevelData.alpha = 2 / 3f;
+
             
             // Unlock Character
+            Debug.Log(curLevelData.unlockCharNum);
             DataCenter.Instance.GetStoreData().characterData[curLevelData.unlockCharNum].isUnlocked = true;
         }
         else
