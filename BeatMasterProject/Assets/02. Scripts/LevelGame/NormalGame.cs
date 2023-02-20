@@ -33,6 +33,7 @@ public class NormalGame : Game
 
     [SerializeField]
     private ChangeCharSprite _changeChar;
+
     protected override void Awake()
     {
         base.Awake();
@@ -124,6 +125,7 @@ public class NormalGame : Game
         {
             _isCheckedShort = true;
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
+            _rewindTime.RecordCheckPoint(characterMovement.transform.position, shortResult[shortIdx].ToString());
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             shortIdx++;
             if (!isShortKeyCorrect)
@@ -166,6 +168,7 @@ public class NormalGame : Game
         {
             _isCheckedAttack = true;
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
+            _rewindTime.RecordCheckPoint(characterMovement.transform.position, shortResult[shortIdx].ToString());
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             monsterPooling.DisableMonster();
             _isShortVisited[shortIdx] = true;
