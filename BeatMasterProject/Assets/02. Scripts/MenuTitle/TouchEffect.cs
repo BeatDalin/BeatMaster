@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class TouchEffect : MonoBehaviour
 {
     private Vector2 _direction;
     private SpriteRenderer _sprite;
+    private TouchEffectPool _touchEffectPool;
 
     [SerializeField] private float _moveSpeed = 0.1f;
     [SerializeField] private float _minSize = 0.1f;
@@ -18,10 +21,14 @@ public class TouchEffect : MonoBehaviour
     [SerializeField] private float othgraphicSize = 3f;
 
     // Start is called before the first frame update
+    private void Awake()
+    {
+        _touchEffectPool = FindObjectOfType<TouchEffectPool>();
+    }
+
     void Start()
     {
         _sprite = GetComponent<SpriteRenderer>();
-
         InitEffect();
     }
 
@@ -36,7 +43,7 @@ public class TouchEffect : MonoBehaviour
         {
             InitEffect();
 
-            ObjectPooling.Instance.ReturnObject(gameObject);
+            _touchEffectPool.ReturnObject(gameObject);
         }
     }
 

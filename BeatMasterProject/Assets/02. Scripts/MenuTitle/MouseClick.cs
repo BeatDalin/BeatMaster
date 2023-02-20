@@ -12,11 +12,18 @@ public class MouseClick : MonoBehaviour
 
     private LevelMenuManager _levelMenuManager;
 
+    private TouchEffectPool _touchEffectPool;
+
     private bool _isChangeScene;
 
     private string _currentScene = "MenuTitle";
     
     [SerializeField] private Game _game;
+
+    private void Awake()
+    {
+        _touchEffectPool = FindObjectOfType<TouchEffectPool>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -77,6 +84,6 @@ public class MouseClick : MonoBehaviour
             
         Vector3 mPosition = Camera.main.ScreenToWorldPoint(mouse);
             
-        ObjectPooling.Instance.GetObject(mPosition);
+        _touchEffectPool.GetObject(mPosition);
     }
 }
