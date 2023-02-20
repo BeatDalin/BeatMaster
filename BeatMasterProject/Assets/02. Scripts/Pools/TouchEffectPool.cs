@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class TouchEffectPool : ObjectPooling
 {
-    public override void Init()
+    protected override void Init()
     {
         DontDestroyOnLoad(this);
         for (int i = 0; i < initCount; i++)
         {
-            poolingObjectQueue.Enqueue(CreateNewObject());
+            CreateNewObject();
         }
     }
 }

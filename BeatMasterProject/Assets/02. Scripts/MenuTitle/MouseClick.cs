@@ -12,34 +12,65 @@ public class MouseClick : MonoBehaviour
 
     private LevelMenuManager _levelMenuManager;
 
+    private TouchEffectPool _touchEffectPool;
+
     private bool _isChangeScene;
 
     private string _currentScene = "MenuTitle";
+    
+    [SerializeField] private Game _game;
+
+    private void Awake()
+    {
+        _touchEffectPool = FindObjectOfType<TouchEffectPool>();
+    }
 
     // Update is called once per frame
     void Update()
     {
-        if (!_currentScene.Equals(SceneManager.GetActiveScene().name))
-        {
-            _isChangeScene = false;
-            _currentScene = SceneManager.GetActiveScene().name;
-        }
-        
-        if (Input.GetMouseButton(0) && _spawnTime >= defaultTime)
-        {
-            InitTouchEffect();
-            _spawnTime = 0f;
-        }
+        // if (!_currentScene.Equals(SceneManager.GetActiveScene().name))
+        // {
+        //     _isChangeScene = false;
+        //     _currentScene = SceneManager.GetActiveScene().name;
+        // }
 
-        if (SceneManager.GetActiveScene().name.Equals(_currentScene) && !_isChangeScene)
+        if (SceneManager.GetActiveScene().name.Equals("Level1"))
         {
-            _isChangeScene = true;
-            
-            if (SceneManager.GetActiveScene().name.Equals("MenuLevelSelect"))
+            if (_game == null)
             {
-                _levelMenuManager = FindObjectOfType<LevelMenuManager>();
+                _game = FindObjectOfType<Game>();
             }
         }
+
+        if (_game != null)
+        {
+            if (!_game.curState.Equals(GameState.Play))
+            {
+                if (Input.GetMouseButton(0) && _spawnTime >= defaultTime)
+                {
+                    InitTouchEffect();
+                    _spawnTime = 0f;
+                }
+            }
+        }
+        else
+        {
+            if (Input.GetMouseButton(0) && _spawnTime >= defaultTime)
+            {
+                InitTouchEffect();
+                _spawnTime = 0f;
+            }
+        }
+
+        // if (SceneManager.GetActiveScene().name.Equals(_currentScene) && !_isChangeScene)
+        // {
+        //     _isChangeScene = true;
+        //     
+        //     if (SceneManager.GetActiveScene().name.Equals("MenuLevelSelect"))
+        //     {
+        //         _levelMenuManager = FindObjectOfType<LevelMenuManager>();
+        //     }
+        // }
 
         _spawnTime += Time.deltaTime;
     }
@@ -47,21 +78,12 @@ public class MouseClick : MonoBehaviour
     private void InitTouchEffect()
     {
         
-        if (SceneManager.GetActiveScene().name.Equals("MenuLevelSelect"))
-        {
-            Vector3 pos = _levelMenuManager.effectRayPoint.GetPoint(10f);
-            
-            ObjectPooling.Instance.GetObject(pos);
-        }
-        else
-        {
-            Vector3 mouse = Input.mousePosition;
+        Vector3 mouse = Input.mousePosition;
 
-            mouse.z = 20f;
+        mouse.z = 20f;
             
-            Vector3 mPosition = Camera.main.ScreenToWorldPoint(mouse);
+        Vector3 mPosition = Camera.main.ScreenToWorldPoint(mouse);
             
-            ObjectPooling.Instance.GetObject(mPosition);
-        }
+        _touchEffectPool.GetObject(mPosition);
     }
 }

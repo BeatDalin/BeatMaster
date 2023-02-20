@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using SonicBloom.Koreo;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
@@ -8,7 +11,8 @@ public class CharacterMovement : MonoBehaviour
     private Game _game;
     private ResourcesChanger _resourcesChanger;
     private Rigidbody2D _rigidbody;
-    private Vector3 _characterPosition;
+    [SerializeField] private Vector3 _characterPosition;
+    [SerializeField] private float _checkPointBeatTime;
     private TouchInputManager _touchInputManager;
 
     [Header("Music")] 
@@ -61,10 +65,11 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _positionYOffset;
     private LayerMask _tileLayer;
 
+    [Header("Variable")]
     private RewindTime _rewindTime;
-
     public Vector3 lastPosition;
     public float lastBeatTime;
+    private GameUI _gameUI;
 
 
     private void Start()
@@ -83,7 +88,7 @@ public class CharacterMovement : MonoBehaviour
         if (_isFailed) //실패하고 다시 시작할때
         {
             //Debug.Log("실패");
-            transform.position = _characterPosition;
+            //transform.position = _characterPosition;
             _previousBeatTime = _currentBeatTime;
             _isFailed = false;
         }
@@ -94,15 +99,24 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        // if (SoundManager.instance.musicPlayer.IsPlaying)
+        // {
+        //     
+        // }
+    }
+
     private void Init()
     {
+        _gameUI = FindObjectOfType<GameUI>();
         _rewindTime = FindObjectOfType<RewindTime>();
         _game = FindObjectOfType<Game>();
         _resourcesChanger = FindObjectOfType<ResourcesChanger>();
         _touchInputManager = FindObjectOfType<TouchInputManager>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _rigidbody.bodyType = RigidbodyType2D.Kinematic;
-        _rigidbody.interpolation = RigidbodyInterpolation2D.Extrapolate;
+        _rigidbody.interpolation = RigidbodyInterpolation2D.Interpolate;
         _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
         _tileLayer = LayerMask.GetMask("Ground");
         _characterPosition = transform.position;
@@ -198,6 +212,7 @@ public class CharacterMovement : MonoBehaviour
             //transform.position = newPosition;
 
             x = newPosition.x;
+            y = newPosition.y;
 
             // 이동한 위치 저장
             lastPosition = newPosition;
@@ -289,9 +304,10 @@ public class CharacterMovement : MonoBehaviour
         if (evt.HasFloatPayload())
         {
             _characterPosition = transform.position;
+            _checkPointBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
+            _rewindTime.ClearRewindList();
             MoveSpeed = evt.GetFloatValue();
             _checkPointCurrentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
-            //_rewindTime.RecordCheckPoint(_characterPosition);
         }
 
         if (evt.HasTextPayload())
@@ -314,39 +330,82 @@ public class CharacterMovement : MonoBehaviour
             y = positionCheckHit.point.y + _positionYOffset;
         }
 
-        _characterPosition = new Vector3(_characterPosition.x, y, 0f);
-        transform.position = _characterPosition;
-        _previousBeatTime = 0;
-        _currentBeatTime = _checkPointCurrentBeatTime;
+        // _characterPosition = new Vector3(_characterPosition.x, y, 0f);
+        // transform.position = _characterPosition;
+        // _previousBeatTime = 0;
+        // _currentBeatTime = _checkPointCurrentBeatTime;
 
-        //StartCoroutine(Rewind(y));
+        StartCoroutine(CoRewind(y));
 
         //_previousBeatTime = _checkPointCurrentBeatTime;
     }
 
-    public IEnumerator Rewind(float y)
+    public IEnumerator CoRewind(float y)
     {
-        _rewindTime.isRecord = false;
-        while (_rewindTime.rewindPos.Count != 0)
+        float elapseTime;
+        float targetTime;
+        
+        _rewindTime.StartRewind();
+
+        if (_rewindTime.rewindList.Count != 0)
         {
-            transform.position = Vector3.Lerp(_rewindTime.rewindPos[0], transform.position, Time.deltaTime);
-            //transform.position = _rewindTime.rewindPos[0];
-            _rewindTime.rewindPos.RemoveAt(0);
-            yield return null;
+            while (_rewindTime.rewindList.Count != 0)
+            {
+                elapseTime = 0f;
+                targetTime = 0.5f;
+                Vector2 targetRewindPos = _rewindTime.rewindList[0].rewindPos;
+            
+                while (elapseTime <= targetTime)
+                {
+                    if (_rewindTime.rewindList.Count > 1)
+                    {
+                        transform.position = Vector3.Lerp(lastPosition, targetRewindPos, elapseTime / targetTime);
+                        elapseTime += Time.deltaTime;
+                        yield return null;
+                    }
+                    else
+                    {
+                        transform.position = Vector3.Lerp(lastPosition, _rewindTime.rewindList[0].rewindPos, elapseTime / targetTime);
+                        elapseTime += Time.deltaTime;
+                        yield return null;
+                    }
+                }
+                if (Mathf.Abs(targetRewindPos.x - transform.position.x) <= 1f)
+                {
+                    _gameUI.ReverseTextColor(_rewindTime.rewindList[0].judgeResult);
+                    StartCoroutine(_rewindTime.RewindParticle(_rewindTime.rewindList[0].judgeResult));
+                    lastPosition = targetRewindPos;
+                    _rewindTime.rewindList.RemoveAt(0);
+                }
+            }
+            elapseTime = 0f;
+            targetTime = 1f;
+            
+            while (elapseTime <= targetTime)
+            {
+                transform.position = Vector3.Lerp(lastPosition,_characterPosition, elapseTime / targetTime);
+                elapseTime += Time.deltaTime;
+                yield return null;
+            }
+        }
+        else
+        {
+            elapseTime = 0f;
+            targetTime = 1f;
+            
+            while (elapseTime <= targetTime)
+            {
+                transform.position = Vector3.Lerp(lastPosition,_characterPosition, elapseTime / targetTime);
+                elapseTime += Time.deltaTime;
+                yield return null;
+            }
         }
 
         _rewindTime.StopRewind();
+        
         _characterPosition = new Vector3(_characterPosition.x, y, 0f);
         transform.position = _characterPosition;
-        _previousBeatTime = 0;
-        _currentBeatTime = _checkPointCurrentBeatTime;
-    }
-
-    private IEnumerator SetPos(Vector3 position)
-    {
-        while (transform.position != position)
-        {
-            yield return null;
-        }
+        lastPosition = _characterPosition;
+        lastBeatTime = _checkPointBeatTime;
     }
 }

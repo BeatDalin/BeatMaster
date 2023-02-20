@@ -13,10 +13,9 @@ public enum TextType
 
 public abstract class GameUI : MonoBehaviour
 {
-    [Header("Game")]
-    protected Game game;
+    [Header("Game")] protected Game game;
 
-    [Header("Result UI")]
+    [Header("Result UI")] 
     [SerializeField] protected GameObject finalPanel;
     [SerializeField] protected Text finalFast;
     [SerializeField] protected Text finalPerfect;
@@ -30,11 +29,12 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected Button goLevelAfterGameBtn;
     [SerializeField] protected Button restartAfterGameBtn;
 
-    [Header("Result Visualize")]
-    [SerializeField] private GameObject _perfectOutline;
-    [SerializeField] private GameObject _fastOutline;
-    [SerializeField] private GameObject _slowOutline;
-    [SerializeField] private GameObject _failOutline;
+    [Header("Result Visualize")] 
+    [SerializeField] private ParticleSystem _perfectParticle;
+
+    [SerializeField] private ParticleSystem _fastParticle;
+    [SerializeField] private ParticleSystem _slowParticle;
+    [SerializeField] private ParticleSystem _failParticle;
     [SerializeField] private Text _judgeText;
     [SerializeField] private RectTransform _textStart;
     [SerializeField] private RectTransform _textEnd;
@@ -45,12 +45,12 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] private Color _slowColor;
     [SerializeField] private Color _failColor;
 
-    [Header("Time Count UI")]
+    [Header("Time Count UI")] 
     public GameObject timePanel;
 
     [SerializeField] public Text timeCount;
 
-    [Header("Pause UI")]
+    [Header("Pause UI")] 
     [SerializeField] protected Button pauseBtn;
     [SerializeField] protected GameObject pausePanel;
     [SerializeField] protected Button continueBtn;
@@ -58,17 +58,17 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected Button goSettingsBtn;
     [SerializeField] protected Button goLevelMenuBtn;
 
-    [Header("Settings UI")]
+    [Header("Settings UI")] 
     [SerializeField] protected GameObject settingsPanel;
 
     [SerializeField] protected Button settingsCloseBtn;
-    
+
     [SerializeField] private List<ParticleSystem> _particleSystemsList = new List<ParticleSystem>();
 
 
-    [Header("Player Character")]
+    [Header("Player Character")] 
     [SerializeField] protected GameObject character;
-    
+
     #region Abstract Function
 
     public abstract void UpdateText(TextType type, int number);
@@ -124,7 +124,7 @@ public abstract class GameUI : MonoBehaviour
             game.ContinueGame();
         });
         restartBtn.onClick.AddListener(() =>
-        {   
+        {
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
         });
@@ -149,47 +149,64 @@ public abstract class GameUI : MonoBehaviour
 
     public void ChangeOutLineColor(BeatResult result)
     {
-        StartCoroutine(CoWaitForSetActive(result));
-    }
-
-    private IEnumerator CoWaitForSetActive(BeatResult result)
-    {
         switch (result)
         {
             case BeatResult.Perfect:
                 TextMove("Perfect");
                 _judgeText.DOColor(_perfectColor, 0.1f);
-                _perfectOutline.SetActive(true);
-                //StartCoroutine(StartParticle());
+                //_perfectOutline.SetActive(true);
+                StartCoroutine(CoStartParticle());
                 break;
 
             case BeatResult.Fast:
                 TextMove("Fast");
                 _judgeText.DOColor(_fastColor, 0.1f);
-                _fastOutline.SetActive(true);
+                //_fastOutline.SetActive(true);
+                _fastParticle.Play();
                 break;
 
             case BeatResult.Slow:
                 TextMove("Slow");
                 _judgeText.DOColor(_slowColor, 0.1f);
-                _slowOutline.SetActive(true);
+                //_slowOutline.SetActive(true);
+                _slowParticle.Play();
                 break;
 
             case BeatResult.Fail:
                 TextMove("Fail");
                 _judgeText.DOColor(_failColor, 0.1f);
-                _failOutline.SetActive(true);
+                //_failOutline.SetActive(true);
+                _failParticle.Play();
                 break;
         }
-
-        yield return new WaitForSeconds(0.5f);
-
-        _perfectOutline.SetActive(false);
-        _fastOutline.SetActive(false);
-        _slowOutline.SetActive(false);
-        _failOutline.SetActive(false);
     }
+    
+    public void ReverseTextColor(string result)
+    {
+        switch (result)
+        {
+            case "Perfect":
+                _judgeText.DOColor(_perfectColor, 0f);
+                TextMove("Perfect");
+                break;
 
+            case "Fast":
+                _judgeText.DOColor(_fastColor, 0f);
+                TextMove("Fast");
+                break;
+
+            case "Slow":
+                _judgeText.DOColor(_slowColor, 0f);
+                TextMove("Slow");
+                break;
+
+            case "Fail":
+                _judgeText.DOColor(_failColor, 0f);
+                TextMove("Fail");
+                break;
+        }
+    }
+    
     private IEnumerator CoStartParticle()
     {
         int i = 0;
@@ -212,77 +229,76 @@ public abstract class GameUI : MonoBehaviour
             _judgeText.DOFade(0, 0.3f).onComplete += () => { _textRect.localPosition = _textStart.localPosition; };
         };
     }
-
-
+    
     public void ShowFinalResult(int[] finalResultSummary, int total, int stageIdx, int levelIdx)
     {
         finalPanel.SetActive(true);
         pauseBtn.interactable = false;
         finalSlow.DOCounter(0, finalResultSummary[3], 1).onComplete += () =>
         {
-            finalSlow.text = $"{finalResultSummary[3]}/{total}";
+            //finalSlow.text = $"{finalResultSummary[3]}/{total}";
 
             finalFast.DOCounter(0, finalResultSummary[1], 1).onComplete += () =>
             {
-                finalFast.text = $"{finalResultSummary[1]}/{total}";
-                
+                //finalFast.text = $"{finalResultSummary[1]}/{total}";
+
                 finalPerfect.DOCounter(0, finalResultSummary[2], 1).onComplete += () =>
                 {
-                    finalPerfect.text = $"{finalResultSummary[2]}/{total}";
+                    //finalPerfect.text = $"{finalResultSummary[2]}/{total}";
 
                     float temp = (float)finalResultSummary[2] / total;
                     int starCount = (int)Mathf.Ceil(temp * 10);
-
-                    for (int i = 0; i < starCount; i++)
-                    {
-                        if (i == starCount - 1)
-                        {
-                            GameObject g = Instantiate(starPrefab);
-                            g.SetActive(true);
-
-                            g.transform.SetParent(startPos.transform);
-                            g.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
-
-                            g.transform.localScale = new Vector3(0, 0, 0);
-
-                            g.transform.DOScale(new Vector3(1, 1, 1), 1f).SetDelay(_delay).SetEase(Ease.OutBack);
-
-                            g.GetComponent<RectTransform>()
-                                .DOLocalMove(target.localPosition, 1f)
-                                .SetDelay(_delay + 0.5f)
-                                .SetEase(Ease.InBack).onComplete += () =>
-                            {
-                                g.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.Flash).onComplete += () =>
-                                {
-                                    ShowStar(DataCenter.Instance.GetLevelData(stageIdx, levelIdx).star);
-                                };
-                            };
-
-                            _delay += 0.2f;
-                        }
-                        else
-                        {
-                            GameObject g = Instantiate(starPrefab);
-                            g.SetActive(true);
-
-                            g.transform.SetParent(startPos.transform);
-                            g.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
-
-                            g.transform.localScale = new Vector3(0, 0, 0);
-
-                            g.transform.DOScale(new Vector3(1, 1, 1), 1f).SetDelay(_delay).SetEase(Ease.OutBack);
-
-                            g.GetComponent<RectTransform>()
-                                .DOLocalMove(target.localPosition, 1f)
-                                .SetDelay(_delay + 0.5f)
-                                .SetEase(Ease.InBack).onComplete += () =>
-                            {
-                                g.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.Flash);
-                            };
-
-                            _delay += 0.2f;
-                        }
-                    }
+                    ShowStar(DataCenter.Instance.GetLevelData(stageIdx, levelIdx).star);
+                    // for (int i = 0; i < starCount; i++)
+                    // {
+                    //     if (i == starCount - 1)
+                    //     {
+                    //         GameObject g = Instantiate(starPrefab);
+                    //         g.SetActive(true);
+                    //
+                    //         g.transform.SetParent(startPos.transform);
+                    //         g.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+                    //
+                    //         g.transform.localScale = new Vector3(0, 0, 0);
+                    //
+                    //         g.transform.DOScale(new Vector3(1, 1, 1), 1f).SetDelay(_delay).SetEase(Ease.OutBack);
+                    //
+                    //         g.GetComponent<RectTransform>()
+                    //             .DOLocalMove(target.localPosition, 1f)
+                    //             .SetDelay(_delay + 0.5f)
+                    //             .SetEase(Ease.InBack).onComplete += () =>
+                    //         {
+                    //             g.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.Flash).onComplete += () =>
+                    //             {
+                    //                 ShowStar(DataCenter.Instance.GetLevelData(stageIdx, levelIdx).star);
+                    //             };
+                    //         };
+                    //
+                    //         _delay += 0.2f;
+                    //     }
+                    //     else
+                    //     {
+                    //         GameObject g = Instantiate(starPrefab);
+                    //         g.SetActive(true);
+                    //
+                    //         g.transform.SetParent(startPos.transform);
+                    //         g.GetComponent<RectTransform>().localPosition = new Vector3(0, 0, 0);
+                    //
+                    //         g.transform.localScale = new Vector3(0, 0, 0);
+                    //
+                    //         g.transform.DOScale(new Vector3(1, 1, 1), 1f).SetDelay(_delay).SetEase(Ease.OutBack);
+                    //
+                    //         g.GetComponent<RectTransform>()
+                    //             .DOLocalMove(target.localPosition, 1f)
+                    //             .SetDelay(_delay + 0.5f)
+                    //             .SetEase(Ease.InBack).onComplete += () =>
+                    //         {
+                    //             g.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.Flash);
+                    //         };
+                    //
+                    //         _delay += 0.2f;
+                    //     }
+                    // }
                 };
             };
         };

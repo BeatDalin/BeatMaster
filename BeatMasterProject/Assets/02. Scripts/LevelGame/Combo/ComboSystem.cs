@@ -5,10 +5,9 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 
-public class ComboSystem : MonoBehaviour
+public class ComboSystem : ObjectPooling
 {
     [SerializeField] private int _increasingAmount = 10000;
-    [SerializeField] private GameObject _comboTextPrefab; 
     [SerializeField] private ushort _combo;
     private Transform _characterTransform;
     [Header("OutLine Effect")]
@@ -18,6 +17,7 @@ public class ComboSystem : MonoBehaviour
     private SpriteRenderer _characterSprite;
     private CharacterMovement _characterMovement;
     private ResourcesChanger _resourcesChanger;
+    private Transform _canvasTrans;
     private int _currentAmount;
     private int _colorIndex;
     private ushort _showEffectNum = 10;
@@ -34,14 +34,26 @@ public class ComboSystem : MonoBehaviour
         _characterSprite = _characterMovement.transform.GetChild(0).GetComponent<SpriteRenderer>();
         _defaultMat = _characterSprite.material;
         _resourcesChanger = FindObjectOfType<ResourcesChanger>();
+        _canvasTrans = transform.GetChild(0).transform;
+        Init();
         // Set Texture based on current character
         // _outLineMat.SetTexture("_MainTex", texture to push....);
     }
+
+    
 
     void Start()
     {
         _currentAmount = _increasingAmount;
         // _colorChangeCoroutine = StartCoroutine(CoChangeOutLineColor());
+    }
+    
+    protected override void Init()
+    {
+        for (int i = 0; i < initCount; i++)
+        {
+            CreateNewObject();
+        }
     }
 
     public void IncreaseCombo()
@@ -50,6 +62,8 @@ public class ComboSystem : MonoBehaviour
         ComboAction();
         ShowCombo();
     }
+    
+    
 
     private void ComboAction()
     {
@@ -87,15 +101,23 @@ public class ComboSystem : MonoBehaviour
         _currentAmount = _increasingAmount;
     }
 
+    public override GameObject GetObject(Vector3 touchPos)
+    {
+        var obj = poolingObjectQueue.Dequeue();
+        obj.transform.position = Camera.main.WorldToScreenPoint(touchPos); 
+        obj.transform.SetParent(_canvasTrans);
+        return obj;
+    }
+
     private void ShowCombo()
     {
         // 콤보 UI를 보여줌
-        GameObject comboGo = Instantiate(_comboTextPrefab, _characterMovement.transform.position, Quaternion.Euler(Vector3.zero),
-            transform);
+        GameObject comboGo = GetObject(_characterMovement.transform.position);
+            
         ComboText comboText = comboGo.GetComponent<ComboText>();
 
-        comboText.SetText(_combo, _colorIndex);
         comboText.SetPlayerSpeed(_characterMovement.MoveSpeed, _resourcesChanger.DefaultSpeed);
+        comboText.SetText(_combo, _colorIndex, this);
     }
     
     private IEnumerator CoChangeOutLineColor()

@@ -50,7 +50,7 @@ public class EffectAnim : Anim
 
     private void ShowJumpEffect()
     {
-        _jumpAnim.transform.position = transform.position; // set position of 
+        _jumpAnim.transform.position = transform.position - Vector3.up * 0.1f; // set position of jump effect animator
         _jumpAnim.Play("JumpDustEffect");
     }
     public void SetEffectBool(bool isLong)
