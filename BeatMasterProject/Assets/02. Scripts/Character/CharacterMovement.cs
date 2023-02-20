@@ -343,7 +343,7 @@ public class CharacterMovement : MonoBehaviour
     public IEnumerator CoRewind(float y)
     {
         float elapseTime;
-        float targetTime;
+        float targetTime = 0.2f;
         
         _rewindTime.StartRewind();
         
@@ -352,7 +352,6 @@ public class CharacterMovement : MonoBehaviour
             while (_rewindTime.rewindList.Count != 0)
             {
                 elapseTime = 0f;
-                targetTime = 0.2f;
                 Vector2 targetRewindPos = _rewindTime.rewindList[0].rewindPos;
             
                 while (elapseTime <= targetTime)
@@ -373,7 +372,6 @@ public class CharacterMovement : MonoBehaviour
                 if (Mathf.Abs(targetRewindPos.x - transform.position.x) <= 1f)
                 {
                     _gameUI.ReverseTextColor(_rewindTime.rewindList[0].judgeResult);
-                    //StartCoroutine(_rewindTime.RewindParticle(_rewindTime.rewindList[0].judgeResult));
                     lastPosition = targetRewindPos;
                     _rewindTime.rewindList.RemoveAt(0);
                 }
@@ -383,7 +381,7 @@ public class CharacterMovement : MonoBehaviour
             
             while (elapseTime <= targetTime)
             {
-                transform.position = Vector3.Lerp(lastPosition,_characterPosition, elapseTime / targetTime);
+                transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
                 elapseTime += Time.deltaTime;
                 yield return null;
             }
@@ -395,7 +393,7 @@ public class CharacterMovement : MonoBehaviour
             
             while (elapseTime <= targetTime)
             {
-                transform.position = Vector3.Lerp(lastPosition,_characterPosition, elapseTime / targetTime);
+                transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
                 elapseTime += Time.deltaTime;
                 yield return null;
             }

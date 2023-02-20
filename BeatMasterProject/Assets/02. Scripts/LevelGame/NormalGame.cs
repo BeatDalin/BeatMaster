@@ -125,7 +125,7 @@ public class NormalGame : Game
         {
             _isCheckedShort = true;
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
-            mapTemp.shortList[shortIdx].GetComponent<Note>()._beatResult = shortResult[shortIdx].ToString();
+            mapTemp.shortTileParticleList[shortIdx].GetComponent<Note>().beatResult = shortResult[shortIdx].ToString();
             rewindTime.RecordCheckPoint(characterMovement.transform.position, shortResult[shortIdx].ToString());
             //gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             shortIdx++;
@@ -169,7 +169,7 @@ public class NormalGame : Game
         {
             _isCheckedAttack = true;
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
-            mapTemp.shortList[shortIdx].GetComponent<Note>()._beatResult = shortResult[shortIdx].ToString();
+            mapTemp.shortTileParticleList[shortIdx].GetComponent<Note>().beatResult = shortResult[shortIdx].ToString();
             rewindTime.RecordCheckPoint(characterMovement.transform.position, shortResult[shortIdx].ToString());
             //gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             monsterPooling.DisableMonster();
@@ -279,9 +279,7 @@ public class NormalGame : Game
         {
             _isCheckedLong = true;
             CheckBeatResult(longResult, longIdx, isLongKeyCorrect, _pressedTimeLong, _eventRangeLong); // Record Result
-            mapTemp.longList[longIdx].GetComponent<Note>()._beatResult = longResult[longIdx].ToString();
-            // 롱노트 리스트를 생성해서 넣어줄때 롱노트 시작과 끝 둘다 넣어주는데 실제 판정이 일어나는 구간은 롱노트 끝이므로 리스트에서는
-            // 현재 롱노트 인덱스 +1을 해서 접근해야 롱노트 끝 오브젝트를 접근할 수 있음
+            mapTemp.longTileParticleList[longIdx].GetComponent<Note>().beatResult = longResult[longIdx].ToString();
             _isLongVisited[longIdx] = true;
             if (!isRewinding)
             {

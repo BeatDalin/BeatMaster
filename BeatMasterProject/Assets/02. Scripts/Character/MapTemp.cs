@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using SonicBloom.Koreo;
+using UnityEngine.Serialization;
 
 public class MapTemp : MonoBehaviour
 {
@@ -59,9 +60,9 @@ public class MapTemp : MonoBehaviour
     private MonsterPooling _monsterPooling;
     private ObjectGenerator _objectGenerator;
 
-    [Header("Variable")] 
-    public List<GameObject> shortList = new List<GameObject>();
-    public List<GameObject> longList = new List<GameObject>();
+    [Header("TileParticleList")] 
+    public List<GameObject> shortTileParticleList = new List<GameObject>();
+    public List<GameObject> longTileParticleList = new List<GameObject>();
 
 
     //[Header("TempVariable")] public Dictionary<int, int> longNoteTilePos = new Dictionary<int, int>();
@@ -330,7 +331,7 @@ public class MapTemp : MonoBehaviour
             if (shortHit)
             {
                 yPosition = shortHit.point.y;
-                shortList.Add(Instantiate(_noteObjects[_shortEventList[i].GetIntValue()], 
+                shortTileParticleList.Add(Instantiate(_noteObjects[_shortEventList[i].GetIntValue()], 
                     new Vector3(xPosition + xOffset, yPosition, 0f), 
                     Quaternion.identity, transform));
                 //_interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0, new Vector3Int(xPosition, 0, 0), new Vector3(xOffset, yPosition, 0f)), false);
@@ -422,7 +423,7 @@ public class MapTemp : MonoBehaviour
                 endYPosition = longEndHit.point.y;
                 
                 //_interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 2, new Vector3Int(endXPosition, 0, 0), new Vector3(endXOffset, endYPosition, 0f)), false);
-                longList.Add(Instantiate(_noteObjects[2], 
+                longTileParticleList.Add(Instantiate(_noteObjects[2], 
                     new Vector3(endXPosition + endXOffset, endYPosition, 0f), 
                     Quaternion.identity, transform));
                 _objectGenerator.RecordLongPos(new Vector3(endXPosition + endXOffset, endYPosition, 0));

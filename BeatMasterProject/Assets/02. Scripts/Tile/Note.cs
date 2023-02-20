@@ -2,31 +2,35 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Note : MonoBehaviour
 {
     private RewindTime _rewindTime;
     private CharacterMovement _characterMovement;
-    public string _beatResult;
+    public string beatResult;
     private Game _game;
-    private bool isPlay = true;
-    private bool isRewindParticle;
-    public int currentIdx;
+    private bool _isPlay = true;
+    private bool _isRewindParticle;
 
     private bool waitResult;
+
+    private WaitForSeconds _waitForSecondsEnumerator;
 
     [SerializeField] private ParticleSystem[] _particleSystems;
     [SerializeField] private ParticleSystemReverseSimulation[] _particleSystemReverseSimulations;
 
     private void Awake()
     {
+        _waitForSecondsEnumerator = new WaitForSeconds(0.1f); 
         _particleSystems = new ParticleSystem[4];
         _rewindTime = FindObjectOfType<RewindTime>();
         _characterMovement = FindObjectOfType<CharacterMovement>();
-        _particleSystems[0] = transform.GetChild(1).GetChild(0).GetComponent<ParticleSystem>();
-        _particleSystems[1] = transform.GetChild(1).GetChild(1).GetComponent<ParticleSystem>();
-        _particleSystems[2] = transform.GetChild(1).GetChild(2).GetComponent<ParticleSystem>();
-        _particleSystems[3] = transform.GetChild(1).GetChild(3).GetComponent<ParticleSystem>();
+        
+        for (int i = 0; i < transform.GetChild(1).childCount; i++)
+        {
+            _particleSystems[i] = transform.GetChild(1).GetChild(i).GetComponent<ParticleSystem>();
+        }
         _particleSystemReverseSimulations = transform.GetChild(1).GetComponentsInChildren<ParticleSystemReverseSimulation>();
     }
 
@@ -34,23 +38,21 @@ public class Note : MonoBehaviour
     {
         if (_rewindTime.isRewind)
         {
-            if (!isRewindParticle)
+            if (!_isRewindParticle)
             {
-                Debug.Log("파티클 기다리는중");
                 if (Mathf.Abs(_characterMovement.transform.position.x - transform.position.x) <= 1f)
                 {
-                    Debug.Log("되돌리기 파티클 재생");
-                    isRewindParticle = true;
-                    StartCoroutine(RewindParticle(_beatResult)); //파티클 되돌리는 함수 실행
+                    _isRewindParticle = true;
+                    StartCoroutine(CoRewindParticle(beatResult)); //파티클 되돌리는 함수 실행
                 }
             }
         }
 
-        if (_beatResult != "" && isPlay)
+        if (!string.IsNullOrEmpty(beatResult) && _isPlay)
         {
-            isRewindParticle = false;
-            isPlay = false;
-            ChangeOutLineColor(_beatResult); //파티클 재생함수 실행
+            _isRewindParticle = false;
+            _isPlay = false;
+            ChangeOutLineColor(beatResult); //파티클 재생함수 실행
         }
     }
 
@@ -82,12 +84,12 @@ public class Note : MonoBehaviour
         while (i != _particleSystems.Length - 1)
         {
             _particleSystems[i].Play();
-            yield return new WaitForSeconds(0.1f);
+            yield return _waitForSecondsEnumerator;
             i++;
         }
     }
 
-    public IEnumerator RewindParticle(string result)
+    public IEnumerator CoRewindParticle(string result)
     {
         int idx = 0;
 
@@ -97,7 +99,7 @@ public class Note : MonoBehaviour
                 while (idx != 4)
                 {
                     _particleSystemReverseSimulations[idx].enabled = true;
-                    yield return new WaitForSeconds(0.1f);
+                    yield return _waitForSecondsEnumerator;
                     idx++;
                 }
 
@@ -105,12 +107,12 @@ public class Note : MonoBehaviour
 
             case "Fast":
                 _particleSystemReverseSimulations[1].enabled = true;
-                yield return new WaitForSeconds(0.2f);
+                yield return _waitForSecondsEnumerator;
                 break;
 
             case "Slow":
                 _particleSystemReverseSimulations[2].enabled = true;
-                yield return new WaitForSeconds(0.2f);
+                yield return _waitForSecondsEnumerator;
                 break;
         }
 
@@ -118,7 +120,8 @@ public class Note : MonoBehaviour
         {
             _particleSystemReverseSimulations[i].enabled = false;
         }
-        isPlay = true;
-        _beatResult = "";
+        
+        _isPlay = true;
+        beatResult = "";
     }
 }
