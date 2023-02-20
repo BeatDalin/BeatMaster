@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SonicBloom.Koreo;
-using UnityEditor;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
@@ -69,7 +69,6 @@ public class CharacterMovement : MonoBehaviour
     private RewindTime _rewindTime;
     public Vector3 lastPosition;
     public float lastBeatTime;
-    [SerializeField] private List<Vector2> particlePos = new List<Vector2>();
     private GameUI _gameUI;
 
 
@@ -106,11 +105,6 @@ public class CharacterMovement : MonoBehaviour
         // {
         //     
         // }
-    }
-
-    public void AddParticlePos()
-    {
-        particlePos.Add(transform.position);
     }
 
     private void Init()
@@ -341,12 +335,12 @@ public class CharacterMovement : MonoBehaviour
         // _previousBeatTime = 0;
         // _currentBeatTime = _checkPointCurrentBeatTime;
 
-        StartCoroutine(Rewind(y));
+        StartCoroutine(CoRewind(y));
 
         //_previousBeatTime = _checkPointCurrentBeatTime;
     }
 
-    public IEnumerator Rewind(float y)
+    public IEnumerator CoRewind(float y)
     {
         float elapseTime;
         float targetTime;
@@ -413,13 +407,5 @@ public class CharacterMovement : MonoBehaviour
         transform.position = _characterPosition;
         lastPosition = _characterPosition;
         lastBeatTime = _checkPointBeatTime;
-    }
-
-    private IEnumerator SetPos(Vector3 position)
-    {
-        while (transform.position != position)
-        {
-            yield return null;
-        }
     }
 }

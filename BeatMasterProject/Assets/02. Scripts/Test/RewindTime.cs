@@ -9,9 +9,7 @@ public class RewindTime : MonoBehaviour
 {
     public bool isRewind;
     public bool isRecord = true;
-
-    public bool _rewindCheck;
-
+    
     public List<RewindData> rewindList = new List<RewindData>();
 
     [SerializeField] private ParticleSystem[] _judgeParticle;
