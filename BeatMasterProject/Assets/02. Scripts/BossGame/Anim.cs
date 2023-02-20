@@ -25,7 +25,7 @@ public enum CharacterNum
 
 public class Anim : MonoBehaviour
 {
-    [SerializeField] private GameObject _hammer;
+    //[SerializeField] private GameObject _hammer;
 
     protected Animator[] animators;
     protected Animator anim;
