@@ -27,7 +27,6 @@ public class ComboText : MonoBehaviour
     private WaitForEndOfFrame _waitForEndOfFrame;
     private StringBuilder _comboStr;
     private ComboSystem _comboSystem;
-    private bool _isGoingDown;
     private Color _startColor;
     private Color _goalColor;
     private int _hueIndex;
@@ -35,7 +34,7 @@ public class ComboText : MonoBehaviour
     private bool _wasCreated;
 
     private readonly ushort MAX_HUE = 360;
-    [SerializeField] private readonly string COMBO_STR = "Combo ";
+    private readonly string COMBO_STR = "Combo ";
     
     private void Awake()
     {
@@ -49,22 +48,17 @@ public class ComboText : MonoBehaviour
     {
         if (_wasCreated)
         {
-            Debug.Log("Shoot");
             Shoot();
         }
     }
     
-    private void Start()
-    {
-        Debug.Log("Start");      
-    }
-
     private void OnDisable()
     {
         // 초기화
         _wasCreated = true;
         
         _alpha = 1f;
+        _text.color = Color.white;
         _startColor = _text.color;
         _startColor.a = _alpha;
         _goalColor.a = _alpha;
