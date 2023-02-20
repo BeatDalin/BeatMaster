@@ -1,11 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class DataCenter : MonoBehaviour
 {
@@ -91,17 +87,18 @@ public class DataCenter : MonoBehaviour
         _playerData.itemData = Enumerable.Repeat(-1, Enum.GetValues(typeof(StoreData.ItemPart)).Length).ToArray(); // 미장착 상태일 때 -1
 
         _gameData.playerData = _playerData;
-        _gameData.stageData = new StageData[1]; // temporally, set array size as 1
+        _gameData.stageData = new StageData[4]; // temporally, set array size as 1
         LevelData temp = new LevelData();
         for (int i = 0; i < _gameData.stageData.Length; i++)
         {
             _gameData.stageData[i].stage = i + 1;
-            _gameData.stageData[i].levelData = new LevelData[5];
+            _gameData.stageData[i].levelData = new LevelData[4];
 
             for (int j = 0; j < _gameData.stageData[i].levelData.Length; j++)
             {
                 temp.level = j + 1;
-                temp.unlockCharNum = j + 1; // clear시 해금할 캐릭터 번호
+                temp.isUnlocked = j == 0;
+                temp.unlockCharNum = i == 0 ? j : 0; // 레벨1은 스테이지 번호대로 캐릭터 해금, 아니면 기본캐릭터 index 부여)
                 _gameData.stageData[i].levelData[j] = temp;
             }
         }
@@ -134,11 +131,11 @@ public class DataCenter : MonoBehaviour
         SaveData();
     }
 
-    public void UpdateStageData(int stageIdx)
-    {
-        StageData curStageData = _gameData.stageData[stageIdx];
-        curStageData.bossClear = true;
-    }
+    // public void UpdateStageData(int stageIdx)
+    // {
+    //     StageData curStageData = _gameData.stageData[stageIdx];
+    //     curStageData.bossClear = true;
+    // }
 
     /// <summary>
     /// Update Data and save updated content to json file.

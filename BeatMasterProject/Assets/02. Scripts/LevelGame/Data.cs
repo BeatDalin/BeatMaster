@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public struct Data
 {
     public PlayerData playerData;
-    public StageData[] stageData;
+    public StageData[] stageData; // contains four StageData
     public StoreData storeData;
 }
 
@@ -23,8 +23,8 @@ public struct PlayerData
 public struct StageData
 {
     public int stage;
-    public bool bossClear;
-    public LevelData[] levelData; // contains five LevelData
+    //public bool bossClear;
+    public LevelData[] levelData; // contains four LevelData
 }
 
 [Serializable]
@@ -39,6 +39,7 @@ public struct LevelData
     public float alpha;
     public int unlockCharNum; // 일단은 level 하나 당 한 캐릭터만 해금
     public bool levelClear;
+    public bool isUnlocked;
 }
 
 [Serializable]
