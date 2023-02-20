@@ -42,6 +42,7 @@ public class Anim : MonoBehaviour
     {
         animators = GetComponentsInChildren<Animator>();
         anim = animators[0];
+        
     }
 
     protected virtual RuntimeAnimatorController GetAnimatorDic(string _key)
@@ -57,6 +58,8 @@ public class Anim : MonoBehaviour
 
    public void ChangeCharacterAnim(int charNum)
     {
+        Debug.Log(anim);
+        Debug.Log(anim.runtimeAnimatorController);
         anim.runtimeAnimatorController = GetAnimatorDic(Enum.GetName(typeof(CharacterNum), charNum));
     }
 

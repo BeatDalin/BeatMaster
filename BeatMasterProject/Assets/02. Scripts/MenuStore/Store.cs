@@ -41,8 +41,8 @@ public class Store : MonoBehaviour
 
     private Button[] _character;
     private Button[] _item;
-    private StoreData _storeData;
-    private PlayerData _playerData;
+    [SerializeField] private StoreData _storeData;
+    [SerializeField] private PlayerData _playerData;
 
     private void Awake()
     {
@@ -52,7 +52,6 @@ public class Store : MonoBehaviour
     private void Start()
     {
         //_animator = _popupPanel[0].transform.GetChild(0).GetComponent<Animator>();
-
         UpdatePlayersDataInScene();
         _storeData = DataCenter.Instance.GetStoreData();
         _playerData = DataCenter.Instance.GetPlayerData();
@@ -71,10 +70,10 @@ public class Store : MonoBehaviour
         for (int i = 0; i < _storeData.characterData.Length; i++)
         {
             int index = i;
-
+            
             _character[index] = Instantiate(_char, _charContent.transform);
             _character[index].transform.GetComponent<Image>().sprite = _changeChar.ChangeCharacterSprite(index);
-            _character[index].transform.GetChild(0).GetComponent<Text>().text =
+            _character[index].transform.GetChild(0).GetComponent<Text>().text = 
                 _storeData.characterData[i].price.ToString();
             if (_storeData.characterData[i].isUnlocked)
             {
@@ -150,7 +149,7 @@ public class Store : MonoBehaviour
 
         _popupPanel[0].transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = ((Image)_character[charNum].targetGraphic).sprite;
         _popupPanel[0].transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
-
+        
         // 구매 안 한 상태일 때 구매하기 버튼 노출
         if (!_storeData.characterData[charNum].isPurchased && _storeData.characterData[charNum].isUnlocked)
         {
