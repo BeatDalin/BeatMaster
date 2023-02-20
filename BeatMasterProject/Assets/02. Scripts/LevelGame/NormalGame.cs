@@ -126,8 +126,9 @@ public class NormalGame : Game
         {
             _isCheckedShort = true;
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
-            _rewindTime.RecordCheckPoint(characterMovement.transform.position, shortResult[shortIdx].ToString());
-            gameUI.ChangeOutLineColor(shortResult[shortIdx]);
+            mapTemp.shortTileParticleList[shortIdx].GetComponent<Note>().beatResult = shortResult[shortIdx].ToString();
+            rewindTime.RecordCheckPoint(characterMovement.transform.position, shortResult[shortIdx].ToString());
+            //gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             shortIdx++;
             if (!isShortKeyCorrect)
             {
@@ -169,8 +170,9 @@ public class NormalGame : Game
         {
             _isCheckedAttack = true;
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
-            _rewindTime.RecordCheckPoint(characterMovement.transform.position, shortResult[shortIdx].ToString());
-            gameUI.ChangeOutLineColor(shortResult[shortIdx]);
+            mapTemp.shortTileParticleList[shortIdx].GetComponent<Note>().beatResult = shortResult[shortIdx].ToString();
+            rewindTime.RecordCheckPoint(characterMovement.transform.position, shortResult[shortIdx].ToString());
+            //gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             monsterPooling.DisableMonster();
             _isShortVisited[shortIdx] = true;
             if (!isRewinding)
@@ -278,6 +280,7 @@ public class NormalGame : Game
         {
             _isCheckedLong = true;
             CheckBeatResult(longResult, longIdx, isLongKeyCorrect, _pressedTimeLong, _eventRangeLong); // Record Result
+            mapTemp.longTileParticleList[longIdx].GetComponent<Note>().beatResult = longResult[longIdx].ToString();
             _isLongVisited[longIdx] = true;
             if (!isRewinding)
             {
