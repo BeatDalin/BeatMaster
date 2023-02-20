@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParticleSystemReverseSimulationSuperSimple : MonoBehaviour
+public class ParticleSystemReverseSimulation : MonoBehaviour
 {
     ParticleSystem[] particleSystems;
 
@@ -10,6 +10,7 @@ public class ParticleSystemReverseSimulationSuperSimple : MonoBehaviour
 
     public float startTime = 2.0f;
     public float simulationSpeedScale = 1.0f;
+    public bool isRewindParticle = false;
 
     void Initialize()
     {
@@ -33,6 +34,16 @@ public class ParticleSystemReverseSimulationSuperSimple : MonoBehaviour
     }
 
     void Update()
+    {
+        RewindParticle();
+        // if (isRewindParticle)
+        // {
+        //     // RewindParticle();
+        //     isRewindParticle = false;
+        // }
+    }
+
+    void RewindParticle()
     {
         particleSystems[0].Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         for (int i = particleSystems.Length - 1; i >= 0; i--)
