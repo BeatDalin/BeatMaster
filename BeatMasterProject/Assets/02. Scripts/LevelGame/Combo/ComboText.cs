@@ -2,10 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System.Timers;
-using TMPro;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -50,8 +47,6 @@ public class ComboText : MonoBehaviour
 
     private void OnEnable()
     {
-        
-
         if (_wasCreated)
         {
             Debug.Log("Shoot");
@@ -91,7 +86,6 @@ public class ComboText : MonoBehaviour
         _hueIndex = hueIndex;
         StartCoroutine(SetTextColor());
         _comboStr.Clear();
-
     }
 
     private IEnumerator SetTextColor()

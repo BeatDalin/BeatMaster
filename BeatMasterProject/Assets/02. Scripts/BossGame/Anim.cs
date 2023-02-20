@@ -1,5 +1,4 @@
 using System;
-using SonicBloom.Koreo.Demos;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -58,8 +57,6 @@ public class Anim : MonoBehaviour
 
    public void ChangeCharacterAnim(int charNum)
     {
-        Debug.Log(anim);
-        Debug.Log(anim.runtimeAnimatorController);
         anim.runtimeAnimatorController = GetAnimatorDic(Enum.GetName(typeof(CharacterNum), charNum));
     }
 
