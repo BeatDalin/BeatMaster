@@ -70,13 +70,13 @@ public abstract class Game : MonoBehaviour
     protected MapTemp mapTemp;
 
     [Header("Event Tracks")] 
-    [SerializeField] [EventID] protected string _shortID;
-    [SerializeField] [EventID] protected string _longID;
-    [SerializeField] [EventID] protected string _jumpCheckID;
-    [SerializeField] [EventID] protected string _attackCheckID;
-    [SerializeField] [EventID] protected string _longCheckMiddleID;
-    [SerializeField] [EventID] protected string _longCheckStartID;
-    [SerializeField] [EventID] protected string _longCheckEndID;
+    [SerializeField] [EventID] protected string shortID;
+    [SerializeField] [EventID] protected string longID;
+    [SerializeField] [EventID] protected string jumpCheckID;
+    [SerializeField] [EventID] protected string attackCheckID;
+    [SerializeField] [EventID] protected string longCheckMiddleID;
+    [SerializeField] [EventID] protected string longCheckStartID;
+    [SerializeField] [EventID] protected string longCheckEndID;
     
     protected virtual void Awake()
     {

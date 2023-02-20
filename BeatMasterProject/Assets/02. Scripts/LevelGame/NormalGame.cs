@@ -45,18 +45,18 @@ public class NormalGame : Game
         _comboSystem = FindObjectOfType<ComboSystem>();
         _touchInputManager = FindObjectOfType<TouchInputManager>();
         // Short Note Event Track
-        Koreographer.Instance.RegisterForEventsWithTime(_jumpCheckID, CheckJumpEnd);
+        Koreographer.Instance.RegisterForEventsWithTime(jumpCheckID, CheckJumpEnd);
         // Attack Note Event Track
-        Koreographer.Instance.RegisterForEventsWithTime(_attackCheckID, CheckAttackEnd);
+        Koreographer.Instance.RegisterForEventsWithTime(attackCheckID, CheckAttackEnd);
         // Long Note Event Track
-        Koreographer.Instance.RegisterForEvents(_longCheckMiddleID, CheckLongMiddle);
-        Koreographer.Instance.RegisterForEventsWithTime(_longCheckStartID, CheckLongStart);
-        Koreographer.Instance.RegisterForEventsWithTime(_longCheckEndID, CheckLongEnd);
+        Koreographer.Instance.RegisterForEvents(longCheckMiddleID, CheckLongMiddle);
+        Koreographer.Instance.RegisterForEventsWithTime(longCheckStartID, CheckLongStart);
+        Koreographer.Instance.RegisterForEventsWithTime(longCheckEndID, CheckLongEnd);
 
         // Result Array
-        _shortEvent = SoundManager.instance.playingKoreo.GetTrackByID(_shortID).GetAllEvents();
+        _shortEvent = SoundManager.instance.playingKoreo.GetTrackByID(shortID).GetAllEvents();
         shortResult = new BeatResult[_shortEvent.Count];
-        longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID(_longID).GetAllEvents().Count];
+        longResult = new BeatResult[SoundManager.instance.playingKoreo.GetTrackByID(longID).GetAllEvents().Count];
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
 
         _playerDatas = DataCenter.Instance.GetPlayerData();
@@ -75,7 +75,7 @@ public class NormalGame : Game
     {
         base.Init();
         // Need Curve Event to execute CalculateRange()
-        _events = SoundManager.instance.playingKoreo.GetTrackByID(_shortID).GetAllEvents();
+        _events = SoundManager.instance.playingKoreo.GetTrackByID(shortID).GetAllEvents();
         _isShortVisited = new bool[_events.Count];
         List<KoreographyEvent> rangeEventList = new List<KoreographyEvent>();
 
@@ -88,7 +88,7 @@ public class NormalGame : Game
         }
         _eventRangeShort = CalculateRange(rangeEventList);
         
-        _events = SoundManager.instance.playingKoreo.GetTrackByID(_longCheckEndID).GetAllEvents();
+        _events = SoundManager.instance.playingKoreo.GetTrackByID(longCheckStartID).GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
         _isLongVisited = new bool[+_events.Count];
 
