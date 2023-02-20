@@ -25,11 +25,8 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
     {
         Title,
         LevelSelect,
-        Level1,
-        Level2,
-        Level3,
-        Level4,
-        Level1MonsterTest
+        Stage1_Level1,
+        Stage4_Level1
     }
 
     public override void Init()

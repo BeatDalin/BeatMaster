@@ -151,7 +151,7 @@ public class SoundManager : MonoBehaviour
                 _bgmPlayer.loop = true;
                 break;
             }
-            case SceneLoadManager.SceneType.Level1: // Level1 씬
+            case SceneLoadManager.SceneType.Stage1_Level1: // Level1 씬
             {
                 playingKoreo = koreographies[2];
                 // playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
