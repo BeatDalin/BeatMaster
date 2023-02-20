@@ -65,10 +65,19 @@ public abstract class Game : MonoBehaviour
     private int[] _shortSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from long notes
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
 
-    [Header("Variable")]
+    [Header("Rewind")]
     protected RewindTime rewindTime;
     protected MapTemp mapTemp;
 
+    [Header("Event Tracks")] 
+    [SerializeField] [EventID] protected string _shortID;
+    [SerializeField] [EventID] protected string _longID;
+    [SerializeField] [EventID] protected string _jumpCheckID;
+    [SerializeField] [EventID] protected string _attackCheckID;
+    [SerializeField] [EventID] protected string _longCheckMiddleID;
+    [SerializeField] [EventID] protected string _longCheckStartID;
+    [SerializeField] [EventID] protected string _longCheckEndID;
+    
     protected virtual void Awake()
     {
         mapTemp = FindObjectOfType<MapTemp>();
