@@ -74,6 +74,11 @@ public class Store : MonoBehaviour
 
             _character[index] = Instantiate(_char, _charContent.transform);
             _character[index].transform.GetComponent<Image>().sprite = _changeChar.ChangeCharacterSprite(index);
+            if (_storeData.characterData[i].isPurchased)
+            {
+                _character[index].transform.GetChild(0).gameObject.SetActive(false);
+                _character[index].transform.GetChild(1).gameObject.SetActive(false);
+            }
             _character[index].transform.GetChild(0).GetComponent<Text>().text =
                 _storeData.characterData[i].price.ToString();
             if (_storeData.characterData[i].isUnlocked)
@@ -105,6 +110,10 @@ public class Store : MonoBehaviour
             _item[index].transform.GetChild(0).GetComponent<Image>().sprite = _changeChar.ChangeItemSprite((StoreData.ItemName)index);
             _item[index].transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
                 _storeData.itemData[index].price.ToString();
+            if (_storeData.itemData[index].isPurchased)
+            {
+                _item[index].transform.GetChild(1).gameObject.SetActive(false);
+            }
             if (_storeData.itemData[index].isUnlocked)
             {
                 _item[index].transform.GetChild(2).gameObject.SetActive(false);
@@ -139,6 +148,23 @@ public class Store : MonoBehaviour
         _changeChar.ChangeItemInItemScroll(_playerData);
         _ifPurchased.SetActive(true);
         _popupPanel[0].SetActive(false);
+        for (int i = 0; i < _storeData.characterData.Length; i++)
+        {
+            int index = i;
+            if (_storeData.characterData[i].isPurchased)
+            {
+                _character[index].transform.GetChild(0).gameObject.SetActive(false);
+                _character[index].transform.GetChild(1).gameObject.SetActive(false);
+            }
+        }
+        for (int i = 0; i < _storeData.itemData.Length - 1; i++)
+        {
+            int index = i;
+            if (_storeData.itemData[index].isPurchased)
+            {
+                _item[index].transform.GetChild(1).gameObject.SetActive(false);
+            }
+        }
     }
 
     #region Character
