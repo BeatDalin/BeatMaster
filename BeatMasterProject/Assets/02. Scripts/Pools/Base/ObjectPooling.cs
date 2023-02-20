@@ -2,19 +2,26 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public abstract class ObjectPooling : Singleton<ObjectPooling>
-{ 
+public abstract class ObjectPooling : MonoBehaviour
+{
     [SerializeField] protected GameObject poolingPrefab;
 
     protected Queue<GameObject> poolingObjectQueue = new Queue<GameObject>();
     
     [SerializeField] protected int initCount;
 
+    private void Awake()
+    {
+        Init();
+    }
+
+    protected abstract void Init();
+
     protected GameObject CreateNewObject()
     {
         var newObj = Instantiate(poolingPrefab);
+        poolingObjectQueue.Enqueue(newObj);
         newObj.transform.SetParent(transform);
         newObj.SetActive(false);
         return newObj;
@@ -42,5 +49,6 @@ public abstract class ObjectPooling : Singleton<ObjectPooling>
         obj.SetActive(false);
         obj.transform.SetParent(transform);
         poolingObjectQueue.Enqueue(obj);
+        Debug.Log(poolingObjectQueue.Count); 
     }
 }

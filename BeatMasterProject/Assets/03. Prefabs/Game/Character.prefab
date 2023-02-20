@@ -1066,7 +1066,6 @@ MonoBehaviour:
   _positionYOffset: 0.5
   lastPosition: {x: 0, y: 0, z: 0}
   lastBeatTime: 0
-  particlePos: []
 --- !u!114 &7686366973799714488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1185,7 +1184,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isRewind: 0
   isRecord: 1
-  _rewindCheck: 0
   rewindList: []
   _judgeParticle:
   - {fileID: 7686366973878617432}
@@ -1552,6 +1550,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 19851914, guid: 3cec58934a80dd440953a42a1d17492d, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19860986, guid: 3cec58934a80dd440953a42a1d17492d, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3cec58934a80dd440953a42a1d17492d, type: 3}
 --- !u!198 &7686366972295778540 stripped
@@ -1628,6 +1634,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 473264, guid: 9b91bc277b170744aada3cd8c0766ac5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19841130, guid: 9b91bc277b170744aada3cd8c0766ac5, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19880368, guid: 9b91bc277b170744aada3cd8c0766ac5, type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1859,6 +1873,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 421722, guid: 3c83b33bf94ceba43b3d880525e8afa4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19872750, guid: 3c83b33bf94ceba43b3d880525e8afa4, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19891092, guid: 3c83b33bf94ceba43b3d880525e8afa4, type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
