@@ -1,13 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using System.Security.Cryptography.X509Certificates;
-using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using ColorUtility = UnityEngine.ColorUtility;
 
 public class StageInfo
 {
@@ -145,16 +139,10 @@ public class StageInformation : MonoBehaviour
         SetToggleStatus(_levelToggles, uiStage);
         
         // Camera
-        // 악~~
-        StartCoroutine(ZoomIn(_mainCam.transform.position, _stageInfo[stageNum].camPos, 8, 3));
-        // _mainCam.orthographicSize = 5f;
-        // _mainCam.transform.position = 
-        //     Vector3.MoveTowards(_mainCam.transform.position, _stageInfo[stageNum].camPos, 10f);
-
-        // _stagePanel.SetActive(true);
+        StartCoroutine(CoZoomIn(_mainCam.transform.position, _stageInfo[stageNum].camPos, 8, 3));
     }
 
-    IEnumerator ZoomIn(Vector3 current, Vector3 target, float currentSize, float targetSize)
+    private IEnumerator CoZoomIn(Vector3 current, Vector3 target, float currentSize, float targetSize)
     {
         float time = 0.5f;
         float elapsedTime = 0.0f;
@@ -179,7 +167,7 @@ public class StageInformation : MonoBehaviour
         _stageBtns.SetActive(!(currentSize > targetSize));
     }
     
-    IEnumerator ZoomOut(Vector3 current, Vector3 target, float currentSize, float targetSize)
+    private IEnumerator CoZoomOut(Vector3 current, Vector3 target, float currentSize, float targetSize)
         {
             _stagePanel.SetActive(currentSize > targetSize);
             
@@ -309,7 +297,7 @@ public class StageInformation : MonoBehaviour
     {
         SoundManager.instance.PlaySFX("Touch");
         StartCoroutine(
-            ZoomOut(_mainCam.transform.position, _camPos[0].transform.position, _mainCam.orthographicSize, 8));
+            CoZoomOut(_mainCam.transform.position, _camPos[0].transform.position, _mainCam.orthographicSize, 8));
 
     }
 

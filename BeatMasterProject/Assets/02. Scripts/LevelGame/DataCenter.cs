@@ -1,11 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class DataCenter : MonoBehaviour
 {
@@ -36,7 +32,7 @@ public class DataCenter : MonoBehaviour
     private void Start()
     {
         // if you want to find where the json file is located...
-        Debug.Log(Application.persistentDataPath);
+        // Debug.Log(Application.persistentDataPath);
         // CreateData();
     }
 
