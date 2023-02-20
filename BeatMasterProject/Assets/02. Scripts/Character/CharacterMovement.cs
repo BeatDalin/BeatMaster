@@ -346,13 +346,13 @@ public class CharacterMovement : MonoBehaviour
         float targetTime;
         
         _rewindTime.StartRewind();
-
+        
         if (_rewindTime.rewindList.Count != 0)
         {
             while (_rewindTime.rewindList.Count != 0)
             {
                 elapseTime = 0f;
-                targetTime = 0.5f;
+                targetTime = 0.2f;
                 Vector2 targetRewindPos = _rewindTime.rewindList[0].rewindPos;
             
                 while (elapseTime <= targetTime)
@@ -373,7 +373,7 @@ public class CharacterMovement : MonoBehaviour
                 if (Mathf.Abs(targetRewindPos.x - transform.position.x) <= 1f)
                 {
                     _gameUI.ReverseTextColor(_rewindTime.rewindList[0].judgeResult);
-                    StartCoroutine(_rewindTime.RewindParticle(_rewindTime.rewindList[0].judgeResult));
+                    //StartCoroutine(_rewindTime.RewindParticle(_rewindTime.rewindList[0].judgeResult));
                     lastPosition = targetRewindPos;
                     _rewindTime.rewindList.RemoveAt(0);
                 }

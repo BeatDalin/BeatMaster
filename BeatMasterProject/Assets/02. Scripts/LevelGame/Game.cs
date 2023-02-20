@@ -65,11 +65,14 @@ public abstract class Game : MonoBehaviour
     private int[] _shortSummary = new int[4]; // Record the number of Fail, Fast, Perfect, Slow results from long notes
     private int[] _finalSummary = new int[4]; // Summed number of short note & long note results for each result type
 
-    protected RewindTime _rewindTime;
+    [Header("Variable")]
+    protected RewindTime rewindTime;
+    protected MapTemp mapTemp;
 
     protected virtual void Awake()
     {
-        _rewindTime = FindObjectOfType<RewindTime>();
+        mapTemp = FindObjectOfType<MapTemp>();
+        rewindTime = FindObjectOfType<RewindTime>();
         _playerAnim = FindObjectOfType<EffectAnim>();
         characterMovement = FindObjectOfType<CharacterMovement>();
         monsterPooling = FindObjectOfType<MonsterPooling>();
@@ -129,9 +132,9 @@ public abstract class Game : MonoBehaviour
         // yield return new WaitWhile(() => !SceneLoadManager.Instance.GetTransitionEnd());
         yield return new WaitUntil(() => SceneLoadManager.Instance.isLoaded);
 
-        if (_rewindTime.isRewind)
+        if (rewindTime.isRewind)
         {
-            while (!_rewindTime.isRecord)
+            while (!rewindTime.isRecord)
             {
                 yield return null;
             }
