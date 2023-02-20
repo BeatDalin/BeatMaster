@@ -1,18 +1,15 @@
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 public class GoogleLogin : MonoBehaviour
 {
-    [SerializeField] Text _status;
-    [SerializeField] Button _logoutBtn;
+    [SerializeField] private Text _status;
+    [SerializeField] private Button _logoutBtn;
 
     private void Start()
     {
-        GPGSBinder.Instance.Login((success, localUser) => _status.text = (success ?
-                     localUser.userName : "Login Failed"));
+        GPGSBinder.Instance.Login((success, localUser) =>
+        _status.text = (success ? localUser.userName : "Login Failed"));
         _logoutBtn.onClick.AddListener(Logout);
     }
 

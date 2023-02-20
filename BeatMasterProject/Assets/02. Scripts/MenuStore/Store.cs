@@ -149,19 +149,17 @@ public class Store : MonoBehaviour
         _popupPanel[0].SetActive(false);
         for (int i = 0; i < _storeData.characterData.Length; i++)
         {
-            int index = i;
             if (_storeData.characterData[i].isPurchased)
             {
-                _character[index].transform.GetChild(0).gameObject.SetActive(false);
-                _character[index].transform.GetChild(1).gameObject.SetActive(false);
+                _character[i].transform.GetChild(0).gameObject.SetActive(false);
+                _character[i].transform.GetChild(1).gameObject.SetActive(false);
             }
         }
         for (int i = 0; i < _storeData.itemData.Length - 1; i++)
         {
-            int index = i;
-            if (_storeData.itemData[index].isPurchased)
+            if (_storeData.itemData[i].isPurchased)
             {
-                _item[index].transform.GetChild(1).gameObject.SetActive(false);
+                _item[i].transform.GetChild(1).gameObject.SetActive(false);
             }
         }
     }
