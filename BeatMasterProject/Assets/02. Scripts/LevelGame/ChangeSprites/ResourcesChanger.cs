@@ -33,6 +33,7 @@ public class ResourcesChanger : MonoBehaviour
 
     private void Init()
     {
+        // TODO Stage()_Level()로 바꾸기
         _resourceIndex = int.Parse(SceneLoadManager.Instance.Scene.ToString().Substring(5)) - 1;
     }
 

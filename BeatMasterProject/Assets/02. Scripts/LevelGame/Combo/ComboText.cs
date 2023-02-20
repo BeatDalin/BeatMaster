@@ -27,15 +27,15 @@ public class ComboText : MonoBehaviour
     private WaitForEndOfFrame _waitForEndOfFrame;
     private StringBuilder _comboStr;
     private ComboSystem _comboSystem;
-    private bool _isGoingDown;
     private Color _startColor;
     private Color _goalColor;
+    private bool _isGoingDown;
     private int _hueIndex;
     private float _alpha = 1f;
     private bool _wasCreated;
 
     private readonly ushort MAX_HUE = 360;
-    [SerializeField] private readonly string COMBO_STR = "Combo ";
+    private readonly string COMBO_STR = "Combo ";
     
     private void Awake()
     {
@@ -65,6 +65,7 @@ public class ComboText : MonoBehaviour
         _wasCreated = true;
         
         _alpha = 1f;
+        _text.color = Color.white;
         _startColor = _text.color;
         _startColor.a = _alpha;
         _goalColor.a = _alpha;

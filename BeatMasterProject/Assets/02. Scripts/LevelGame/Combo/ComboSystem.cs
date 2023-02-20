@@ -18,6 +18,7 @@ public class ComboSystem : ObjectPooling
     private CharacterMovement _characterMovement;
     private ResourcesChanger _resourcesChanger;
     private Transform _canvasTrans;
+    private Dictionary<GameObject, ComboText> _comboDict = new Dictionary<GameObject, ComboText>(); 
     private int _currentAmount;
     private int _colorIndex;
     private ushort _showEffectNum = 10;
@@ -52,7 +53,8 @@ public class ComboSystem : ObjectPooling
     {
         for (int i = 0; i < initCount; i++)
         {
-            CreateNewObject();
+            GameObject go = CreateNewObject();
+            _comboDict.Add(go, go.GetComponent<ComboText>());
         }
     }
 
@@ -113,11 +115,9 @@ public class ComboSystem : ObjectPooling
     {
         // 콤보 UI를 보여줌
         GameObject comboGo = GetObject(_characterMovement.transform.position);
-            
-        ComboText comboText = comboGo.GetComponent<ComboText>();
 
-        comboText.SetPlayerSpeed(_characterMovement.MoveSpeed, _resourcesChanger.DefaultSpeed);
-        comboText.SetText(_combo, _colorIndex, this);
+        _comboDict[comboGo].SetPlayerSpeed(_characterMovement.MoveSpeed, _resourcesChanger.DefaultSpeed);
+        _comboDict[comboGo].SetText(_combo, _colorIndex, this);
     }
     
     private IEnumerator CoChangeOutLineColor()
