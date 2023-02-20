@@ -5,42 +5,38 @@ using UnityEngine;
 
 public class CameraResolution : MonoBehaviour
 {
-    //[SerializeField] private Camera _camera;
-
-    // 1920 x 1080
-    [SerializeField] private int _setWidth = 1920;    // 사용자 설정 너비(가로)
-    [SerializeField] private int _setHeight = 1080;   // 사용자 설정 높이(세로)
-    [SerializeField] private int _deviceWidth;  // 디바이스 너비 저장
-    [SerializeField] private int _deviceHeight; // 디바이스 높이 저장
+    [SerializeField] private Camera _camera;
+    [SerializeField] private Rect _rect;
+    [SerializeField] private float _scaleHeight;
+    [SerializeField] private float _scaleWidth;
+    
     
     private void Awake()
     {
-        //_camera = GetComponent<Camera>();
-
-        
-        //CameraSetResolution();
-        
+        CameraSetResolution();
     }
-
-    private void Start()
+    private void CameraSetResolution()
     {
-        Camera camera = GetComponent<Camera>();
-        Rect rect = camera.rect;
-        float scaleheight = ((float)Screen.width / Screen.height) / ((float)16 / 9); // (가로 / 세로)
-        float scalewidth = 1f / scaleheight;
-        if (scaleheight < 1)
+        _camera = GetComponent<Camera>();
+        _rect = _camera.rect;
+        _scaleHeight = ((float)Screen.width / Screen.height) / ((float)16 / 9); // (가로 / 세로)
+        _scaleWidth = 1f / _scaleHeight;
+        if (_scaleHeight < 1)
         {
-            rect.height = scaleheight;
-            rect.y = (1f - scaleheight) / 2f;
+            _rect.height = _scaleHeight;
+            _rect.y = (1f - _scaleHeight) / 2f;
         }
         else
         {
-            rect.width = scalewidth;
-            rect.x = (1f - scalewidth) / 2f;
+            _rect.width = _scaleWidth;
+            _rect.x = (1f - _scaleWidth) / 2f;
         }
-        camera.rect = rect;
+        _camera.rect = _rect;
     }
-    //void OnPreCull() => GL.Clear(true, true, Color.black);
+    void OnPreCull() => GL.Clear(true, true, Color.black);
+    
+    
+    
     
     
     // private void CameraSetResolution()
