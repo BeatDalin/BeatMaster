@@ -98,7 +98,7 @@ public class DataCenter : MonoBehaviour
             {
                 temp.level = j + 1;
                 temp.isUnlocked = j == 0;
-                temp.unlockCharNum = j <= 1 ? j + 1 : 2; // 레벨 번호대로 캐릭터 해금, 아니면 기본캐릭터 index 부여)
+                temp.unlockCharNum = j <= 1 ? j + 1 : 2; // 레벨 번호대로 캐릭터 해금, 또는 마지막 character index 부여)
                 
                 _gameData.stageData[i].levelData[j] = temp;
             }
