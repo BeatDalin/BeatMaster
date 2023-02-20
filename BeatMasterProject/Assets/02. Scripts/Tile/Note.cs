@@ -12,9 +12,6 @@ public class Note : MonoBehaviour
     private Game _game;
     private bool _isPlay = true;
     private bool _isRewindParticle;
-
-    private bool waitResult;
-
     private WaitForSeconds _waitForSecondsEnumerator;
 
     [SerializeField] private ParticleSystem[] _particleSystems;
