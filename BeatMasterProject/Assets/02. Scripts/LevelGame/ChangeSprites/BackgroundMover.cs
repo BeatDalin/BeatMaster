@@ -7,30 +7,28 @@ using UnityEngine;
 public class BackgroundMover : MonoBehaviour
 {
     [SerializeField] private float _moveXAmount = 0.01f;
-    [SerializeField] private float _heightLerp = 0.05f;
-    [SerializeField] private float _ModSpeedY = 5f;
-    private Renderer _myRenderer;
-    private Material _myMaterial;
+    [SerializeField] private float _modSpeedY = 5f;
+    private SpriteRenderer[] _mySpriteRenderers;
     private CameraController _cameraController;
     private CharacterMovement _characterMovement;
     private CinemachineVirtualCamera _characterCamera;
     private CinemachineBrain _mainCamBrain;
-    private Vector2 _currentUV;
     private float _heightTimer;
     private float _prevSpeed;
-    
+    private float _scrollX;
+    private static readonly int ScrollAmount = Shader.PropertyToID("_ScrollAmount");
+
     // TODO
     // 추후 해상도에 따라 스케일 조정 등을 생각 해봐야할 듯
     
     private void Awake()
     {
         _cameraController = FindObjectOfType<CameraController>();
-        _myRenderer = GetComponent<Renderer>();
         _characterMovement = FindObjectOfType<CharacterMovement>();
         _mainCamBrain = GameObject.FindWithTag("Main").GetComponent<CinemachineBrain>();
         _characterCamera = _cameraController.GetComponent<CinemachineVirtualCamera>();
-        _myMaterial = _myRenderer.material;
-        _currentUV = _myMaterial.mainTextureOffset;
+        
+        _mySpriteRenderers = GetComponentsInChildren<SpriteRenderer>();
     }
 
     private void Update()
@@ -43,47 +41,60 @@ public class BackgroundMover : MonoBehaviour
         MoveBackground();
     }
     
-    public void SetBackgroundSize(float speed)
+    public void SetBackgroundSize()
     {
         // lerp 만들기
-        StartCoroutine(CoSetBackgroundSize(speed));
-        _prevSpeed = speed;
+        StartCoroutine(CoSetBackgroundSize());
     }
 
-    private IEnumerator CoSetBackgroundSize(float speed)
+    private IEnumerator CoSetBackgroundSize()
     {
-        float goalSize = speed < _prevSpeed ? _cameraController.MinOrthoSize : _cameraController.MaxOrthoSize;
-        float modRatio = speed < _prevSpeed
-            ? goalSize / _cameraController.MaxOrthoSize
-            : goalSize / _cameraController.MinOrthoSize;
-        float standardSize = goalSize - _characterCamera.m_Lens.OrthographicSize;
+        bool isIncreasing = _cameraController.ToOrthoSize > _cameraController.FromOrthoSize;
+        float standardSize = isIncreasing
+            ? _cameraController.ToOrthoSize - _cameraController.FromOrthoSize
+            : _cameraController.FromOrthoSize - _cameraController.ToOrthoSize;
+        
         float ratio = 0;
+        float modRatio = _cameraController.ToOrthoSize / _cameraController.FromOrthoSize;
         Vector3 originalScale = transform.localScale;
         
         while (ratio < 1)
         {
             yield return new WaitForEndOfFrame();
-            float deltaSize = goalSize - _characterCamera.m_Lens.OrthographicSize;
-            float totalIncrement = standardSize - deltaSize;
-            
+            // 4 -> 6
+            // 6   4.1
+            // 1.9
+            // 0.1 목표
+            // 6 -> 4
+            // 6  5.9
+            // 0.1
+            // 0.1 목표
+            // 3.9
+            float deltaSize = _cameraController.ToOrthoSize - _characterCamera.m_Lens.OrthographicSize;
+            float totalIncrement = isIncreasing ? standardSize - deltaSize : standardSize + deltaSize;
+            Debug.Log(ratio);
             ratio = totalIncrement / standardSize;
+            Debug.Log(originalScale * modRatio);
             transform.localScale = Vector3.Lerp(originalScale, originalScale * modRatio, ratio);
         }
     }
     
     private void MoveBackgroundOffset()
     {
-        Vector2 tempUV = _currentUV;
-        tempUV.x += _moveXAmount * Time.deltaTime * _characterMovement.MoveSpeed;
-        _currentUV = tempUV;
-        _myMaterial.mainTextureOffset = _currentUV;
+        
+        for (int i = 0; i < _mySpriteRenderers.Length; i++)
+        {
+            _scrollX += (i + 1) * _moveXAmount * Time.deltaTime * _characterMovement.MoveSpeed;
+            _mySpriteRenderers[i].material.SetFloat(ScrollAmount, _scrollX);
+        }
+        
     }
 
     private void MoveBackground()
     {
         Vector3 tempVec = transform.position;
         
-        float posY = Mathf.Lerp(tempVec.y, _mainCamBrain.transform.position.y, _ModSpeedY * Time.deltaTime);
+        float posY = Mathf.Lerp(tempVec.y, _mainCamBrain.transform.position.y, _modSpeedY * Time.deltaTime);
         Vector3 goalVec = new Vector3(_characterMovement.transform.position.x, posY, tempVec.z);
         
         transform.position = goalVec;
