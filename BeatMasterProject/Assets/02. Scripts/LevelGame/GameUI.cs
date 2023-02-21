@@ -91,7 +91,7 @@ public abstract class GameUI : MonoBehaviour
     //     }
     // }
 
-    protected void OpenPause()
+    public void OpenPause()
     {
         if (game.curState.Equals(GameState.Play))
         {
