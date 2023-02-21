@@ -8,7 +8,7 @@ public class DataCenter : MonoBehaviour
     [SerializeField]
     private Data _gameData; // keep it private, and update it through method using stage & level number
     private PlayerData _playerData;
-    private ItemData[] itemData;
+    private Achievement _achievement;
     private readonly string _fileName = "Data.json"; // file name 
     private string _path => Application.persistentDataPath + '/' + _fileName;
     private static GameObject _go;
@@ -46,6 +46,8 @@ public class DataCenter : MonoBehaviour
             string data = stream.ReadToEnd();
             _gameData = JsonUtility.FromJson<Data>(data);
             _playerData = _gameData.playerData;
+            _achievement = _gameData.achievement;
+
             stream.Close();
         }
         else
@@ -80,6 +82,7 @@ public class DataCenter : MonoBehaviour
     {
         _gameData = new Data();
         _playerData = new PlayerData();
+        _achievement = new Achievement();
         _playerData.playerLv = 1;
         _playerData.playerStage = 1;
         _playerData.playerChar = 0; // default character index
@@ -99,10 +102,23 @@ public class DataCenter : MonoBehaviour
                 temp.level = j + 1;
                 temp.isUnlocked = j == 0;
                 temp.unlockCharNum = j <= 1 ? j + 1 : 2; // 레벨1은 스테이지 번호대로 캐릭터 해금, 아니면 기본캐릭터 index 부여)
-                
+
                 _gameData.stageData[i].levelData[j] = temp;
             }
         }
+
+        _achievement.isFirstPurchased = false;
+        _achievement.isStarted = false;
+        _achievement.isGrown = false;
+        _achievement.isMaster = false;
+        /*        _achievement.isPlayedOnce = false;
+                _achievement.isPlayedFive = false;
+                _achievement.isPlayedTen = false;*/
+        _achievement.isFirstItem = false;
+        _achievement.isCrownItem = false;
+        _achievement.isRestartedOverHundred = false;
+        _achievement.isFirstPayment = false;
+        _achievement.playCount = 0;
 
         CreateStoreData();
         SaveData();
@@ -235,6 +251,10 @@ public class DataCenter : MonoBehaviour
     {
         _gameData.storeData.characterData[charNum].isPurchased = true;
         _gameData.playerData.playerItem -= _gameData.storeData.characterData[charNum].price;
+        if (!_gameData.achievement.isFirstPurchased)
+        {
+            GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_first_character, success => _gameData.achievement.isFirstPurchased = true);
+        }
         SaveData();
     }
 
@@ -256,6 +276,14 @@ public class DataCenter : MonoBehaviour
     {
         _gameData.storeData.itemData[(int)itemName].isPurchased = true;
         _gameData.playerData.playerItem -= _gameData.storeData.itemData[(int)itemName].price;
+        if (!_gameData.achievement.isFirstItem)
+        {
+            GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_first_item, success => _gameData.achievement.isFirstItem = true);
+        }
+        if (!_gameData.achievement.isCrownItem)
+        {
+            GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_crown_item, success => _gameData.achievement.isCrownItem = true);
+        }
         SaveData();
     }
 
@@ -274,5 +302,10 @@ public class DataCenter : MonoBehaviour
     public PlayerData GetPlayerData()
     {
         return _gameData.playerData;
+    }
+
+    public Achievement GetAchievementData()
+    {
+        return _gameData.achievement;
     }
 }

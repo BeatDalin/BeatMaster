@@ -8,6 +8,7 @@ public struct Data
     public PlayerData playerData;
     public StageData[] stageData; // contains four StageData
     public StoreData storeData;
+    public Achievement achievement;
 }
 
 [Serializable]
@@ -101,4 +102,21 @@ public struct RewindData
 {
     public Vector2 rewindPos;
     public string judgeResult;
+}
+
+[Serializable]
+public struct Achievement
+{
+    public bool isFirstPurchased;
+    public bool isStarted;
+    public bool isGrown;
+    public bool isMaster;
+    /*public bool isPlayedOnce;
+    public bool isPlayedFive;
+    public bool isPlayedTen;*/
+    public bool isFirstItem;
+    public bool isCrownItem;
+    public bool isRestartedOverHundred;
+    public bool isFirstPayment;
+    public int playCount;
 }
