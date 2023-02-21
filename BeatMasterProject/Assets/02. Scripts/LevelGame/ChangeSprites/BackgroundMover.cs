@@ -94,7 +94,7 @@ public class BackgroundMover : MonoBehaviour
     {
         Vector3 tempVec = transform.position;
         
-        float posY = Mathf.Lerp(tempVec.y, _mainCamBrain.transform.position.y, _ModSpeedY * Time.deltaTime);
+        float posY = Mathf.Lerp(tempVec.y, _mainCamBrain.transform.position.y, _modSpeedY * Time.deltaTime);
         Vector3 goalVec = new Vector3(_characterMovement.transform.position.x, posY, tempVec.z);
         
         transform.position = goalVec;
