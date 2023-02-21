@@ -51,10 +51,12 @@ public class ComboSystem : ObjectPooling
     
     protected override void Init()
     {
+        float defaultSpeed = _characterMovement.MoveSpeed;
         for (int i = 0; i < initCount; i++)
         {
             GameObject go = CreateNewObject();
             _comboDict.Add(go, go.GetComponent<ComboText>());
+            _comboDict[go].SetDefaultSpeed(defaultSpeed);
         }
     }
 
@@ -117,7 +119,7 @@ public class ComboSystem : ObjectPooling
         // 콤보 UI를 보여줌
         GameObject comboGo = GetObject(_characterMovement.transform.position);
 
-        _comboDict[comboGo].SetPlayerSpeed(_characterMovement.MoveSpeed, _resourcesChanger.DefaultSpeed);
+        _comboDict[comboGo].SetPlayerSpeed(_characterMovement.MoveSpeed);
         _comboDict[comboGo].SetText(_combo, _colorIndex, this);
     }
     
@@ -128,6 +130,7 @@ public class ComboSystem : ObjectPooling
             _outLineMat.SetColor(OutLineColor, _colorsHDR[Random.Range(0, _colorsHDR.Length)]);
             yield return new WaitForSeconds(1f);
         }
+        
         _isColorChanging = false;
     }
 }
