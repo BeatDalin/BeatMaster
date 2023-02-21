@@ -106,8 +106,9 @@ public class ComboSystem : ObjectPooling
     public override GameObject GetObject(Vector3 touchPos)
     {
         var obj = poolingObjectQueue.Dequeue();
-        obj.transform.position = Camera.main.WorldToScreenPoint(touchPos); 
+        obj.transform.position = touchPos; 
         obj.transform.SetParent(_canvasTrans);
+        obj.transform.localScale = Vector3.one;
         return obj;
     }
 
