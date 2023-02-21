@@ -6,41 +6,51 @@ using UnityEngine.UI;
 
 public class Store : MonoBehaviour
 {
+    [Header("Prefab Buttons")]
     [SerializeField]
-    private Button _char;
-
+    private Button _characterBtn;
     [SerializeField]
     private Button _itemBtn;
 
+    [Header("Panels")]
     [SerializeField]
     private GameObject[] _popupPanel; //panels 0:_purchasePanel, 1:_noMoneyPanel, 2: _lockedPanel
+
+
+    [Header("Popup Buttons")]
     [SerializeField]
     private Button[] _popupBtn; //buttons 0:_purchaseBtn, 1:_closeBtn
+
+    [Header("Text")]
     [SerializeField]
     private Text _playerCoin;
+
+    [Header("Objects")]
     [SerializeField]
     private GameObject _ifPurchased;
+    [SerializeField]
+    private GameObject[] _selectArea;
+    [SerializeField]
+    private GameObject _charContent;
+    [SerializeField]
+    private GameObject _itemContent;
+
     [SerializeField]
     private Anim _anim;
 
     [SerializeField]
     private ChangeCharSprite _changeChar;
 
-    [SerializeField] private Toggle[] _toggles; //0: charBtn, 1:itemBtn
+    [Header("Toggles")]
+    [SerializeField]
+    private Toggle[] _toggles; //0: charBtn, 1:itemBtn
 
     //private Animator _animator;
 
-    [SerializeField]
-    private GameObject[] _selectArea;
-
-    [SerializeField]
-    private GameObject _charContent;
-
-    [SerializeField]
-    private GameObject _itemContent;
-
     private Button[] _character;
     private Button[] _item;
+
+    [Header("Data")]
     [SerializeField] private StoreData _storeData;
     [SerializeField] private PlayerData _playerData;
 
@@ -70,8 +80,8 @@ public class Store : MonoBehaviour
         for (int i = 0; i < _storeData.characterData.Length; i++)
         {
             int index = i;
-            
-            _character[index] = Instantiate(_char, _charContent.transform);
+
+            _character[index] = Instantiate(_characterBtn, _charContent.transform);
             _character[index].transform.GetComponent<Image>().sprite = _changeChar.ChangeCharacterSprite(index);
             if (_storeData.characterData[i].isPurchased)
             {
@@ -95,6 +105,7 @@ public class Store : MonoBehaviour
     {
         _popupPanel[2].SetActive(true);
         _popupPanel[2].transform.GetChild(0).GetChild(1).GetComponent<Text>().text =
+
                     (_storeData.characterData[index].unlockStage + 1) + " - " + (_storeData.characterData[index].unlockLevel + 1) + "을 깨고 와주세요!";
     }
 
@@ -173,7 +184,7 @@ public class Store : MonoBehaviour
 
         _popupPanel[0].transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = ((Image)_character[charNum].targetGraphic).sprite;
         _popupPanel[0].transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
-        
+
         // 구매 안 한 상태일 때 구매하기 버튼 노출
         if (!_storeData.characterData[charNum].isPurchased && _storeData.characterData[charNum].isUnlocked)
         {
