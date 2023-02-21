@@ -3,52 +3,42 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using SonicBloom.Koreo;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum MenuButtonName // Title 씬의 버튼들
+public enum TitleButtonName
 {
     Play = 0,
-    Setting,
-    Store,
+    Menu,
+    Store
 }
-
-public enum SettingButtonName // Setting Panel의 버튼들
+public enum MenuButtonName // 메뉴 버튼들
 {
-    Sound = 0,
-    Quality,
-    Leave
+    Setting = 0,
+    MyInfo,
+    Quit
 }
 
 public class MenuTitleButton : MonoBehaviour
 {
+    
     [EventID] public string eventID;
 
     [SerializeField] private DOTweenAnimation[] _doTweenAnimations;
 
-    [Header("==== Title Buttons ====")] 
-    [SerializeField] private Button[] _menuButtons; // <Title - Menu> Buttons
+    [Header("========= Buttons =========")] 
+    [SerializeField] private Button[] _titleButtons;    // 플레이, 메뉴, 상점 버튼
+    [SerializeField] private Button[] _menuButtons;     // 세팅, 내정보, 게임 종료 버튼
 
-    [Header("==== Title Panel ====")]
-    [SerializeField] private GameObject _settingPanel; // <Panel> Settings
-    [SerializeField] private GameObject _storePanel; // <Panel> Store
 
-    // [Header("==== Setting Panel Buttons ====")] 
-    // [SerializeField] private Button[] _settingButtons; // <Title - Setting> Buttons
-    //
-    // [Header("==== Setting Panel ====")] 
-    // [SerializeField] private GameObject _soundSettingPanel; // <Panel> SoundSetting\
-    // [SerializeField] private GameObject _qualitySettingPanel; // <Panel> QualitySetting
-    // [SerializeField] private GameObject _leavePanel; // <Panel> LeavePopUp
-
-    [Header("==== Close Button ====")] 
-    [SerializeField] private Button _closeButton;
+    [Header("========= Panels =========")] 
+    [SerializeField] private GameObject _menuGroupPanel; // Menu Group
+    [SerializeField] private GameObject _storePanel; // Store Panel
+    [SerializeField] private GameObject[] _menuPanels;  // Menu Panels
 
     [SerializeField] private float _fadeTime = 1f; // Panel Fade 타임
 
-    private int _objectIdx = 0;
-
+    
     private void Start()
     {
         // Event Register
@@ -66,7 +56,7 @@ public class MenuTitleButton : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            UIManager.instance.ClosePopUp();
+            //UIManager.instance.ClosePopUp();
         }
     }
 
@@ -75,92 +65,79 @@ public class MenuTitleButton : MonoBehaviour
     /// </summary>
     private void AddClickListener()
     {
-        #region Menu Buttons (StartGame, Store, Setting)
-
-        // <Menu - Button> StartGame
-        _menuButtons[(int)MenuButtonName.Play].onClick.AddListener(() =>
-        {
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
-        });
-        // <Menu - Button> Store
-        _menuButtons[(int)MenuButtonName.Store].onClick.AddListener(() => { OpenPanelFadeIn(_storePanel); });
-        // <Menu - Button> Setting
-        _menuButtons[(int)MenuButtonName.Setting].onClick.AddListener(() => { OpenPanelFadeIn(_settingPanel); });
+        #region Title 씬의 버튼들 (Play, Menu, Store)
+        
+        _titleButtons[(int)TitleButtonName.Play].onClick.AddListener(() => { SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect); });  // Play 버튼
+        _titleButtons[(int)TitleButtonName.Menu].onClick.AddListener(() => { OpenMenu(_menuGroupPanel); });     // Menu 버튼
+        _titleButtons[(int)TitleButtonName.Store].onClick.AddListener(() => { OpenPanel(_storePanel); });       // Store 버튼
 
         #endregion
 
-        #region Setting Buttons (Sound, Quality, Leave)
+        #region MenuGroup의 버튼들 (Settings, MyInfo, Quit)
 
-        // // <Setting - Button> Sound Settings
-        // _settingButtons[(int)SettingButtonName.Sound].onClick.AddListener(() => { OpenPopUp("SoundSetting"); });
-        // // <Setting - Button> Quality Settings
-        // _settingButtons[(int)SettingButtonName.Quality].onClick
-        //     .AddListener(() => { OpenPopUp("QualitySetting"); });
-        // // <Setting - Button> Leave
-        // _settingButtons[(int)SettingButtonName.Leave].onClick.AddListener(() => { OpenPopUp("Leave"); });
-
+        // Menu - Settings 버튼 (Setting, MyInfo, Quit)
+        _menuButtons[(int)MenuButtonName.Setting].onClick.AddListener(() => { OpenPanel(_menuPanels[(int)MenuButtonName.Setting]); });
+        _menuButtons[(int)MenuButtonName.MyInfo].onClick.AddListener(() => { OpenPanel(_menuPanels[(int)MenuButtonName.MyInfo]); });
+        _menuButtons[(int)MenuButtonName.Quit].onClick.AddListener(() => { OpenPanel(_menuPanels[(int)MenuButtonName.Quit]); });
+        
         #endregion
         
     }
-
-    public void OpenPanelFadeIn(GameObject panelName)
+    public void OpenMenu(GameObject panelName)
     {
+        SoundManager.instance.PlaySFX("Touch");
+
         if (!panelName.activeSelf)
         {
             panelName.SetActive(true);
-            panelName.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
+        }
+        else
+        {   
+            panelName.SetActive(false);
         }
     }
-
-    public void ClosePanelFadeOut(GameObject panelName)
+    public void CloseMenu(GameObject panelName)
     {
+        panelName.SetActive(false);
+    }
+    
+    public void OpenPanel(GameObject panelName)
+    {
+        if (!panelName.activeSelf)
+        {
+            SoundManager.instance.PlaySFX("Touch");
+            CloseMenu(_menuGroupPanel);
+
+            foreach (var titleButton in _titleButtons)
+            {
+                ActivateButton(titleButton,false);
+            }
+            
+            panelName.SetActive(true);
+            panelName.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
+            
+        }
+    }
+    public void ClosePanel(GameObject panelName)
+    {
+        SoundManager.instance.PlaySFX("Touch");
+
         panelName.GetComponent<RectTransform>().DOLocalMove(new Vector3(Screen.width, 0, 0), 0.4f).onComplete += () =>
         {
             panelName.SetActive(false);
+
+            foreach (var titleButton in _titleButtons)
+            {
+                ActivateButton(titleButton,true);
+            }
         };
     }
 
-
-    // private void OpenPopUp(string popUpName)
-    // {
-    //     SoundManager.instance.PlaySFX("Touch");
-    //
-    //     switch (popUpName)
-    //     {
-    //         case "StartGame":
-    //             if (!_playPanel.activeSelf)
-    //             {
-    //                 _playPanel.SetActive(true);
-    //             }
-    //
-    //             break;
-    //         case "Store":
-    //             if (!_storePanel.activeSelf)
-    //             {
-    //                 _storePanel.SetActive(true);
-    //             }
-    //
-    //             break;
-    //         case "Setting":
-    //             if (!_settingPanel.activeSelf)
-    //             {
-    //                 _settingPanel.SetActive(true);
-    //             }
-    //
-    //             //UIManager.instance.OpenPopUp(_settingPopUp);
-    //             break;
-    //         case "SoundSetting":
-    //             //UIManager.instance.OpenPopUp(_soundSettingPopUp);
-    //             break;
-    //         case "QualitySetting":
-    //             //UIManager.instance.OpenPopUp(_qualitySettingPopUp);
-    //             break;
-    //         case "Leave":
-    //             //UIManager.instance.OpenPopUp(_leavePopUp);
-    //             break;
-    //     }
-    // }
-
+    // 다른 UI가 활성/비활성화 되었을 때, 다른 버튼 클릭(터치) 가능/불가능 하도록!
+    public void ActivateButton(Button buttonName, bool isInteractable)
+    {
+        buttonName.interactable = isInteractable;
+    }    
     private void ChangeScale(KoreographyEvent evt)
     {
         for (int i = 0; i < _doTweenAnimations.Length; i++)
@@ -169,4 +146,10 @@ public class MenuTitleButton : MonoBehaviour
             _doTweenAnimations[i].DOPlay();
         }
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+    
 }

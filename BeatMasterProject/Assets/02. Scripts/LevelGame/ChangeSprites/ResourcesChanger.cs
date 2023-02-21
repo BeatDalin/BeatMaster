@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.Serialization;
 
 public class ResourcesChanger : MonoBehaviour
 {
-    public float DefaultSpeed { get; private set; }
+    private float _defaultSpeed;
     [SerializeField] private ChangingResources[] _changingResources;
     [SerializeField] private AnimationCurve _hueCurve;
     [SerializeField] private float _lerpTime = 1f;
@@ -16,7 +15,10 @@ public class ResourcesChanger : MonoBehaviour
     private Volume _volume;
     private ColorAdjustments _colorAdjustments;
     private int _materialIndex;
-    private int _resourceIndex;
+    private string _sceneName;
+    private ChangingResources _currentResource;
+    private CharacterMovement _characterMovement;
+
     private int _hueIndex;
     private int _satIndex;
     private readonly int MAX_HUE = 360;
@@ -28,24 +30,33 @@ public class ResourcesChanger : MonoBehaviour
         _backgroundMover = FindObjectOfType<BackgroundMover>();
         _volume = FindObjectOfType<Volume>();
         _volume.profile.TryGet(typeof(ColorAdjustments), out _colorAdjustments);
+        _characterMovement = FindObjectOfType<CharacterMovement>();
         Init();
     }
 
     private void Init()
     {
         // TODO Stage()_Level()로 바꾸기
-        _resourceIndex = int.Parse(SceneLoadManager.Instance.Scene.ToString().Substring(5)) - 1;
+        _sceneName = SceneLoadManager.Instance.Scene.ToString();
+        SetDefaultSpeed();
     }
 
     public void OnSpeedChanged(float speed)
     {
         ChangePostProcessing(speed);
-        _backgroundMover.SetBackgroundSize(speed);
+        _backgroundMover.SetBackgroundSize();
     }
     
     private void ChangePostProcessing(float speed)
     {
-        _hueIndex %= _changingResources[_resourceIndex].HueValues.Length;
+        foreach (var changingResource in _changingResources)
+        {
+            if (changingResource.name == _sceneName)
+            {
+                _currentResource = changingResource;
+                break;
+            }
+        }
 
         StartCoroutine(CoHueShift(speed));
     }
@@ -57,7 +68,7 @@ public class ResourcesChanger : MonoBehaviour
         
         Color.RGBToHSV(_colorAdjustments.colorFilter.value, out h, out s, out v);
 
-        if (DefaultSpeed.Equals(speed))
+        if (_defaultSpeed.Equals(speed))
         {
             while (_lerpTime > timer)
             {
@@ -81,10 +92,11 @@ public class ResourcesChanger : MonoBehaviour
                 
                 // changingResources의 값은 ratio 값이 아닌 일반 HSV 값이므로 최대 값으로 나누어 주어야 된다.
                 // 360이 최대 값
-                h = Mathf.Lerp(h * MAX_HUE, _changingResources[_resourceIndex].HueValues[_hueIndex], _hueCurve.Evaluate(ratio)) /
+                h = Mathf.Lerp(h * MAX_HUE, _currentResource.HueValues[_hueIndex],
+                        _hueCurve.Evaluate(ratio)) /
                     MAX_HUE;
                 // 100이 최대 값
-                s = Mathf.Lerp(s * MAX_SAT, _changingResources[_resourceIndex].SatValues[_satIndex], _hueCurve.Evaluate(ratio)) /
+                s = Mathf.Lerp(s * MAX_SAT, _currentResource.SatValues[_satIndex], _hueCurve.Evaluate(ratio)) /
                     MAX_SAT;
                     _colorAdjustments.colorFilter.value = Color.HSVToRGB(h, s, v);
                 yield return new WaitForEndOfFrame();
@@ -95,9 +107,9 @@ public class ResourcesChanger : MonoBehaviour
         _satIndex++;
     }
 
-    public void SetDefaultSpeed(float moveSpeed)
+    public void SetDefaultSpeed()
     {
-        DefaultSpeed = moveSpeed;
+        _defaultSpeed = _characterMovement.MoveSpeed;
     }
 
     public void ResetPostProcessing()
