@@ -7,10 +7,11 @@ public class ApplicationPause : MonoBehaviour
 {
     private bool _isPause;
     private Game _game;
-    
+    private GameUI _gameUI;
     // Start is called before the first frame update
     void Start()
     {
+        _gameUI = FindObjectOfType<GameUI>();
         _game = FindObjectOfType<Game>();
     }
 
@@ -20,14 +21,16 @@ public class ApplicationPause : MonoBehaviour
         {
             _isPause = true;
             _game.PauseGame();  // 게임 일시 정지
+            _gameUI.OpenPause();
+            
         }
-        else
-        {
-            if (_isPause)
-            {
-                _isPause = false;
-                _game.ContinueGame();   // 게임 재개
-            }
-        }
+        // else
+        // {
+        //     if (_isPause)
+        //     {
+        //         _isPause = false;
+        //         _game.ContinueGame();   // 게임 재개
+        //     }
+        // }
     }
 }

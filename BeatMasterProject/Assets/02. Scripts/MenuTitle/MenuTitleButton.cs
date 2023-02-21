@@ -120,9 +120,10 @@ public class MenuTitleButton : MonoBehaviour
     }
     public void ClosePanel(GameObject panelName)
     {
+        SoundManager.instance.PlaySFX("Touch");
+
         panelName.GetComponent<RectTransform>().DOLocalMove(new Vector3(Screen.width, 0, 0), 0.4f).onComplete += () =>
         {
-            SoundManager.instance.PlaySFX("Touch");
             panelName.SetActive(false);
 
             foreach (var titleButton in _titleButtons)
