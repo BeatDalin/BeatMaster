@@ -75,6 +75,6 @@ public class WaypointMover : MonoBehaviour
                 Vector3.MoveTowards(_stagePathTrail.transform.position, _currWaypoint.position, _moveSpeed * Time.deltaTime);
             yield return null;
         }
-        SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level4);
+        // SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level4);
     }
 }

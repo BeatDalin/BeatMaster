@@ -35,6 +35,7 @@ public class ComboText : MonoBehaviour
 
     private readonly ushort MAX_HUE = 360;
     private readonly string COMBO_STR = "Combo ";
+    private readonly ushort _defaultWidth = 1920;
     
     private void Awake()
     {
@@ -42,6 +43,7 @@ public class ComboText : MonoBehaviour
         _rigid = GetComponent<Rigidbody2D>();
         _waitForEndOfFrame = new WaitForEndOfFrame();
         _comboStr = new StringBuilder(10);
+        InitSize();
     }
 
     private void OnEnable()
@@ -68,17 +70,25 @@ public class ComboText : MonoBehaviour
     {
         FadeIn();
     }
+    
+    private void InitSize()
+    {
+        float fontRatio = (float)Screen.width / _defaultWidth;
+        _text.fontSize = Mathf.RoundToInt(_text.fontSize * fontRatio);
+    }
 
     public void SetText(int combo, int index, ComboSystem comboSystem)
     {
+        gameObject.SetActive(true);
+        
         _comboSystem = comboSystem;
         _comboStr.Append(COMBO_STR);
         _comboStr.Append(combo);
         _text.text = _comboStr.ToString();
-        gameObject.SetActive(true);
         int hueIndex = Math.Clamp(index, 0, _hueValues.Length - 1);
         _hueIndex = hueIndex;
         StartCoroutine(SetTextColor());
+        
         _comboStr.Clear();
     }
 

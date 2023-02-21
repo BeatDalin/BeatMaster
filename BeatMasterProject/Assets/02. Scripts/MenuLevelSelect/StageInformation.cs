@@ -5,20 +5,20 @@ using UnityEngine.UI;
 
 public class StageInfo
 {
-    public int stageNum; // stage index
-    public int nextstageNum; // 다음 level index
-    public int formerStageNum; // 이전 level index
-    public int maxStageNum = 3; // 최대 level index
+    public int stageIdx; // stage index
+    public int nextStageIdx; // 다음 level index
+    public int formerStageIdx; // 이전 level index
+    public int maxStageIdx = 3; // 최대 level index
     public string stageDescription; // levelUI TextArea에 들어갈 level 설명
     
     public Vector3 mapPos; // StageUI에서 보여줄 map 영역
     public Vector3 camPos; // StageUI BG에서 보여줄 map 영역
 
-    public StageInfo(int stageNum, string stageDescription, Vector3 mapPos, Vector3 camPos)
+    public StageInfo(int stageIdx, string stageDescription, Vector3 mapPos, Vector3 camPos)
     {
-        this.stageNum = stageNum;
-        nextstageNum = this.stageNum == maxStageNum ? this.stageNum : this.stageNum + 1; // 현재 레벨이 최대 레벨이라면, 다음 레벨 없음
-        formerStageNum = this.stageNum == 0 ? this.stageNum : this.stageNum - 1; // 현재 레벨이 최소 레벨이라면, 이전 레벨 없음
+        this.stageIdx = stageIdx;
+        nextStageIdx = this.stageIdx == maxStageIdx ? this.stageIdx : this.stageIdx + 1; // 현재 레벨이 최대 레벨이라면, 다음 레벨 없음
+        formerStageIdx = this.stageIdx == 0 ? this.stageIdx : this.stageIdx - 1; // 현재 레벨이 최소 레벨이라면, 이전 레벨 없음
         this.stageDescription = stageDescription;
         this.mapPos = mapPos;
         this.camPos = camPos;
@@ -105,41 +105,41 @@ public class StageInformation : MonoBehaviour
     //     _levelPanel.SetActive(false);
     // }
     
-    private void SetStageInfo(int stageNum)
+    private void SetStageInfo(int stageIdx)
     {
         SoundManager.instance.PlaySFX("Touch");
         _stageBtns.SetActive(false);
         
         // levelNum 최댓 최솟값 한정
-        stageNum = stageNum > _maxStageNum ? _maxStageNum : stageNum;
-        stageNum = stageNum < 0 ? 0 : stageNum;
+        stageIdx = stageIdx > _maxStageNum ? _maxStageNum : stageIdx;
+        stageIdx = stageIdx < 0 ? 0 : stageIdx;
         
         // move Btn
-        _moveBtn[0].SetActive(stageNum != 0);
-        _moveBtn[1].SetActive(stageNum != _maxStageNum);
+        _moveBtn[0].SetActive(stageIdx != 0);
+        _moveBtn[1].SetActive(stageIdx != _maxStageNum);
         
         
         // Toggles
         _levelToggles[0].isOn = true;
-        SetToggleStatus(_levelToggles, stageNum);
+        SetToggleStatus(_levelToggles, stageIdx);
         
         // StageTitle Txt
-        int curStage = _stageInfo[stageNum].stageNum + 1;
+        int curStage = _stageInfo[stageIdx].stageIdx + 1;
         _stageTitle.text = "Stage " + curStage;
         
         // map position
-        _maskTarget.GetComponent<RectTransform>().localPosition = _stageInfo[stageNum].mapPos;
+        _maskTarget.GetComponent<RectTransform>().localPosition = _stageInfo[stageIdx].mapPos;
         
         // description Txt
-        _description.text = _stageInfo[stageNum].stageDescription;
+        _description.text = _stageInfo[stageIdx].stageDescription;
 
-        uiStage = _stageInfo[stageNum].stageNum;
+        uiStage = _stageInfo[stageIdx].stageIdx;
         
         // Toggles
         SetToggleStatus(_levelToggles, uiStage);
         
         // Camera
-        StartCoroutine(CoZoomIn(_mainCam.transform.position, _stageInfo[stageNum].camPos, 8, 3));
+        StartCoroutine(CoZoomIn(_mainCam.transform.position, _stageInfo[stageIdx].camPos, 8, 3));
     }
 
     private IEnumerator CoZoomIn(Vector3 current, Vector3 target, float currentSize, float targetSize)
@@ -168,32 +168,31 @@ public class StageInformation : MonoBehaviour
     }
     
     private IEnumerator CoZoomOut(Vector3 current, Vector3 target, float currentSize, float targetSize)
+    {
+        _stagePanel.SetActive(currentSize > targetSize);
+        
+        float time = 0.5f;
+        float elapsedTime = 0.0f;
+            // _mainCam.orthographicSize > 5
+        while(elapsedTime < time)
         {
-            _stagePanel.SetActive(currentSize > targetSize);
+            elapsedTime += (Time.deltaTime);
             
-            float time = 0.5f;
-            float elapsedTime = 0.0f;
-                // _mainCam.orthographicSize > 5
-            while(elapsedTime < time)
-            {
-                elapsedTime += (Time.deltaTime);
-                
-                _mainCam.transform.position = 
-                    Vector3.Lerp(current, target, elapsedTime/time);
-                _mainCam.orthographicSize =
-                    Mathf.Lerp(currentSize, targetSize, elapsedTime / time);
-                
-                yield return null;
-            }
-    
-            _mainCam.transform.position = target;
-            _mainCam.orthographicSize = targetSize;
-    
-            yield return new WaitForSeconds(0.3f);
+            _mainCam.transform.position = 
+                Vector3.Lerp(current, target, elapsedTime / time);
+            _mainCam.orthographicSize =
+                Mathf.Lerp(currentSize, targetSize, elapsedTime / time);
             
-            _stageBtns.SetActive(!(currentSize > targetSize));
+            yield return null;
         }
-    
+
+        _mainCam.transform.position = target;
+        _mainCam.orthographicSize = targetSize;
+
+        yield return new WaitForSeconds(0.3f);
+        
+        _stageBtns.SetActive(!(currentSize > targetSize));
+    }
     
     private void SetToggleStatus(Toggle[] toggles, int stageNum)
     {
@@ -204,7 +203,6 @@ public class StageInformation : MonoBehaviour
             toggles[i].GetComponent<Toggle>().interactable = levelData.isUnlocked; // 클릭 막기
             toggles[i].transform.GetChild(0).GetComponent<Image>().sprite = _toggleSprite[levelData.isUnlocked ? 0 : 1]; // 잠금 여부에 따라 toggle sprite 변경
             toggles[i].transform.GetChild(2).gameObject.SetActive(levelData.isUnlocked); // Text 영역
-            //Debug.Log("stage"+ stageNum+" level "+i+" "+levelData.isUnlocked);
 
             if (levelData.isUnlocked)
             {
@@ -262,23 +260,9 @@ public class StageInformation : MonoBehaviour
     {
         SoundManager.instance.PlaySFX("Touch");
 
-        switch (GetSelectedToggle(_levelToggles))
-        {
-            case 0:
-                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1);
-                break;
-            case 1:
-                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level2);
-                break;
-            case 2:
-                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level3);
-                break;
-            case 3:
-                SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level4);
-                break;
-        }
-        // StartCoroutine(CoFadeOut());
-        // SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Level1);
+        string sceneName = $"Stage{uiStage + 1}_Level{GetSelectedToggle(_levelToggles) + 1}";
+        // Debug.Log(sceneName);
+        SceneLoadManager.Instance.LoadLevelAsync((SceneLoadManager.SceneType)Enum.Parse(typeof(SceneLoadManager.SceneType), sceneName));
     }
 
     public void OnClickLeftBtn()
@@ -298,7 +282,6 @@ public class StageInformation : MonoBehaviour
         SoundManager.instance.PlaySFX("Touch");
         StartCoroutine(
             CoZoomOut(_mainCam.transform.position, _camPos[0].transform.position, _mainCam.orthographicSize, 8));
-
     }
 
     public void OnClickTitleBtn()
