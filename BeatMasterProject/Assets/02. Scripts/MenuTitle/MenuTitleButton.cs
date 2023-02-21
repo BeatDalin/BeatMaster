@@ -110,7 +110,7 @@ public class MenuTitleButton : MonoBehaviour
 
             foreach (var titleButton in _titleButtons)
             {
-                UnInteractable(titleButton);
+                ActivateButton(titleButton,false);
             }
             
             panelName.SetActive(true);
@@ -128,23 +128,16 @@ public class MenuTitleButton : MonoBehaviour
 
             foreach (var titleButton in _titleButtons)
             {
-                Interactable(titleButton);
+                ActivateButton(titleButton,true);
             }
         };
     }
 
-    // 다른 UI가 비활성화 되었을 때, 다른 버튼 클릭(터치) 가능하도록!
-    public void Interactable(Button buttonName)
+    // 다른 UI가 활성/비활성화 되었을 때, 다른 버튼 클릭(터치) 가능/불가능 하도록!
+    public void ActivateButton(Button buttonName, bool isInteractable)
     {
-        buttonName.interactable = true;
-    }
-    
-    // 다른 UI가 활성화 되었을 때, 다른 버튼 클릭(터치) 못하도록!
-    public void UnInteractable(Button buttonName)
-    {
-        buttonName.interactable = false;
-    }
-    
+        buttonName.interactable = isInteractable;
+    }    
     private void ChangeScale(KoreographyEvent evt)
     {
         for (int i = 0; i < _doTweenAnimations.Length; i++)
