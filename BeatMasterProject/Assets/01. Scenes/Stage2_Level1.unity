@@ -6577,8 +6577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveXAmount: 0.01
-  _heightLerp: 0.05
-  _ModSpeedY: 5
+  _modSpeedY: 5
 --- !u!23 &1494601849
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6734,8 +6733,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 2, z: -10}
-  _minOrthoSize: 4
-  _maxOrthoSize: 6
   _speedEventID: Level1_Spd
 --- !u!1 &1550472947
 GameObject:
@@ -7084,8 +7081,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 2, z: -10}
-  _minOrthoSize: 4
-  _maxOrthoSize: 6
   _speedEventID: Level1_Spd
 --- !u!114 &1686695924
 MonoBehaviour:
@@ -7200,6 +7195,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2996507906987670984, guid: fa2f6bd45131e1a4599c9e9da85d189f, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 270507031}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa2f6bd45131e1a4599c9e9da85d189f, type: 3}
 --- !u!1 &1768320477
