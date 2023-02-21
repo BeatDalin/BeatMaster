@@ -63,9 +63,8 @@ public class MapGenerator : MonoBehaviour
     private MonsterPooling _monsterPooling;
     private ObjectGenerator _objectGenerator;
 
-    [Header("TileParticleList")]
-    public List<GameObject> shortTileParticleList = new List<GameObject>();
-    public List<GameObject> longTileParticleList = new List<GameObject>();
+    [HideInInspector] public List<GameObject> shortTileParticleList = new List<GameObject>();
+    [HideInInspector] public List<GameObject> longTileParticleList = new List<GameObject>();
 
     private void Awake()
     {
@@ -226,7 +225,6 @@ public class MapGenerator : MonoBehaviour
             _tileX += 1;
             _tileY += groundYDelta;
 
-            Debug.Log(groundYDelta);
             // 사이드 타일 체크
             // 사이드 타일은 평평한 타일만 올 수 있기 때문에 현재 타일 타입이 Flat인지 체크
             if (groundType == _GroundType.Flat && i != 0 && i != _mapEventList.Count - 1)
@@ -280,6 +278,7 @@ public class MapGenerator : MonoBehaviour
             // 이전 타일 타입을 현재 타일 타입으로 갱신
             prevGroundType = groundType;
         }
+
         FillMapSide();
     }
 
@@ -316,6 +315,7 @@ public class MapGenerator : MonoBehaviour
     {
         int xPosition = 0;
         float yPosition = 0;
+
         for (int i = 0; i < _shortEventList.Count; i++)
         {
             int shortSample = _shortEventList[i].StartSample;
@@ -341,9 +341,9 @@ public class MapGenerator : MonoBehaviour
             if (shortHit)
             {
                 yPosition = shortHit.point.y;
+
                 shortTileParticleList.Add(Instantiate(_noteObjects[_shortEventList[i].GetIntValue()],
                     new Vector3(xPosition + xOffset, yPosition, 0f), Quaternion.identity, transform));
-                
                 _monsterPooling.AddTilePos(xPosition + xOffset, yPosition);
             }
 
