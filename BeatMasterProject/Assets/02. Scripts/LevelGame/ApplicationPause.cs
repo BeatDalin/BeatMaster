@@ -20,7 +20,6 @@ public class ApplicationPause : MonoBehaviour
         if (pauseStatus)
         {
             _isPause = true;
-            _game.PauseGame();  // 게임 일시 정지
             _gameUI.OpenPause();
             
         }
