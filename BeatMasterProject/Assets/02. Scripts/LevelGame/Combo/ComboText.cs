@@ -138,10 +138,14 @@ public class ComboText : MonoBehaviour
         _rigid.velocity = direction;
     }
 
-    public void SetPlayerSpeed(float speed, float defaultSpeed)
+    public void SetPlayerSpeed(float speed)
     {
         _playerSpeed = speed;
-        _defaultSpeed = defaultSpeed;
+    }
+
+    public void SetDefaultSpeed(float speed)
+    {
+        _defaultSpeed = speed;
     }
 
     private void FadeIn()

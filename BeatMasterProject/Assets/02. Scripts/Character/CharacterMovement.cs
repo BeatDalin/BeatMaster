@@ -21,22 +21,9 @@ public class CharacterMovement : MonoBehaviour
     public float MoveSpeed
     {
         get => _moveSpeed;
-        set
-        {
-            if (_moveSpeed == 0)
-            {
-                _moveSpeed = value;
-                _resourcesChanger.SetDefaultSpeed(_moveSpeed);
-                return;
-            }
-
-            if (!_moveSpeed.Equals(value))
-            {
-                _moveSpeed = value;
-                _resourcesChanger.OnSpeedChanged(_moveSpeed);
-            }
-        }
+        set => _moveSpeed = value;
     }
+    
     public float gravityScale;
     public float startGravityAccel;
     private float _gravityAccel;

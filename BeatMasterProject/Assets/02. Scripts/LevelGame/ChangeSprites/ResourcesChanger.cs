@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 
 public class ResourcesChanger : MonoBehaviour
 {
-    public float DefaultSpeed { get; private set; }
+    private float _defaultSpeed;
     [SerializeField] private ChangingResources[] _changingResources;
     [SerializeField] private AnimationCurve _hueCurve;
     [SerializeField] private float _lerpTime = 1f;
@@ -18,6 +18,7 @@ public class ResourcesChanger : MonoBehaviour
     private int _materialIndex;
     private string _sceneName;
     private ChangingResources _currentResource;
+    private CharacterMovement _characterMovement;
 
     private int _hueIndex;
     private int _satIndex;
@@ -30,6 +31,7 @@ public class ResourcesChanger : MonoBehaviour
         _backgroundMover = FindObjectOfType<BackgroundMover>();
         _volume = FindObjectOfType<Volume>();
         _volume.profile.TryGet(typeof(ColorAdjustments), out _colorAdjustments);
+        _characterMovement = FindObjectOfType<CharacterMovement>();
         Init();
     }
 
@@ -37,12 +39,13 @@ public class ResourcesChanger : MonoBehaviour
     {
         // TODO Stage()_Level()로 바꾸기
         _sceneName = SceneLoadManager.Instance.Scene.ToString();
+        SetDefaultSpeed();
     }
 
     public void OnSpeedChanged(float speed)
     {
         ChangePostProcessing(speed);
-        _backgroundMover.SetBackgroundSize(speed);
+        _backgroundMover.SetBackgroundSize();
     }
     
     private void ChangePostProcessing(float speed)
@@ -66,7 +69,7 @@ public class ResourcesChanger : MonoBehaviour
         
         Color.RGBToHSV(_colorAdjustments.colorFilter.value, out h, out s, out v);
 
-        if (DefaultSpeed.Equals(speed))
+        if (_defaultSpeed.Equals(speed))
         {
             while (_lerpTime > timer)
             {
@@ -105,9 +108,9 @@ public class ResourcesChanger : MonoBehaviour
         _satIndex++;
     }
 
-    public void SetDefaultSpeed(float moveSpeed)
+    public void SetDefaultSpeed()
     {
-        DefaultSpeed = moveSpeed;
+        _defaultSpeed = _characterMovement.MoveSpeed;
     }
 
     public void ResetPostProcessing()
