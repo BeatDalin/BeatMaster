@@ -42,8 +42,8 @@ public class MapTemp : MonoBehaviour
     private KoreographyEvent _longEvent;
     private CurvePayload _longPayload;
 
-    [Space]
-    [Header("Tile")]
+    [Space] [Header("Tile")] 
+    private WaitForSeconds _waitForSec;
     [SerializeField] private Tilemap _groundTilemap;
     [SerializeField] private Tilemap _interactionTilemap;
     private List<List<Tile>> _tileLists = new List<List<Tile>>();
@@ -69,7 +69,7 @@ public class MapTemp : MonoBehaviour
 
     private void Awake()
     {
-        
+        _waitForSec = new WaitForSeconds(0.01f);
         
         Init(theme);
         GenerateMap();
@@ -338,11 +338,11 @@ public class MapTemp : MonoBehaviour
 
                 _monsterPooling.AddTilePos(xPosition + xOffset, yPosition);
             }
-
+            
             if (_shortEventList[i].GetIntValue() == 0)
             {
-                // Record position
-                _objectGenerator.RecordShortPos(new Vector3(xPosition + xOffset, yPosition, 0));
+                // Record Jump position
+                _objectGenerator.RecordJumpPos(new Vector3(xPosition + xOffset, yPosition, 0));
                 if (int.Parse(_mapEventList[xPosition + 2].GetTextValue()) != 5)
                 {
                     // Posit object only when next tile is not empty tile
@@ -352,9 +352,9 @@ public class MapTemp : MonoBehaviour
         }
     }
 
-    IEnumerator WaitForSomething()
+    private IEnumerator WaitForSomething()
     {
-        yield return new WaitForSeconds(0.01f);
+        yield return _waitForSec;
         GenerateShortNoteTile();
         GenerateLongNoteTile();
     }

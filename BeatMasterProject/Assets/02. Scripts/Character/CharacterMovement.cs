@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SonicBloom.Koreo;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
@@ -18,25 +17,16 @@ public class CharacterMovement : MonoBehaviour
     [Header("Music")] 
     [EventID] public string speedEventID;
     [SerializeField] private float _moveSpeed;
+    
+    [Header("Character Tag")]
+    private const string UnTag = "Untagged";
+    private const string PlayerTag = "Player";
     public float MoveSpeed
     {
         get => _moveSpeed;
-        set
-        {
-            if (_moveSpeed == 0)
-            {
-                _moveSpeed = value;
-                _resourcesChanger.SetDefaultSpeed(_moveSpeed);
-                return;
-            }
-
-            if (!_moveSpeed.Equals(value))
-            {
-                _moveSpeed = value;
-                _resourcesChanger.OnSpeedChanged(_moveSpeed);
-            }
-        }
+        set => _moveSpeed = value;
     }
+    
     public float gravityScale;
     public float startGravityAccel;
     private float _gravityAccel;
@@ -322,6 +312,7 @@ public class CharacterMovement : MonoBehaviour
 
     public void RewindPosition()
     {
+        gameObject.tag = UnTag; // Set its tag as Untagged
         RaycastHit2D positionCheckHit = Physics2D.Raycast(_characterPosition, Vector2.down, 1000f, _tileLayer);
         float y = 0f;
         // 땅 위에 있을 때
@@ -404,5 +395,7 @@ public class CharacterMovement : MonoBehaviour
         transform.position = _characterPosition;
         lastPosition = _characterPosition;
         lastBeatTime = _checkPointBeatTime;
+
+        gameObject.tag = PlayerTag; // Back to Player Tag
     }
 }

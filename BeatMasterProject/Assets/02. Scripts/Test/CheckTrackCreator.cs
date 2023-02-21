@@ -6,7 +6,11 @@ using UnityEngine;
 
 public class CheckTrackCreator : MonoBehaviour
 {
-    [Header("Long Check Track")] public KoreographyTrack longTrack; // long note track
+    [Header("Map Track")]
+    public KoreographyTrack mapTrack;
+    
+    [Header("Long Check Track")]
+    public KoreographyTrack longTrack; // long note track
 
     // Track for check long notes to be created 
     public KoreographyTrack longCheckStart;
@@ -28,6 +32,7 @@ public class CheckTrackCreator : MonoBehaviour
     private void Start()
     {
         // If you want to create check events, call functions here
+        // ConvertMapToText();
         // GenerateJumpCheckEvent();
         //GenerateLongCheckEvent();
         // GenerateCheckPointEvent();
@@ -35,9 +40,25 @@ public class CheckTrackCreator : MonoBehaviour
         // GenerateAttackCheckEvent();
     }
 
+    private void ConvertMapToText()
+    {
+        // Convert Map
+        var mapEvents = mapTrack.GetAllEvents();
+        for (int i = 0; i < mapEvents.Count; i++)
+        {
+            if (mapEvents[i].HasIntPayload())
+            {
+                var value = mapEvents[i].GetIntValue();
+                TextPayload textPayload = new TextPayload();
+                textPayload.TextVal = value.ToString();
+                mapEvents[i].Payload = textPayload;
+            }
+        }
+    }
 
     private void GenerateLongCheckEvent()
     {
+        // Important Note : You have to convert all event payloads as Curve after creating CheckEvents
         var allEvents = longTrack.GetAllEvents();
         for (int i = 0; i < allEvents.Count; i++)
         {
