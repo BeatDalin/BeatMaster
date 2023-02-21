@@ -7,7 +7,7 @@ using UnityEngine;
 public class BackgroundMover : MonoBehaviour
 {
     [SerializeField] private float _moveXAmount = 0.01f;
-    [SerializeField] private float _ModSpeedY = 5f;
+    [SerializeField] private float _modSpeedY = 5f;
     private SpriteRenderer[] _mySpriteRenderers;
     private CameraController _cameraController;
     private CharacterMovement _characterMovement;
@@ -16,7 +16,8 @@ public class BackgroundMover : MonoBehaviour
     private float _heightTimer;
     private float _prevSpeed;
     private float _scrollX;
-    
+    private static readonly int ScrollAmount = Shader.PropertyToID("_ScrollAmount");
+
     // TODO
     // 추후 해상도에 따라 스케일 조정 등을 생각 해봐야할 듯
     
@@ -84,8 +85,7 @@ public class BackgroundMover : MonoBehaviour
         for (int i = 0; i < _mySpriteRenderers.Length; i++)
         {
             _scrollX += (i + 1) * _moveXAmount * Time.deltaTime * _characterMovement.MoveSpeed;
-            Debug.Log($"i+1:{i+1} _scrollX : {_scrollX}");
-            _mySpriteRenderers[i].material.SetFloat("_ScrollAmount", _scrollX);
+            _mySpriteRenderers[i].material.SetFloat(ScrollAmount, _scrollX);
         }
         
     }
