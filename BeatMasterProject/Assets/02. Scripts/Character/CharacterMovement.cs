@@ -380,7 +380,6 @@ public class CharacterMovement : MonoBehaviour
             
             while (elapseTime <= targetTime)
             {
-                Debug.Log("리스트 다 비우고 돌아온거" + _rewindTime.rewindList.Count);
                 transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
                 elapseTime += Time.fixedDeltaTime;
                 yield return null;
@@ -393,7 +392,6 @@ public class CharacterMovement : MonoBehaviour
             
             while (elapseTime <= targetTime)
             {
-                Debug.Log("처음부터 죽었을때 (리스트0)" + _rewindTime.rewindList.Count);
                 transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
                 elapseTime += Time.fixedDeltaTime;
                 yield return null;

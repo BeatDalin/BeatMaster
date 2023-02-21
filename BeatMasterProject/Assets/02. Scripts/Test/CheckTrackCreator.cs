@@ -29,7 +29,7 @@ public class CheckTrackCreator : MonoBehaviour
     {
         // If you want to create check events, call functions here
         // GenerateJumpCheckEvent();
-        // GenerateLongCheckEvent();
+        //GenerateLongCheckEvent();
         // GenerateCheckPointEvent();
         // SyncAttackLong();
         // GenerateAttackCheckEvent();

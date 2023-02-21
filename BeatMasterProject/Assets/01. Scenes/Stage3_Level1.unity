@@ -421,8 +421,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterList: []
   coinParent: {fileID: 970478227}
-  _mapEventID: Level1_Map
-  _shortEventID: Level1_Short
+  _mapEventID: Stage3_Level1_Map
+  _shortEventID: Stage3_Level1_Short
   _mapEventList: []
   _shortEventList: []
   _monsterPrefab: {fileID: 3003763203973727308, guid: 367c90cd1e9064c43bbfaafbc81f3d4a, type: 3}
@@ -619,10 +619,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd60e1b7f395ae34f95524f4bb5ddbad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _setWidth: 1920
-  _setHeight: 1080
-  _deviceWidth: 0
-  _deviceHeight: 0
+  _camera: {fileID: 0}
+  _rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  _scaleHeight: 0
+  _scaleWidth: 0
 --- !u!1001 &340208106
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -871,8 +876,8 @@ MonoBehaviour:
   gameUI: {fileID: 0}
   curState: 0
   curSample: 0
-  _spdEventID: Level1_Spd
-  _checkPointID: Level1_CheckPoint
+  _spdEventID: Stage3_Level1_Spd
+  _checkPointID: Stage3_Level1_CheckPoint
   rewindShortIdx: 0
   rewindLongIdx: 0
   rewindSampleTime: -1
@@ -884,6 +889,13 @@ MonoBehaviour:
   _stageIdx: 2
   _levelIdx: 0
   coinCount: 0
+  shortID: Stage3_Level1_Short
+  longID: Stage3_Level1_Long
+  jumpCheckID: Stage3_Level1_JumpCheck
+  attackCheckID: Stage3_Level1_AttackCheck
+  longCheckMiddleID: Stage3_Level1_LongCheckMiddle
+  longCheckStartID: Stage3_Level1_LongCheckStart
+  longCheckEndID: Stage3_Level1_LongCheckEnd
   _changeChar: {fileID: 18329012}
 --- !u!4 &612035090
 Transform:
@@ -1147,10 +1159,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   theme: 1
   _isEditMode: 0
-  _mapEventID: Level1_MapCopy
-  _shortEventID: Level1_Short
-  _longEventID: Level1_Long
-  _spdEventID: Level1_Spd
+  _mapEventID: Stage3_Level1_Map
+  _shortEventID: Stage3_Level1_Short
+  _longEventID: Stage3_Level1_Long
+  _spdEventID: Stage3_Level1_Spd
   _groundTilemap: {fileID: 1828062194}
   _interactionTilemap: {fileID: 1912302631}
   _interactionTiles:
@@ -1190,10 +1202,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dabd7d5bc70bae2499f342adb8dbe61e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapEventID: Level1_MapCopy
+  _mapEventID: Stage3_Level1_Map
   _starObj: {fileID: 7397218863573384310, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
   _itemContainer: {fileID: 39094806}
-  _checkPointEventID: Level1_CheckPoint
+  _checkPointEventID: Stage3_Level1_CheckPoint
   _checkPointList: []
   _checkPointPrefab: {fileID: 7384471502369270403, guid: 068390efa75ccce49a3cb31d7915638b, type: 3}
   _checkPointPos: []
@@ -6943,10 +6955,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd60e1b7f395ae34f95524f4bb5ddbad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _setWidth: 1920
-  _setHeight: 1080
-  _deviceWidth: 0
-  _deviceHeight: 0
+  _camera: {fileID: 0}
+  _rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  _scaleHeight: 0
+  _scaleWidth: 0
 --- !u!1 &1657311695
 GameObject:
   m_ObjectHideFlags: 3
@@ -7349,10 +7366,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd60e1b7f395ae34f95524f4bb5ddbad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _setWidth: 1920
-  _setHeight: 1080
-  _deviceWidth: 0
-  _deviceHeight: 0
+  _camera: {fileID: 0}
+  _rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  _scaleHeight: 0
+  _scaleWidth: 0
 --- !u!1 &1811512135
 GameObject:
   m_ObjectHideFlags: 0
@@ -8154,6 +8176,14 @@ PrefabInstance:
     - target: {fileID: 7686366973799714471, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
+      propertyPath: _moveSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
+      propertyPath: speedEventID
+      value: Stage3_Level1_Spd
       objectReference: {fileID: 0}
     - target: {fileID: 7686366973799714492, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: m_Name
