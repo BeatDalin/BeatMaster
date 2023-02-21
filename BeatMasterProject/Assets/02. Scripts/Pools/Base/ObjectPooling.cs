@@ -49,6 +49,5 @@ public abstract class ObjectPooling : MonoBehaviour
         obj.SetActive(false);
         obj.transform.SetParent(transform);
         poolingObjectQueue.Enqueue(obj);
-        Debug.Log(poolingObjectQueue.Count); 
     }
 }

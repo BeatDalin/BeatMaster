@@ -112,7 +112,9 @@ public class Note : MonoBehaviour
                 yield return _waitForSecondsEnumerator;
                 break;
         }
-
+        
+        yield return _waitForSecondsEnumerator;
+        
         for (int i = 0; i < _particleSystemReverseSimulations.Length - 1; i++)
         {
             _particleSystemReverseSimulations[i].enabled = false;
