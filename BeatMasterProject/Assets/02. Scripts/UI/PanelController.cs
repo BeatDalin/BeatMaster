@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class SettingPanel : MonoBehaviour
+public class PanelController : MonoBehaviour
 {
     public void ClosePanel(GameObject panelName)
     {

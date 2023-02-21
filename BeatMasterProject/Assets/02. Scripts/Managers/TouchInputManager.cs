@@ -106,7 +106,6 @@ public class TouchInputManager : MonoBehaviour
         }
         return false;
     }
-
     public bool CheckRightTouch()
     {
         if (Input.touchCount > 0)
