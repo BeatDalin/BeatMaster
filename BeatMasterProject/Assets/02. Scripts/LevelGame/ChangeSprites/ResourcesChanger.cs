@@ -105,6 +105,8 @@ public class ResourcesChanger : MonoBehaviour
         
         _hueIndex++;
         _satIndex++;
+        _hueIndex %= _currentResource.HueValues.Length;
+        _satIndex %= _currentResource.SatValues.Length;
     }
 
     public void SetDefaultSpeed()
