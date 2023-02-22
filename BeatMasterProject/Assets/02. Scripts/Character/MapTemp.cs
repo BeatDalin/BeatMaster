@@ -341,6 +341,7 @@ public class MapTemp : MonoBehaviour
             {
                 // Record Jump position
                 _objectGenerator.RecordJumpPos(new Vector3(xPosition + xOffset, yPosition, 0));
+                
                 if (int.Parse(_mapEventList[xPosition + 2].GetTextValue()) != 5)
                 {
                     // Posit object only when next tile is not empty tile
