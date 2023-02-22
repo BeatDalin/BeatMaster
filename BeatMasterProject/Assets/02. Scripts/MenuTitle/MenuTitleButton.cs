@@ -10,12 +10,12 @@ public enum TitleButtonName
 {
     Play = 0,
     Menu,
-    Store
+    Store,
+    Gpgs
 }
 public enum MenuButtonName // 메뉴 버튼들
 {
     Setting = 0,
-    MyInfo,
     Quit
 }
 
@@ -34,6 +34,7 @@ public class MenuTitleButton : MonoBehaviour
     [Header("========= Panels =========")] 
     [SerializeField] private GameObject _menuGroupPanel; // Menu Group
     [SerializeField] private GameObject _storePanel; // Store Panel
+    [SerializeField] private GameObject _gpgsPanel;  // Google Game Service Panel
     [SerializeField] private GameObject[] _menuPanels;  // Menu Panels
 
     [SerializeField] private float _fadeTime = 1f; // Panel Fade 타임
@@ -70,6 +71,7 @@ public class MenuTitleButton : MonoBehaviour
         _titleButtons[(int)TitleButtonName.Play].onClick.AddListener(() => { SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect); });  // Play 버튼
         _titleButtons[(int)TitleButtonName.Menu].onClick.AddListener(() => { OpenMenu(_menuGroupPanel); });     // Menu 버튼
         _titleButtons[(int)TitleButtonName.Store].onClick.AddListener(() => { OpenPanel(_storePanel); });       // Store 버튼
+        _titleButtons[(int)TitleButtonName.Gpgs].onClick.AddListener(() => {OpenPanel(_gpgsPanel);});
 
         #endregion
 
@@ -77,7 +79,6 @@ public class MenuTitleButton : MonoBehaviour
 
         // Menu - Settings 버튼 (Setting, MyInfo, Quit)
         _menuButtons[(int)MenuButtonName.Setting].onClick.AddListener(() => { OpenPanel(_menuPanels[(int)MenuButtonName.Setting]); });
-        _menuButtons[(int)MenuButtonName.MyInfo].onClick.AddListener(() => { OpenPanel(_menuPanels[(int)MenuButtonName.MyInfo]); });
         _menuButtons[(int)MenuButtonName.Quit].onClick.AddListener(() => { OpenPanel(_menuPanels[(int)MenuButtonName.Quit]); });
         
         #endregion
