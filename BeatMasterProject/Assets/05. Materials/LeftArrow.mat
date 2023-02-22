@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Background_a
-  m_Shader: {fileID: -6465566751694194690, guid: 82f6270716576e94f9d3f7ff07b69345, type: 3}
+  m_Name: LeftArrow
+  m_Shader: {fileID: -6465566751694194690, guid: f6220d9265f1165499937a9224d1809c, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -24,8 +24,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Emission:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 239f043aa92d35343b48c3f29af3b0e1, type: 3}
+        m_Texture: {fileID: 2800000, guid: 6132e77023594e541bd25bccd554fa4e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -51,15 +55,7 @@ Material:
     m_Ints: []
     m_Floats:
     - PixelSnap: 0
-    - _ColorMask: 15
     - _EnableExternalAlpha: 0
-    - _ScrollAmount: 0
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    - _UseUIAlphaClip: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
