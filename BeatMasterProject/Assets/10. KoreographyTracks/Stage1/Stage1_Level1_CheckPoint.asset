@@ -33,7 +33,6 @@ MonoBehaviour:
   _SerializedPayloadTypes:
   - SonicBloom.Koreo.CurvePayload
   - SonicBloom.Koreo.IntPayload
-  - SonicBloom.Koreo.FloatPayload
   _AssetPayloads: []
   _AssetPayloadIdxs: 
   _ColorPayloads: []
@@ -64,10 +63,8 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   _CurvePayloadIdxs: 00000000
-  _FloatPayloads:
-  - mFloatVal: 0
-  - mFloatVal: 0
-  _FloatPayloadIdxs: 0500000006000000
+  _FloatPayloads: []
+  _FloatPayloadIdxs: 
   _GradientPayloads: []
   _GradientPayloadIdxs: 
   _IntPayloads:
@@ -76,7 +73,9 @@ MonoBehaviour:
   - mIntVal: 0
   - mIntVal: 0
   - mIntVal: 0
-  _IntPayloadIdxs: 0100000002000000030000000400000007000000
+  - mIntVal: 0
+  - mIntVal: 0
+  _IntPayloadIdxs: 01000000020000000300000004000000050000000600000007000000
   _SpectrumPayloads: []
   _SpectrumPayloadIdxs: 
   _TextPayloads: []
