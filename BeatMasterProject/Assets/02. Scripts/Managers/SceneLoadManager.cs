@@ -26,6 +26,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         Title,
         LevelSelect,
         Stage1_Level1,
+        Stage3_Level1,
         Stage2_Level1,
         Stage4_Level1
     }
@@ -43,6 +44,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         _loadImage.gameObject.SetActive(false);
         _canvas = _loadingCanvas.GetComponent<Canvas>();
         _canvas.worldCamera = Camera.main;
+        Application.targetFrameRate = 30;
     }
 
     // 어느 씬에서 Play를 해도 PreTitle 씬부터 시작하도록 하기 위해 사용~

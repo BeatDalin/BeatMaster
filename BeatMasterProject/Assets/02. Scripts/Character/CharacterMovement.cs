@@ -337,19 +337,18 @@ public class CharacterMovement : MonoBehaviour
             {
                 elapseTime = 0f;
                 Vector2 targetRewindPos = _rewindTime.rewindList[0].rewindPos;
-            
                 while (elapseTime <= targetTime)
                 {
                     if (_rewindTime.rewindList.Count > 1)
                     {
                         transform.position = Vector3.Lerp(lastPosition, targetRewindPos, elapseTime / targetTime);
-                        elapseTime += Time.deltaTime;
+                        elapseTime += Time.fixedDeltaTime;
                         yield return null;
                     }
                     else
                     {
                         transform.position = Vector3.Lerp(lastPosition, _rewindTime.rewindList[0].rewindPos, elapseTime / targetTime);
-                        elapseTime += Time.deltaTime;
+                        elapseTime += Time.fixedDeltaTime;
                         yield return null;
                     }
                 }
@@ -366,7 +365,7 @@ public class CharacterMovement : MonoBehaviour
             while (elapseTime <= targetTime)
             {
                 transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
-                elapseTime += Time.deltaTime;
+                elapseTime += Time.fixedDeltaTime;
                 yield return null;
             }
         }
@@ -378,7 +377,7 @@ public class CharacterMovement : MonoBehaviour
             while (elapseTime <= targetTime)
             {
                 transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
-                elapseTime += Time.deltaTime;
+                elapseTime += Time.fixedDeltaTime;
                 yield return null;
             }
         }
