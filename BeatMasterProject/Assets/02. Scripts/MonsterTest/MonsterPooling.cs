@@ -71,7 +71,6 @@ public class MonsterPooling : MonoBehaviour
         while (_tilePos.Count == 0)
         {
             yield return null;
-            Debug.Log("타일 리스트 기다리는 중");
         }
         SpawnMonster();
     }

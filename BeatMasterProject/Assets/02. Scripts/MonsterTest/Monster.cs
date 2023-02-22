@@ -16,7 +16,6 @@ public class Monster : MonoBehaviour
     [SerializeField] private Rigidbody2D _rigidbody2D;
     
     [Header("Animation")]
-    [SerializeField] private Animator _animator;
     [SerializeField] private DOTweenAnimation _doTweenAnimation;
 
     private SpriteRenderer _spriteRenderer;
@@ -54,7 +53,6 @@ public class Monster : MonoBehaviour
                     _spriteRenderer.DOFade(0f, 0.3f).onComplete += () =>
                     {
                         _doTweenAnimation.DORewind();
-                        //_coin.MoveCoin(movePos, coinParent);
                         transform.position = _originalPos;
                         transform.rotation = Quaternion.identity;
                     };
