@@ -107,7 +107,7 @@ public class CharacterMovement : MonoBehaviour
         _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
         _tileLayer = LayerMask.GetMask("Ground");
         _characterPosition = transform.position;
-        MoveSpeed = 2f;
+        // MoveSpeed = 2f;
 
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
     }
