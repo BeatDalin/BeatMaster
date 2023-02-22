@@ -329,7 +329,7 @@ public class CharacterMovement : MonoBehaviour
 
     public IEnumerator CoRewind(float y)
     {
-        float elapseTime;
+        float elapseTime = 0f;
         float targetTime = 0.1f;
         
         _rewindTime.StartRewind();
@@ -365,7 +365,7 @@ public class CharacterMovement : MonoBehaviour
                 }
             }
             elapseTime = 0f;
-            targetTime = 1f;
+            targetTime = 0.3f;
             
             while (elapseTime <= targetTime)
             {
@@ -377,9 +377,6 @@ public class CharacterMovement : MonoBehaviour
         }
         else
         {
-            elapseTime = 0f;
-            targetTime = 1f;
-            
             while (elapseTime <= targetTime)
             {
                 transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
