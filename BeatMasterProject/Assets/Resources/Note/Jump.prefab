@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7769617005153326287}
   - component: {fileID: 1423381425235899152}
   m_Layer: 0
-  m_Name: JumpNote
+  m_Name: Jump
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,8 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 879af0d8af30c5246baa219d09a3c38e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _beatResult: 
-  currentIdx: 0
+  beatResult: 
+  _particleSystems: []
+  _particleSystemReverseSimulations: []
 --- !u!1 &3907975758145464375
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,6 +139,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 19851914, guid: 3cec58934a80dd440953a42a1d17492d, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19860986, guid: 3cec58934a80dd440953a42a1d17492d, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3cec58934a80dd440953a42a1d17492d, type: 3}
 --- !u!4 &1196159504490284211 stripped
@@ -152,6 +161,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7769617005153326287}
     m_Modifications:
+    - target: {fileID: 117554, guid: 609edfdac278eeb49b9903ff44e52941, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 196536, guid: 609edfdac278eeb49b9903ff44e52941, type: 3}
       propertyPath: m_Name
       value: PowerupRingBlue
@@ -260,6 +273,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 421722, guid: 3c83b33bf94ceba43b3d880525e8afa4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19872750, guid: 3c83b33bf94ceba43b3d880525e8afa4, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19891092, guid: 3c83b33bf94ceba43b3d880525e8afa4, type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -384,6 +405,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 473264, guid: 9b91bc277b170744aada3cd8c0766ac5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19841130, guid: 9b91bc277b170744aada3cd8c0766ac5, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19880368, guid: 9b91bc277b170744aada3cd8c0766ac5, type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
