@@ -26,8 +26,8 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         Title,
         LevelSelect,
         Stage1_Level1,
-        Stage3_Level1,
         Stage2_Level1,
+        Stage3_Level1,
         Stage4_Level1
     }
 
@@ -95,7 +95,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
             _loadImage.material.SetFloat(Cutoff,
                 Mathf.MoveTowards(_loadImage.material.GetFloat(Cutoff), _hideBackground,
                     _transitionSpd * Time.deltaTime));
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
 
         StartCoroutine(CoLoadLevelAsync());
@@ -117,7 +117,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
             _loadImage.material.SetFloat(Cutoff,
                 Mathf.MoveTowards(_loadImage.material.GetFloat(Cutoff), _showBackground,
                     _transitionSpd * Time.deltaTime));
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
 
         _loadImage.gameObject.SetActive(false);

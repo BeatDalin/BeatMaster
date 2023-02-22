@@ -29,6 +29,7 @@ public class ObjectGenerator : MonoBehaviour
     [SerializeField] private List<Obstacle> _obstacleScripts = new List<Obstacle>();
     private int _obsIdx;
     [SerializeField] private int[] _obstacleCounts;
+    private const string _obstacleTag0 = "Obstacle0";
 
     [Header("Long Note Start/End")]
     [SerializeField] private GameObject _longObj;
@@ -88,6 +89,10 @@ public class ObjectGenerator : MonoBehaviour
     public void PositObstacles(float xPos, float yPos)
     {
         var obstacle = Instantiate(_obstObj, new Vector3(xPos + 1, yPos + 0.6f, 0), Quaternion.identity);
+        if (obstacle.CompareTag(_obstacleTag0))
+        {
+            obstacle.transform.position -= Vector3.up * 0.2f;
+        }
         obstacle.transform.SetParent(_obstContainer);
         _obstacleScripts.Add(obstacle.GetComponent<Obstacle>());
 

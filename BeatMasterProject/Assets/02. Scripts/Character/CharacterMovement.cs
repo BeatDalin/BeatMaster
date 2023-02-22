@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using SonicBloom.Koreo;
 
@@ -56,8 +57,10 @@ public class CharacterMovement : MonoBehaviour
     [Header("Rewind")]
     public Vector3 lastPosition;
     public float lastBeatTime;
+    private float rotationSpeed = 1080f;
     private RewindTime _rewindTime;
     private GameUI _gameUI;
+    
 
     private void Start()
     {
@@ -326,8 +329,8 @@ public class CharacterMovement : MonoBehaviour
 
     public IEnumerator CoRewind(float y)
     {
-        float elapseTime;
-        float targetTime = 0.2f;
+        float elapseTime = 0f;
+        float targetTime = 0.1f;
         
         _rewindTime.StartRewind();
         
@@ -342,12 +345,14 @@ public class CharacterMovement : MonoBehaviour
                     if (_rewindTime.rewindList.Count > 1)
                     {
                         transform.position = Vector3.Lerp(lastPosition, targetRewindPos, elapseTime / targetTime);
+                        transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
                         elapseTime += Time.fixedDeltaTime;
                         yield return null;
                     }
                     else
                     {
                         transform.position = Vector3.Lerp(lastPosition, _rewindTime.rewindList[0].rewindPos, elapseTime / targetTime);
+                        transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
                         elapseTime += Time.fixedDeltaTime;
                         yield return null;
                     }
@@ -360,23 +365,22 @@ public class CharacterMovement : MonoBehaviour
                 }
             }
             elapseTime = 0f;
-            targetTime = 1f;
+            targetTime = 0.3f;
             
             while (elapseTime <= targetTime)
             {
                 transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
+                transform.DORotate(new Vector3(0, 0, 0), targetTime);
                 elapseTime += Time.fixedDeltaTime;
                 yield return null;
             }
         }
         else
         {
-            elapseTime = 0f;
-            targetTime = 1f;
-            
             while (elapseTime <= targetTime)
             {
                 transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
+                transform.DORotate(new Vector3(0, 0, 0), targetTime);
                 elapseTime += Time.fixedDeltaTime;
                 yield return null;
             }
@@ -385,6 +389,7 @@ public class CharacterMovement : MonoBehaviour
         _rewindTime.StopRewind();
         
         _characterPosition = new Vector3(_characterPosition.x, y, 0f);
+        transform.rotation = Quaternion.identity;
         transform.position = _characterPosition;
         lastPosition = _characterPosition;
         lastBeatTime = _checkPointBeatTime;
