@@ -4,6 +4,9 @@ using UnityEngine.UI;
 public class GoogleLogin : MonoBehaviour
 {
     [SerializeField] private Text _status;
+    [SerializeField] private Button _achieveBtn;
+    [SerializeField] private Button _okBtn;
+    [SerializeField] private GameObject _quitPanel;
     private void Start()
     {
         GPGSBinder.Instance.Login((success, localUser) =>
@@ -14,9 +17,11 @@ public class GoogleLogin : MonoBehaviour
             }
             else
             {
-                FailLogin();
+                _quitPanel.SetActive(true);
             }
         });
+        _achieveBtn.onClick.AddListener(() => GPGSBinder.Instance.ShowAchievementUI());
+        _okBtn.onClick.AddListener(() => FailLogin());
     }
 
     private void SuccessLogin(UnityEngine.SocialPlatforms.ILocalUser localUser)
@@ -26,8 +31,7 @@ public class GoogleLogin : MonoBehaviour
 
     private void FailLogin()
     {
-        //로그인 실패했을 때 로그인해야 게임을 만들 수 있습니다 panel 뜨고
-        //Button은 확인 AddListener로 Application.Quit();추가
+        Application.Quit();
     }
 
     private void Logout()

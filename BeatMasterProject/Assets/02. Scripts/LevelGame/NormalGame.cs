@@ -152,7 +152,6 @@ public class NormalGame : Game
         {
             if (_shortEvent[shortIdx].GetIntValue() == 1 && (_touchInputManager.CheckRightTouch() || Input.GetKeyDown(_attackNoteKey)))
             {
-                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 _comboSystem.IncreaseCombo();
                 _particleController.PlayJumpParticle();
                 isShortKeyCorrect = true;
@@ -309,6 +308,7 @@ public class NormalGame : Game
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Damage);
         curState = GameState.Rewind;
         SoundManager.instance.PlayBGM(false); // pause
+        SoundManager.instance.PlaySFX("Rewind");
         curSample = rewindSampleTime;
         _playerAnim.SetEffectBool(false); // Stop booster animation
         characterMovement.RewindPosition(); // Relocate player
