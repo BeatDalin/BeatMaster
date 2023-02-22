@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2076007791, guid: aa81bbec85a3f423193272a7c6154986, type: 3}
+  m_Name: Stage3_Level1
+  m_EditorClassIdentifier: 
+  mSourceClip: {fileID: 8300000, guid: bc8b597659d0d4c129652fc222c2324c, type: 3}
+  mAudioFilePath: 
+  mSampleRate: 44100
+  mIgnoreLatencyOffset: 0
+  mTempoSections:
+  - sectionName: New Section
+    startSample: 0
+    samplesPerBeat: 22050
+    beatsPerMeasure: 4
+    bStartNewMeasure: 1
+  mTracks:
+  - {fileID: 11400000, guid: 5968e0f1c69d244f18ba040ae9e190e4, type: 2}
+  - {fileID: 11400000, guid: 0917acc2b3f6c48b5a3892aaee71957c, type: 2}
+  - {fileID: 11400000, guid: 7cada053658ac4145a7ea14209138a71, type: 2}
+  - {fileID: 11400000, guid: b3824ff7158e648b4bb56f397094b460, type: 2}
+  - {fileID: 11400000, guid: 04f958092e0654826ad2ab9a6d30ef71, type: 2}
+  - {fileID: 11400000, guid: 9a75803dc57bb4778abca0969072ad0e, type: 2}
+  - {fileID: 11400000, guid: 984c9dc08faf24a35953182ab4ddd760, type: 2}
+  - {fileID: 11400000, guid: f9b18c267d6ec41a085fa85f5230050f, type: 2}
+  - {fileID: 11400000, guid: 101decf14721c48e79082b18c138a223, type: 2}
+  - {fileID: 11400000, guid: 37c65654a8c0f4cdb8e09032ed183a64, type: 2}

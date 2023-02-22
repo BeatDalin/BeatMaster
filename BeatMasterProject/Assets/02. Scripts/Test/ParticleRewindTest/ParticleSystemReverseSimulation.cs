@@ -36,11 +36,6 @@ public class ParticleSystemReverseSimulation : MonoBehaviour
     void Update()
     {
         RewindParticle();
-        // if (isRewindParticle)
-        // {
-        //     // RewindParticle();
-        //     isRewindParticle = false;
-        // }
     }
 
     void RewindParticle()

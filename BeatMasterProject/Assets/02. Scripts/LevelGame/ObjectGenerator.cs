@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using SonicBloom.Koreo;
 using UnityEngine;
 
@@ -26,10 +25,11 @@ public class ObjectGenerator : MonoBehaviour
     [Header("Short Note Obstacles")]
     [SerializeField] private GameObject _obstObj;
     [SerializeField] private Transform _obstContainer;
-    [SerializeField] private List<Vector3> _obstPosList;
-    private List<Obstacle> _obstacleScripts = new List<Obstacle>();
+    [SerializeField] private List<Vector3> _jumpPosList;
+    [SerializeField] private List<Obstacle> _obstacleScripts = new List<Obstacle>();
     private int _obsIdx;
     [SerializeField] private int[] _obstacleCounts;
+    private const string _obstacleTag0 = "Obstacle0";
 
     [Header("Long Note Start/End")]
     [SerializeField] private GameObject _longObj;
@@ -62,9 +62,9 @@ public class ObjectGenerator : MonoBehaviour
         PositLongNotify();
     }
 
-    public void RecordShortPos(Vector3 pos)
+    public void RecordJumpPos(Vector3 pos)
     {
-        _obstPosList.Add(pos);
+        _jumpPosList.Add(pos);
     }
     public void RecordLongPos(Vector3 pos)
     {
@@ -89,15 +89,22 @@ public class ObjectGenerator : MonoBehaviour
     public void PositObstacles(float xPos, float yPos)
     {
         var obstacle = Instantiate(_obstObj, new Vector3(xPos + 1, yPos + 0.6f, 0), Quaternion.identity);
+        if (obstacle.CompareTag(_obstacleTag0))
+        {
+            obstacle.transform.position -= Vector3.up * 0.2f;
+        }
         obstacle.transform.SetParent(_obstContainer);
         _obstacleScripts.Add(obstacle.GetComponent<Obstacle>());
 
         // Record the number of obstacles before each check point.
+        // Check point position is already behind current position -> Increase an index to access obstacle count array
         if (xPos + 1 > _checkPointPos[_obsIdx].x)
         {
             _obsIdx++;
-            _obstacleCounts[_obsIdx] = _obstacleCounts.Sum();
+            _obstacleCounts[_obsIdx] = _obstacleCounts[_obsIdx - 1]; // Starts from the number of obstacles before currently arrived checkpoint
         }
+        
+        // Increase the number of obstacles before arriving next checkpoint
         if (xPos + 1 <= _checkPointPos[_obsIdx].x)
         {
             _obstacleCounts[_obsIdx]++;
@@ -110,6 +117,7 @@ public class ObjectGenerator : MonoBehaviour
     public void ResetObstAnimation()
     {
         // Reset all obstacle's animation before next checkpoint.
+        // Reset obstacles between my recent check point and next check point.
         for (int i = _obstacleCounts[_checkPointIdx]; i < _obstacleCounts[_checkPointIdx + 1]; i++)
         {
             _obstacleScripts[i].ResetAnim();

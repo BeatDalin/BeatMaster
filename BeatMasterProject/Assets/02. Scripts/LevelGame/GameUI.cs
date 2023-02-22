@@ -154,29 +154,21 @@ public abstract class GameUI : MonoBehaviour
             case BeatResult.Perfect:
                 TextMove("Perfect");
                 _judgeText.DOColor(_perfectColor, 0.1f);
-                //_perfectOutline.SetActive(true);
-                StartCoroutine(CoStartParticle());
                 break;
 
             case BeatResult.Fast:
                 TextMove("Fast");
                 _judgeText.DOColor(_fastColor, 0.1f);
-                //_fastOutline.SetActive(true);
-                _fastParticle.Play();
                 break;
 
             case BeatResult.Slow:
                 TextMove("Slow");
                 _judgeText.DOColor(_slowColor, 0.1f);
-                //_slowOutline.SetActive(true);
-                _slowParticle.Play();
                 break;
 
             case BeatResult.Fail:
                 TextMove("Fail");
                 _judgeText.DOColor(_failColor, 0.1f);
-                //_failOutline.SetActive(true);
-                _failParticle.Play();
                 break;
         }
     }
@@ -204,17 +196,6 @@ public abstract class GameUI : MonoBehaviour
                 _judgeText.DOColor(_failColor, 0f);
                 TextMove("Fail");
                 break;
-        }
-    }
-    
-    private IEnumerator CoStartParticle()
-    {
-        int i = 0;
-        while (i != _particleSystemsList.Count - 1)
-        {
-            _particleSystemsList[i].Play();
-            yield return new WaitForSeconds(0.1f);
-            i++;
         }
     }
 
