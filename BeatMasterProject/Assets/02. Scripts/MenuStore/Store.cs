@@ -39,6 +39,12 @@ public class Store : MonoBehaviour
 
     [SerializeField] private Button _closeStoreBtn;
 
+    // readonly string
+    private readonly string _equip = "Equip";
+    private readonly string _unEquip = "UnEquip";
+    private readonly string _equipped = "Equipped";
+    private readonly string _buy = "Buy";
+    
     private void Awake()
     {
         DataCenter.Instance.LoadData();
@@ -93,9 +99,8 @@ public class Store : MonoBehaviour
         SoundManager.instance.PlaySFX("Touch");
         _popupPanel[2].SetActive(true);
         _popUpDOTweens[2].DORestart();
-        _popupPanel[2].transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "Clear " +
-            (_storeData.characterData[index].unlockStage + 1) + " - " +
-            (_storeData.characterData[index].unlockLevel + 1) + " stage to unlock";
+        _popupPanel[2].transform.GetChild(0).GetChild(1).GetComponent<Text>().text =
+            $"Clear {_storeData.characterData[index].unlockStage + 1} - {_storeData.characterData[index].unlockLevel + 1} stage to unlock";
     }
 
     private void SetItemBtn()
@@ -154,7 +159,7 @@ public class Store : MonoBehaviour
         _storeData = DataCenter.Instance.GetStoreData();
         _playerData = DataCenter.Instance.GetPlayerData();
         _ifPurchased.transform.GetChild(0).GetComponent<Button>().interactable = true;
-        _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "BUY";
+        _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _buy;
         _popupBtn[0].onClick.RemoveAllListeners();
         _changeChar.ChangeItemInItemScroll(_playerData);
         _ifPurchased.SetActive(true);
@@ -207,7 +212,7 @@ public class Store : MonoBehaviour
                  charNum != DataCenter.Instance.GetPlayerData().playerChar)
         {
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
-            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "Equip";
+            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _equip;
 
             _popupBtn[0].onClick.AddListener(delegate { EquipCharacter(charNum); });
         }
@@ -217,7 +222,7 @@ public class Store : MonoBehaviour
         {
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
             _ifPurchased.transform.GetChild(0).GetComponent<Button>().interactable = false;
-            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "Equipped";
+            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _equipped;
         }
 
         _closeStoreBtn.interactable = false;
@@ -281,7 +286,7 @@ public class Store : MonoBehaviour
                  itemNum != DataCenter.Instance.GetPlayerData().itemData[(int)itemPart])
         {
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
-            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "Equip";
+            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _equip;
 
             _popupBtn[0].onClick.AddListener(delegate { EquipItem(itemPart, itemName); });
         }
@@ -290,7 +295,7 @@ public class Store : MonoBehaviour
         else
         {
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
-            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "UnEquip";
+            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _unEquip;
 
             _popupBtn[0].onClick.AddListener(delegate { EquipItem(itemPart, (StoreData.ItemName)(-1)); });
         }
