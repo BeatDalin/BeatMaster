@@ -293,7 +293,7 @@ public class MapGenerator : MonoBehaviour
             _groundTilemap.SetTile(GetTileChangeData(_TileType.GroundTop, 0,
                 new Vector3Int(++_tileX, _tileY, 0), new Vector3(0f, _groundYOffset, 0f)), false);
 
-            for (int j = _tileY - 1; j >= -10; j--)
+            for (int j = _tileY - 1; j >= -30; j--)
             {
                 _groundTilemap.SetTile(GetTileChangeData(_TileType.GroundUnder, 0,
                     new Vector3Int(_tileX, j, 0), new Vector3(0f, _groundYOffset, 0f)), false);
@@ -441,6 +441,29 @@ public class MapGenerator : MonoBehaviour
 
                             Instantiate(_noteObjects[(int)_NoteType.LongMid],
                                 new Vector3(midXPosition, midYPosition, 0f), Quaternion.identity, transform);
+                        }
+                    }
+
+                    int startXCeil = (int)(Mathf.Ceil(startXPosition + startXOffset));
+                    int endXFloor = (int)(Mathf.Floor(endXPosition + endXOffset)) - 1;
+
+                    for (int k = startXCeil; k <= endXFloor; k++)
+                    {
+                        float y = 0;
+                        RaycastHit2D hit = Physics2D.Raycast(new Vector2(k, 100f), Vector2.down, 1000, _tileLayer);
+                        
+                        if (hit)
+                        {
+                            y = hit.point.y;
+                        }
+
+                        for (float l = y; l >= -31; l--)
+                        {
+                            Vector3Int tilePosition = _groundTilemap.WorldToCell(new Vector3(k, l, 0f));
+                            Color color = new Color(1f, 1f, 1f, 0f);
+
+                            _groundTilemap.SetTileFlags(tilePosition, TileFlags.None);
+                            _groundTilemap.SetColor(tilePosition, color);
                         }
                     }
 
