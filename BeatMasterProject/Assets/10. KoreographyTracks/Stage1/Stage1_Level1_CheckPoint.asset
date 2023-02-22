@@ -15,7 +15,11 @@ MonoBehaviour:
   mEventID: Stage1_Level1_CheckPoint
   mEventList:
   - mStartSample: 0
-    mEndSample: 0
+    mEndSample: 2000
+  - mStartSample: 317520
+    mEndSample: 317520
+  - mStartSample: 529200
+    mEndSample: 529200
   - mStartSample: 846720
     mEndSample: 846720
   - mStartSample: 1693440
@@ -27,18 +31,43 @@ MonoBehaviour:
   - mStartSample: 2989980
     mEndSample: 2989980
   _SerializedPayloadTypes:
+  - SonicBloom.Koreo.CurvePayload
   - SonicBloom.Koreo.IntPayload
   - SonicBloom.Koreo.FloatPayload
   _AssetPayloads: []
   _AssetPayloadIdxs: 
   _ColorPayloads: []
   _ColorPayloadIdxs: 
-  _CurvePayloads: []
-  _CurvePayloadIdxs: 
+  _CurvePayloads:
+  - mCurveData:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  _CurvePayloadIdxs: 00000000
   _FloatPayloads:
   - mFloatVal: 0
   - mFloatVal: 0
-  _FloatPayloadIdxs: 0300000004000000
+  _FloatPayloadIdxs: 0500000006000000
   _GradientPayloads: []
   _GradientPayloadIdxs: 
   _IntPayloads:
@@ -46,7 +75,8 @@ MonoBehaviour:
   - mIntVal: 0
   - mIntVal: 0
   - mIntVal: 0
-  _IntPayloadIdxs: 00000000010000000200000005000000
+  - mIntVal: 0
+  _IntPayloadIdxs: 0100000002000000030000000400000007000000
   _SpectrumPayloads: []
   _SpectrumPayloadIdxs: 
   _TextPayloads: []
