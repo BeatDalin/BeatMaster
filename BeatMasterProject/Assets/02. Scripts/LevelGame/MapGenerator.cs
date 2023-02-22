@@ -217,12 +217,12 @@ public class MapGenerator : MonoBehaviour
             // 급경사일 때
             if (groundType == _GroundType.SteepUp)
             {
-                groundYDelta = 1;
+                groundYDelta += 1;
             }
             
             if (prevGroundType == _GroundType.SteepDown)
             {
-                groundYDelta = -1;
+                groundYDelta += -1;
             }
 
             _tileX += 1;
