@@ -151,9 +151,25 @@ public class SoundManager : MonoBehaviour
                 _bgmPlayer.loop = true;
                 break;
             }
-            case SceneLoadManager.SceneType.Stage1_Level1: // Level1 씬
+            case SceneLoadManager.SceneType.Stage1_Level1: // Forest
             {
                 playingKoreo = koreographies[2];
+                // playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
+                musicPlayer.LoadSong(playingKoreo, 0, false);
+                break;
+            }
+            
+            case SceneLoadManager.SceneType.Stage2_Level1: // City
+            {
+                playingKoreo = koreographies[3];
+                // playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
+                musicPlayer.LoadSong(playingKoreo, 0, false);
+                break;
+            }
+            
+            case SceneLoadManager.SceneType.Stage3_Level1: // Desert
+            {
+                playingKoreo = koreographies[4];
                 // playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
                 musicPlayer.LoadSong(playingKoreo, 0, false);
                 break;

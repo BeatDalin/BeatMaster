@@ -26,6 +26,8 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         Title,
         LevelSelect,
         Stage1_Level1,
+        Stage2_Level1,
+        Stage3_Level1,
         Stage4_Level1
     }
 
@@ -42,6 +44,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         _loadImage.gameObject.SetActive(false);
         _canvas = _loadingCanvas.GetComponent<Canvas>();
         _canvas.worldCamera = Camera.main;
+        Application.targetFrameRate = 30;
     }
 
     // 어느 씬에서 Play를 해도 PreTitle 씬부터 시작하도록 하기 위해 사용~
@@ -92,7 +95,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
             _loadImage.material.SetFloat(Cutoff,
                 Mathf.MoveTowards(_loadImage.material.GetFloat(Cutoff), _hideBackground,
                     _transitionSpd * Time.deltaTime));
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
 
         StartCoroutine(CoLoadLevelAsync());
@@ -114,7 +117,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
             _loadImage.material.SetFloat(Cutoff,
                 Mathf.MoveTowards(_loadImage.material.GetFloat(Cutoff), _showBackground,
                     _transitionSpd * Time.deltaTime));
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
 
         _loadImage.gameObject.SetActive(false);

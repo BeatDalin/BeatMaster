@@ -35,12 +35,10 @@ public class RewindTime : MonoBehaviour
 
     public void ClearRewindList()
     {
-        Debug.Log("되돌리기 리스트 " + rewindList.Count);
         rewindList.Clear();
-        Debug.Log("되돌리기 리스트 " + rewindList.Count);
     }
 
-    public void RecordCheckPoint(Vector2 pos, string result)
+    public void RecordRewindPoint(Vector2 pos, string result)
     {
         _rewindData = new RewindData();
         _rewindData.rewindPos = pos;
