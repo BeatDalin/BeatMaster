@@ -35,17 +35,9 @@ public class PlayerStatus : MonoBehaviour
     {
         if (status == playerStatus)
             return;
-        if (playerStatus == CharacterStatus.FastIdle && status == CharacterStatus.Jump)
+        if (playerStatus == CharacterStatus.FastIdle && (status == CharacterStatus.Jump || status == CharacterStatus.Attack))
         {
             status = CharacterStatus.FastIdle;
-        }
-        if(playerStatus == CharacterStatus.FastIdle)
-        {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y-0.13f, gameObject.transform.position.z);
-        }
-        else if(status== CharacterStatus.FastIdle)
-        {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y+ 0.13f, gameObject.transform.position.z);
         }
 
         playerStatus = status;
