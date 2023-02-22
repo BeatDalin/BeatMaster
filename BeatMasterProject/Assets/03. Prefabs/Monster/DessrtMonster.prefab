@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4553432830243929760}
   - component: {fileID: 872915895793271827}
   m_Layer: 6
-  m_Name: Monster
+  m_Name: DessrtMonster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,9 +78,9 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 62a8e02b0cf94d741b642d21434d981e, type: 3}
+  m_Sprite: {fileID: 1098874132, guid: 3d343d91d952848f5a7eea5630bbfef1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 1
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
@@ -104,7 +104,6 @@ MonoBehaviour:
   isGainCoin: 1
   _originalPos: {x: 0, y: 0, z: 0}
   _rigidbody2D: {fileID: 6571710119711434610}
-  _animator: {fileID: 0}
   _doTweenAnimation: {fileID: 872915895793271827}
 --- !u!50 &6571710119711434610
 Rigidbody2D:
@@ -137,7 +136,7 @@ Animator:
   m_GameObject: {fileID: 3003763203973727308}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c54e885ebb830483fac563c73dca89e3, type: 2}
+  m_Controller: {fileID: 9100000, guid: 8921e149c22ad45019bee13a78d9f294, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -161,7 +160,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.33, y: 0.63}
+  m_Size: {x: 0.33, y: 0.48}
   m_Direction: 0
 --- !u!114 &872915895793271827
 MonoBehaviour:
