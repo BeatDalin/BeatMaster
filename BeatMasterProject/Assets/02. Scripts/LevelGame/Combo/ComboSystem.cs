@@ -16,7 +16,6 @@ public class ComboSystem : ObjectPooling
     private Material _defaultMat;
     private SpriteRenderer _characterSprite;
     private CharacterMovement _characterMovement;
-    private ResourcesChanger _resourcesChanger;
     private Transform _canvasTrans;
     private Dictionary<GameObject, ComboText> _comboDict = new Dictionary<GameObject, ComboText>(); 
     private int _currentAmount;
@@ -34,8 +33,8 @@ public class ComboSystem : ObjectPooling
         _characterMovement = FindObjectOfType<CharacterMovement>();
         _characterSprite = _characterMovement.transform.GetChild(0).GetComponent<SpriteRenderer>();
         _defaultMat = _characterSprite.material;
-        _resourcesChanger = FindObjectOfType<ResourcesChanger>();
         _canvasTrans = transform.GetChild(0).transform;
+        _canvasTrans.GetComponent<Canvas>().worldCamera = Camera.main;
         Init();
         // Set Texture based on current character
         // _outLineMat.SetTexture("_MainTex", texture to push....);
