@@ -51,8 +51,8 @@ public class MapGenerator : MonoBehaviour
     private List<List<Tile>> _tileLists = new List<List<Tile>>();
     private List<Tile> _topTiles = new List<Tile>();
     private List<Tile> _underTiles = new List<Tile>();
-    [SerializeField] private List<Tile> _interactionTiles = new List<Tile>();
-    [SerializeField] private List<GameObject> _noteObjects = new List<GameObject>();
+    private List<Tile> _interactionTiles = new List<Tile>();
+    private List<GameObject> _noteObjects = new List<GameObject>();
     private const int _tileCount = 9;
     private const int _noteObjectCount = 4;
     private int _tileX = -1, _tileY;
@@ -65,6 +65,7 @@ public class MapGenerator : MonoBehaviour
 
     [HideInInspector] public List<GameObject> shortTileParticleList = new List<GameObject>();
     [HideInInspector] public List<GameObject> longTileParticleList = new List<GameObject>();
+    private WaitForSeconds _waitForSec;
 
     private void Awake()
     {
@@ -152,6 +153,7 @@ public class MapGenerator : MonoBehaviour
         _tileLayer = LayerMask.GetMask("Ground");
         _monsterPooling = FindObjectOfType<MonsterPooling>();
         _objectGenerator = GetComponent<ObjectGenerator>();
+        _waitForSec = new WaitForSeconds(0.01f);
     }
 
     private void GenerateMap()
@@ -217,7 +219,8 @@ public class MapGenerator : MonoBehaviour
             {
                 groundYDelta = 1;
             }
-            else if (prevGroundType == _GroundType.SteepDown)
+            
+            if (prevGroundType == _GroundType.SteepDown)
             {
                 groundYDelta = -1;
             }
@@ -349,8 +352,8 @@ public class MapGenerator : MonoBehaviour
 
             if (_shortEventList[i].GetIntValue() == 0)
             {
-                // Record position
-                _objectGenerator.RecordShortPos(new Vector3(xPosition + xOffset, yPosition, 0));
+                // Record jump position
+                _objectGenerator.RecordJumpPos(new Vector3(xPosition + xOffset, yPosition, 0));
                 if (int.Parse(_mapEventList[xPosition + 2].GetTextValue()) != 5)
                 {
                     // Posit object only when next tile is not empty tile
@@ -462,7 +465,7 @@ public class MapGenerator : MonoBehaviour
 
     private IEnumerator CoGenerateNoteObject()
     {
-        yield return new WaitForSeconds(0.01f);
+        yield return _waitForSec;
 
         GenerateShortNoteObject();
         GenerateLongNoteObject();

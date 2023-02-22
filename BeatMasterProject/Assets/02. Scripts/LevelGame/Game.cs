@@ -67,7 +67,7 @@ public abstract class Game : MonoBehaviour
 
     [Header("Rewind")]
     protected RewindTime rewindTime;
-    protected MapTemp mapTemp;
+    protected MapGenerator mapGenerator;
 
     [Header("Event Tracks")] 
     [SerializeField] [EventID] protected string shortID;
@@ -80,7 +80,7 @@ public abstract class Game : MonoBehaviour
     
     protected virtual void Awake()
     {
-        mapTemp = FindObjectOfType<MapTemp>();
+        mapGenerator = FindObjectOfType<MapGenerator>();
         rewindTime = FindObjectOfType<RewindTime>();
         _playerAnim = FindObjectOfType<EffectAnim>();
         characterMovement = FindObjectOfType<CharacterMovement>();
