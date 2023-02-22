@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SonicBloom.Koreo;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ObjectGenerator : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class ObjectGenerator : MonoBehaviour
     [SerializeField] private GameObject _checkPointPrefab; 
     private GameObject _checkPointObj; // Check point object to be placed
     private Animator _checkPointAnim;
-    [SerializeField] public List<Vector3> _checkPointPos;
+    public List<Vector3> checkPointPos;
     private int _checkPointIdx;
 
     [Header("Short Note Obstacles")]
@@ -98,14 +99,14 @@ public class ObjectGenerator : MonoBehaviour
 
         // Record the number of obstacles before each check point.
         // Check point position is already behind current position -> Increase an index to access obstacle count array
-        if (xPos + 1 > _checkPointPos[_obsIdx].x)
+        if (xPos + 1 > checkPointPos[_obsIdx].x)
         {
             _obsIdx++;
             _obstacleCounts[_obsIdx] = _obstacleCounts[_obsIdx - 1]; // Starts from the number of obstacles before currently arrived checkpoint
         }
         
         // Increase the number of obstacles before arriving next checkpoint
-        if (xPos + 1 <= _checkPointPos[_obsIdx].x)
+        if (xPos + 1 <= checkPointPos[_obsIdx].x)
         {
             _obstacleCounts[_obsIdx]++;
         }
@@ -132,7 +133,7 @@ public class ObjectGenerator : MonoBehaviour
     /// <param name="yPos"></param>
     public void RecordCheckPoint(int xPos, int yPos)
     {
-        _checkPointPos.Add(new Vector3(xPos, yPos, 0)); // Record position
+        checkPointPos.Add(new Vector3(xPos, yPos, 0)); // Record position
     }
     
     /// <summary>
@@ -143,7 +144,7 @@ public class ObjectGenerator : MonoBehaviour
     public int MoveCheckPointForward()
     {
         _checkPointIdx++;
-        _checkPointObj.transform.position = _checkPointPos[_checkPointIdx];
+        _checkPointObj.transform.position = checkPointPos[_checkPointIdx];
         // _checkPointVisited[_checkPointIdx] = true;
         _checkPointAnim.SetTrigger(IsPlay); // Play Animation
         return _checkPointList[_checkPointIdx].StartSample;

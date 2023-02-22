@@ -3,6 +3,7 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using SonicBloom.Koreo;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
@@ -63,8 +64,8 @@ public class CharacterMovement : MonoBehaviour
     private RewindTime _rewindTime;
     private GameUI _gameUI;
     private ObjectGenerator _objectGenerator;
-    [SerializeField] private int rewindIdx;
-    private bool isCheckCheckPoint = true;
+    [SerializeField] private int _rewindIdx;
+    private bool _isCheckCheckPoint = true;
     
     private void Start()
     {
@@ -314,16 +315,16 @@ public class CharacterMovement : MonoBehaviour
 
     private void CheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
-        if (isCheckCheckPoint && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
+        if (_isCheckCheckPoint && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
         {
-            isCheckCheckPoint = false;
-            _characterPosition = _objectGenerator._checkPointPos[rewindIdx];
-            rewindIdx++;
+            _isCheckCheckPoint = false;
+            _characterPosition = _objectGenerator.checkPointPos[_rewindIdx];
+            _rewindIdx++;
         }
         
-        if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !isCheckCheckPoint)
+        if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isCheckCheckPoint)
         {
-            isCheckCheckPoint = true;
+            _isCheckCheckPoint = true;
         }
     }
 
@@ -414,7 +415,7 @@ public class CharacterMovement : MonoBehaviour
         transform.position = _characterPosition;
         lastPosition = _characterPosition;
         lastBeatTime = _checkPointBeatTime;
-        rewindIdx--;
+        _rewindIdx--;
         gameObject.tag = PlayerTag; // Back to Player Tag
     }
 }
