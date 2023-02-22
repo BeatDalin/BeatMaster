@@ -204,7 +204,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 1033062612987228167, guid: 433ef1d309daef74abcf22a35f8fbe03, type: 2}
-  m_audioClip: {fileID: 8300000, guid: fd4bdb26ebadeff40a018250f93ba9ca, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 627931f147dda9c4a82921095192cc42, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -627,13 +627,15 @@ MonoBehaviour:
   _bgm: []
   _sfx:
   - name: Jump
-    clip: {fileID: 8300000, guid: fd4bdb26ebadeff40a018250f93ba9ca, type: 3}
+    clip: {fileID: 8300000, guid: 627931f147dda9c4a82921095192cc42, type: 3}
   - name: Attack
     clip: {fileID: 8300000, guid: d46323e22e74e46baa241cbf48c85671, type: 3}
   - name: Hit
     clip: {fileID: 8300000, guid: 4ce5157f1bc644b66b3fb9bf8bf67447, type: 3}
   - name: Touch
     clip: {fileID: 8300000, guid: 45142f22d3cc48848b4da27ec4f4ff46, type: 3}
+  - name: Rewind
+    clip: {fileID: 8300000, guid: 38913917c9bf2814c8e7cc02287dba4c, type: 3}
   _bgmPlayer: {fileID: 0}
   _sfxPlayer:
   - {fileID: 868407479656403310}
@@ -646,7 +648,7 @@ MonoBehaviour:
   koreographies:
   - {fileID: 11400000, guid: 6e0380dc1e077c049a90e1b143f47daa, type: 2}
   - {fileID: 11400000, guid: c42a3bf0d90fdae4c9f7dbf27f0aaf50, type: 2}
-  - {fileID: 11400000, guid: ecff6c88a2a050145ac1fd13f77234fa, type: 2}
+  - {fileID: 11400000, guid: 3262b4e1a8a682640a800cb9f262f314, type: 2}
   - {fileID: 11400000, guid: 22b2ddc6516002f49aa11883c9a3b51d, type: 2}
   - {fileID: 11400000, guid: 18d585b538f854495a53f6403829a55d, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: d0b2e5df1c7c61a45b591ee67f6cf879, type: 2}

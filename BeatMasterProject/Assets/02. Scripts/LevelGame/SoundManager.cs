@@ -175,6 +175,14 @@ public class SoundManager : MonoBehaviour
                 musicPlayer.LoadSong(playingKoreo, 0, false);
                 break;
             }
+            
+            case SceneLoadManager.SceneType.Stage4_Level1: // Glacier
+            {
+                playingKoreo = koreographies[5];
+                // playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
+                musicPlayer.LoadSong(playingKoreo, 0, false);
+                break;
+            }
         }
         // Load next scene's Koreography
         Koreographer.Instance.LoadKoreography(playingKoreo);
