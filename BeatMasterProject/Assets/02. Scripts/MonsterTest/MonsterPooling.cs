@@ -109,7 +109,7 @@ public class MonsterPooling : MonoBehaviour
         {
             if (_shortEventList[i].GetIntValue() == 1)
             {
-                GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 2f), Quaternion.identity, transform);
+                GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 1f), Quaternion.identity, transform);
                 Instantiate(_coinPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 1f), Quaternion.identity,
                     transform);
                 
