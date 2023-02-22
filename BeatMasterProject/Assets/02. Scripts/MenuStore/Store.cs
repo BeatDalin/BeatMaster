@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -54,6 +55,20 @@ public class Store : MonoBehaviour
     [SerializeField] private StoreData _storeData;
     [SerializeField] private PlayerData _playerData;
 
+
+    [Header("DOTween Animations")] 
+    [SerializeField] private DOTweenAnimation[] _popUpDOTweens;
+    [SerializeField] private DOTweenAnimation[] _toggleDOTweens;
+    [SerializeField] private DOTweenAnimation[] _selectAreaDOTweens;
+
+    [SerializeField] private Button _closeStoreBtn;
+
+    // readonly string
+    private readonly string _equip = "Equip";
+    private readonly string _unEquip = "UnEquip";
+    private readonly string _equipped = "Equipped";
+    private readonly string _buy = "Buy";
+    
     private void Awake()
     {
         DataCenter.Instance.LoadData();
@@ -88,6 +103,7 @@ public class Store : MonoBehaviour
                 _character[index].transform.GetChild(0).gameObject.SetActive(false);
                 _character[index].transform.GetChild(1).gameObject.SetActive(false);
             }
+
             _character[index].transform.GetChild(0).GetComponent<Text>().text =
                 _storeData.characterData[i].price.ToString();
             if (_storeData.characterData[i].isUnlocked)
@@ -103,10 +119,12 @@ public class Store : MonoBehaviour
 
     private void SetTextInUnlockChar(int index)
     {
+        _closeStoreBtn.interactable = false;
+        SoundManager.instance.PlaySFX("Touch");
         _popupPanel[2].SetActive(true);
+        _popUpDOTweens[2].DORestart();
         _popupPanel[2].transform.GetChild(0).GetChild(1).GetComponent<Text>().text =
-
-                    (_storeData.characterData[index].unlockStage + 1) + " - " + (_storeData.characterData[index].unlockLevel + 1) + "을 깨고 와주세요!";
+            $"Clear {_storeData.characterData[index].unlockStage + 1} - {_storeData.characterData[index].unlockLevel + 1} stage to unlock";
     }
 
     private void SetItemBtn()
@@ -117,13 +135,15 @@ public class Store : MonoBehaviour
             int index = i;
 
             _item[index] = Instantiate(_itemBtn, _itemContent.transform);
-            _item[index].transform.GetChild(0).GetComponent<Image>().sprite = _changeChar.ChangeItemSprite((StoreData.ItemName)index);
+            _item[index].transform.GetChild(0).GetComponent<Image>().sprite =
+                _changeChar.ChangeItemSprite((StoreData.ItemName)index);
             _item[index].transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
                 _storeData.itemData[index].price.ToString();
             if (_storeData.itemData[index].isPurchased)
             {
                 _item[index].transform.GetChild(1).gameObject.SetActive(false);
             }
+
             if (_storeData.itemData[index].isUnlocked)
             {
                 _item[index].transform.GetChild(2).gameObject.SetActive(false);
@@ -131,33 +151,47 @@ public class Store : MonoBehaviour
                     SetItemPopup(_storeData.itemData[index].itemPart, _storeData.itemData[index].itemName));
             }
         }
+
         _changeChar.ChangeItemInItemScroll(_playerData);
     }
 
     private void ChangeCharacterInItemScroll()
     {
-        _selectArea[1].transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = _changeChar.ChangeCharacterSprite(_playerData.playerChar);
+        _selectArea[1].transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite =
+            _changeChar.ChangeCharacterSprite(_playerData.playerChar);
     }
 
     // 선택한 탭에 따라 캐릭터/아이템 리스트를 보여준다.
     private void ShowStoreList(int toggleNum)
     {
-        _selectArea[toggleNum].SetActive(true);
-        _selectArea[toggleNum - 1 < 0 ? 1 : 0].SetActive(false);
-        _playerData = DataCenter.Instance.GetPlayerData();
-        ChangeCharacterInItemScroll();
+        if (!_selectArea[toggleNum].activeSelf)
+        {
+            SoundManager.instance.PlaySFX("Touch");
+            _toggleDOTweens[toggleNum].DORestart();
+            _selectAreaDOTweens[toggleNum].DORestart();
+            _selectArea[toggleNum].SetActive(true);
+            _selectArea[toggleNum - 1 < 0 ? 1 : 0].SetActive(false);
+            _playerData = DataCenter.Instance.GetPlayerData();
+            ChangeCharacterInItemScroll();
+        }
     }
 
     private void InitStorePopup()
     {
+        _closeStoreBtn.interactable = true;
+        SoundManager.instance.PlaySFX("Touch");
         _storeData = DataCenter.Instance.GetStoreData();
         _playerData = DataCenter.Instance.GetPlayerData();
         _ifPurchased.transform.GetChild(0).GetComponent<Button>().interactable = true;
-        _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "구매하기";
+        _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _buy;
         _popupBtn[0].onClick.RemoveAllListeners();
         _changeChar.ChangeItemInItemScroll(_playerData);
         _ifPurchased.SetActive(true);
-        _popupPanel[0].SetActive(false);
+
+        for (int i = 0; i < _popupPanel.Length; i++)
+        {
+            _popupPanel[i].SetActive(false);
+        }
         for (int i = 0; i < _storeData.characterData.Length; i++)
         {
             if (_storeData.characterData[i].isPurchased)
@@ -166,6 +200,7 @@ public class Store : MonoBehaviour
                 _character[i].transform.GetChild(1).gameObject.SetActive(false);
             }
         }
+
         for (int i = 0; i < _storeData.itemData.Length - 1; i++)
         {
             if (_storeData.itemData[i].isPurchased)
@@ -182,23 +217,26 @@ public class Store : MonoBehaviour
     {
         _popupPanel[0].transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
 
-        _popupPanel[0].transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = ((Image)_character[charNum].targetGraphic).sprite;
+        _popupPanel[0].transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite =
+            ((Image)_character[charNum].targetGraphic).sprite;
         _popupPanel[0].transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
 
         // 구매 안 한 상태일 때 구매하기 버튼 노출
         if (!_storeData.characterData[charNum].isPurchased && _storeData.characterData[charNum].isUnlocked)
         {
-            _ifPurchased.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = _storeData.characterData[charNum].price.ToString();
+            _ifPurchased.transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
+                _storeData.characterData[charNum].price.ToString();
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(true);
 
             _popupBtn[0].onClick.AddListener(delegate { PurchaseCharacter(charNum); });
         }
 
         // 구매했는데 미장착 상태일 때 장착하기 버튼
-        else if (_storeData.characterData[charNum].isPurchased && charNum != DataCenter.Instance.GetPlayerData().playerChar)
+        else if (_storeData.characterData[charNum].isPurchased &&
+                 charNum != DataCenter.Instance.GetPlayerData().playerChar)
         {
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
-            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "장착하기";
+            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _equip;
 
             _popupBtn[0].onClick.AddListener(delegate { EquipCharacter(charNum); });
         }
@@ -208,9 +246,13 @@ public class Store : MonoBehaviour
         {
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
             _ifPurchased.transform.GetChild(0).GetComponent<Button>().interactable = false;
-            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "장착 중";
+            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _equipped;
         }
+
+        _closeStoreBtn.interactable = false;
+        SoundManager.instance.PlaySFX("Touch");
         _popupPanel[0].SetActive(true);
+        _popUpDOTweens[0].DORestart();
         _anim.ChangeCharacterAnim(charNum);
     }
 
@@ -219,7 +261,10 @@ public class Store : MonoBehaviour
         int price = _storeData.characterData[charNum].price;
         if (price > DataCenter.Instance.GetPlayerData().playerItem)
         {
+            _closeStoreBtn.interactable = false;
+            SoundManager.instance.PlaySFX("Touch");
             _popupPanel[1].SetActive(true);
+            _popUpDOTweens[1].DORestart();
             return;
         }
 
@@ -246,23 +291,26 @@ public class Store : MonoBehaviour
         int itemNum = (int)itemName;
         _popupPanel[0].transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
 
-        _popupPanel[0].transform.GetChild(0).GetChild(1).GetComponent<Image>().sprite = _item[itemNum].transform.GetChild(0).GetComponent<Image>().sprite;
+        _popupPanel[0].transform.GetChild(0).GetChild(1).GetComponent<Image>().sprite =
+            _item[itemNum].transform.GetChild(0).GetComponent<Image>().sprite;
         _popupPanel[0].transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
 
         // 구매 안 한 상태일 때 구매하기 버튼 노출
         if (!_storeData.itemData[itemNum].isPurchased && _storeData.itemData[itemNum].isUnlocked)
         {
-            _ifPurchased.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = _storeData.itemData[itemNum].price.ToString();
+            _ifPurchased.transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
+                _storeData.itemData[itemNum].price.ToString();
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(true);
 
             _popupBtn[0].onClick.AddListener(delegate { PurchaseItem(itemPart, itemName); });
         }
 
         // 구매했는데 미장착 상태일 때 장착하기 버튼
-        else if (_storeData.itemData[itemNum].isPurchased && itemNum != DataCenter.Instance.GetPlayerData().itemData[(int)itemPart])
+        else if (_storeData.itemData[itemNum].isPurchased &&
+                 itemNum != DataCenter.Instance.GetPlayerData().itemData[(int)itemPart])
         {
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
-            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "장착하기";
+            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _equip;
 
             _popupBtn[0].onClick.AddListener(delegate { EquipItem(itemPart, itemName); });
         }
@@ -271,11 +319,15 @@ public class Store : MonoBehaviour
         else
         {
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
-            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "해제하기";
+            _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _unEquip;
 
             _popupBtn[0].onClick.AddListener(delegate { EquipItem(itemPart, (StoreData.ItemName)(-1)); });
         }
+
+        _closeStoreBtn.interactable = false;
+        SoundManager.instance.PlaySFX("Touch");
         _popupPanel[0].SetActive(true);
+        _popUpDOTweens[0].DORestart();
     }
 
     private void PurchaseItem(StoreData.ItemPart itemPart, StoreData.ItemName itemName)
@@ -285,7 +337,9 @@ public class Store : MonoBehaviour
 
         if (price > DataCenter.Instance.GetPlayerData().playerItem)
         {
+            _closeStoreBtn.interactable = false;
             _popupPanel[1].SetActive(true);
+            _popUpDOTweens[1].DORestart();
             return;
         }
 
@@ -319,6 +373,7 @@ public class Store : MonoBehaviour
     #endregion
 
     #region ifFix
+
     /*
      *     private void OnEnable()
         {
@@ -338,5 +393,6 @@ public class Store : MonoBehaviour
                 _anim.wrapMode = isLoop?WrapMode.Default : WrapMode.Loop;
             }
         }*/
+
     #endregion
 }

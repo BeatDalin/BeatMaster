@@ -71,14 +71,13 @@ public class MonsterPooling : MonoBehaviour
         while (_tilePos.Count == 0)
         {
             yield return null;
-            Debug.Log("타일 리스트 기다리는 중");
         }
         SpawnMonster();
     }
 
     public void DisableMonster()
     {
-        monsterList[_monsterIdx].GetComponent<Monster>().ShowAnim(_coinScreenPos, coinParent);
+        monsterList[_monsterIdx].GetComponent<Monster>().ShowAnim();
         _monsterIdx++;
     }
 
@@ -109,7 +108,7 @@ public class MonsterPooling : MonoBehaviour
         {
             if (_shortEventList[i].GetIntValue() == 1)
             {
-                GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 2f), Quaternion.identity, transform);
+                GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 1f), Quaternion.identity, transform);
                 Instantiate(_coinPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 1f), Quaternion.identity,
                     transform);
                 

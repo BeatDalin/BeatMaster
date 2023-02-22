@@ -72,7 +72,6 @@ public class BackgroundMover : MonoBehaviour
             // 3.9
             float deltaSize = _cameraController.ToOrthoSize - _characterCamera.m_Lens.OrthographicSize;
             float totalIncrement = isIncreasing ? standardSize - deltaSize : standardSize + deltaSize;
-            Debug.Log(ratio);
             ratio = totalIncrement / standardSize;
             Debug.Log(originalScale * modRatio);
             transform.localScale = Vector3.Lerp(originalScale, originalScale * modRatio, ratio);

@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using SonicBloom.Koreo;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
@@ -11,13 +9,17 @@ public class CharacterMovement : MonoBehaviour
     private Game _game;
     private ResourcesChanger _resourcesChanger;
     private Rigidbody2D _rigidbody;
+    private TouchInputManager _touchInputManager;
     [SerializeField] private Vector3 _characterPosition;
     [SerializeField] private float _checkPointBeatTime;
-    private TouchInputManager _touchInputManager;
 
     [Header("Music")] 
     [EventID] public string speedEventID;
     [SerializeField] private float _moveSpeed;
+    
+    [Header("Character Tag")]
+    private const string UnTag = "Untagged";
+    private const string PlayerTag = "Player";
     public float MoveSpeed
     {
         get => _moveSpeed;
@@ -52,10 +54,11 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _positionYOffset;
     private LayerMask _tileLayer;
 
-    [Header("Variable")]
-    private RewindTime _rewindTime;
+    [Header("Rewind")]
     public Vector3 lastPosition;
     public float lastBeatTime;
+    private float rotationSpeed = 1080f;
+    private RewindTime _rewindTime;
     private GameUI _gameUI;
 
     private bool _isAttack;
@@ -110,7 +113,6 @@ public class CharacterMovement : MonoBehaviour
         _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
         _tileLayer = LayerMask.GetMask("Ground");
         _characterPosition = transform.position;
-        MoveSpeed = 2f;
 
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
     }
@@ -195,9 +197,6 @@ public class CharacterMovement : MonoBehaviour
     /// </summary>
     private void Move()
     {
-        float x = 0f;
-        float y = 0f;
-
         float beatTime = (float)Koreographer.Instance.GetMusicBeatTime();
 
         if (beatTime != 0f)
@@ -207,8 +206,8 @@ public class CharacterMovement : MonoBehaviour
             Vector3 newPosition = lastPosition + transform.right * deltaPosition;
             //transform.position = newPosition;
 
-            x = newPosition.x;
-            y = newPosition.y;
+            float x = newPosition.x;
+            float y = newPosition.y;
 
             // 이동한 위치 저장
             lastPosition = newPosition;
@@ -327,6 +326,7 @@ public class CharacterMovement : MonoBehaviour
 
     public void RewindPosition()
     {
+        gameObject.tag = UnTag; // Set its tag as Untagged
         RaycastHit2D positionCheckHit = Physics2D.Raycast(_characterPosition, Vector2.down, 1000f, _tileLayer);
         float y = 0f;
         // 땅 위에 있을 때
@@ -347,8 +347,8 @@ public class CharacterMovement : MonoBehaviour
 
     public IEnumerator CoRewind(float y)
     {
-        float elapseTime;
-        float targetTime = 0.2f;
+        float elapseTime = 0f;
+        float targetTime = 0.1f;
         
         _rewindTime.StartRewind();
         
@@ -358,19 +358,20 @@ public class CharacterMovement : MonoBehaviour
             {
                 elapseTime = 0f;
                 Vector2 targetRewindPos = _rewindTime.rewindList[0].rewindPos;
-            
                 while (elapseTime <= targetTime)
                 {
                     if (_rewindTime.rewindList.Count > 1)
                     {
                         transform.position = Vector3.Lerp(lastPosition, targetRewindPos, elapseTime / targetTime);
-                        elapseTime += Time.deltaTime;
+                        transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
+                        elapseTime += Time.fixedDeltaTime;
                         yield return null;
                     }
                     else
                     {
                         transform.position = Vector3.Lerp(lastPosition, _rewindTime.rewindList[0].rewindPos, elapseTime / targetTime);
-                        elapseTime += Time.deltaTime;
+                        transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
+                        elapseTime += Time.fixedDeltaTime;
                         yield return null;
                     }
                 }
@@ -382,24 +383,23 @@ public class CharacterMovement : MonoBehaviour
                 }
             }
             elapseTime = 0f;
-            targetTime = 1f;
+            targetTime = 0.3f;
             
             while (elapseTime <= targetTime)
             {
                 transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
-                elapseTime += Time.deltaTime;
+                transform.DORotate(new Vector3(0, 0, 0), targetTime);
+                elapseTime += Time.fixedDeltaTime;
                 yield return null;
             }
         }
         else
         {
-            elapseTime = 0f;
-            targetTime = 1f;
-            
             while (elapseTime <= targetTime)
             {
                 transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
-                elapseTime += Time.deltaTime;
+                transform.DORotate(new Vector3(0, 0, 0), targetTime);
+                elapseTime += Time.fixedDeltaTime;
                 yield return null;
             }
         }
@@ -407,10 +407,12 @@ public class CharacterMovement : MonoBehaviour
         _rewindTime.StopRewind();
         
         _characterPosition = new Vector3(_characterPosition.x, y, 0f);
+        transform.rotation = Quaternion.identity;
         transform.position = _characterPosition;
         lastPosition = _characterPosition;
         lastBeatTime = _checkPointBeatTime;
 
         _attackBeatTime = _checkPointBeatTime;
+        gameObject.tag = PlayerTag; // Back to Player Tag
     }
 }

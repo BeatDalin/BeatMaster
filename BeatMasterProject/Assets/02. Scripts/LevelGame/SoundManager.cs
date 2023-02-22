@@ -22,7 +22,8 @@ public class SoundManager : MonoBehaviour
 
     [SerializeField] private AudioSource _bgmPlayer; // BGM 플레이어
     [SerializeField] private AudioSource[] _sfxPlayer; // SFX 플레이어. 여러 개 재생될 수 있게 배열로 선언
-
+    
+    
     [Header("Koreography")]
     public Koreography playingKoreo;
     public SimpleMusicPlayer musicPlayer;
@@ -151,9 +152,25 @@ public class SoundManager : MonoBehaviour
                 _bgmPlayer.loop = true;
                 break;
             }
-            case SceneLoadManager.SceneType.Stage1_Level1: // Level1 씬
+            case SceneLoadManager.SceneType.Stage1_Level1: // Forest
             {
                 playingKoreo = koreographies[2];
+                // playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
+                musicPlayer.LoadSong(playingKoreo, 0, false);
+                break;
+            }
+            
+            case SceneLoadManager.SceneType.Stage2_Level1: // City
+            {
+                playingKoreo = koreographies[3];
+                // playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
+                musicPlayer.LoadSong(playingKoreo, 0, false);
+                break;
+            }
+            
+            case SceneLoadManager.SceneType.Stage3_Level1: // Desert
+            {
+                playingKoreo = koreographies[4];
                 // playingKoreo = Resources.Load<Koreography>("KoreoGraphys/Level1");
                 musicPlayer.LoadSong(playingKoreo, 0, false);
                 break;
