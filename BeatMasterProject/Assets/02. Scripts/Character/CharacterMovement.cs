@@ -63,6 +63,11 @@ public class CharacterMovement : MonoBehaviour
     private float rotationSpeed = 1080f;
     private RewindTime _rewindTime;
     private GameUI _gameUI;
+
+    private bool _isAttack;
+    [SerializeField] private float _attackBeatTime;
+
+
     private ObjectGenerator _objectGenerator;
     [SerializeField] private int _rewindIdx;
     private bool _isCheckCheckPoint = true;
@@ -124,6 +129,13 @@ public class CharacterMovement : MonoBehaviour
 
     private void GetInput()
     {
+        if (_touchInputManager.CheckRightTouch())
+        {
+            PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
+            SoundManager.instance.PlaySFX("Attack");
+            _isAttack = true;
+            _attackBeatTime = lastBeatTime;
+        }
         // isLongNote prevents jumping during checking long notes
         if (!isLongNote && _touchInputManager.CheckLeftTouch() && _canJump)
         {
@@ -243,10 +255,19 @@ public class CharacterMovement : MonoBehaviour
                     _canJump = true;
                     _jumpCount = 0;
                     _gravityAccel = startGravityAccel;
-                    if (PlayerStatus.Instance.playerStatus != CharacterStatus.FastIdle)
+                    if (PlayerStatus.Instance.playerStatus != CharacterStatus.FastIdle && !_isAttack)
                     {
                         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
                     }
+                }
+            }
+
+            if (_isAttack)
+            {
+                if (lastBeatTime >= _attackBeatTime + 0.7f)
+                {
+                    PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                    _isAttack = false;
                 }
             }
 
@@ -415,6 +436,8 @@ public class CharacterMovement : MonoBehaviour
         transform.position = _characterPosition;
         lastPosition = _characterPosition;
         lastBeatTime = _checkPointBeatTime;
+
+        _attackBeatTime = _checkPointBeatTime;
         _rewindIdx--;
         gameObject.tag = PlayerTag; // Back to Player Tag
     }
