@@ -16,17 +16,14 @@ public class Monster : MonoBehaviour
     [SerializeField] private Rigidbody2D _rigidbody2D;
     
     [Header("Animation")]
-    [SerializeField] private Animator _animator;
     [SerializeField] private DOTweenAnimation _doTweenAnimation;
 
     private SpriteRenderer _spriteRenderer;
     private GameState _curState;
-    private Coin _coin;
 
     private void Start()
     {
         _curState = GameState.Idle;
-        _coin = transform.GetChild(0).GetComponent<Coin>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -52,7 +49,6 @@ public class Monster : MonoBehaviour
                     _spriteRenderer.DOFade(0f, 0.3f).onComplete += () =>
                     {
                         _doTweenAnimation.DORewind();
-                        //_coin.MoveCoin(movePos, coinParent);
                         transform.position = _originalPos;
                         transform.rotation = Quaternion.identity;
                     };
