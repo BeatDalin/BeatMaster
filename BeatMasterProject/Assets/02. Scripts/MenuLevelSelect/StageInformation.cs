@@ -54,10 +54,9 @@ public class StageInformation : MonoBehaviour
     // [SerializeField] private GameObject[] _starImg;
     private readonly String[] _stageDescription =
     {
-        "\"설레는 첫 번째 모험!\"", "\"도시에서는 어떤 일이 일어날까?\"", 
-        "\"난 기쁠 때 리듬과 모래바람을 타\"", "\"음악과 함께라면 추위도 무섭지 않아!\""
-    };
-    
+        "\"Exciting first adventure!\"", "\"What will happen in the city?\"",
+        "\"When I'm happy, I ride the rhythm and the sandstorm\"", "\"With music, I'm not afraid of the cold!\""};
+
     private void Awake()
     {
         DataCenter.Instance.LoadData();

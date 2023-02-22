@@ -24,7 +24,16 @@
 
 public static class GPGSIds
 {
-    public const string achievement_first_purchase = "CgkIhuD7vY4CEAIQBA"; // <GPGSID>
-    public const string achievement_purchase_all_characters = "CgkIhuD7vY4CEAIQBQ"; // <GPGSID>
+    public const string achievement_clear_once = "CgkIhuD7vY4CEAIQDA"; // <GPGSID>
+    public const string achievement_restart_over_hundred = "CgkIhuD7vY4CEAIQCg"; // <GPGSID>
+    public const string achievement_purchase_first_character = "CgkIhuD7vY4CEAIQBA"; // <GPGSID>
+    public const string achievement_grown = "CgkIhuD7vY4CEAIQCA"; // <GPGSID>
+    public const string achievement_purchase_crown_item = "CgkIhuD7vY4CEAIQBg"; // <GPGSID>
+    public const string achievement_first_payment = "CgkIhuD7vY4CEAIQCw"; // <GPGSID>
+    public const string achievement_master = "CgkIhuD7vY4CEAIQCQ"; // <GPGSID>
+    public const string achievement_purchase_first_item = "CgkIhuD7vY4CEAIQBQ"; // <GPGSID>
+    public const string achievement_clear_10_times = "CgkIhuD7vY4CEAIQDQ"; // <GPGSID>
+    public const string achievement_first_one_star = "CgkIhuD7vY4CEAIQBw"; // <GPGSID>
+
 }
 

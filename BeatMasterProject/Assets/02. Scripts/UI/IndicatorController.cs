@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class IndicatorController : MonoBehaviour
 {
-    private Dictionary<Transform, List<Animator>> _childrenDict = new Dictionary<Transform, List<Animator>>();
+    [SerializeField] private Transform[] _indicatorsTransforms;
+    [SerializeField] private float _waitTime;
     private void Awake()
     {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            Transform childTrans = transform.GetChild(i).transform;
-            _childrenDict.Add(childTrans, new List<Animator>(childTrans.GetComponentsInChildren<Animator>()));
-            
-        }
         
+    }
+
+    private IEnumerator CoMoveTrans()
+    {
+        yield break;
     }
 
     void Update()
