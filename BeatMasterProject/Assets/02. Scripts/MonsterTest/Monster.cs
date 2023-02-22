@@ -6,9 +6,6 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour
 {
-    [Header("Variable")]
-    public bool isGainCoin;
-
     [Header("Transform")]
     [SerializeField] private Vector3 _originalPos;
 
@@ -40,45 +37,20 @@ public class Monster : MonoBehaviour
         }
     }
 
-    public void ShowAnim(Vector2 movePos, GameObject coinParent)
+    public void ShowAnim()
     {
-        if (isGainCoin)
+        _doTweenAnimation.transform.DOLocalMove(new Vector3(transform.localPosition.x + 3f,transform.localPosition.y + 3f,0), 0.1f).onPlay += () =>
         {
-            isGainCoin = false;
-            
-            _doTweenAnimation.transform.DOLocalMove(new Vector3(transform.localPosition.x + 3f,transform.localPosition.y + 3f,0), 0.1f).onPlay += () =>
+            _doTweenAnimation.transform.DOLocalRotate(new Vector3(180f, 0f, 0f), 0.3f).onPlay += () =>
             {
-                _doTweenAnimation.transform.DOLocalRotate(new Vector3(180f, 0f, 0f), 0.3f).onPlay += () =>
+                _spriteRenderer.DOFade(0f, 0.3f).onComplete += () =>
                 {
-                    _spriteRenderer.DOFade(0f, 0.3f).onComplete += () =>
-                    {
-                        _doTweenAnimation.DORewind();
-                        transform.position = _originalPos;
-                        transform.rotation = Quaternion.identity;
-                    };
+                    _doTweenAnimation.DORewind();
+                    transform.position = _originalPos;
+                    transform.rotation = Quaternion.identity;
                 };
             };
-        }
-        else
-        {
-            _doTweenAnimation.transform.DOLocalMove(new Vector3(transform.localPosition.x + 3f,transform.localPosition.y + 3f,0), 0.1f).onPlay += () =>
-            {
-                _doTweenAnimation.transform.DOLocalRotate(new Vector3(180f, 0f, 0f), 0.3f).onPlay += () =>
-                {
-                    _spriteRenderer.DOFade(0f, 0.3f).onComplete += () =>
-                    {
-                        _doTweenAnimation.DORewind();
-                        transform.position = _originalPos;
-                        transform.rotation = Quaternion.identity;
-                    };
-                };
-            };
-        }
-    }
-
-    public void DisableMonster()
-    {
-        _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 0);
+        };
     }
 
     public void ChangeAlpha(bool up)

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1400348765421405152}
   - component: {fileID: -3466420409692252049}
   - component: {fileID: -3691229760653197284}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ghost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -389811466, guid: 281fd3f3b9c127e48b180993708ff400, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -248,8 +248,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c506e6be7de3748c0be672a872501f54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGainCoin: 1
   _originalPos: {x: 0, y: 0, z: 0}
   _rigidbody2D: {fileID: 1400348765421405152}
-  _animator: {fileID: 1400348765421405155}
   _doTweenAnimation: {fileID: -3466420409692252049}
