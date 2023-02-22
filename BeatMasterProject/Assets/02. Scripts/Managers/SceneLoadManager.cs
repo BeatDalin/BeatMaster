@@ -26,8 +26,8 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         Title,
         LevelSelect,
         Stage1_Level1,
-        Stage3_Level1,
         Stage2_Level1,
+        Stage3_Level1,
         Stage4_Level1
     }
 
