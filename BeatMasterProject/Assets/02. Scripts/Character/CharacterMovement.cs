@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using SonicBloom.Koreo;
 
@@ -10,9 +8,9 @@ public class CharacterMovement : MonoBehaviour
     private Game _game;
     private ResourcesChanger _resourcesChanger;
     private Rigidbody2D _rigidbody;
+    private TouchInputManager _touchInputManager;
     [SerializeField] private Vector3 _characterPosition;
     [SerializeField] private float _checkPointBeatTime;
-    private TouchInputManager _touchInputManager;
 
     [Header("Music")] 
     [EventID] public string speedEventID;
@@ -55,12 +53,11 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _positionYOffset;
     private LayerMask _tileLayer;
 
-    [Header("Variable")]
-    private RewindTime _rewindTime;
+    [Header("Rewind")]
     public Vector3 lastPosition;
     public float lastBeatTime;
+    private RewindTime _rewindTime;
     private GameUI _gameUI;
-
 
     private void Start()
     {
@@ -110,7 +107,6 @@ public class CharacterMovement : MonoBehaviour
         _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
         _tileLayer = LayerMask.GetMask("Ground");
         _characterPosition = transform.position;
-        MoveSpeed = 2f;
 
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
     }
@@ -189,9 +185,6 @@ public class CharacterMovement : MonoBehaviour
     /// </summary>
     private void Move()
     {
-        float x = 0f;
-        float y = 0f;
-
         float beatTime = (float)Koreographer.Instance.GetMusicBeatTime();
 
         if (beatTime != 0f)
@@ -201,8 +194,8 @@ public class CharacterMovement : MonoBehaviour
             Vector3 newPosition = lastPosition + transform.right * deltaPosition;
             //transform.position = newPosition;
 
-            x = newPosition.x;
-            y = newPosition.y;
+            float x = newPosition.x;
+            float y = newPosition.y;
 
             // 이동한 위치 저장
             lastPosition = newPosition;
