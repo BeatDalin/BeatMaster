@@ -1157,7 +1157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 613a8eb57722cbc4cb2a9d36064a9568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theme: 1
+  theme: 2
   _isEditMode: 0
   _mapEventID: Stage3_Level1_Map
   _shortEventID: Stage3_Level1_Short
@@ -1211,7 +1211,8 @@ MonoBehaviour:
   _checkPointPos: []
   _obstObj: {fileID: 7365472536441820991, guid: 786b4a00a6f2f7e42a21dcee8a5fdd9e, type: 3}
   _obstContainer: {fileID: 1550472948}
-  _obstPosList: []
+  _jumpPosList: []
+  _obstacleScripts: []
   _obstacleCounts: 
   _longObj: {fileID: 9155850983924608617, guid: bf4e4d41dac4db24593523c30fe9eb84, type: 3}
   _longObjContainer: {fileID: 1625267936}
@@ -6576,8 +6577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveXAmount: 0.01
-  _heightLerp: 0.05
-  _ModSpeedY: 5
+  _modSpeedY: 5
 --- !u!23 &1494601849
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6733,8 +6733,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 2, z: -10}
-  _minOrthoSize: 4
-  _maxOrthoSize: 6
   _speedEventID: Level1_Spd
 --- !u!1 &1550472947
 GameObject:
@@ -7083,8 +7081,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 2, z: -10}
-  _minOrthoSize: 4
-  _maxOrthoSize: 6
   _speedEventID: Level1_Spd
 --- !u!114 &1686695924
 MonoBehaviour:
@@ -7725,7 +7721,8 @@ MonoBehaviour:
   _checkPointPos: []
   _obstObj: {fileID: 0}
   _obstContainer: {fileID: 0}
-  _obstPosList: []
+  _jumpPosList: []
+  _obstacleScripts: []
   _obstacleCounts: 
   _longObj: {fileID: 460992977723358697, guid: 685e87385f64d0f41821f5a32ef58ab5, type: 3}
   _longObjContainer: {fileID: 1625267936}

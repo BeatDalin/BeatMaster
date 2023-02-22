@@ -34,7 +34,7 @@ public class CheckTrackCreator : MonoBehaviour
         // If you want to create check events, call functions here
         // ConvertMapToText();
         // GenerateJumpCheckEvent();
-        //GenerateLongCheckEvent();
+        // GenerateLongCheckEvent();
         // GenerateCheckPointEvent();
         // SyncAttackLong();
         // GenerateAttackCheckEvent();
