@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -283,7 +283,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &126352209
 GameObject:
@@ -388,7 +388,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 23
+  m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &199611009
 GameObject:
@@ -445,7 +445,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &270507030
 GameObject:
@@ -732,7 +732,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &414589723 stripped
 ParticleSystem:
@@ -842,7 +842,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 21
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &612035085
 GameObject:
@@ -1015,7 +1015,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 22
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &955603729
 GameObject:
@@ -1120,7 +1120,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 25
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &970478227 stripped
 GameObject:
@@ -1136,45 +1136,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1005781689}
-  - component: {fileID: 1005781688}
+  - component: {fileID: 1005781691}
   - component: {fileID: 1005781690}
   m_Layer: 0
-  m_Name: Temp Map Generator
+  m_Name: Map Generator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1005781688
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1005781687}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 613a8eb57722cbc4cb2a9d36064a9568, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  theme: 0
-  _isEditMode: 0
-  _mapEventID: Stage2_Level1_Map
-  _shortEventID: Stage2_Level1_Short
-  _longEventID: Stage2_Level1_Long
-  _spdEventID: Stage2_Level1_Spd
-  _groundTilemap: {fileID: 1828062194}
-  _interactionTilemap: {fileID: 1912302631}
-  _interactionTiles:
-  - {fileID: 11400000, guid: 7e877a6e4b306d5419d1825d9c61dc20, type: 2}
-  - {fileID: 11400000, guid: 55a4e7756a2f3d14093d6eb3c9695761, type: 2}
-  - {fileID: 11400000, guid: 802914fd3e355224d87a42f5db5b7953, type: 2}
-  _noteObjects:
-  - {fileID: 1053584660413951657, guid: 557f20fafb0334f5aafb7d733f4a201d, type: 3}
-  - {fileID: 1529077192042052370, guid: 9a9884f735ac7476580fc02c1ebd3500, type: 3}
-  - {fileID: 5063711641293318802, guid: d4d3084fe33494e97a977cf4eb9bfcad, type: 3}
-  shortTileParticleList: []
-  longTileParticleList: []
 --- !u!4 &1005781689
 Transform:
   m_ObjectHideFlags: 0
@@ -1188,7 +1158,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1005781690
 MonoBehaviour:
@@ -1217,6 +1187,28 @@ MonoBehaviour:
   _longObj: {fileID: 9155850983924608617, guid: bf4e4d41dac4db24593523c30fe9eb84, type: 3}
   _longObjContainer: {fileID: 1625267936}
   _longObjPosList: []
+--- !u!114 &1005781691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1005781687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ede440cb146fd64eac4904e5006b692, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  theme: 0
+  _isEditMode: 0
+  _mapEventID: Stage2_Level1_Map
+  _shortEventID: Stage2_Level1_Short
+  _longEventID: Stage2_Level1_Long
+  _spdEventID: Stage2_Level1_Spd
+  _groundTilemap: {fileID: 1828062194}
+  _interactionTilemap: {fileID: 1912302631}
+  shortTileParticleList: []
+  longTileParticleList: []
 --- !u!1 &1026440231 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1455545215042877320, guid: 0a0bc7912ba0746dba1711d9fc49f157, type: 3}
@@ -6052,7 +6044,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 24
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1347497662
 GameObject:
@@ -6096,7 +6088,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 26
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1412838908
 GameObject:
@@ -6543,7 +6535,7 @@ Transform:
   - {fileID: 1828062191}
   - {fileID: 1912302628}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1494601847
 GameObject:
@@ -6641,7 +6633,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &1516532131 stripped
 ParticleSystem:
@@ -6733,7 +6725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 2, z: -10}
-  _speedEventID: Level1_Spd
+  _speedEventID: Stage2_Level1_Spd
 --- !u!1 &1550472947
 GameObject:
   m_ObjectHideFlags: 0
@@ -6763,7 +6755,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1625267935
 GameObject:
@@ -6794,7 +6786,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1653310224
 GameObject:
@@ -7081,7 +7073,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 2, z: -10}
-  _speedEventID: Level1_Spd
+  _speedEventID: Stage2_Level1_Spd
 --- !u!114 &1686695924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7153,7 +7145,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2996507906668417908, guid: fa2f6bd45131e1a4599c9e9da85d189f, type: 3}
       propertyPath: m_RootOrder
-      value: 27
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 2996507906668417908, guid: fa2f6bd45131e1a4599c9e9da85d189f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7451,7 +7443,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &1816595897 stripped
 ParticleSystem:
@@ -7645,96 +7637,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!1 &1860435640
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1860435642}
-  - component: {fileID: 1860435641}
-  - component: {fileID: 1860435643}
-  m_Layer: 0
-  m_Name: MapGenerator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1860435641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1860435640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ede440cb146fd64eac4904e5006b692, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  theme: 1
-  _mapEventID: Level1_Map
-  _shortEventID: Level1_Short
-  _spdEventID: Level1_Spd
-  _mapEventList: []
-  _shortEventList: []
-  _spdEventList: []
-  _shortEventIndex: 0
-  _spdEventIndex: 0
-  _groundTilemap: {fileID: 1828062194}
-  _interactionTilemap: {fileID: 1912302631}
-  _interactionTiles:
-  - {fileID: 11400000, guid: 7e877a6e4b306d5419d1825d9c61dc20, type: 2}
-  - {fileID: 11400000, guid: 55a4e7756a2f3d14093d6eb3c9695761, type: 2}
-  _objectGenerator: {fileID: 1860435643}
-  _longEventID: Level1_Long
-  _longTrackIdx: 0
-  _longEventTrack: []
---- !u!4 &1860435642
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1860435640}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1860435643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1860435640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dabd7d5bc70bae2499f342adb8dbe61e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mapEventID: 
-  _starObj: {fileID: 2222503924655302269, guid: 9870be05766ef86479abbf1e23c1a2b6, type: 3}
-  _itemContainer: {fileID: 39094806}
-  _checkPointEventID: 
-  _checkPointList: []
-  _checkPointPrefab: {fileID: 7384471502369270403, guid: 068390efa75ccce49a3cb31d7915638b, type: 3}
-  _checkPointPos: []
-  _obstObj: {fileID: 0}
-  _obstContainer: {fileID: 0}
-  _jumpPosList: []
-  _obstacleScripts: []
-  _obstacleCounts: 
-  _longObj: {fileID: 460992977723358697, guid: 685e87385f64d0f41821f5a32ef58ab5, type: 3}
-  _longObjContainer: {fileID: 1625267936}
-  _longObjPosList: []
 --- !u!1 &1912302627
 GameObject:
   m_ObjectHideFlags: 0
@@ -8074,7 +7976,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6174276070358361232, guid: 1f76ef2c4fa104b4188df9a5dae0ce2f, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6174276070358361232, guid: 1f76ef2c4fa104b4188df9a5dae0ce2f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8140,7 +8042,7 @@ PrefabInstance:
       objectReference: {fileID: 6174276071496471040}
     - target: {fileID: 7686366973799714471, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7686366973799714471, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8184,7 +8086,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: _moveSpeed
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: speedEventID
