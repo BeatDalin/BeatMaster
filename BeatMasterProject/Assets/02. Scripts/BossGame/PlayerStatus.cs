@@ -34,7 +34,9 @@ public class PlayerStatus : MonoBehaviour
     public void ChangeStatus(CharacterStatus status)
     {
         if (status == playerStatus)
+        {
             return;
+        }
         if (playerStatus == CharacterStatus.FastIdle && (status == CharacterStatus.Jump || status == CharacterStatus.Attack))
         {
             status = CharacterStatus.FastIdle;

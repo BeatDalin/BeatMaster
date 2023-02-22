@@ -122,6 +122,7 @@ public class CharacterMovement : MonoBehaviour
         if (_touchInputManager.CheckRightTouch())
         {
             PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
+            SoundManager.instance.PlaySFX("Attack");
             _isAttack = true;
             _attackBeatTime = lastBeatTime;
         }
