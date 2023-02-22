@@ -19,7 +19,7 @@ public class ObjectGenerator : MonoBehaviour
     [SerializeField] private GameObject _checkPointPrefab; 
     private GameObject _checkPointObj; // Check point object to be placed
     private Animator _checkPointAnim;
-    [SerializeField] private List<Vector3> _checkPointPos;
+    [SerializeField] public List<Vector3> _checkPointPos;
     private int _checkPointIdx;
 
     [Header("Short Note Obstacles")]

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class CharacterMovement : MonoBehaviour
 
     [Header("Music")] 
     [EventID] public string speedEventID;
+    [EventID] public string checkpointID;
     [SerializeField] private float _moveSpeed;
     
     [Header("Character Tag")]
@@ -60,8 +62,10 @@ public class CharacterMovement : MonoBehaviour
     private float rotationSpeed = 1080f;
     private RewindTime _rewindTime;
     private GameUI _gameUI;
+    private ObjectGenerator _objectGenerator;
+    [SerializeField] private int rewindIdx;
+    private bool isCheckCheckPoint = true;
     
-
     private void Start()
     {
         Init();
@@ -99,6 +103,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void Init()
     {
+        _objectGenerator = FindObjectOfType<ObjectGenerator>();
         _gameUI = FindObjectOfType<GameUI>();
         _rewindTime = FindObjectOfType<RewindTime>();
         _game = FindObjectOfType<Game>();
@@ -112,6 +117,8 @@ public class CharacterMovement : MonoBehaviour
         _characterPosition = transform.position;
 
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
+        Koreographer.Instance.RegisterForEventsWithTime(checkpointID, CheckPoint);
+
     }
 
     private void GetInput()
@@ -289,7 +296,6 @@ public class CharacterMovement : MonoBehaviour
     {
         if (evt.HasFloatPayload())
         {
-            _characterPosition = transform.position;
             _checkPointBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
             _rewindTime.ClearRewindList();
             MoveSpeed = evt.GetFloatValue();
@@ -303,6 +309,21 @@ public class CharacterMovement : MonoBehaviour
                 _canGroundCheck = false;
                 PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
             }
+        }
+    }
+
+    private void CheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
+    {
+        if (isCheckCheckPoint && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
+        {
+            isCheckCheckPoint = false;
+            _characterPosition = _objectGenerator._checkPointPos[rewindIdx];
+            rewindIdx++;
+        }
+        
+        if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !isCheckCheckPoint)
+        {
+            isCheckCheckPoint = true;
         }
     }
 
@@ -393,7 +414,7 @@ public class CharacterMovement : MonoBehaviour
         transform.position = _characterPosition;
         lastPosition = _characterPosition;
         lastBeatTime = _checkPointBeatTime;
-
+        rewindIdx--;
         gameObject.tag = PlayerTag; // Back to Player Tag
     }
 }
