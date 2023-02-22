@@ -142,8 +142,8 @@ public class MenuTitleButton : MonoBehaviour
     {
         for (int i = 0; i < _doTweenAnimations.Length; i++)
         {
-            _doTweenAnimations[i].DORewind();
-            _doTweenAnimations[i].DOPlay();
+            _doTweenAnimations[i].DORestart();
+
         }
     }
 
