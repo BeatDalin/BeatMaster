@@ -57,8 +57,10 @@ public class CharacterMovement : MonoBehaviour
     [Header("Rewind")]
     public Vector3 lastPosition;
     public float lastBeatTime;
+    private float rotationSpeed = 1080f;
     private RewindTime _rewindTime;
     private GameUI _gameUI;
+    
 
     private void Start()
     {
@@ -343,14 +345,14 @@ public class CharacterMovement : MonoBehaviour
                     if (_rewindTime.rewindList.Count > 1)
                     {
                         transform.position = Vector3.Lerp(lastPosition, targetRewindPos, elapseTime / targetTime);
-                        transform.Rotate(Vector3.forward * Time.fixedDeltaTime * 1080f);
+                        transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
                         elapseTime += Time.fixedDeltaTime;
                         yield return null;
                     }
                     else
                     {
                         transform.position = Vector3.Lerp(lastPosition, _rewindTime.rewindList[0].rewindPos, elapseTime / targetTime);
-                        transform.Rotate(Vector3.forward * Time.fixedDeltaTime * 1080f);
+                        transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
                         elapseTime += Time.fixedDeltaTime;
                         yield return null;
                     }
