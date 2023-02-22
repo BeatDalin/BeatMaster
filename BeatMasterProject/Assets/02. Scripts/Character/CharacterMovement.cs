@@ -11,28 +11,23 @@ public class CharacterMovement : MonoBehaviour
     private TouchInputManager _touchInputManager;
     [SerializeField] private Vector3 _characterPosition;
     [SerializeField] private float _checkPointBeatTime;
+    private float _gravityScale;
+    private float _startGravityAccel;
+    private float _gravityAccel;
+    private float _previousBeatTime = 0;
+    private float _currentBeatTime = 0;
+    private bool _isFailed;
 
-    [Header("Music")] 
-    [EventID] public string speedEventID;
+    [Header("Move")] 
+    [SerializeField][EventID] private string _speedEventID;
     [SerializeField] private float _moveSpeed;
     
-    [Header("Character Tag")]
-    private const string UnTag = "Untagged";
-    private const string PlayerTag = "Player";
     public float MoveSpeed
     {
         get => _moveSpeed;
         set => _moveSpeed = value;
     }
     
-    public float gravityScale;
-    public float startGravityAccel;
-    private float _gravityAccel;
-    private float _previousBeatTime = 0;
-    private float _currentBeatTime = 0;
-    private float _checkPointCurrentBeatTime = 0f;
-    private bool _isFailed;
-
     [Header("Jump")]
     [SerializeField] private float _jumpGapRate = 0.25f;
     [SerializeField] private float _jumpHeight = 1.3f;
@@ -49,7 +44,9 @@ public class CharacterMovement : MonoBehaviour
 
     [Header("Ray")] 
     [SerializeField] private Transform _rayOriginPoint;
-    [SerializeField] private float _rayDistanceOffset = 0.2f;
+    [SerializeField] private float _minRayDistance = 0.5f;
+    private float _maxRayDistance;
+    private float _rayDistance;
     [SerializeField] private float _positionYOffset;
     private LayerMask _tileLayer;
 
@@ -58,6 +55,10 @@ public class CharacterMovement : MonoBehaviour
     public float lastBeatTime;
     private RewindTime _rewindTime;
     private GameUI _gameUI;
+
+    [Header("Character Tag")]
+    private const string UnTag = "Untagged";
+    private const string PlayerTag = "Player";
 
     private void Start()
     {
@@ -106,9 +107,12 @@ public class CharacterMovement : MonoBehaviour
         _rigidbody.interpolation = RigidbodyInterpolation2D.Interpolate;
         _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
         _tileLayer = LayerMask.GetMask("Ground");
-        _characterPosition = transform.position;
 
-        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
+        _characterPosition = transform.position;
+        _maxRayDistance = _minRayDistance + 0.2f;
+        _rayDistance = Mathf.Lerp(_minRayDistance, _maxRayDistance, (MoveSpeed - 2f) / 2f);
+        
+        Koreographer.Instance.RegisterForEvents(_speedEventID, ChangeMoveSpeed);
     }
 
     private void GetInput()
@@ -141,8 +145,7 @@ public class CharacterMovement : MonoBehaviour
         //Debug.DrawRay(new Vector2(_jumpStartPosition.x, 100f), Vector2.down * 1000f, Color.yellow, 10f);
         for (int i = 2; i <= 5; i++)
         {
-            RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down,
-                1000, _tileLayer);
+            RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down, 1000, _tileLayer);
 
             //Debug.DrawRay(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down * 1000f, Color.blue, 10f);
             if (jumpEndCheckHit)
@@ -192,7 +195,6 @@ public class CharacterMovement : MonoBehaviour
             float deltaBeatTime = beatTime - lastBeatTime;
             float deltaPosition = deltaBeatTime * MoveSpeed;
             Vector3 newPosition = lastPosition + transform.right * deltaPosition;
-            //transform.position = newPosition;
 
             float x = newPosition.x;
             float y = newPosition.y;
@@ -201,8 +203,7 @@ public class CharacterMovement : MonoBehaviour
             lastPosition = newPosition;
             lastBeatTime = beatTime;
 
-            RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down,
-                -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
+            RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, _rayDistance, _tileLayer);
 
             // 땅 위에 있을 때
             if (positionCheckHit)
@@ -216,22 +217,21 @@ public class CharacterMovement : MonoBehaviour
                 {
                     _canJump = false;
                     _gravityAccel += Time.fixedDeltaTime;
-                    y = _rigidbody.position.y + Physics2D.gravity.y * gravityScale * _gravityAccel;
+                    y = _rigidbody.position.y + Physics2D.gravity.y * _gravityScale * _gravityAccel;
                 }
             }
 
             // 점프하고 나서 다시 땅에 다다랐는지 체크
             if (_canGroundCheck)
             {
-                RaycastHit2D groundCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down,
-                    -_rayOriginPoint.localPosition.y + _rayDistanceOffset, _tileLayer);
+                RaycastHit2D groundCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, _rayDistance, _tileLayer);
 
                 if (groundCheckHit)
                 {
                     isJumping = false;
                     _canJump = true;
                     _jumpCount = 0;
-                    _gravityAccel = startGravityAccel;
+                    _gravityAccel = _startGravityAccel;
                     if (PlayerStatus.Instance.playerStatus != CharacterStatus.FastIdle)
                     {
                         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
@@ -262,19 +262,19 @@ public class CharacterMovement : MonoBehaviour
         switch (jumpTileCount)
         {
             case 3:
-                a = ((2 * _jumpEndY) - (4 * _jumpMidY)) / 9;
-                b = (_jumpEndY - (9 * a)) / 3;
+                a = ((2f * _jumpEndY) - (4f * _jumpMidY)) / 9f;
+                b = (_jumpEndY - (9f * a)) / 3f;
                 break;
             case 4:
-                a = (_jumpEndY - (2 * _jumpMidY)) / 8;
-                b = (_jumpMidY - (4 * a)) / 2;
+                a = (_jumpEndY - (2f * _jumpMidY)) / 8f;
+                b = (_jumpMidY - (4f * a)) / 2f;
                 break;
             case 5:
-                a = ((2 * _jumpEndY) - (4 * _jumpMidY)) / 25;
-                b = (_jumpEndY - (25 * a)) / 5;
+                a = ((2f * _jumpEndY) - (4f * _jumpMidY)) / 25f;
+                b = (_jumpEndY - (25f * a)) / 5f;
                 break;
             default: // jumpTileCount 2
-                a = (_jumpEndY - (2 * _jumpMidY)) / 2;
+                a = (_jumpEndY - (2f * _jumpMidY)) / 2f;
                 b = _jumpMidY - a;
                 break;
         }
@@ -290,7 +290,7 @@ public class CharacterMovement : MonoBehaviour
             _checkPointBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
             _rewindTime.ClearRewindList();
             MoveSpeed = evt.GetFloatValue();
-            _checkPointCurrentBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
+            _rayDistance = Mathf.Lerp(_minRayDistance, _maxRayDistance, (MoveSpeed - 2f) / 2f);
         }
 
         if (evt.HasTextPayload())

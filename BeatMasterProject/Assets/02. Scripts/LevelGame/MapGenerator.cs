@@ -252,7 +252,7 @@ public class MapGenerator : MonoBehaviour
                 new Vector3Int(_tileX, _tileY, 0), new Vector3(0f, _groundYOffset, 0f)), false);
 
             // 밑 영역 타일들 배치
-            for (int j = _tileY - 1; j >= -10; j--)
+            for (int j = _tileY - 1; j >= -30; j--)
             {
                 if (!isSideTile && j != _tileY - 1)
                 {
