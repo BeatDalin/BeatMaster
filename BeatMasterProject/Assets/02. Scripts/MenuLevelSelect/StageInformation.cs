@@ -28,7 +28,7 @@ public class StageInfo
 public class StageInformation : MonoBehaviour
 {
     [SerializeField] private GameObject _stagePanel;
-    // private CanvasGroup _levelCanvasGroup;
+    [SerializeField] private GameObject _notYetPopup;
     [Header("StageData")]
     private int _maxStageNum = 3; // 최대 stage index
     public LevelData[] curStageData = new LevelData[4];
@@ -261,8 +261,14 @@ public class StageInformation : MonoBehaviour
         SoundManager.instance.PlaySFX("Touch");
 
         string sceneName = $"Stage{uiStage + 1}_Level{GetSelectedToggle(_levelToggles) + 1}";
-        // Debug.Log(sceneName);
-        SceneLoadManager.Instance.LoadLevelAsync((SceneLoadManager.SceneType)Enum.Parse(typeof(SceneLoadManager.SceneType), sceneName));
+        if (Enum.IsDefined(typeof(SceneLoadManager.SceneType), sceneName))
+        {
+            SceneLoadManager.Instance.LoadLevelAsync((SceneLoadManager.SceneType)Enum.Parse(typeof(SceneLoadManager.SceneType), sceneName));
+        }
+        else
+        {
+            _notYetPopup.SetActive(true);
+        }
     }
 
     public void OnClickLeftBtn()

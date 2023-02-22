@@ -152,6 +152,7 @@ public class NormalGame : Game
         {
             if (_shortEvent[shortIdx].GetIntValue() == 1 && (_touchInputManager.CheckRightTouch() || Input.GetKeyDown(_attackNoteKey)))
             {
+                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 _comboSystem.IncreaseCombo();
                 _particleController.PlayJumpParticle();
                 isShortKeyCorrect = true;

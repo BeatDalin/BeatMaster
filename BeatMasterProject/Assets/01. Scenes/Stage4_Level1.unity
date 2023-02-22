@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -421,11 +421,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterList: []
   coinParent: {fileID: 970478227}
-  _mapEventID: Level1_Map
-  _shortEventID: Level1_Short
+  _mapEventID: Stage4_Level1_Map
+  _shortEventID: Stage4_Level1_Short
   _mapEventList: []
   _shortEventList: []
-  _monsterPrefab: {fileID: 3003763203973727308, guid: 367c90cd1e9064c43bbfaafbc81f3d4a, type: 3}
+  _monsterPrefab: {fileID: 3003763203973727308, guid: ba608f76094d69648bd473e84f0f7e82, type: 3}
   _coinPrefab: {fileID: 7397218863573384310, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
   _monsterIdx: 0
   _camera: {fileID: 270507031}
@@ -619,10 +619,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd60e1b7f395ae34f95524f4bb5ddbad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _setWidth: 1920
-  _setHeight: 1080
-  _deviceWidth: 0
-  _deviceHeight: 0
+  _camera: {fileID: 0}
+  _rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  _scaleHeight: 0
+  _scaleWidth: 0
 --- !u!1001 &340208106
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -871,8 +876,8 @@ MonoBehaviour:
   gameUI: {fileID: 0}
   curState: 0
   curSample: 0
-  _spdEventID: Level1_Spd
-  _checkPointID: Level1_CheckPoint
+  _spdEventID: Stage4_Level1_Spd
+  _checkPointID: Stage4_Level1_CheckPoint
   rewindShortIdx: 0
   rewindLongIdx: 0
   rewindSampleTime: -1
@@ -884,6 +889,13 @@ MonoBehaviour:
   _stageIdx: 3
   _levelIdx: 0
   coinCount: 0
+  shortID: Stage4_Level1_Short
+  longID: Stage4_Level1_Long
+  jumpCheckID: Stage4_Level1_JumpCheck
+  attackCheckID: Stage4_Level1_AttackCheck
+  longCheckMiddleID: Stage4_Level1_LongCheckMiddle
+  longCheckStartID: Stage4_Level1_LongCheckStart
+  longCheckEndID: Stage4_Level1_LongCheckEnd
   _changeChar: {fileID: 18329012}
 --- !u!4 &612035090
 Transform:
@@ -1132,7 +1144,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1005781688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1145,12 +1157,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 613a8eb57722cbc4cb2a9d36064a9568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theme: 1
+  theme: 3
   _isEditMode: 0
-  _mapEventID: Level1_MapCopy
-  _shortEventID: Level1_Short
-  _longEventID: Level1_Long
-  _spdEventID: Level1_Spd
+  _mapEventID: Stage4_Level1_Map
+  _shortEventID: Stage4_Level1_Short
+  _longEventID: Stage4_Level1_Long
+  _spdEventID: Stage4_Level1_Spd
   _groundTilemap: {fileID: 1828062194}
   _interactionTilemap: {fileID: 1912302631}
   _interactionTiles:
@@ -1190,16 +1202,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dabd7d5bc70bae2499f342adb8dbe61e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapEventID: Level1_MapCopy
+  _mapEventID: Stage4_Level1_Map
   _starObj: {fileID: 7397218863573384310, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
   _itemContainer: {fileID: 39094806}
-  _checkPointEventID: Level1_CheckPoint
+  _checkPointEventID: Stage4_Level1_CheckPoint
   _checkPointList: []
   _checkPointPrefab: {fileID: 7384471502369270403, guid: 068390efa75ccce49a3cb31d7915638b, type: 3}
   _checkPointPos: []
   _obstObj: {fileID: 7365472536441820991, guid: 786b4a00a6f2f7e42a21dcee8a5fdd9e, type: 3}
   _obstContainer: {fileID: 1550472948}
-  _obstPosList: []
+  _jumpPosList: []
+  _obstacleScripts: []
   _obstacleCounts: 
   _longObj: {fileID: 9155850983924608617, guid: bf4e4d41dac4db24593523c30fe9eb84, type: 3}
   _longObjContainer: {fileID: 1625267936}
@@ -6564,8 +6577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveXAmount: 0.01
-  _heightLerp: 0.05
-  _ModSpeedY: 5
+  _modSpeedY: 5
 --- !u!23 &1494601849
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6721,9 +6733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 2, z: -10}
-  _minOrthoSize: 4
-  _maxOrthoSize: 6
-  _speedEventID: Level1_Spd
+  _speedEventID: Stage4_Level1_Spd
 --- !u!1 &1550472947
 GameObject:
   m_ObjectHideFlags: 0
@@ -6943,10 +6953,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd60e1b7f395ae34f95524f4bb5ddbad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _setWidth: 1920
-  _setHeight: 1080
-  _deviceWidth: 0
-  _deviceHeight: 0
+  _camera: {fileID: 0}
+  _rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  _scaleHeight: 0
+  _scaleWidth: 0
 --- !u!1 &1657311695
 GameObject:
   m_ObjectHideFlags: 3
@@ -7066,9 +7081,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 2, z: -10}
-  _minOrthoSize: 4
-  _maxOrthoSize: 6
-  _speedEventID: Level1_Spd
+  _speedEventID: Stage4_Level1_Spd
 --- !u!114 &1686695924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7178,6 +7191,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2996507906987670984, guid: fa2f6bd45131e1a4599c9e9da85d189f, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 270507031}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa2f6bd45131e1a4599c9e9da85d189f, type: 3}
 --- !u!1 &1768320477
@@ -7349,10 +7366,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd60e1b7f395ae34f95524f4bb5ddbad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _setWidth: 1920
-  _setHeight: 1080
-  _deviceWidth: 0
-  _deviceHeight: 0
+  _camera: {fileID: 0}
+  _rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  _scaleHeight: 0
+  _scaleWidth: 0
 --- !u!1 &1811512135
 GameObject:
   m_ObjectHideFlags: 0
@@ -7636,7 +7658,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1860435641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7649,24 +7671,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ede440cb146fd64eac4904e5006b692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theme: 1
-  _mapEventID: Level1_Map
-  _shortEventID: Level1_Short
-  _spdEventID: Level1_Spd
-  _mapEventList: []
-  _shortEventList: []
-  _spdEventList: []
-  _shortEventIndex: 0
-  _spdEventIndex: 0
+  theme: 3
+  _isEditMode: 0
+  _mapEventID: Stage4_Level1_Map
+  _shortEventID: Stage4_Level1_Short
+  _longEventID: Stage4_Level1_Long
+  _spdEventID: Stage4_Level1_Spd
   _groundTilemap: {fileID: 1828062194}
   _interactionTilemap: {fileID: 1912302631}
-  _interactionTiles:
-  - {fileID: 11400000, guid: 7e877a6e4b306d5419d1825d9c61dc20, type: 2}
-  - {fileID: 11400000, guid: 55a4e7756a2f3d14093d6eb3c9695761, type: 2}
-  _objectGenerator: {fileID: 1860435643}
-  _longEventID: Level1_Long
-  _longTrackIdx: 0
-  _longEventTrack: []
+  shortTileParticleList: []
+  longTileParticleList: []
 --- !u!4 &1860435642
 Transform:
   m_ObjectHideFlags: 0
@@ -7694,16 +7708,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dabd7d5bc70bae2499f342adb8dbe61e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapEventID: 
-  _starObj: {fileID: 2222503924655302269, guid: 9870be05766ef86479abbf1e23c1a2b6, type: 3}
+  _mapEventID: Stage4_Level1_Map
+  _starObj: {fileID: 7397218863573384310, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
   _itemContainer: {fileID: 39094806}
-  _checkPointEventID: 
+  _checkPointEventID: Stage4_Level1_CheckPoint
   _checkPointList: []
   _checkPointPrefab: {fileID: 7384471502369270403, guid: 068390efa75ccce49a3cb31d7915638b, type: 3}
   _checkPointPos: []
-  _obstObj: {fileID: 0}
-  _obstContainer: {fileID: 0}
-  _obstPosList: []
+  _obstObj: {fileID: 7365472536441820991, guid: 786b4a00a6f2f7e42a21dcee8a5fdd9e, type: 3}
+  _obstContainer: {fileID: 1550472948}
+  _jumpPosList: []
+  _obstacleScripts: []
   _obstacleCounts: 
   _longObj: {fileID: 460992977723358697, guid: 685e87385f64d0f41821f5a32ef58ab5, type: 3}
   _longObjContainer: {fileID: 1625267936}
@@ -8154,6 +8169,22 @@ PrefabInstance:
     - target: {fileID: 7686366973799714471, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
+      propertyPath: _moveSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
+      propertyPath: checkpointID
+      value: Stage4_Level1_CheckPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
+      propertyPath: speedEventID
+      value: Stage4_Level1_Spd
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
+      propertyPath: _rayDistanceOffset
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7686366973799714492, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: m_Name
