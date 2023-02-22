@@ -73,10 +73,11 @@ public class BackgroundMover : MonoBehaviour
             float deltaSize = _cameraController.ToOrthoSize - _characterCamera.m_Lens.OrthographicSize;
             float totalIncrement = isIncreasing ? standardSize - deltaSize : standardSize + deltaSize;
             ratio = totalIncrement / standardSize;
+            Debug.Log(originalScale * modRatio);
             transform.localScale = Vector3.Lerp(originalScale, originalScale * modRatio, ratio);
         }
     }
-    
+
     private void MoveBackgroundOffset()
     {
         if (_characterMovement.transform.position.x == 0)
@@ -89,7 +90,7 @@ public class BackgroundMover : MonoBehaviour
             _scrollX += _moveXAmount * Time.deltaTime * _characterMovement.MoveSpeed;
             _mySpriteRenderers[i].material.SetFloat(ScrollAmount, _scrollX);
         }
-        
+
     }
 
     private void MoveBackground()
