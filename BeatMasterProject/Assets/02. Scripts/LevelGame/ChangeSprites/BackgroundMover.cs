@@ -79,10 +79,14 @@ public class BackgroundMover : MonoBehaviour
     
     private void MoveBackgroundOffset()
     {
-        
+        if (_characterMovement.transform.position.x == 0)
+        {
+            return;
+        }
+
         for (int i = 0; i < _mySpriteRenderers.Length; i++)
         {
-            _scrollX += (i + 1) * _moveXAmount * Time.deltaTime * _characterMovement.MoveSpeed;
+            _scrollX += _moveXAmount * Time.deltaTime * _characterMovement.MoveSpeed;
             _mySpriteRenderers[i].material.SetFloat(ScrollAmount, _scrollX);
         }
         
