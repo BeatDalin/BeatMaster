@@ -185,7 +185,7 @@ public class DataCenter : MonoBehaviour
     {
         CharacterData[] tempCharacterData = _gameData.storeData.characterData;
 
-        int[] charPrice = { 0, 15, 20 };
+        int[] charPrice = { 0, 150, 150 };
 
         for (int i = 0; i < _gameData.storeData.charCount; i++)
         {
@@ -208,18 +208,18 @@ public class DataCenter : MonoBehaviour
         StoreData.ItemPart[] itemParts =
         {
             StoreData.ItemPart.Background,
-            StoreData.ItemPart.Neck,
+            StoreData.ItemPart.Attach,
             StoreData.ItemPart.Face,
             StoreData.ItemPart.Head,
             StoreData.ItemPart.Head,
-            StoreData.ItemPart.Head,
+            StoreData.ItemPart.Attach,
             StoreData.ItemPart.Head,
             StoreData.ItemPart.Background,
             StoreData.ItemPart.Head,
             StoreData.ItemPart.Background,
             StoreData.ItemPart.Background,
         };
-        int[] itemPrice = { 10, 10, 10, 20, 20, 30 };
+        int[] itemPrice = { 50, 50, 90, 70, 70, 150 };
 
         for (int i = 0; i < _gameData.storeData.itemCount; i++)
         {
@@ -280,7 +280,7 @@ public class DataCenter : MonoBehaviour
         {
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_first_item, success => _gameData.achievement.isFirstItem = true);
         }
-        if (!_gameData.achievement.isCrownItem)
+        if (!_gameData.achievement.isCrownItem && (int)itemName==5)
         {
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_crown_item, success => _gameData.achievement.isCrownItem = true);
         }

@@ -50,9 +50,9 @@ public struct StoreData
     public enum ItemPart
     {
         Background = 0,
-        Neck,
         Face,
         Head,
+        Attach,
     }
 
     public enum ItemName
