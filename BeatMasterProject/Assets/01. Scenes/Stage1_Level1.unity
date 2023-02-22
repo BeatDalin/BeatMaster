@@ -581,7 +581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveXAmount: 0.01
-  _ModSpeedY: 5
+  _modSpeedY: 5
 --- !u!1 &270507030
 GameObject:
   m_ObjectHideFlags: 0
@@ -1011,8 +1011,8 @@ MonoBehaviour:
   gameUI: {fileID: 0}
   curState: 0
   curSample: 0
-  _spdEventID: Level1_Spd
-  _checkPointID: Level1_CheckPoint
+  _spdEventID: Stage1_Level1_Spd
+  _checkPointID: Stage1_Level1_CheckPoint
   rewindShortIdx: 0
   rewindLongIdx: 0
   rewindSampleTime: -1
@@ -1024,13 +1024,13 @@ MonoBehaviour:
   _stageIdx: 0
   _levelIdx: 0
   coinCount: 0
-  shortID: Level1_Short
-  longID: Level1_Long
-  jumpCheckID: Level1_JumpCheck
-  attackCheckID: Level1_AttackCheck
-  longCheckMiddleID: Level1_LongCheckMiddle
-  longCheckStartID: Level1_LongCheckStart
-  longCheckEndID: Level1_LongCheckEnd
+  shortID: Stage1_Level1_Short
+  longID: Stage1_Level1_Long
+  jumpCheckID: Stage1_Level1_JumpCheck
+  attackCheckID: Stage1_Level1_AttackCheck
+  longCheckMiddleID: Stage1_Level1_LongCheckMiddle
+  longCheckStartID: Stage1_Level1_LongCheckStart
+  longCheckEndID: Stage1_Level1_LongCheckEnd
   _changeChar: {fileID: 18329012}
 --- !u!4 &612035090
 Transform:
@@ -1378,10 +1378,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   theme: 1
   _isEditMode: 0
-  _mapEventID: Level1_MapCopy
-  _shortEventID: Level1_Short
-  _longEventID: Level1_Long
-  _spdEventID: Level1_Spd
+  _mapEventID: Stage1_Level1_Map
+  _shortEventID: Stage1_Level1_Short
+  _longEventID: Stage1_Level1_Long
+  _spdEventID: Stage1_Level1_Spd
+  _shortEventList: []
   _groundTilemap: {fileID: 1828062194}
   _interactionTilemap: {fileID: 1912302631}
   _interactionTiles:
@@ -1421,10 +1422,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dabd7d5bc70bae2499f342adb8dbe61e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapEventID: Level1_MapCopy
+  _mapEventID: Stage1_Level1_Map
   _starObj: {fileID: 7397218863573384310, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
   _itemContainer: {fileID: 39094806}
-  _checkPointEventID: Level1_CheckPoint
+  _checkPointEventID: Stage1_Level1_CheckPoint
   _checkPointList: []
   _checkPointPrefab: {fileID: 7384471502369270403, guid: 068390efa75ccce49a3cb31d7915638b, type: 3}
   _checkPointPos: []
@@ -6937,7 +6938,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 2, z: -10}
-  _speedEventID: Level1_Spd
+  _speedEventID: Stage1_Level1_Spd
 --- !u!1 &1550472947
 GameObject:
   m_ObjectHideFlags: 0
@@ -7369,7 +7370,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 2, z: -10}
-  _speedEventID: Level1_Spd
+  _speedEventID: Stage1_Level1_Spd
 --- !u!114 &1686695924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8531,6 +8532,10 @@ PrefabInstance:
     - target: {fileID: 7686366973799714471, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
+      propertyPath: speedEventID
+      value: Stage1_Level1_Spd
       objectReference: {fileID: 0}
     - target: {fileID: 7686366973799714492, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: m_Name
