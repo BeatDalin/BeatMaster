@@ -7,27 +7,51 @@ using UnityEngine.UI;
 
 public class Store : MonoBehaviour
 {
-    [SerializeField] private Button _char;
-    [SerializeField] private Button _itemBtn;
+    [Header("Prefab Buttons")]
+    [SerializeField]
+    private Button _characterBtn;
+    [SerializeField]
+    private Button _itemBtn;
 
-    [SerializeField] private GameObject[] _popupPanel; //panels 0:_purchasePanel, 1:_noMoneyPanel, 2: _lockedPanel
-    [SerializeField] private Button[] _popupBtn; //buttons 0:_purchaseBtn, 1:_closeBtn
-    [SerializeField] private Text _playerCoin;
-    [SerializeField] private GameObject _ifPurchased;
-    [SerializeField] private Anim _anim;
+    [Header("Panels")]
+    [SerializeField]
+    private GameObject[] _popupPanel; //panels 0:_purchasePanel, 1:_noMoneyPanel, 2: _lockedPanel
 
-    [SerializeField] private ChangeCharSprite _changeChar;
 
-    [SerializeField] private Toggle[] _toggles; //0: charBtn, 1:itemBtn
+    [Header("Popup Buttons")]
+    [SerializeField]
+    private Button[] _popupBtn; //buttons 0:_purchaseBtn, 1:_closeBtn
+
+    [Header("Text")]
+    [SerializeField]
+    private Text _playerCoin;
+
+    [Header("Objects")]
+    [SerializeField]
+    private GameObject _ifPurchased;
+    [SerializeField]
+    private GameObject[] _selectArea;
+    [SerializeField]
+    private GameObject _charContent;
+    [SerializeField]
+    private GameObject _itemContent;
+
+    [SerializeField]
+    private Anim _anim;
+
+    [SerializeField]
+    private ChangeCharSprite _changeChar;
+
+    [Header("Toggles")]
+    [SerializeField]
+    private Toggle[] _toggles; //0: charBtn, 1:itemBtn
 
     //private Animator _animator;
 
-    [SerializeField] private GameObject[] _selectArea;
-    [SerializeField] private GameObject _charContent;
-    [SerializeField] private GameObject _itemContent;
-
     private Button[] _character;
     private Button[] _item;
+
+    [Header("Data")]
     [SerializeField] private StoreData _storeData;
     [SerializeField] private PlayerData _playerData;
 
@@ -72,7 +96,7 @@ public class Store : MonoBehaviour
         {
             int index = i;
 
-            _character[index] = Instantiate(_char, _charContent.transform);
+            _character[index] = Instantiate(_characterBtn, _charContent.transform);
             _character[index].transform.GetComponent<Image>().sprite = _changeChar.ChangeCharacterSprite(index);
             if (_storeData.characterData[i].isPurchased)
             {

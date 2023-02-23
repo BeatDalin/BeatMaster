@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1663,7 +1663,7 @@ MonoBehaviour:
   _checkPointEventID: Stage1_Level1_CheckPoint
   _checkPointList: []
   _checkPointPrefab: {fileID: 7384471502369270403, guid: 068390efa75ccce49a3cb31d7915638b, type: 3}
-  _checkPointPos: []
+  checkPointPos: []
   _obstObj: {fileID: 7365472536441820991, guid: 786b4a00a6f2f7e42a21dcee8a5fdd9e, type: 3}
   _obstContainer: {fileID: 1550472948}
   _jumpPosList: []
@@ -6894,6 +6894,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 351795571555828153, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791823711089478939, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4293571413371234759, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
