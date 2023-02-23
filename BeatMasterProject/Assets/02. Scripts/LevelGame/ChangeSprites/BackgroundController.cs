@@ -51,7 +51,7 @@ public class BackgroundController : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(MoveBackgroundOffset());
+        StartCoroutine(CoMoveBackgroundOffset());
     }
 
     private void LateUpdate()
@@ -95,7 +95,7 @@ public class BackgroundController : MonoBehaviour
         }
     }
 
-    private IEnumerator MoveBackgroundOffset()
+    private IEnumerator CoMoveBackgroundOffset()
     {
         while (!SoundManager.instance.musicPlayer.IsPlaying)
         {
@@ -110,7 +110,7 @@ public class BackgroundController : MonoBehaviour
         }
 
         yield return null;
-        StartCoroutine(MoveBackgroundOffset());
+        StartCoroutine(CoMoveBackgroundOffset());
     }
 
     private void MoveBackground()
@@ -125,8 +125,8 @@ public class BackgroundController : MonoBehaviour
 
     public void SetBackgroundSprite(ChangingResources changingResources)
     {
-        int legth = changingResources.Backgrounds.Length;
-        if (legth == 0)
+        int length = changingResources.Backgrounds.Length;
+        if (length == 0)
         {
             Debug.LogError("Backgrounds 리소스 길이가 0입니다");
             return;
@@ -135,7 +135,7 @@ public class BackgroundController : MonoBehaviour
         // 0번째 인덱스는 안 움직이는 배경이 들어갈 것임 ==> Sprite-Default Material로 함
         _mySpriteRenderers[0].sprite = changingResources.Backgrounds[0];
 
-        if (legth == 1)
+        if (length == 1)
         {
             _mySpriteRenderers[0].material = changingResources.BackgroundMaterials[0];
         }
