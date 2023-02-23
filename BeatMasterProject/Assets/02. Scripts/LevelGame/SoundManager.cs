@@ -99,6 +99,11 @@ public class SoundManager : MonoBehaviour
                 _sfxPlayer[3].clip = _sfx[3].clip;
                 _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
                 break;
+            case "Rewind":
+                _sfxPlayer[4].clip = _sfx[4].clip;
+                _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
+                break;
+            
         }
         
         
