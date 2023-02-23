@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e0cb291f40ac1914989abb6494b606fe
+guid: 4ccbf198388b21745a152d549af27ea7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 250
+  spritePixelsToUnits: 50
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -152,13 +152,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: snowman walk left_0
+      name: 1_2_glacier_0
       rect:
         serializedVersion: 2
-        x: 10
+        x: 0
         y: 0
-        width: 105
-        height: 152
+        width: 72
+        height: 72
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,20 +166,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9f647ef3fce090d4caf2c9d12074236f
-      internalID: -2086466316
+      spriteID: cfade5866ba26b048887ed69101b1d0f
+      internalID: -588258701
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: snowman walk left_1
+      name: 1_2_glacier_1
       rect:
         serializedVersion: 2
-        x: 121
+        x: 72
         y: 0
-        width: 105
-        height: 152
+        width: 72
+        height: 72
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -187,20 +187,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6fff7a017e44cfc4eac77b64d01358ca
-      internalID: 1041187938
+      spriteID: aec0d91b61ddbe8499f3b3abafd6f663
+      internalID: 821762979
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: snowman walk left_2
+      name: 1_2_glacier_2
       rect:
         serializedVersion: 2
-        x: 232
+        x: 144
         y: 0
-        width: 105
-        height: 152
+        width: 72
+        height: 72
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -208,20 +208,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dc2209013f34bd8478e48401c620c31f
-      internalID: 1361667645
+      spriteID: bb00310cff0c4df469248451715c4155
+      internalID: 1362398857
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: snowman walk left_3
+      name: 1_2_glacier_3
       rect:
         serializedVersion: 2
-        x: 343
+        x: 216
         y: 0
-        width: 105
-        height: 152
+        width: 72
+        height: 72
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -229,8 +229,92 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b45e22da6e9417e4a87e079ac856ad18
-      internalID: 425665055
+      spriteID: 78f419a1cc1da074d966ff8a32824a55
+      internalID: -1922913507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 1_2_glacier_4
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 72
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9e6bf35df0b0844a91f0a2aacab52ff
+      internalID: 1219119659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 1_2_glacier_5
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 72
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 440eeab7d7b50b244a7a0a25a701570c
+      internalID: 2041781735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 1_2_glacier_6
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 0
+        width: 72
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a076688eb2bc11c42abea84a8bf8e36a
+      internalID: 1989262451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 1_2_glacier_7
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 0
+        width: 72
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7f169886e74f934aae9e788cea08a19
+      internalID: -923348786
       vertices: []
       indices: 
       edges: []
@@ -238,7 +322,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: e4b4d18d3d9f5cc44a62a6684c50c783
+    spriteID: 11bc91ff89c6944448aa86b29591f3a6
     internalID: 0
     vertices: []
     indices: 
@@ -246,10 +330,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      snowman walk left_1: 1041187938
-      snowman walk left_3: 425665055
-      snowman walk left_0: -2086466316
-      snowman walk left_2: 1361667645
+      1_2_glacier_2: 1362398857
+      1_2_glacier_0: -588258701
+      1_2_glacier_1: 821762979
+      1_2_glacier_6: 1989262451
+      1_2_glacier_3: -1922913507
+      1_2_glacier_7: -923348786
+      1_2_glacier_4: 1219119659
+      1_2_glacier_5: 2041781735
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
