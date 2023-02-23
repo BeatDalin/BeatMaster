@@ -1178,7 +1178,7 @@ MonoBehaviour:
   _checkPointEventID: Stage2_Level1_CheckPoint
   _checkPointList: []
   _checkPointPrefab: {fileID: 7384471502369270403, guid: 068390efa75ccce49a3cb31d7915638b, type: 3}
-  _checkPointPos: []
+  checkPointPos: []
   _obstObj: {fileID: 1288147546175994288, guid: 942e028c0f952574a99dd036675aaee2, type: 3}
   _obstContainer: {fileID: 1550472948}
   _jumpPosList: []
@@ -6188,6 +6188,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1791823711089478939, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4293571413371234759, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -8087,6 +8091,10 @@ PrefabInstance:
     - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: _moveSpeed
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
+      propertyPath: checkpointID
+      value: Stage2_Level1_CheckPoint
       objectReference: {fileID: 0}
     - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: speedEventID
