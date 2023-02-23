@@ -15,12 +15,12 @@ public class GoogleAchievement : MonoBehaviour
 
         if (GUILayout.Button("Achievement"))
         {
-            GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_first_purchase, success => _log = $"{success}");
+            GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_first_character, success => _log = $"{success}");
         }
 
         if (GUILayout.Button("Achievement2"))
         {
-            GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_all_characters, success => _log = $"{success}");
+            GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_first_item, success => _log = $"{success}");
         }
 
         GUILayout.Label(_log);
