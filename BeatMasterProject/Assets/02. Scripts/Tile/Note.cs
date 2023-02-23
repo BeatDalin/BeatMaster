@@ -88,7 +88,7 @@ public class Note : MonoBehaviour
 
     public IEnumerator CoRewindParticle(string result)
     {
-        int idx = 3;
+        int idx = _particleSystems.Length - 1;
 
         switch (result)
         {
@@ -115,7 +115,7 @@ public class Note : MonoBehaviour
         
         yield return _waitForSecondsEnumerator;
         
-        for (int i = 3; i > -1; i--)
+        for (int i = _particleSystems.Length - 1; i > -1; i--)
         {
             _particleSystemReverseSimulations[i].enabled = false;
         }
