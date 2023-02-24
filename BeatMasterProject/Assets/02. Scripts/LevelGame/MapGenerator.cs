@@ -17,7 +17,7 @@ public class MapGenerator : MonoBehaviour
     }
     private enum _GroundType
     {
-        Flat, GentleUp, GentleDown, SteepUp, SteepDown, Empty
+        Flat, GentleUp, GentleDown, SteepUp, SteepDown, Empty, LeftSide = 7, RightSide = 8
     }
     private enum _NoteType
     {
@@ -55,6 +55,7 @@ public class MapGenerator : MonoBehaviour
     private List<GameObject> _noteObjects = new List<GameObject>();
     private const int _tileCount = 9;
     private const int _noteObjectCount = 4;
+    private const int _minTileY = -30;
     private int _tileX = -1, _tileY;
     private float _groundYOffset = 0f;
     private LayerMask _tileLayer;
@@ -236,13 +237,13 @@ public class MapGenerator : MonoBehaviour
                 if (prevGroundType == _GroundType.Empty)
                 {
                     isSideTile = true;
-                    groundIndex = 7;
+                    groundIndex = (int)_GroundType.LeftSide;
                 }
                 // 다음 타일이 빈 타일이면 오른쪽 사이드
                 else if ((_GroundType)(_mapEventList[i + 1].GetTextValue().Split().Select(float.Parse).ToArray()[0]) == _GroundType.Empty)
                 {
                     isSideTile = true;
-                    groundIndex = 8;
+                    groundIndex = (int)_GroundType.RightSide;
                 }
             }
 
@@ -252,7 +253,7 @@ public class MapGenerator : MonoBehaviour
                 new Vector3Int(_tileX, _tileY, 0), new Vector3(0f, _groundYOffset, 0f)), false);
 
             // 밑 영역 타일들 배치
-            for (int j = _tileY - 1; j >= -10; j--)
+            for (int j = _tileY - 1; j >= _minTileY; j--)
             {
                 if (!isSideTile && j != _tileY - 1)
                 {
@@ -293,7 +294,7 @@ public class MapGenerator : MonoBehaviour
             _groundTilemap.SetTile(GetTileChangeData(_TileType.GroundTop, 0,
                 new Vector3Int(++_tileX, _tileY, 0), new Vector3(0f, _groundYOffset, 0f)), false);
 
-            for (int j = _tileY - 1; j >= -10; j--)
+            for (int j = _tileY - 1; j >= _minTileY; j--)
             {
                 _groundTilemap.SetTile(GetTileChangeData(_TileType.GroundUnder, 0,
                     new Vector3Int(_tileX, j, 0), new Vector3(0f, _groundYOffset, 0f)), false);
@@ -347,7 +348,24 @@ public class MapGenerator : MonoBehaviour
 
                 shortTileParticleList.Add(Instantiate(_noteObjects[_shortEventList[i].GetIntValue()],
                     new Vector3(xPosition + xOffset, yPosition, 0f), Quaternion.identity, transform));
-                _monsterPooling.AddTilePos(xPosition + xOffset, yPosition);
+                
+                // 몬스터 위치와 타입 저장
+                // Default는 지상 몬스터
+                _monsterPooling.AddMonsterInfo(xPosition + xOffset, yPosition, MonsterPooling.MonsterType.Ground);
+                
+                // 롱 노트 구간에는 공중 몬스터로 변경
+                for (int j = 0; j < _longEventList.Count; j++)
+                {
+                    // 롱 노트 구간 확인용 값, 롱 노트 구간에는 0과 1사이 값을 가진다.
+                    float checkInLong = _longEventList[j].GetEventDeltaAtSampleTime(shortSample);
+
+                    if (checkInLong > 0 && checkInLong < 1)
+                    {
+                        _monsterPooling.ChangeMonsterType(xPosition + xOffset, yPosition, MonsterPooling.MonsterType.Air);
+                        
+                        break;
+                    }
+                }
             }
 
             if (_shortEventList[i].GetIntValue() == 0)
@@ -362,6 +380,7 @@ public class MapGenerator : MonoBehaviour
             }
         }
     }
+
 
     private void GenerateLongNoteObject()
     {
@@ -382,7 +401,7 @@ public class MapGenerator : MonoBehaviour
                 int prevMapSample = _mapEventList[j].StartSample;
                 int nextMapSample = _mapEventList[j + 1].StartSample;
 
-                if (longStartSample < nextMapSample + 5)
+                if (longStartSample < nextMapSample + 1)
                 {
                     startXPosition = j;
                     startXOffset = (float)(longStartSample - prevMapSample) / (nextMapSample - prevMapSample);
@@ -392,7 +411,7 @@ public class MapGenerator : MonoBehaviour
                         int endPrevMapSample = _mapEventList[k].StartSample;
                         int endNextMapSample = _mapEventList[k + 1].StartSample;
 
-                        if (longEndSample < endNextMapSample + 5)
+                        if (longEndSample < endNextMapSample + 1)
                         {
                             endXPosition = k;
                             endXOffset = (float)(longEndSample - endPrevMapSample) / (endNextMapSample - endPrevMapSample);
@@ -444,9 +463,94 @@ public class MapGenerator : MonoBehaviour
                         }
                     }
 
+                    // 원하는 롱 노트 구간 타일 투명화
+                    if (_longEventList[i].GetCurveValue().Evaluate(0) != _longEventList[i].GetCurveValue().Evaluate(1))
+                    {
+                        MakeTransparentLongNote(startXPosition, startXOffset, endXPosition, endXOffset);
+                    }
+
                     break;
                 }
             }
+        }
+    }
+
+    private void MakeTransparentLongNote(int startXPosition, float startXOffset, int endXPosition, float endXOffset)
+    {
+        // 투명하게 할 롱 노트 구간의 시작점과 끝점을 찾는다.
+        int startXCeil = Mathf.CeilToInt(startXPosition + startXOffset);
+
+        //Debug.Log($"{startXPosition}  {startXOffset}  {(Mathf.Round(startXOffset * 100) / 100)}  {startXCeil}");
+
+        if ((Mathf.Round(startXOffset * 100) / 100) % 1 >= 0.199f || (Mathf.Round(startXOffset * 100) / 100) == 1)
+        {
+            startXCeil += 1;
+        }
+
+        int endXFloor = Mathf.FloorToInt(endXPosition + endXOffset);
+        //Debug.Log($"{endXPosition}  {endXOffset}  {(Mathf.Round(endXOffset * 100) / 100)}  {endXFloor}");
+
+        if ((Mathf.Round(endXOffset * 100) / 100) % 1 <= 0.801f)
+        {
+            endXFloor -= 1;
+        }
+
+        // 시작과 끝 사이 구간을 투명하게 한다.
+        for (int k = startXCeil; k <= endXFloor; k++)
+        {
+            float y = 0;
+            RaycastHit2D hit = Physics2D.Raycast(new Vector2(k, 100f), Vector2.down, 1000, _tileLayer);
+            
+            //Debug.DrawRay(new Vector2(k, 100f), Vector2.down * 200f, Color.red, 100f);
+            if (hit)
+            {
+                y = hit.point.y;
+            }
+
+            for (float l = y + 1; l >= _minTileY - 1; l--)
+            {
+                Vector3Int tilePosition = _groundTilemap.WorldToCell(new Vector3(k, l, 0f));
+                Color color = new Color(1f, 1f, 1f, 0f);
+
+                _groundTilemap.SetTileFlags(tilePosition, TileFlags.None);
+                _groundTilemap.SetColor(tilePosition, color);
+            }
+        }
+
+        // 롱 노트 시작의 전 타일과 끝의 뒤 타일을 사이드 타일로 바꿔 준다.
+        // 시작
+        float sideTileY = 0;
+        RaycastHit2D sideTileHit = Physics2D.Raycast(new Vector2(startXCeil - 1, 100f), Vector2.down, 1000, _tileLayer);
+
+        if (sideTileHit)
+        {
+            sideTileY = sideTileHit.point.y;
+        }
+
+        Vector3Int sideTilePosition = _groundTilemap.WorldToCell(new Vector3(startXCeil - 1, sideTileY, 0f));
+        _groundTilemap.SetTile(sideTilePosition, _topTiles[(int)_GroundType.RightSide]);
+
+        for (float k = sideTileY - 1; k >= _minTileY - 1; k--)
+        {
+            sideTilePosition = _groundTilemap.WorldToCell(new Vector3(startXCeil - 1, k, 0f));
+            _groundTilemap.SetTile(sideTilePosition, _underTiles[(int)_GroundType.RightSide]);
+        }
+
+        // 끝
+        sideTileHit = Physics2D.Raycast(new Vector2(endXFloor + 1, 100f), Vector2.down, 1000, _tileLayer);
+
+        if (sideTileHit)
+        {
+            sideTileY = sideTileHit.point.y;
+        }
+
+        sideTilePosition = _groundTilemap.WorldToCell(new Vector3(endXFloor + 1, sideTileY, 0f));
+        _groundTilemap.SetTile(sideTilePosition, _topTiles[(int)_GroundType.LeftSide]);
+
+        for (float k = sideTileY - 1; k >= _minTileY - 1; k--)
+        {
+            sideTilePosition = _groundTilemap.WorldToCell(new Vector3(endXFloor + 1, k, 0f));
+            _groundTilemap.SetTile(sideTilePosition, _underTiles[(int)_GroundType.LeftSide]);
         }
     }
 

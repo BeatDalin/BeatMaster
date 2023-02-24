@@ -11,7 +11,7 @@ public class ResourcesChanger : MonoBehaviour
     [SerializeField] private ChangingResources[] _changingResources;
     [SerializeField] private AnimationCurve _hueCurve;
     [SerializeField] private float _lerpTime = 1f;
-    private BackgroundMover _backgroundMover;
+    private BackgroundController _backgroundController;
     private Volume _volume;
     private ColorAdjustments _colorAdjustments;
     private int _materialIndex;
@@ -27,7 +27,7 @@ public class ResourcesChanger : MonoBehaviour
     
     private void Awake()
     {
-        _backgroundMover = FindObjectOfType<BackgroundMover>();
+        _backgroundController = FindObjectOfType<BackgroundController>();
         _volume = FindObjectOfType<Volume>();
         _volume.profile.TryGet(typeof(ColorAdjustments), out _colorAdjustments);
         _characterMovement = FindObjectOfType<CharacterMovement>();
@@ -38,16 +38,12 @@ public class ResourcesChanger : MonoBehaviour
     {
         // TODO Stage()_Level()로 바꾸기
         _sceneName = SceneLoadManager.Instance.Scene.ToString();
+        SetCurrentResource();
+        _backgroundController.SetOffsetSize(_changingResources[0].Backgrounds[0]);
         SetDefaultSpeed();
     }
 
-    public void OnSpeedChanged(float speed)
-    {
-        ChangePostProcessing(speed);
-        _backgroundMover.SetBackgroundSize();
-    }
-    
-    private void ChangePostProcessing(float speed)
+    private void SetCurrentResource()
     {
         foreach (var changingResource in _changingResources)
         {
@@ -58,6 +54,22 @@ public class ResourcesChanger : MonoBehaviour
             }
         }
 
+        ChangeBackground();
+    }
+    
+    private void ChangeBackground()
+    {
+        _backgroundController.SetBackgroundSprite(_currentResource);
+    }
+
+    public void OnSpeedChanged(float speed)
+    {
+        ChangePostProcessing(speed);
+        _backgroundController.SetBackgroundSize();
+    }
+    
+    private void ChangePostProcessing(float speed)
+    {
         StartCoroutine(CoHueShift(speed));
     }
 
@@ -79,7 +91,7 @@ public class ResourcesChanger : MonoBehaviour
                 // 여기선 그냥 값이
                 s = Mathf.Lerp(s, 0, _hueCurve.Evaluate(ratio));
                 _colorAdjustments.colorFilter.value = Color.HSVToRGB(h, s, v);
-                yield return new WaitForEndOfFrame();
+                yield return null;
             }
         }
         else
@@ -99,14 +111,12 @@ public class ResourcesChanger : MonoBehaviour
                 s = Mathf.Lerp(s * MAX_SAT, _currentResource.SatValues[_satIndex], _hueCurve.Evaluate(ratio)) /
                     MAX_SAT;
                     _colorAdjustments.colorFilter.value = Color.HSVToRGB(h, s, v);
-                yield return new WaitForEndOfFrame();
-            }    
+                yield return null;
+            }
+            _hueIndex++;
+            _satIndex++;
         }
-        
-        _hueIndex++;
-        _satIndex++;
-        _hueIndex %= _currentResource.HueValues.Length;
-        _satIndex %= _currentResource.SatValues.Length;
+
     }
 
     public void SetDefaultSpeed()

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using SonicBloom.Koreo;
@@ -6,6 +5,11 @@ using UnityEngine;
 
 public class MonsterPooling : MonoBehaviour
 {
+    public enum MonsterType
+    {
+        Ground, Air
+    }
+
     public List<GameObject> monsterList = new List<GameObject>();
     public GameObject coinParent;
 
@@ -15,16 +19,17 @@ public class MonsterPooling : MonoBehaviour
     [SerializeField] private List<KoreographyEvent> _mapEventList = new List<KoreographyEvent>();
     [SerializeField] private List<KoreographyEvent> _shortEventList = new List<KoreographyEvent>();
 
-    [Header("Variable")] 
-    [SerializeField] private GameObject _monsterPrefab;
+    [Header("Variable")]
+    [SerializeField] private List<GameObject> _monsterPrefabList;
     [SerializeField] private GameObject _coinPrefab;
     [SerializeField] private int _monsterIdx;
     [SerializeField] private Camera _camera;
 
     [Header("Transform")]
     public RectTransform coinPos;
-    
+
     [Header("Tile")]
+    private Dictionary<Vector3, int> _monsterInfos = new Dictionary<Vector3, int>();
     [SerializeField] private List<Vector3> _tilePos = new List<Vector3>();
 
     public Vector2 _coinScreenPos;
@@ -81,9 +86,15 @@ public class MonsterPooling : MonoBehaviour
         _monsterIdx++;
     }
 
-    public void AddTilePos(float posX, float posY)
+    public void AddMonsterInfo(float posX, float posY, MonsterType monsterType)
     {
         _tilePos.Add(new Vector3(posX, posY, 0));
+        _monsterInfos.Add(new Vector3(posX, posY, 0f), (int)monsterType);
+    }
+
+    public void ChangeMonsterType(float posX, float posY, MonsterType monsterType)
+    {
+        _monsterInfos[new Vector3(posX, posY, 0f)] = (int)monsterType;
     }
 
     public void ResetPool() //캐릭터가 체크포인트를 지났으면 인덱스 시작부분을 변경
@@ -108,9 +119,12 @@ public class MonsterPooling : MonoBehaviour
         {
             if (_shortEventList[i].GetIntValue() == 1)
             {
-                GameObject g = Instantiate(_monsterPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 1f), Quaternion.identity, transform);
-                Instantiate(_coinPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 1f), Quaternion.identity,
-                    transform);
+                int monsterType;
+
+                _monsterInfos.TryGetValue(_tilePos[i], out monsterType);
+
+                GameObject g = Instantiate(_monsterPrefabList[monsterType], new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 1f), Quaternion.identity, transform);
+                Instantiate(_coinPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 1f), Quaternion.identity, transform);
                 
                 monsterList.Add(g);
             }

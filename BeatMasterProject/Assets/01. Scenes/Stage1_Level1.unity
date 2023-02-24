@@ -343,7 +343,9 @@ MonoBehaviour:
   _shortEventID: Stage1_Level1_Short
   _mapEventList: []
   _shortEventList: []
-  _monsterPrefab: {fileID: 3003763203973727308, guid: 367c90cd1e9064c43bbfaafbc81f3d4a, type: 3}
+  _monsterPrefabList:
+  - {fileID: 3003763203973727308, guid: 367c90cd1e9064c43bbfaafbc81f3d4a, type: 3}
+  - {fileID: 1400348765421405156, guid: 7f663afe6328ead439c03787290e253f, type: 3}
   _coinPrefab: {fileID: 7397218863573384310, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
   _monsterIdx: 0
   _camera: {fileID: 270507031}
@@ -7836,7 +7838,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1686695925}
   - component: {fileID: 1686695924}
-  - component: {fileID: 1686695923}
   m_Layer: 10
   m_Name: CM vcam2
   m_TagString: Untagged
@@ -7844,20 +7845,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1686695923
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1686695922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c16549d75c543af4fab6b915f049d2d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _offset: {x: 0, y: 2, z: -10}
-  _speedEventID: Stage1_Level1_Spd
 --- !u!114 &1686695924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9304,6 +9291,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7917251886544282262, guid: 08096f48e60e45f4784e28041a6e6838, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 704b727c6d65ec944bc391cb33b01132, type: 2}
+    - target: {fileID: 7917251887136921713, guid: 08096f48e60e45f4784e28041a6e6838, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6650044f34d8f7248ac9a9aa1199029e, type: 2}
     - target: {fileID: 7917251887348568385, guid: 08096f48e60e45f4784e28041a6e6838, type: 3}
       propertyPath: m_Name
       value: Background
@@ -9352,5 +9347,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7917251887377733477, guid: 08096f48e60e45f4784e28041a6e6838, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 58d2ad1601be5244f8f723a5748232b6, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08096f48e60e45f4784e28041a6e6838, type: 3}

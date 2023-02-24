@@ -553,7 +553,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -3668,6 +3668,7 @@ GameObject:
   - component: {fileID: 1469466303}
   - component: {fileID: 1469466302}
   - component: {fileID: 1469466301}
+  - component: {fileID: 1469466307}
   m_Layer: 5
   m_Name: GPGSBtn
   m_TagString: Untagged
@@ -3926,6 +3927,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1469466299}
   m_CullTransparentMesh: 1
+--- !u!114 &1469466307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1469466299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00258ad6c13e8f348a71136c4f4aaa14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _status: {fileID: 4702479460236218956}
+  _achieveBtn: {fileID: 1193010322}
+  _okBtn: {fileID: 1122993920}
+  _quitPanel: {fileID: 1731900446}
 --- !u!1 &1511063571
 GameObject:
   m_ObjectHideFlags: 0

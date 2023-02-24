@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
+
 public class NormalGame : Game
 {
     private ParticleController _particleController;
@@ -207,7 +208,9 @@ public class NormalGame : Game
         {
             isLongPressed = true;
             _comboSystem.IncreaseCombo();
+#if UNITY_EDITOR
             Debug.Log("Long Key Press");
+#endif
             PlayerStatus.Instance.ChangeStatus(CharacterStatus.FastIdle);
             _playerAnim.SetEffectBool(true);
         }
@@ -215,7 +218,9 @@ public class NormalGame : Game
         {
             isLongPressed = false;
             _comboSystem.ResetCombo(); // erase it later
+#if UNITY_EDITOR
             Debug.Log("Long Key Up during CheckLongStart");
+#endif
             _playerAnim.SetEffectBool(false);
         }
 
@@ -243,7 +248,9 @@ public class NormalGame : Game
             {
                 // TouchPhase.Began or TouchPhase.End
                 isLongPressed = false;
+#if UNITY_EDITOR
                 Debug.Log("Middle KeyUP => Fail!!!");
+#endif
                 _playerAnim.SetEffectBool(false);
                 //==============Rewind 자리==============
                 Rewind();
@@ -261,7 +268,9 @@ public class NormalGame : Game
             if (!isLongKeyCorrect)
             {
                 isLongKeyCorrect = true;
+#if UNITY_EDITOR
                 Debug.Log("End Key Up => Correct!");
+#endif
                 // Combo
                 _comboSystem.IncreaseCombo();
                 _comboSystem.ResetCurrentAmount();
@@ -294,7 +303,9 @@ public class NormalGame : Game
             }
             if (!isLongKeyCorrect)
             {
+#if UNITY_EDITOR
                 Debug.Log("End Key Fail!!!");
+#endif
                 // ===============Rewind==============
                 Rewind();
             }
