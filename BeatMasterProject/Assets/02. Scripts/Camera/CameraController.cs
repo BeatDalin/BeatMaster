@@ -6,7 +6,8 @@ using SonicBloom.Koreo;
 public class CameraController : MonoBehaviour
 {
     private CharacterMovement _characterMovement;
-    private CinemachineVirtualCamera _virtualCamera;
+    // private CinemachineVirtualCamera _virtualCamera;
+    private CinemachineVirtualCamera[] _virtualCameras;
     private ResourcesChanger _resourcesChanger;
 
     public float FromOrthoSize { get => _fromOrthoSize; private set => _fromOrthoSize = value; }
@@ -21,10 +22,13 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         _characterMovement = FindObjectOfType<CharacterMovement>();
-        _virtualCamera = transform.GetComponent<CinemachineVirtualCamera>();
         _resourcesChanger = FindObjectOfType<ResourcesChanger>();
-        _virtualCamera.transform.position = _virtualCamera.Follow.position + _offset;
-        _virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(3f, 8f, (2f * _characterMovement.MoveSpeed - 3f) / 5f);
+        _virtualCameras = FindObjectsOfType<CinemachineVirtualCamera>();
+        foreach (var virtualCamera in _virtualCameras)
+        {
+            virtualCamera.transform.position = virtualCamera.Follow.position + _offset;
+            virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(3f, 8f, (2f * _characterMovement.MoveSpeed - 3f) / 5f);
+        }
         _prevCharacterSpeed = _characterMovement.MoveSpeed;
 
         Koreographer.Instance.RegisterForEvents(_speedEventID, ChangeOrthoSize);
@@ -58,12 +62,18 @@ public class CameraController : MonoBehaviour
         
         while (time <= 1f)
         {
-            _virtualCamera.m_Lens.OrthographicSize = Mathf.SmoothStep(from, to, time);
+            foreach (var virtualCamera in _virtualCameras)
+            {
+                virtualCamera.m_Lens.OrthographicSize = Mathf.SmoothStep(from, to, time);
+            }
             time += Time.deltaTime;
             
             yield return null;
         }
-        
-        _virtualCamera.m_Lens.OrthographicSize = to;
+
+        foreach (var virtualCamera in _virtualCameras)
+        {
+            virtualCamera.m_Lens.OrthographicSize = to;
+        }
     }
 }

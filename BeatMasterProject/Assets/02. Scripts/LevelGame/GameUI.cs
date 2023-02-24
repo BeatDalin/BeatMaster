@@ -229,7 +229,7 @@ public abstract class GameUI : MonoBehaviour
 
                     float temp = (float)finalResultSummary[2] / total;
                     int starCount = (int)Mathf.Ceil(temp * 10);
-                    ShowStar(DataCenter.Instance.GetLevelData(stageIdx, levelIdx).star);
+                    // ShowStar(DataCenter.Instance.GetLevelData(stageIdx, levelIdx).star);
                     // for (int i = 0; i < starCount; i++)
                     // {
                     //     if (i == starCount - 1)

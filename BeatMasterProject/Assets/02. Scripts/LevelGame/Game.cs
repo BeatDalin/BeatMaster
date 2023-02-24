@@ -36,7 +36,7 @@ public abstract class Game : MonoBehaviour
     [SerializeField][EventID] private string _spdEventID;
 
     [Header("Check Point")]
-    [SerializeField] [EventID] private string _checkPointID;
+    [SerializeField][EventID] private string _checkPointID;
     [SerializeField] protected int rewindShortIdx;
     [SerializeField] protected int rewindLongIdx;
     [SerializeField] protected int rewindSampleTime = -1;
@@ -90,7 +90,7 @@ public abstract class Game : MonoBehaviour
         Koreographer.Instance.ClearEventRegister(); // Initialize Koreographer Event Regiser
         // Save Point Event Track
         Koreographer.Instance.RegisterForEventsWithTime(_checkPointID, SaveCheckPoint);
-        
+
         // Data
         DataCenter.Instance.LoadData();
     }
@@ -163,7 +163,7 @@ public abstract class Game : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
         gameUI.timePanel.SetActive(false);
-        
+
         // // Rewind Character Position
         // if (curState.Equals(GameState.Rewind))
         // {
@@ -176,9 +176,9 @@ public abstract class Game : MonoBehaviour
         // Music Play & Game Start
         startSample = startSample < 0 ? 0 : startSample; // if less than zero, set as zero
         SoundManager.instance.PlayBGM(true, startSample);
-        
+
     }
-    
+
     private void SaveCheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
     {
         if (evt.StartSample > rewindSampleTime)
@@ -194,7 +194,7 @@ public abstract class Game : MonoBehaviour
             // Record sample time to play music
             curSample = objectGenerator.MoveCheckPointForward();
             rewindSampleTime = curSample;
-            
+
             // Record Index
             rewindShortIdx = shortIdx;
             rewindLongIdx = longIdx;
@@ -324,44 +324,72 @@ public abstract class Game : MonoBehaviour
         curLevelData.perfectCount = _finalSummary[2];
         curLevelData.slowCount = _finalSummary[3];
         curLevelData.levelClear = true;
-        
+
+        Achievement achieve = DataCenter.Instance.GetAchievementData();
+        if (achieve.playCount <= 10)
+        {
+            if ((achieve.playCount += 1) == 1)
+            {
+                GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_clear_once, success => print("achievement_clear_once"));
+            }
+            else if (achieve.playCount == 10)
+            {
+                GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_clear_10_times, success => print("achievement_clear_10_times"));
+            }
+        }
         // Push data into current level's data
         if (_finalSummary[2] == totalNoteCount)
         {
             curLevelData.star = 3;
             curLevelData.alpha = 1f;
-            
+            gameUI.ShowStar(3);
+
             // Unlock Character
             DataCenter.Instance.GetStoreData().characterData[curLevelData.unlockCharNum].isUnlocked = true;
+
+            if (achieve.isMaster == false)
+            {
+                GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_master, success => achieve.isMaster = true);
+            }
         }
-        
+
         // generous condition for test: _finalSummary[2] >= totalNoteCount / 3
         else if (_finalSummary[2] >= totalNoteCount / 3 * 2)
         {
             curLevelData.star = curLevelData.star > 2 ? curLevelData.star : 2;
             curLevelData.alpha = 2 / 3f;
+            gameUI.ShowStar(2);
 
-            
             // Unlock Character
             Debug.Log(curLevelData.unlockCharNum);
             DataCenter.Instance.GetStoreData().characterData[curLevelData.unlockCharNum].isUnlocked = true;
+            if (achieve.isGrown == false)
+            {
+                GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_grown, success => achieve.isGrown = true);
+            }
         }
         else
         {
             curLevelData.star = curLevelData.star > 1 ? curLevelData.star : 1;
             curLevelData.alpha = 1 / 3f;
+            gameUI.ShowStar(1);
+
+            if (achieve.isStarted == false)
+            {
+                GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_first_one_star, success => achieve.isStarted = true);
+            }
         }
-        
+
         // Save updated level data into json file
         DataCenter.Instance.SaveData(curLevelData, stageIdx, levelIdx);
 
         // Unlock Next Level
         if (levelIdx < 3)
         {
-            LevelData nextLevelData = DataCenter.Instance.GetLevelData(stageIdx, levelIdx+1);
+            LevelData nextLevelData = DataCenter.Instance.GetLevelData(stageIdx, levelIdx + 1);
             nextLevelData.isUnlocked = true;
-            
-            DataCenter.Instance.SaveData(nextLevelData, stageIdx, levelIdx+1);
+
+            DataCenter.Instance.SaveData(nextLevelData, stageIdx, levelIdx + 1);
         }
         else
         {

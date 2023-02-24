@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class MouseClick : MonoBehaviour
 {
     public float defaultTime = 0.01f;
+    private List<string> _sceneList = new List<string>();
     
     private float _spawnTime;
 
@@ -25,6 +26,16 @@ public class MouseClick : MonoBehaviour
         _touchEffectPool = FindObjectOfType<TouchEffectPool>();
     }
 
+    private void Start()
+    {
+        string[] sceneArray = Enum.GetNames(typeof(SceneLoadManager.SceneType));
+
+        for (int i = 0; i < sceneArray.Length; i++)
+        {
+            _sceneList.Add(sceneArray[i]);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -34,7 +45,7 @@ public class MouseClick : MonoBehaviour
         //     _currentScene = SceneManager.GetActiveScene().name;
         // }
 
-        if (SceneManager.GetActiveScene().name.Equals("Level1"))
+        if (!SceneManager.GetActiveScene().Equals(_sceneList[0]) && !SceneManager.GetActiveScene().Equals(_sceneList[1]))
         {
             if (_game == null)
             {

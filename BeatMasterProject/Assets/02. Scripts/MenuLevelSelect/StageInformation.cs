@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class StageInfo
 {
@@ -13,7 +14,6 @@ public class StageInfo
     
     public Vector3 mapPos; // StageUI에서 보여줄 map 영역
     public Vector3 camPos; // StageUI BG에서 보여줄 map 영역
-
     public StageInfo(int stageIdx, string stageDescription, Vector3 mapPos, Vector3 camPos)
     {
         this.stageIdx = stageIdx;
@@ -28,7 +28,7 @@ public class StageInfo
 public class StageInformation : MonoBehaviour
 {
     [SerializeField] private GameObject _stagePanel;
-    // private CanvasGroup _levelCanvasGroup;
+    [SerializeField] private GameObject _notYetPopup;
     [Header("StageData")]
     private int _maxStageNum = 3; // 최대 stage index
     public LevelData[] curStageData = new LevelData[4];
@@ -52,12 +52,12 @@ public class StageInformation : MonoBehaviour
     [SerializeField] private GameObject[] _camPos;
     // [SerializeField] private GameObject _clearImg;
     // [SerializeField] private GameObject[] _starImg;
+    
     private readonly String[] _stageDescription =
     {
-        "\"설레는 첫 번째 모험!\"", "\"도시에서는 어떤 일이 일어날까?\"", 
-        "\"난 기쁠 때 리듬과 모래바람을 타\"", "\"음악과 함께라면 추위도 무섭지 않아!\""
-    };
-    
+        "\"Exciting first adventure!\"", "\"What will happen in the city?\"",
+        "\"When I'm happy, I ride the rhythm and the sandstorm\"", "\"With music, I'm not afraid of the cold!\""};
+
     private void Awake()
     {
         DataCenter.Instance.LoadData();
@@ -202,6 +202,7 @@ public class StageInformation : MonoBehaviour
             
             toggles[i].GetComponent<Toggle>().interactable = levelData.isUnlocked; // 클릭 막기
             toggles[i].transform.GetChild(0).GetComponent<Image>().sprite = _toggleSprite[levelData.isUnlocked ? 0 : 1]; // 잠금 여부에 따라 toggle sprite 변경
+            toggles[i].transform.GetChild(0).GetComponent<Image>().type = Image.Type.Sliced;
             toggles[i].transform.GetChild(2).gameObject.SetActive(levelData.isUnlocked); // Text 영역
 
             if (levelData.isUnlocked)
@@ -261,19 +262,27 @@ public class StageInformation : MonoBehaviour
         SoundManager.instance.PlaySFX("Touch");
 
         string sceneName = $"Stage{uiStage + 1}_Level{GetSelectedToggle(_levelToggles) + 1}";
-        // Debug.Log(sceneName);
-        SceneLoadManager.Instance.LoadLevelAsync((SceneLoadManager.SceneType)Enum.Parse(typeof(SceneLoadManager.SceneType), sceneName));
+        if (Enum.IsDefined(typeof(SceneLoadManager.SceneType), sceneName))
+        {
+            SceneLoadManager.Instance.LoadLevelAsync((SceneLoadManager.SceneType)Enum.Parse(typeof(SceneLoadManager.SceneType), sceneName));
+        }
+        else
+        {
+            _notYetPopup.SetActive(true);
+            _notYetPopup.GetComponent<DOTweenAnimation>().DORestart();
+
+        }
     }
 
     public void OnClickLeftBtn()
     {
-        // SoundManager.instance.PlaySFX("Touch");
+        SoundManager.instance.PlaySFX("Touch");
         SetStageInfo(uiStage-1);
     }
 
     public void OnClickRightBtn()
     { 
-        // SoundManager.instance.PlaySFX("Touch");
+        SoundManager.instance.PlaySFX("Touch");
         SetStageInfo(uiStage+1);
     }
 

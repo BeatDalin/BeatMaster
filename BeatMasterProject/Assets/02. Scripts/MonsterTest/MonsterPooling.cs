@@ -83,7 +83,7 @@ public class MonsterPooling : MonoBehaviour
 
     public void DisableMonster()
     {
-        monsterList[_monsterIdx].GetComponent<Monster>().ShowAnim(_coinScreenPos, coinParent);
+        monsterList[_monsterIdx].GetComponent<Monster>().ShowAnim();
         _monsterIdx++;
     }
 

@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using SonicBloom.Koreo;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
@@ -20,9 +22,9 @@ public class CharacterMovement : MonoBehaviour
     private bool _isFailed;
 
     [Header("Move")] 
-    [SerializeField][EventID] private string _speedEventID;
+    [EventID] public string speedEventID;
+    [EventID] public string checkpointID;
     [SerializeField] private float _moveSpeed;
-    
     public float MoveSpeed
     {
         get => _moveSpeed;
@@ -57,12 +59,18 @@ public class CharacterMovement : MonoBehaviour
     private float rotationSpeed = 1080f;
     private RewindTime _rewindTime;
     private GameUI _gameUI;
-    
 
     [Header("Character Tag")]
     private const string UnTag = "Untagged";
     private const string PlayerTag = "Player";
 
+    private bool _isAttack;
+    [SerializeField] private float _attackBeatTime;
+
+    private ObjectGenerator _objectGenerator;
+    [SerializeField] private int _rewindIdx;
+    private bool _isCheckCheckPoint = true;
+    
     private void Start()
     {
         Init();
@@ -100,6 +108,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void Init()
     {
+        _objectGenerator = FindObjectOfType<ObjectGenerator>();
         _gameUI = FindObjectOfType<GameUI>();
         _rewindTime = FindObjectOfType<RewindTime>();
         _game = FindObjectOfType<Game>();
@@ -115,11 +124,19 @@ public class CharacterMovement : MonoBehaviour
         _maxRayDistance = _minRayDistance + 0.2f;
         _rayDistance = Mathf.Lerp(_minRayDistance, _maxRayDistance, (MoveSpeed - 2f) / 2f);
         
-        Koreographer.Instance.RegisterForEvents(_speedEventID, ChangeMoveSpeed);
+        Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
+        Koreographer.Instance.RegisterForEventsWithTime(checkpointID, CheckPoint);
     }
 
     private void GetInput()
     {
+        if (_touchInputManager.CheckRightTouch())
+        {
+            PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
+            SoundManager.instance.PlaySFX("Attack");
+            _isAttack = true;
+            _attackBeatTime = lastBeatTime;
+        }
         // isLongNote prevents jumping during checking long notes
         if (!isLongNote && _touchInputManager.CheckLeftTouch() && _canJump)
         {
@@ -234,11 +251,20 @@ public class CharacterMovement : MonoBehaviour
                     isJumping = false;
                     _canJump = true;
                     _jumpCount = 0;
-                    _gravityAccel = _startGravityAccel;
-                    if (PlayerStatus.Instance.playerStatus != CharacterStatus.FastIdle)
+                    _gravityAccel = startGravityAccel;
+                    if (PlayerStatus.Instance.playerStatus != CharacterStatus.FastIdle && !_isAttack)
                     {
                         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
                     }
+                }
+            }
+
+            if (_isAttack)
+            {
+                if (lastBeatTime >= _attackBeatTime + 0.7f)
+                {
+                    PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                    _isAttack = false;
                 }
             }
 
@@ -289,7 +315,6 @@ public class CharacterMovement : MonoBehaviour
     {
         if (evt.HasFloatPayload())
         {
-            _characterPosition = transform.position;
             _checkPointBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
             _rewindTime.ClearRewindList();
             MoveSpeed = evt.GetFloatValue();
@@ -303,6 +328,21 @@ public class CharacterMovement : MonoBehaviour
                 _canGroundCheck = false;
                 PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
             }
+        }
+    }
+
+    private void CheckPoint(KoreographyEvent evt, int sampleTime, int sampleDelta, DeltaSlice deltaSlice)
+    {
+        if (_isCheckCheckPoint && evt.GetValueOfCurveAtTime(sampleTime) < 0.9f)
+        {
+            _isCheckCheckPoint = false;
+            _characterPosition = _objectGenerator.checkPointPos[_rewindIdx];
+            _rewindIdx++;
+        }
+        
+        if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isCheckCheckPoint)
+        {
+            _isCheckCheckPoint = true;
         }
     }
 
@@ -329,7 +369,7 @@ public class CharacterMovement : MonoBehaviour
 
     public IEnumerator CoRewind(float y)
     {
-        float elapseTime;
+        float elapseTime = 0f;
         float targetTime = 0.1f;
         
         _rewindTime.StartRewind();
@@ -365,7 +405,7 @@ public class CharacterMovement : MonoBehaviour
                 }
             }
             elapseTime = 0f;
-            targetTime = 1f;
+            targetTime = 0.3f;
             
             while (elapseTime <= targetTime)
             {
@@ -377,9 +417,6 @@ public class CharacterMovement : MonoBehaviour
         }
         else
         {
-            elapseTime = 0f;
-            targetTime = 1f;
-            
             while (elapseTime <= targetTime)
             {
                 transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
@@ -397,6 +434,8 @@ public class CharacterMovement : MonoBehaviour
         lastPosition = _characterPosition;
         lastBeatTime = _checkPointBeatTime;
 
+        _attackBeatTime = _checkPointBeatTime;
+        _rewindIdx--;
         gameObject.tag = PlayerTag; // Back to Player Tag
     }
 }

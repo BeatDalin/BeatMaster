@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
+
 public class NormalGame : Game
 {
     private ParticleController _particleController;
@@ -34,6 +35,8 @@ public class NormalGame : Game
     [SerializeField]
     private ChangeCharSprite _changeChar;
 
+    private int _rewindCount=0;
+
     protected override void Awake()
     {
         base.Awake();
@@ -60,7 +63,7 @@ public class NormalGame : Game
         totalNoteCount = shortResult.Length + longResult.Length; // total number of note events
 
         _playerDatas = DataCenter.Instance.GetPlayerData();
-        
+
         _playerAnim.ChangeCharacterAnim(_playerDatas.playerChar);
         _changeChar.ChangeItemInItemScroll(_playerDatas);
     }
@@ -106,10 +109,9 @@ public class NormalGame : Game
             if (_shortEvent[shortIdx].GetIntValue() == 0 && !characterMovement.isJumping && (Input.GetKeyDown(_jumpNoteKey) || _touchInputManager.CheckLeftTouch()))
             {
                 isShortKeyCorrect = true;
-                PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
                 _comboSystem.IncreaseCombo();
                 _particleController.PlayJumpParticle();
-                
+
                 // Increase coin only once!
                 if (!_isShortVisited[shortIdx])
                 {
@@ -154,7 +156,7 @@ public class NormalGame : Game
                 _comboSystem.IncreaseCombo();
                 _particleController.PlayJumpParticle();
                 isShortKeyCorrect = true;
-                
+
                 // Increase coin only once!
                 if (!_isShortVisited[shortIdx])
                 {
@@ -205,8 +207,10 @@ public class NormalGame : Game
         if (_touchInputManager.CheckLeftTouch() || Input.GetKeyDown(_longNoteKey))
         {
             isLongPressed = true;
-            _comboSystem.IncreaseCombo(); 
+            _comboSystem.IncreaseCombo();
+#if UNITY_EDITOR
             Debug.Log("Long Key Press");
+#endif
             PlayerStatus.Instance.ChangeStatus(CharacterStatus.FastIdle);
             _playerAnim.SetEffectBool(true);
         }
@@ -214,7 +218,9 @@ public class NormalGame : Game
         {
             isLongPressed = false;
             _comboSystem.ResetCombo(); // erase it later
+#if UNITY_EDITOR
             Debug.Log("Long Key Up during CheckLongStart");
+#endif
             _playerAnim.SetEffectBool(false);
         }
 
@@ -242,7 +248,9 @@ public class NormalGame : Game
             {
                 // TouchPhase.Began or TouchPhase.End
                 isLongPressed = false;
+#if UNITY_EDITOR
                 Debug.Log("Middle KeyUP => Fail!!!");
+#endif
                 _playerAnim.SetEffectBool(false);
                 //==============Rewind 자리==============
                 Rewind();
@@ -260,7 +268,9 @@ public class NormalGame : Game
             if (!isLongKeyCorrect)
             {
                 isLongKeyCorrect = true;
+#if UNITY_EDITOR
                 Debug.Log("End Key Up => Correct!");
+#endif
                 // Combo
                 _comboSystem.IncreaseCombo();
                 _comboSystem.ResetCurrentAmount();
@@ -291,7 +301,9 @@ public class NormalGame : Game
             }
             if (!isLongKeyCorrect)
             {
+#if UNITY_EDITOR
                 Debug.Log("End Key Fail!!!");
+#endif
                 // ===============Rewind==============
                 Rewind();
             }
@@ -307,6 +319,7 @@ public class NormalGame : Game
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Damage);
         curState = GameState.Rewind;
         SoundManager.instance.PlayBGM(false); // pause
+        SoundManager.instance.PlaySFX("Rewind");
         curSample = rewindSampleTime;
         _playerAnim.SetEffectBool(false); // Stop booster animation
         characterMovement.RewindPosition(); // Relocate player
@@ -324,6 +337,11 @@ public class NormalGame : Game
         objectGenerator.ResetObstAnimation();
         // Post Processing
         _resourcesChanger.ResetPostProcessing();
+        Achievement achieve = DataCenter.Instance.GetAchievementData();
+        if ((_rewindCount += 1) == 100)
+        {
+            GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_restart_over_hundred, success => achieve.isRestartedOverHundred = true);
+        }
     }
 
     private void IncreaseItem()
@@ -341,7 +359,7 @@ public class NormalGame : Game
         return coinCount;
     }
 
-    
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
