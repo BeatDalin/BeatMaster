@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
-using DG.Tweening;
 using UnityEngine;
+using DG.Tweening;
 using SonicBloom.Koreo;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
@@ -251,7 +249,7 @@ public class CharacterMovement : MonoBehaviour
                     isJumping = false;
                     _canJump = true;
                     _jumpCount = 0;
-                    _gravityAccel = startGravityAccel;
+                    _gravityAccel = _startGravityAccel;
                     if (PlayerStatus.Instance.playerStatus != CharacterStatus.FastIdle && !_isAttack)
                     {
                         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);

@@ -21,7 +21,6 @@ public class MonsterPooling : MonoBehaviour
 
     [Header("Variable")]
     [SerializeField] private List<GameObject> _monsterPrefabList;
-    [SerializeField] private GameObject _monsterPrefab;
     [SerializeField] private GameObject _coinPrefab;
     [SerializeField] private int _monsterIdx;
     [SerializeField] private Camera _camera;
