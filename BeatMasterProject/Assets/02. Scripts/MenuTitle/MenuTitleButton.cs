@@ -68,10 +68,26 @@ public class MenuTitleButton : MonoBehaviour
     {
         #region Title 씬의 버튼들 (Play, Menu, Store)
         
-        _titleButtons[(int)TitleButtonName.Play].onClick.AddListener(() => { SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect); });  // Play 버튼
-        _titleButtons[(int)TitleButtonName.Menu].onClick.AddListener(() => { OpenMenu(_menuGroupPanel); });     // Menu 버튼
-        _titleButtons[(int)TitleButtonName.Store].onClick.AddListener(() => { OpenPanel(_storePanel); });       // Store 버튼
-        _titleButtons[(int)TitleButtonName.Gpgs].onClick.AddListener(() => {OpenPanel(_gpgsPanel);});
+        _titleButtons[(int)TitleButtonName.Play].onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
+        });  // Play 버튼
+        _titleButtons[(int)TitleButtonName.Menu].onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
+            OpenMenu(_menuGroupPanel); 
+        });     // Menu 버튼
+        _titleButtons[(int)TitleButtonName.Store].onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
+            OpenPanel(_storePanel); 
+        });       // Store 버튼
+        _titleButtons[(int)TitleButtonName.Gpgs].onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
+            OpenPanel(_gpgsPanel);
+        });
 
         #endregion
 

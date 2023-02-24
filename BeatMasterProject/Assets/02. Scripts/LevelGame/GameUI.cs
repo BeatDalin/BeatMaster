@@ -116,35 +116,54 @@ public abstract class GameUI : MonoBehaviour
         }
 
         // Button Events
-        pauseBtn.onClick.AddListener(() => OpenPause());
+        pauseBtn.onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
+            OpenPause();
+        });
         continueBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
             character.SetActive(true);
             UIManager.instance.ClosePopUp();
             game.ContinueGame();
         });
         restartBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
         });
         goLevelMenuBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
         //settings
-        goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPopUp(settingsPanel));
-        settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePopUp(); });
+        goSettingsBtn.onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
+            UIManager.instance.OpenPopUp(settingsPanel);
+        });
+        settingsCloseBtn.onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
+            UIManager.instance.ClosePopUp();
+        });
 
         goLevelAfterGameBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
 
         restartAfterGameBtn.onClick.AddListener(() =>
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene));
+        {
+            ExcuteVibration.Instance.Touch();
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
+        });
     }
 
     public void ChangeOutLineColor(BeatResult result)
@@ -153,6 +172,7 @@ public abstract class GameUI : MonoBehaviour
         {
             case BeatResult.Perfect:
                 TextMove("Perfect");
+                ExcuteVibration.Instance.Perfect();
                 _judgeText.DOColor(_perfectColor, 0.1f);
                 break;
 

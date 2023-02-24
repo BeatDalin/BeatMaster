@@ -282,6 +282,8 @@ public class NormalGame : Game
         {
             _isCheckedLong = true;
             CheckBeatResult(longResult, longIdx, isLongKeyCorrect, _pressedTimeLong, _eventRangeLong); // Record Result
+            rewindTime.RecordRewindPoint(characterMovement.transform.position, longResult[longIdx].ToString());
+            gameUI.ChangeOutLineColor(longResult[longIdx]);
             mapGenerator.longTileParticleList[longIdx].GetComponent<Note>().beatResult = longResult[longIdx].ToString();
             _isLongVisited[longIdx] = true;
             if (!isRewinding)
@@ -306,6 +308,7 @@ public class NormalGame : Game
     {
         isRewinding = true;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Damage);
+        ExcuteVibration.Instance.Fail();
         curState = GameState.Rewind;
         SoundManager.instance.PlayBGM(false); // pause
         SoundManager.instance.PlaySFX("Rewind");
