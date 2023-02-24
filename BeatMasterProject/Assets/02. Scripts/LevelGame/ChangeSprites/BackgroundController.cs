@@ -61,7 +61,7 @@ public class BackgroundController : MonoBehaviour
 
     public void SetBackgroundSize()
     {
-        // lerp 만들기
+        // lerp 만들기z
         StartCoroutine(CoSetBackgroundSize());
     }
 
@@ -78,7 +78,7 @@ public class BackgroundController : MonoBehaviour
         
         while (ratio < 1)
         {
-            yield return new WaitForEndOfFrame();
+            yield return null;
             // 4 -> 6
             // 6   4.1
             // 1.9

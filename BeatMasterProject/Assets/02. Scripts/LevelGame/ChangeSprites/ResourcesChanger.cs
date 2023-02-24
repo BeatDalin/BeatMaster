@@ -91,11 +91,14 @@ public class ResourcesChanger : MonoBehaviour
                 // 여기선 그냥 값이
                 s = Mathf.Lerp(s, 0, _hueCurve.Evaluate(ratio));
                 _colorAdjustments.colorFilter.value = Color.HSVToRGB(h, s, v);
-                yield return new WaitForEndOfFrame();
+                yield return null;
             }
         }
         else
         {
+            Debug.Log(_hueIndex);
+            Debug.Log(_currentResource);
+            Debug.Log(_currentResource.HueValues[_hueIndex]); 
             while (_lerpTime > timer)
             {
                 timer += Time.deltaTime;
@@ -111,12 +114,12 @@ public class ResourcesChanger : MonoBehaviour
                 s = Mathf.Lerp(s * MAX_SAT, _currentResource.SatValues[_satIndex], _hueCurve.Evaluate(ratio)) /
                     MAX_SAT;
                     _colorAdjustments.colorFilter.value = Color.HSVToRGB(h, s, v);
-                yield return new WaitForEndOfFrame();
-            }    
+                yield return null;
+            }
+            _hueIndex++;
+            _satIndex++;
         }
-        
-        _hueIndex++;
-        _satIndex++;
+
     }
 
     public void SetDefaultSpeed()
