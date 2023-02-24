@@ -334,7 +334,7 @@ public class MapTemp : MonoBehaviour
                     Quaternion.identity, transform));
                 //_interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0, new Vector3Int(xPosition, 0, 0), new Vector3(xOffset, yPosition, 0f)), false);
 
-                _monsterPooling.AddTilePos(xPosition + xOffset, yPosition);
+                //_monsterPooling.AddTilePos(xPosition + xOffset, yPosition);
             }
             
             if (_shortEventList[i].GetIntValue() == 0)
