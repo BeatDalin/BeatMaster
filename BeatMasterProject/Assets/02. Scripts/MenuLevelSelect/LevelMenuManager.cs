@@ -31,11 +31,11 @@ public class LevelMenuManager : MonoBehaviour
             SoundManager.instance.PlaySFX("Touch");
             if (!_settingPopUp.activeSelf)
             {
-                UIManager.instance.OpenPopUp(_settingPopUp);
+                UIManager.instance.OpenPanel(_settingPopUp);
             }
             else
             {
-                UIManager.instance.ClosePopUp();
+                UIManager.instance.ClosePanel(_settingPopUp);
             }
         }
     }
