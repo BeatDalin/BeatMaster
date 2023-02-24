@@ -400,7 +400,7 @@ public class CharacterMovement : MonoBehaviour
                         yield return null;
                     }
                 }
-                if (Mathf.Abs(targetRewindPos.x - transform.position.x) <= 1f)
+                if (Mathf.Abs(targetRewindPos.x - transform.position.x) <= 0.5f)
                 {
                     _gameUI.ReverseTextColor(_rewindTime.rewindList[0].judgeResult);
                     lastPosition = targetRewindPos;
