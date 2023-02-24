@@ -96,9 +96,6 @@ public class ResourcesChanger : MonoBehaviour
         }
         else
         {
-            Debug.Log(_hueIndex);
-            Debug.Log(_currentResource);
-            Debug.Log(_currentResource.HueValues[_hueIndex]); 
             while (_lerpTime > timer)
             {
                 timer += Time.deltaTime;
