@@ -24,7 +24,6 @@ public class ComboText : MonoBehaviour
     
     private Text _text;
     private Rigidbody2D _rigid;
-    private WaitForEndOfFrame _waitForEndOfFrame;
     private StringBuilder _comboStr;
     private ComboSystem _comboSystem;
     private Color _startColor;
@@ -41,7 +40,6 @@ public class ComboText : MonoBehaviour
     {
         _text = GetComponent<Text>();
         _rigid = GetComponent<Rigidbody2D>();
-        _waitForEndOfFrame = new WaitForEndOfFrame();
         _comboStr = new StringBuilder(10);
         InitSize();
     }
@@ -122,7 +120,7 @@ public class ComboText : MonoBehaviour
                 _text.color = _goalColor;
             }
             
-            yield return _waitForEndOfFrame;
+            yield return null;
         }
     }
     
