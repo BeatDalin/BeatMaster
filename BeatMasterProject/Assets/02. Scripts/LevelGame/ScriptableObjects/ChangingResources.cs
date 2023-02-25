@@ -7,7 +7,11 @@ public class ChangingResources : ScriptableObject
 {
     //hue, saturation, lightness
     [SerializeField] private int[] _hueValues;
-    public int[] HueValues { get => _hueValues; private set => _hueValues = value; }
+    public int[] HueValues { get => _hueValues;}
     [SerializeField] private int[] _satValues;
-    public int[] SatValues { get => _satValues; private set => _satValues = value; }
+    public int[] SatValues { get => _satValues;}
+    [SerializeField] private Sprite[] _backgrounds;
+    public Sprite[] Backgrounds { get => _backgrounds;}
+    [SerializeField] private Material[] _backgroundMaterials;
+    public Material[] BackgroundMaterials { get => _backgroundMaterials;}
 }

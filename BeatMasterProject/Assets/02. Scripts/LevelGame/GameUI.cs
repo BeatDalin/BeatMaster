@@ -95,7 +95,8 @@ public abstract class GameUI : MonoBehaviour
     {
         if (game.curState.Equals(GameState.Play))
         {
-            UIManager.instance.OpenPopUp(pausePanel);
+            SoundManager.instance.PlaySFX("Touch");
+            UIManager.instance.OpenPanel(pausePanel);
             game.PauseGame();
             character.SetActive(false);
         }
@@ -119,23 +120,26 @@ public abstract class GameUI : MonoBehaviour
         pauseBtn.onClick.AddListener(() => OpenPause());
         continueBtn.onClick.AddListener(() =>
         {
+            SoundManager.instance.PlaySFX("Touch");
             character.SetActive(true);
-            UIManager.instance.ClosePopUp();
+            UIManager.instance.ClosePanel(pausePanel);
             game.ContinueGame();
         });
         restartBtn.onClick.AddListener(() =>
         {
+            SoundManager.instance.PlaySFX("Touch");
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
         });
         goLevelMenuBtn.onClick.AddListener(() =>
         {
+            SoundManager.instance.PlaySFX("Touch");
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
         //settings
-        goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPopUp(settingsPanel));
-        settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePopUp(); });
+        goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPanel(settingsPanel));
+        settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePanel(settingsPanel); });
 
         goLevelAfterGameBtn.onClick.AddListener(() =>
         {
@@ -229,7 +233,7 @@ public abstract class GameUI : MonoBehaviour
 
                     float temp = (float)finalResultSummary[2] / total;
                     int starCount = (int)Mathf.Ceil(temp * 10);
-                    ShowStar(DataCenter.Instance.GetLevelData(stageIdx, levelIdx).star);
+                    // ShowStar(DataCenter.Instance.GetLevelData(stageIdx, levelIdx).star);
                     // for (int i = 0; i < starCount; i++)
                     // {
                     //     if (i == starCount - 1)
