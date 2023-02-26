@@ -5176,19 +5176,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6676748890695700630}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3259926732508270253}
-        m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, Assembly-CSharp-firstpass
-        m_MethodName: DORestart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &4164920821015086393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6002,6 +5990,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   character: {fileID: 0}
+  _pauseBtnDOT: {fileID: 3259926732508270253}
   _itemText: {fileID: 6676748890294561052}
   _deathText: {fileID: 7965345376904727008}
 --- !u!1 &6676748891087081312
@@ -7218,7 +7207,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2393273947163370404, guid: 8616b69a768114632a773562203b0002, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 400
+      value: 287.5
       objectReference: {fileID: 0}
     - target: {fileID: 2393273947163370404, guid: 8616b69a768114632a773562203b0002, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -7243,6 +7232,18 @@ PrefabInstance:
     - target: {fileID: 6894169135177945391, guid: 8616b69a768114632a773562203b0002, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7884938508431040582, guid: 8616b69a768114632a773562203b0002, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7884938508431040582, guid: 8616b69a768114632a773562203b0002, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7884938508431040582, guid: 8616b69a768114632a773562203b0002, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8616b69a768114632a773562203b0002, type: 3}
@@ -7329,7 +7330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2393273947163370404, guid: 8616b69a768114632a773562203b0002, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 625
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 2393273947163370404, guid: 8616b69a768114632a773562203b0002, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -7354,6 +7355,18 @@ PrefabInstance:
     - target: {fileID: 6894169135177945391, guid: 8616b69a768114632a773562203b0002, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7884938508431040582, guid: 8616b69a768114632a773562203b0002, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7884938508431040582, guid: 8616b69a768114632a773562203b0002, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7884938508431040582, guid: 8616b69a768114632a773562203b0002, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8616b69a768114632a773562203b0002, type: 3}
@@ -7440,7 +7453,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2393273947163370404, guid: 8616b69a768114632a773562203b0002, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 400
+      value: 175
       objectReference: {fileID: 0}
     - target: {fileID: 2393273947163370404, guid: 8616b69a768114632a773562203b0002, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -7465,6 +7478,18 @@ PrefabInstance:
     - target: {fileID: 6894169135177945391, guid: 8616b69a768114632a773562203b0002, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7884938508431040582, guid: 8616b69a768114632a773562203b0002, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7884938508431040582, guid: 8616b69a768114632a773562203b0002, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7884938508431040582, guid: 8616b69a768114632a773562203b0002, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8616b69a768114632a773562203b0002, type: 3}
