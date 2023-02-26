@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SonicBloom.Koreo;
 using SonicBloom.Koreo.Players;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -22,8 +23,7 @@ public class SoundManager : MonoBehaviour
 
     [SerializeField] private AudioSource _bgmPlayer; // BGM 플레이어
     [SerializeField] private AudioSource[] _sfxPlayer; // SFX 플레이어. 여러 개 재생될 수 있게 배열로 선언
-    
-    
+
     [Header("Koreography")]
     public Koreography playingKoreo;
     public SimpleMusicPlayer musicPlayer;
@@ -89,16 +89,29 @@ public class SoundManager : MonoBehaviour
                 break;
             case "Attack":
                 _sfxPlayer[1].clip = _sfx[1].clip;
-                _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
+                _sfxPlayer[1].PlayOneShot(_sfxPlayer[1].clip);
                 break;
             case "Hit":
                 _sfxPlayer[2].clip = _sfx[2].clip;
-                _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
+                _sfxPlayer[2].PlayOneShot(_sfxPlayer[2].clip);
                 break;
             case "Touch":
                 _sfxPlayer[3].clip = _sfx[3].clip;
-                _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
+                _sfxPlayer[3].PlayOneShot(_sfxPlayer[3].clip);
                 break;
+            case "Rewind":
+                _sfxPlayer[4].clip = _sfx[4].clip;
+                _sfxPlayer[4].PlayOneShot(_sfxPlayer[4].clip);
+                break;
+            case "CheckPoint":
+                _sfxPlayer[5].clip = _sfx[5].clip;
+                _sfxPlayer[5].PlayOneShot(_sfxPlayer[5].clip);
+                break;
+            case "Coin":
+                _sfxPlayer[6].clip = _sfx[6].clip;
+                _sfxPlayer[6].volume = 0.2f;
+                _sfxPlayer[6].PlayOneShot(_sfxPlayer[6].clip);
+                break;            
         }
         
         

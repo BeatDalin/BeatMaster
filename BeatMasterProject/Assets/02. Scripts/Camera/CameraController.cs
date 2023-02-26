@@ -24,14 +24,11 @@ public class CameraController : MonoBehaviour
         _characterMovement = FindObjectOfType<CharacterMovement>();
         _resourcesChanger = FindObjectOfType<ResourcesChanger>();
         _virtualCameras = FindObjectsOfType<CinemachineVirtualCamera>();
-        // _virtualCamera = GetComponent<CinemachineVirtualCamera>();
         foreach (var virtualCamera in _virtualCameras)
         {
             virtualCamera.transform.position = virtualCamera.Follow.position + _offset;
-            virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(3f, 7f, (_characterMovement.MoveSpeed - 1.5f) / 2f);
+            virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(3f, 8f, (2f * _characterMovement.MoveSpeed - 3f) / 5f);
         }
-        // _virtualCamera.transform.position = _virtualCamera.Follow.position + _offset;
-        // _virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(3f, 7f, (_characterMovement.MoveSpeed - 1.5f) / 2f);
         _prevCharacterSpeed = _characterMovement.MoveSpeed;
 
         Koreographer.Instance.RegisterForEvents(_speedEventID, ChangeOrthoSize);
@@ -51,8 +48,8 @@ public class CameraController : MonoBehaviour
             return;
         }
         
-        _fromOrthoSize = Mathf.Lerp(3f, 7f, (_prevCharacterSpeed - 1.5f) / 2f);
-        _toOrthoSize = Mathf.Lerp(3f, 7f, (newCharacterSpeed - 1.5f) / 2f);
+        _fromOrthoSize = Mathf.Lerp(3f, 8f, (2f * _prevCharacterSpeed - 3f) / 5f);
+        _toOrthoSize = Mathf.Lerp(3f, 8f, (2f * newCharacterSpeed - 3f) / 5f);
         
         StartCoroutine(CoChangeOrthoSize(_fromOrthoSize, _toOrthoSize));
         _resourcesChanger.OnSpeedChanged(newCharacterSpeed);
