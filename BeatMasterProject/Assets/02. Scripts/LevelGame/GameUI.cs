@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public enum TextType
 {
@@ -69,6 +70,8 @@ public abstract class GameUI : MonoBehaviour
     [Header("Player Character")] 
     [SerializeField] protected GameObject character;
 
+    [Header("DOTween Animations")] 
+    [SerializeField] private DOTweenAnimation _pauseBtnDOT;
     #region Abstract Function
 
     public abstract void UpdateText(TextType type, int number);
@@ -95,7 +98,9 @@ public abstract class GameUI : MonoBehaviour
     {
         if (game.curState.Equals(GameState.Play))
         {
-            UIManager.instance.OpenPopUp(pausePanel);
+            _pauseBtnDOT.DORestart();
+            SoundManager.instance.PlaySFX("Touch");
+            UIManager.instance.OpenPanel(pausePanel);
             game.PauseGame();
             character.SetActive(false);
         }
@@ -119,23 +124,26 @@ public abstract class GameUI : MonoBehaviour
         pauseBtn.onClick.AddListener(() => OpenPause());
         continueBtn.onClick.AddListener(() =>
         {
+            SoundManager.instance.PlaySFX("Touch");
             character.SetActive(true);
-            UIManager.instance.ClosePopUp();
+            UIManager.instance.ClosePanel(pausePanel);
             game.ContinueGame();
         });
         restartBtn.onClick.AddListener(() =>
         {
+            SoundManager.instance.PlaySFX("Touch");
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
         });
         goLevelMenuBtn.onClick.AddListener(() =>
         {
+            SoundManager.instance.PlaySFX("Touch");
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
         //settings
-        goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPopUp(settingsPanel));
-        settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePopUp(); });
+        goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPanel(settingsPanel));
+        settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePanel(settingsPanel); });
 
         goLevelAfterGameBtn.onClick.AddListener(() =>
         {
