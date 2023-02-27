@@ -16,6 +16,7 @@ public class RewindTime : MonoBehaviour
     [SerializeField] private ParticleSystemReverseSimulation[] _particleSystemReverseSimulations;
 
     private RewindData _rewindData;
+    private int _countBtwStartEnd = 0;
 
     private float _time;
     private Game _game;
@@ -45,6 +46,22 @@ public class RewindTime : MonoBehaviour
         _rewindData.judgeResult = result;
 
         rewindList.Insert(0, _rewindData);
+    }
+
+    public void RecordRewindPoint(Vector2 pos, string result, bool isStart)
+    {
+        _rewindData = new RewindData();
+        _rewindData.rewindPos = pos;
+        _rewindData.judgeResult = result;
+        rewindList.Insert(0, _rewindData);
+        if (!isStart)
+        {
+            // Long End
+            rewindList[_countBtwStartEnd - 1] = _rewindData;
+            _countBtwStartEnd = 0;
+            return;
+        }
+        _countBtwStartEnd = rewindList.Count;
     }
 
     public void StartRewind()

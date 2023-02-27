@@ -107,7 +107,6 @@ public class MonsterPooling : MonoBehaviour
         for (int i = _count; i < _monsterIdx; i++)
         {
             monsterList[i].GetComponent<Monster>().ChangeAlpha(true);
-            //monsterList[i].SetActive(true);
         }
 
         _monsterIdx = _count;
