@@ -52,6 +52,9 @@ public class StageInformation : MonoBehaviour
     [SerializeField] private GameObject[] _camPos;
     // [SerializeField] private GameObject _clearImg;
     // [SerializeField] private GameObject[] _starImg;
+
+    [SerializeField] private string _descriptionString;
+    [SerializeField] private DOTweenAnimation _descriptionDoTweenAnimation;
     
     private readonly String[] _stageDescription =
     {
@@ -107,6 +110,7 @@ public class StageInformation : MonoBehaviour
     
     private void SetStageInfo(int stageIdx)
     {
+        _description.text = "";   
         SoundManager.instance.PlaySFX("Touch");
         _stageBtns.SetActive(false);
         
@@ -131,11 +135,11 @@ public class StageInformation : MonoBehaviour
         _maskTarget.GetComponent<RectTransform>().localPosition = _stageInfo[stageIdx].mapPos;
         
         // description Txt
-        _description.text = _stageInfo[stageIdx].stageDescription;
-
+        _descriptionString = _stageInfo[stageIdx].stageDescription;
+        
         uiStage = _stageInfo[stageIdx].stageIdx;
         
-        // Toggles
+        // Toggle
         SetToggleStatus(_levelToggles, uiStage);
         
         // Camera
@@ -164,6 +168,9 @@ public class StageInformation : MonoBehaviour
 
         yield return new WaitForSeconds(0.3f);  
         _stagePanel.SetActive(currentSize > targetSize);
+        _description.DOText(_descriptionString, 2f);
+        _descriptionDoTweenAnimation.DORestart();
+        
         _stageBtns.SetActive(!(currentSize > targetSize));
     }
     

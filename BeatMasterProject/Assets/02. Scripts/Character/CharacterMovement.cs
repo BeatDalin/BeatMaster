@@ -128,7 +128,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void GetInput()
     {
-        if (_touchInputManager.CheckRightTouch())
+        if (_touchInputManager.CheckRightTouch() || Input.GetKeyDown(KeyCode.RightArrow))
         {
             PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
             SoundManager.instance.PlaySFX("Attack");
@@ -340,6 +340,7 @@ public class CharacterMovement : MonoBehaviour
         
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isCheckCheckPoint)
         {
+            SoundManager.instance.PlaySFX("CheckPoint");
             _isCheckCheckPoint = true;
         }
     }
