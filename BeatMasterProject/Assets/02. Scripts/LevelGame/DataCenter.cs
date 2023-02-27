@@ -67,6 +67,13 @@ public class DataCenter : MonoBehaviour
         SaveData();
     }
 
+    /*    public void SaveData(LevelData levelData, int stageIdx, int levelIdx, LeaderboardData leaderboardData)
+        {
+            _gameData.stageData[stageIdx].levelData[levelIdx] = levelData;
+            _gameData.stageData[stageIdx].leaderboardData[levelIdx] = leaderboardData;
+            SaveData();
+        }*/
+
     public LevelData GetLevelData(int stageIdx, int levelIdx)
     {
         return _gameData.stageData[stageIdx].levelData[levelIdx];
@@ -83,29 +90,45 @@ public class DataCenter : MonoBehaviour
         _gameData = new Data();
         _playerData = new PlayerData();
         _achievement = new Achievement();
+        //_leaderboardData=new LeaderboardData();
         _playerData.playerLv = 1;
         _playerData.playerStage = 1;
         _playerData.playerChar = 0; // default character index
         _playerData.itemData = new int[Enum.GetValues(typeof(StoreData.ItemPart)).Length]; // 부위별(index) 현재 장착중인 item(value)
         _playerData.itemData = Enumerable.Repeat(-1, Enum.GetValues(typeof(StoreData.ItemPart)).Length).ToArray(); // 미장착 상태일 때 -1
+        //_playerData.mapClearedCount = 0;
 
         _gameData.playerData = _playerData;
         _gameData.stageData = new StageData[4]; // temporally, set array size as 1
         LevelData temp = new LevelData();
+        //LeaderboardData leaderboard= new LeaderboardData();
         for (int i = 0; i < _gameData.stageData.Length; i++)
         {
             _gameData.stageData[i].stage = i + 1;
             _gameData.stageData[i].levelData = new LevelData[4];
+            //_gameData.stageData[i].leaderboardData= new LeaderboardData[4];
 
             for (int j = 0; j < _gameData.stageData[i].levelData.Length; j++)
             {
                 temp.level = j + 1;
                 temp.isUnlocked = j == 0;
                 temp.unlockCharNum = j <= 1 ? j + 1 : 2; // 레벨 번호대로 캐릭터 해금, 또는 마지막 character index 부여)
-                
+
                 _gameData.stageData[i].levelData[j] = temp;
+
+                /*leaderboard.score = 0;
+                _gameData.stageData[i].leaderboardData[j] = leaderboard;*/
             }
         }
+
+        /*        _gameData.leaderboardData = new LeaderboardData[_gameData.stageData.Length];
+                for(int i=0; i<_gameData.leaderboardData.Length; i++)
+                {
+                    _gameData.leaderboardData[i].deathCount = 0;
+                    _gameData.leaderboardData[i].playTime = 0;
+                    _gameData.leaderboardData[i].mapClearedCount=0;
+                    _gameData.leaderboardData[i].starCount = 0;
+                }*/
 
         _achievement.isFirstPurchased = false;
         _achievement.isStarted = false;
@@ -280,7 +303,7 @@ public class DataCenter : MonoBehaviour
         {
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_first_item, success => _gameData.achievement.isFirstItem = true);
         }
-        if (!_gameData.achievement.isCrownItem && (int)itemName==5)
+        if (!_gameData.achievement.isCrownItem && (int)itemName == 5)
         {
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_crown_item, success => _gameData.achievement.isCrownItem = true);
         }
@@ -308,4 +331,9 @@ public class DataCenter : MonoBehaviour
     {
         return _gameData.achievement;
     }
+
+    /*    public LeaderboardData GetLeaderboardData(int stageIdx, int levelIdx)
+        {
+            return _gameData.stageData[stageIdx].leaderboardData[levelIdx];
+        }*/
 }
