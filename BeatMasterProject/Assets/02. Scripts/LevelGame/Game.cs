@@ -27,6 +27,7 @@ public abstract class Game : MonoBehaviour
     protected CharacterMovement characterMovement;
     protected MonsterPooling monsterPooling;
     protected EffectAnim _playerAnim;
+    private LeaderboardManager _leaderboardManager;
 
     [Header("Game Play")]
     public GameState curState = GameState.Idle;
@@ -87,6 +88,7 @@ public abstract class Game : MonoBehaviour
         monsterPooling = FindObjectOfType<MonsterPooling>();
         objectGenerator = FindObjectOfType<ObjectGenerator>();
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
+        _leaderboardManager = FindObjectOfType<LeaderboardManager>();
         Koreographer.Instance.ClearEventRegister(); // Initialize Koreographer Event Regiser
         // Save Point Event Track
         Koreographer.Instance.RegisterForEventsWithTime(_checkPointID, SaveCheckPoint);
@@ -325,7 +327,10 @@ public abstract class Game : MonoBehaviour
         curLevelData.slowCount = _finalSummary[3];
         curLevelData.levelClear = true;
 
+        //LeaderboardData leaderboard=DataCenter.Instance.GetLeaderboardData(stageIdx, levelIdx);
+
         Achievement achieve = DataCenter.Instance.GetAchievementData();
+
         if (achieve.playCount <= 10)
         {
             if ((achieve.playCount += 1) == 1)
@@ -341,7 +346,7 @@ public abstract class Game : MonoBehaviour
         if (_finalSummary[2] == totalNoteCount)
         {
             curLevelData.star = 3;
-            curLevelData.alpha = 1f;
+            //curLevelData.alpha = 1f;
 
             // Unlock Character
             DataCenter.Instance.GetStoreData().characterData[curLevelData.unlockCharNum].isUnlocked = true;
@@ -356,7 +361,7 @@ public abstract class Game : MonoBehaviour
         else if (_finalSummary[2] >= totalNoteCount / 3 * 2)
         {
             curLevelData.star = curLevelData.star > 2 ? curLevelData.star : 2;
-            curLevelData.alpha = 2 / 3f;
+            //curLevelData.alpha = 2 / 3f;
 
 
             // Unlock Character
@@ -370,22 +375,27 @@ public abstract class Game : MonoBehaviour
         else
         {
             curLevelData.star = curLevelData.star > 1 ? curLevelData.star : 1;
-            curLevelData.alpha = 1 / 3f;
+            //curLevelData.alpha = 1 / 3f;
             if (achieve.isStarted == false)
             {
                 GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_first_one_star, success => achieve.isStarted = true);
             }
         }
 
-        // Save updated level data into json file
-        DataCenter.Instance.SaveData(curLevelData, stageIdx, levelIdx);
+        //leaderboard.score = _leaderboardManager.CalculateScore(curLevelData.star, deathCount);
+        int score= _leaderboardManager.CalculateScore(curLevelData.star, deathCount);
+        _leaderboardManager.ReportScore(stageIdx, levelIdx, score);
 
+        // Save updated level data into json file
+        //DataCenter.Instance.SaveData(curLevelData, stageIdx, levelIdx, leaderboard);
+        DataCenter.Instance.SaveData(curLevelData, stageIdx, levelIdx);
         // Unlock Next Level
         if (levelIdx < 3)
         {
             LevelData nextLevelData = DataCenter.Instance.GetLevelData(stageIdx, levelIdx + 1);
             nextLevelData.isUnlocked = true;
 
+            //DataCenter.Instance.SaveData(nextLevelData, stageIdx, levelIdx + 1, leaderboard);
             DataCenter.Instance.SaveData(nextLevelData, stageIdx, levelIdx + 1);
         }
         else
@@ -402,6 +412,8 @@ public abstract class Game : MonoBehaviour
         //     DataCenter.Instance.UpdatePlayerData(stageIdx + 2, 1, coinCount);
         // }
         DataCenter.Instance.UpdatePlayerData(stageIdx + 1, levelIdx + 2, coinCount);
+        
+
     }
 
     public void PauseGame()

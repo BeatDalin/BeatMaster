@@ -28,6 +28,7 @@ public abstract class GameUI : MonoBehaviour
     private float _delay = 0f;
     [SerializeField] protected Button goLevelAfterGameBtn;
     [SerializeField] protected Button restartAfterGameBtn;
+    [SerializeField] protected Button showLeaderboardBtn;
 
     [Header("Result Visualize")] 
     [SerializeField] private ParticleSystem _perfectParticle;
@@ -145,6 +146,12 @@ public abstract class GameUI : MonoBehaviour
 
         restartAfterGameBtn.onClick.AddListener(() =>
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene));
+
+        showLeaderboardBtn.onClick.AddListener(() =>
+        {
+            int stageIdx = (int)SceneLoadManager.Instance.Scene - 2;
+            GPGSBinder.Instance.ShowTargetLeaderboardUI(GPGSBinder.Instance.CheckStageIdx(stageIdx));
+        });
     }
 
     public void ChangeOutLineColor(BeatResult result)
