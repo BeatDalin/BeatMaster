@@ -49,6 +49,12 @@ public struct LevelData
 [Serializable]
 public struct StoreData
 {
+    public enum CharacterName
+    {
+        Corgi,
+        ColorfulCorgi,
+        Duck
+    }
     public enum ItemPart
     {
         Background = 0,
@@ -90,6 +96,7 @@ public struct StoreData
 [Serializable]
 public struct CharacterData
 {
+    public StoreData.CharacterName characterName;
     public int characterNum;
     public int price;
     public int unlockStage;
@@ -97,6 +104,7 @@ public struct CharacterData
     public bool isPurchased;
     public bool isUnlocked;
     public bool isPaidItem;
+    public string characterDescription;
 }
 
 [Serializable]
@@ -108,6 +116,7 @@ public struct ItemData
     public bool isPurchased;
     public bool isUnlocked;
     public bool isPaidItem;
+    public string itemDescription;
 }
 
 [Serializable]
@@ -118,6 +127,7 @@ public struct PaidItemData
     public bool isPurchased;
     public int[] packageCharacterNum;
     public StoreData.ItemName[] packageItemName;
+    public string paidItemDescription;
 }
 
 [Serializable]
