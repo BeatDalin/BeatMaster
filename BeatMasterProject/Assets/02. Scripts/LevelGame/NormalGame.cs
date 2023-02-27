@@ -91,9 +91,9 @@ public class NormalGame : Game
         }
         _eventRangeShort = CalculateRange(rangeEventList);
         
-        _events = SoundManager.instance.playingKoreo.GetTrackByID(longCheckStartID).GetAllEvents();
+        _events = SoundManager.instance.playingKoreo.GetTrackByID(longCheckEndID).GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
-        _isLongVisited = new bool[+_events.Count];
+        _isLongVisited = new bool[_events.Count];
 
     }
 
