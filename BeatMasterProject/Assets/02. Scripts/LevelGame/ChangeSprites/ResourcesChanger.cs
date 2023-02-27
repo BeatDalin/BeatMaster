@@ -31,12 +31,15 @@ public class ResourcesChanger : MonoBehaviour
         _volume = FindObjectOfType<Volume>();
         _volume.profile.TryGet(typeof(ColorAdjustments), out _colorAdjustments);
         _characterMovement = FindObjectOfType<CharacterMovement>();
+    }
+
+    private void Start()
+    {
         Init();
     }
 
     private void Init()
     {
-        // TODO Stage()_Level()로 바꾸기
         _sceneName = SceneLoadManager.Instance.Scene.ToString();
         SetCurrentResource();
         _backgroundController.SetOffsetSize(_changingResources[0].Backgrounds[0]);
@@ -50,18 +53,13 @@ public class ResourcesChanger : MonoBehaviour
             if (changingResource.name == _sceneName)
             {
                 _currentResource = changingResource;
+                _backgroundController.SetBackgroundSprite(changingResource);
                 break;
             }
         }
 
-        ChangeBackground();
     }
     
-    private void ChangeBackground()
-    {
-        _backgroundController.SetBackgroundSprite(_currentResource);
-    }
-
     public void OnSpeedChanged(float speed)
     {
         ChangePostProcessing(speed);

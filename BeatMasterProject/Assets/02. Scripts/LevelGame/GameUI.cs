@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public enum TextType
 {
@@ -69,6 +70,8 @@ public abstract class GameUI : MonoBehaviour
     [Header("Player Character")] 
     [SerializeField] protected GameObject character;
 
+    [Header("DOTween Animations")] 
+    [SerializeField] private DOTweenAnimation _pauseBtnDOT;
     #region Abstract Function
 
     public abstract void UpdateText(TextType type, int number);
@@ -95,6 +98,7 @@ public abstract class GameUI : MonoBehaviour
     {
         if (game.curState.Equals(GameState.Play))
         {
+            _pauseBtnDOT.DORestart();
             SoundManager.instance.PlaySFX("Touch");
             UIManager.instance.OpenPanel(pausePanel);
             game.PauseGame();

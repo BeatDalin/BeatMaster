@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
     {
         if (!panel.activeSelf)
         {
+            SoundManager.instance.PlaySFX("Touch");
             panel.SetActive(true);
             panel.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
         }
@@ -46,6 +47,7 @@ public class UIManager : MonoBehaviour
         //     return;
         // }
         //GameObject g = popUpStack.Pop();
+        SoundManager.instance.PlaySFX("Touch");
         panel.GetComponent<RectTransform>().DOLocalMove(new Vector3(Screen.width, 0, 0), 0.6f).onComplete += () =>
         {
             panel.SetActive(false);
