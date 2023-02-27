@@ -309,10 +309,12 @@ public class DataCenter : MonoBehaviour
     {
         _gameData.storeData.characterData[charNum].isPurchased = true;
         _gameData.playerData.playerItem -= _gameData.storeData.characterData[charNum].price;
+#if !UNITY_EDITOR
         if (!_gameData.achievement.isFirstPurchased)
         {
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_first_character, success => _gameData.achievement.isFirstPurchased = true);
         }
+#endif
         SaveData();
     }
 
@@ -334,6 +336,7 @@ public class DataCenter : MonoBehaviour
     {
         _gameData.storeData.itemData[(int)itemName].isPurchased = true;
         _gameData.playerData.playerItem -= _gameData.storeData.itemData[(int)itemName].price;
+#if !UNITY_EDITOR
         if (!_gameData.achievement.isFirstItem)
         {
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_first_item, success => _gameData.achievement.isFirstItem = true);
@@ -342,6 +345,7 @@ public class DataCenter : MonoBehaviour
         {
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_crown_item, success => _gameData.achievement.isCrownItem = true);
         }
+#endif
         SaveData();
     }
 

@@ -247,6 +247,10 @@ public class Store : MonoBehaviour
         {
             if (_storeData.itemData[i].isPurchased)
             {
+                int index = i;
+                _item[index].onClick.RemoveAllListeners();
+                _item[index].onClick.AddListener(() =>
+                    SetItemPopup(_storeData.itemData[index].itemPart, _storeData.itemData[index].itemName));
                 _item[i].transform.GetChild(1).gameObject.SetActive(false);
                 _item[i].transform.GetChild(2).gameObject.SetActive(false);
             }
