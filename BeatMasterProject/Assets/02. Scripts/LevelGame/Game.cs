@@ -33,6 +33,8 @@ public abstract class Game : MonoBehaviour
     public GameState curState = GameState.Idle;
     public int curSample;
     protected bool isRewinding;
+    private WaitWhile _waitWhileSceneLoad;
+    
     [Header("Check Game End")]
     [SerializeField][EventID] private string _spdEventID;
 
@@ -89,6 +91,8 @@ public abstract class Game : MonoBehaviour
         objectGenerator = FindObjectOfType<ObjectGenerator>();
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
         _leaderboardManager = FindObjectOfType<LeaderboardManager>();
+        
+        _waitWhileSceneLoad = new WaitWhile(() => !SceneLoadManager.Instance.GetTransitionEnd());
         Koreographer.Instance.ClearEventRegister(); // Initialize Koreographer Event Regiser
         // Save Point Event Track
         Koreographer.Instance.RegisterForEventsWithTime(_checkPointID, SaveCheckPoint);
@@ -99,8 +103,8 @@ public abstract class Game : MonoBehaviour
 
     protected virtual void Start()
     {
-        // StartWithDelay();
-        StartCoroutine(CoStartWithDelay(0));
+        StartWithDelay();
+        // StartCoroutine(CoStartWithDelay(0));
         Koreographer.Instance.RegisterForEvents(_spdEventID, CheckEnd);
     }
 
@@ -120,7 +124,7 @@ public abstract class Game : MonoBehaviour
 
     protected void StartWithDelay(int startSample = 0)
     {
-        StartCoroutine(SceneLoadManager.Instance.CoSceneEnter());
+        // StartCoroutine(SceneLoadManager.Instance.CoSceneEnter());
         StartCoroutine(CoStartWithDelay(startSample));
     }
 
@@ -140,8 +144,8 @@ public abstract class Game : MonoBehaviour
         // }
 
         // Wait for Scene Transition to end
-        // yield return new WaitWhile(() => !SceneLoadManager.Instance.GetTransitionEnd());
-        yield return new WaitUntil(() => SceneLoadManager.Instance.isLoaded);
+        yield return _waitWhileSceneLoad;
+        // yield return new WaitUntil(() => SceneLoadManager.Instance.isLoaded);
 
         if (rewindTime.isRewind)
         {
@@ -165,12 +169,7 @@ public abstract class Game : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
         gameUI.timePanel.SetActive(false);
-
-        // // Rewind Character Position
-        // if (curState.Equals(GameState.Rewind))
-        // {
-        //     characterMovement.RewindPosition();
-        // }
+        
         curState = GameState.Play;
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
         isRewinding = false;
@@ -229,8 +228,8 @@ public abstract class Game : MonoBehaviour
         {
             SummarizeResult();
             RateResult(_stageIdx, _levelIdx);
-            gameUI.UpdateText(TextType.Death, deathCount);// increase death count
-            gameUI.ShowFinalResult(_finalSummary, totalNoteCount, _stageIdx, _levelIdx); // for testing purpose ...
+            gameUI.UpdateText(TextType.Death, deathCount); // increase death count
+            gameUI.ShowFinalResult(_finalSummary, totalNoteCount, _stageIdx, _levelIdx); // final result
         }
         else if (message == "Stop")
         {
@@ -412,18 +411,7 @@ public abstract class Game : MonoBehaviour
         {
             Debug.Log("Stage Clear");
         }
-
-        // if (levelIdx != 0 && levelIdx % 4 == 0)
-        // {
-        //     //Debug.Log("stage clear");
-        //     // boss game clear
-        //     DataCenter.Instance.UpdateStageData(stageIdx);
-        //     DataCenter.Instance.AddStageData();
-        //     DataCenter.Instance.UpdatePlayerData(stageIdx + 2, 1, coinCount);
-        // }
         DataCenter.Instance.UpdatePlayerData(stageIdx + 1, levelIdx + 2, coinCount);
-
-
     }
 
     public void PauseGame()

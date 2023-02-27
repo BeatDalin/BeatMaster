@@ -146,7 +146,7 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-    private void Jump()
+    public void Jump()
     {
         SoundManager.instance.PlaySFX("Jump");
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);

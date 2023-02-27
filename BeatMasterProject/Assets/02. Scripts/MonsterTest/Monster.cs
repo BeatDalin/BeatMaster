@@ -57,7 +57,7 @@ public class Monster : MonoBehaviour
     {
         if (up)
         {
-            _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 1);
+            _spriteRenderer.DOFade(1, 2f);
         }
         else
         {
