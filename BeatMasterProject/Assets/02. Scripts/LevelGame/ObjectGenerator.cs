@@ -146,6 +146,7 @@ public class ObjectGenerator : MonoBehaviour
         _checkPointIdx++;
         _checkPointObj.transform.position = checkPointPos[_checkPointIdx];
         // _checkPointVisited[_checkPointIdx] = true;
+        SoundManager.instance.PlaySFX("CheckPoint");
         _checkPointAnim.SetTrigger(IsPlay); // Play Animation
         return _checkPointList[_checkPointIdx].StartSample;
     }
