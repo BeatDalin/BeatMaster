@@ -37,7 +37,7 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
     [Header("Catalog")]
     public Dictionary<string, ProductInfo> productCatalog = new Dictionary<string, ProductInfo>();
     private bool _isCatalogueLoaded;
-    private WaitUntil _waitForCatalogueLoad;
+    public WaitUntil _waitForCatalogueLoad;
 
     // [Space] 
     [Header("Test in Unity")] 
@@ -72,7 +72,7 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
     public void GetCredential(string authCode)
     {
         // Authenticate user using Firebase.Auth
-        Debug.Log($"=================== Auth code exist? {authCode}");
+        // Debug.Log($"=================== Auth code exist? {authCode}");
         if (_authCode == authCode)
         {
             // _authCode is already set -> Already authenticated, No need to execute GetCredential
@@ -410,7 +410,7 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
             {
                 if (task.IsCompleted)
                 {
-                    Debug.Log("######## GET PRODUCT CATALOGUE ########");
+                    Debug.Log("######## GET PRODUCT CATALOG ########");
                     DataSnapshot snapshot = task.Result;
                     foreach (var data in snapshot.Children)
                     {
@@ -418,7 +418,7 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
                         ProductInfo info = JsonUtility.FromJson<ProductInfo>(data.GetRawJsonValue());
                         productCatalog.Add(info.id, info);
                     }
-                    Debug.Log("######## GET PRODUCT CATALOGUE Ended ########");
+                    Debug.Log("######## GET PRODUCT CATALOG Ended ########");
                     _isCatalogueLoaded = true;
                 }
             });

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -510,26 +510,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1089981987}
     m_Modifications:
-    - target: {fileID: 572444418136975084, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-      propertyPath: priceText
-      value: 
-      objectReference: {fileID: 103017905}
-    - target: {fileID: 572444418136975084, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-      propertyPath: titleText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 572444418136975084, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-      propertyPath: descriptionText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3427708340431405722, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-      propertyPath: m_Text
-      value: 0.99
-      objectReference: {fileID: 0}
-    - target: {fileID: 3427708340431405724, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-      propertyPath: m_Name
-      value: BtnPriceTxt
-      objectReference: {fileID: 0}
     - target: {fileID: 3427708341113819449, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -678,24 +658,17 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 90716ddb09a7d014b8f31be38abf1f7a, type: 2}
-    - target: {fileID: 7996901133415294391, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 5694358568655860027, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 5694358568655860027, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 130
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 572444418136975084, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
---- !u!114 &103017905 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3427708340431405722, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-  m_PrefabInstance: {fileID: 103017904}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &103017906 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3427708341113819449, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
@@ -1438,26 +1411,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1089981987}
     m_Modifications:
-    - target: {fileID: 572444418136975084, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-      propertyPath: priceText
-      value: 
-      objectReference: {fileID: 417676184}
-    - target: {fileID: 572444418136975084, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-      propertyPath: productId
-      value: com.BeatDalin.BeatMasterProject.starterPack
-      objectReference: {fileID: 0}
-    - target: {fileID: 572444418136975084, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-      propertyPath: titleText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 572444418136975084, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-      propertyPath: descriptionText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3427708340431405722, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-      propertyPath: m_Text
-      value: 2.99
-      objectReference: {fileID: 0}
     - target: {fileID: 3427708340431405724, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
       propertyPath: m_Name
       value: BtnPriceTxt
@@ -1602,12 +1555,8 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: cf795be6a1db75945a7e06cf25364c92, type: 2}
-    - target: {fileID: 7996901133415294391, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 572444418136975084, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
 --- !u!114 &417676182 stripped
 MonoBehaviour:
@@ -1618,17 +1567,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &417676184 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3427708340431405722, guid: 3f0dc0d1acf365f41bb5336d8c8ebb74, type: 3}
-  m_PrefabInstance: {fileID: 417676181}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &495448438
@@ -2042,7 +1980,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -100}
-  m_SizeDelta: {x: 0, y: 50}
+  m_SizeDelta: {x: -100, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &528395922
 MonoBehaviour:
@@ -3390,6 +3328,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7698220271081164976, guid: be115e47d4b8b12479c6fb078bf9c466, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7698220271415030113, guid: be115e47d4b8b12479c6fb078bf9c466, type: 3}
       propertyPath: m_Camera
       value: 
@@ -3398,6 +3340,10 @@ PrefabInstance:
       propertyPath: _store
       value: 
       objectReference: {fileID: 2103554150}
+    - target: {fileID: 7698220271415030114, guid: be115e47d4b8b12479c6fb078bf9c466, type: 3}
+      propertyPath: _outerBtnParent
+      value: 
+      objectReference: {fileID: 1089981987}
     - target: {fileID: 7698220271415030114, guid: be115e47d4b8b12479c6fb078bf9c466, type: 3}
       propertyPath: _IAPButtons.Array.size
       value: 2
@@ -4319,7 +4265,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -100}
-  m_SizeDelta: {x: 0, y: 50}
+  m_SizeDelta: {x: -100, y: 70}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1041217478
 MonoBehaviour:
@@ -6039,7 +5985,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 40}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1267082449
@@ -8420,7 +8366,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 40}
+  m_AnchoredPosition: {x: 0, y: 20}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1841911182
