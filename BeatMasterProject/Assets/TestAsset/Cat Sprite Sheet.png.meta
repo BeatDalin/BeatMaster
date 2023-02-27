@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 12.5
+  spritePixelsToUnits: 2.5
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -124,6 +124,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -131,10 +143,10 @@ TextureImporter:
       name: Cat Sprite Sheet_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 9
         y: 288
-        width: 32
-        height: 32
+        width: 12
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -152,10 +164,10 @@ TextureImporter:
       name: Cat Sprite Sheet_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 41
         y: 288
-        width: 32
-        height: 32
+        width: 12
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -173,10 +185,10 @@ TextureImporter:
       name: Cat Sprite Sheet_2
       rect:
         serializedVersion: 2
-        x: 64
+        x: 73
         y: 288
-        width: 32
-        height: 32
+        width: 12
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -194,10 +206,10 @@ TextureImporter:
       name: Cat Sprite Sheet_3
       rect:
         serializedVersion: 2
-        x: 96
+        x: 105
         y: 288
-        width: 32
-        height: 32
+        width: 12
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -215,10 +227,10 @@ TextureImporter:
       name: Cat Sprite Sheet_4
       rect:
         serializedVersion: 2
-        x: 0
+        x: 9
         y: 256
-        width: 32
-        height: 32
+        width: 12
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -236,10 +248,10 @@ TextureImporter:
       name: Cat Sprite Sheet_5
       rect:
         serializedVersion: 2
-        x: 32
+        x: 41
         y: 256
-        width: 32
-        height: 32
+        width: 12
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -257,10 +269,10 @@ TextureImporter:
       name: Cat Sprite Sheet_6
       rect:
         serializedVersion: 2
-        x: 64
+        x: 73
         y: 256
-        width: 32
-        height: 32
+        width: 12
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -278,10 +290,10 @@ TextureImporter:
       name: Cat Sprite Sheet_7
       rect:
         serializedVersion: 2
-        x: 96
+        x: 105
         y: 256
-        width: 32
-        height: 32
+        width: 12
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -299,10 +311,10 @@ TextureImporter:
       name: Cat Sprite Sheet_8
       rect:
         serializedVersion: 2
-        x: 0
+        x: 9
         y: 224
-        width: 32
-        height: 32
+        width: 13
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -320,10 +332,10 @@ TextureImporter:
       name: Cat Sprite Sheet_9
       rect:
         serializedVersion: 2
-        x: 32
+        x: 41
         y: 224
-        width: 32
-        height: 32
+        width: 13
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -341,10 +353,10 @@ TextureImporter:
       name: Cat Sprite Sheet_10
       rect:
         serializedVersion: 2
-        x: 64
+        x: 73
         y: 224
-        width: 32
-        height: 32
+        width: 13
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -362,10 +374,10 @@ TextureImporter:
       name: Cat Sprite Sheet_11
       rect:
         serializedVersion: 2
-        x: 96
+        x: 105
         y: 224
-        width: 32
-        height: 32
+        width: 13
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -383,10 +395,10 @@ TextureImporter:
       name: Cat Sprite Sheet_12
       rect:
         serializedVersion: 2
-        x: 0
+        x: 9
         y: 192
-        width: 32
-        height: 32
+        width: 13
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -404,10 +416,10 @@ TextureImporter:
       name: Cat Sprite Sheet_13
       rect:
         serializedVersion: 2
-        x: 32
+        x: 41
         y: 192
-        width: 32
-        height: 32
+        width: 13
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -425,10 +437,10 @@ TextureImporter:
       name: Cat Sprite Sheet_14
       rect:
         serializedVersion: 2
-        x: 64
+        x: 73
         y: 192
-        width: 32
-        height: 32
+        width: 13
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -446,10 +458,10 @@ TextureImporter:
       name: Cat Sprite Sheet_15
       rect:
         serializedVersion: 2
-        x: 96
+        x: 105
         y: 192
-        width: 32
-        height: 32
+        width: 13
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -467,10 +479,10 @@ TextureImporter:
       name: Cat Sprite Sheet_16
       rect:
         serializedVersion: 2
-        x: 0
+        x: 10
         y: 160
-        width: 32
-        height: 32
+        width: 13
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -488,10 +500,10 @@ TextureImporter:
       name: Cat Sprite Sheet_17
       rect:
         serializedVersion: 2
-        x: 32
-        y: 160
-        width: 32
-        height: 32
+        x: 41
+        y: 161
+        width: 14
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -509,10 +521,10 @@ TextureImporter:
       name: Cat Sprite Sheet_18
       rect:
         serializedVersion: 2
-        x: 64
-        y: 160
-        width: 32
-        height: 32
+        x: 71
+        y: 163
+        width: 16
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -530,10 +542,10 @@ TextureImporter:
       name: Cat Sprite Sheet_19
       rect:
         serializedVersion: 2
-        x: 96
-        y: 160
-        width: 32
-        height: 32
+        x: 103
+        y: 161
+        width: 16
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -551,10 +563,10 @@ TextureImporter:
       name: Cat Sprite Sheet_20
       rect:
         serializedVersion: 2
-        x: 128
+        x: 135
         y: 160
-        width: 32
-        height: 32
+        width: 16
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -572,10 +584,10 @@ TextureImporter:
       name: Cat Sprite Sheet_21
       rect:
         serializedVersion: 2
-        x: 160
-        y: 160
-        width: 32
-        height: 32
+        x: 168
+        y: 161
+        width: 15
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -593,10 +605,10 @@ TextureImporter:
       name: Cat Sprite Sheet_22
       rect:
         serializedVersion: 2
-        x: 192
-        y: 160
-        width: 32
-        height: 32
+        x: 201
+        y: 162
+        width: 15
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -614,10 +626,10 @@ TextureImporter:
       name: Cat Sprite Sheet_23
       rect:
         serializedVersion: 2
-        x: 224
-        y: 160
-        width: 32
-        height: 32
+        x: 234
+        y: 161
+        width: 13
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -635,10 +647,10 @@ TextureImporter:
       name: Cat Sprite Sheet_24
       rect:
         serializedVersion: 2
-        x: 0
+        x: 10
         y: 128
-        width: 32
-        height: 32
+        width: 13
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -656,10 +668,10 @@ TextureImporter:
       name: Cat Sprite Sheet_25
       rect:
         serializedVersion: 2
-        x: 32
-        y: 128
-        width: 32
-        height: 32
+        x: 41
+        y: 131
+        width: 15
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -677,10 +689,10 @@ TextureImporter:
       name: Cat Sprite Sheet_26
       rect:
         serializedVersion: 2
-        x: 64
-        y: 128
-        width: 32
-        height: 32
+        x: 71
+        y: 132
+        width: 17
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -698,10 +710,10 @@ TextureImporter:
       name: Cat Sprite Sheet_27
       rect:
         serializedVersion: 2
-        x: 96
-        y: 128
-        width: 32
-        height: 32
+        x: 104
+        y: 131
+        width: 16
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -719,10 +731,10 @@ TextureImporter:
       name: Cat Sprite Sheet_28
       rect:
         serializedVersion: 2
-        x: 128
+        x: 137
         y: 128
-        width: 32
-        height: 32
+        width: 14
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -740,10 +752,10 @@ TextureImporter:
       name: Cat Sprite Sheet_29
       rect:
         serializedVersion: 2
-        x: 160
-        y: 128
-        width: 32
-        height: 32
+        x: 169
+        y: 129
+        width: 14
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -761,10 +773,10 @@ TextureImporter:
       name: Cat Sprite Sheet_30
       rect:
         serializedVersion: 2
-        x: 192
-        y: 128
-        width: 32
-        height: 32
+        x: 202
+        y: 131
+        width: 13
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -782,10 +794,10 @@ TextureImporter:
       name: Cat Sprite Sheet_31
       rect:
         serializedVersion: 2
-        x: 224
-        y: 128
-        width: 32
-        height: 32
+        x: 234
+        y: 129
+        width: 13
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -803,10 +815,10 @@ TextureImporter:
       name: Cat Sprite Sheet_32
       rect:
         serializedVersion: 2
-        x: 0
+        x: 8
         y: 96
-        width: 32
-        height: 32
+        width: 16
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -824,10 +836,10 @@ TextureImporter:
       name: Cat Sprite Sheet_33
       rect:
         serializedVersion: 2
-        x: 32
+        x: 40
         y: 96
-        width: 32
-        height: 32
+        width: 16
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -845,10 +857,10 @@ TextureImporter:
       name: Cat Sprite Sheet_34
       rect:
         serializedVersion: 2
-        x: 64
+        x: 72
         y: 96
-        width: 32
-        height: 32
+        width: 16
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -866,10 +878,10 @@ TextureImporter:
       name: Cat Sprite Sheet_35
       rect:
         serializedVersion: 2
-        x: 96
+        x: 104
         y: 96
-        width: 32
-        height: 32
+        width: 16
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -887,10 +899,10 @@ TextureImporter:
       name: Cat Sprite Sheet_36
       rect:
         serializedVersion: 2
-        x: 0
+        x: 10
         y: 64
-        width: 32
-        height: 32
+        width: 13
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -908,10 +920,10 @@ TextureImporter:
       name: Cat Sprite Sheet_37
       rect:
         serializedVersion: 2
-        x: 32
+        x: 42
         y: 64
-        width: 32
-        height: 32
+        width: 13
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -929,10 +941,10 @@ TextureImporter:
       name: Cat Sprite Sheet_38
       rect:
         serializedVersion: 2
-        x: 64
+        x: 75
         y: 64
-        width: 32
-        height: 32
+        width: 13
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -950,10 +962,10 @@ TextureImporter:
       name: Cat Sprite Sheet_39
       rect:
         serializedVersion: 2
-        x: 96
+        x: 106
         y: 64
-        width: 32
-        height: 32
+        width: 15
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -971,10 +983,10 @@ TextureImporter:
       name: Cat Sprite Sheet_40
       rect:
         serializedVersion: 2
-        x: 128
+        x: 138
         y: 64
-        width: 32
-        height: 32
+        width: 14
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -992,10 +1004,10 @@ TextureImporter:
       name: Cat Sprite Sheet_41
       rect:
         serializedVersion: 2
-        x: 160
+        x: 170
         y: 64
-        width: 32
-        height: 32
+        width: 13
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1013,10 +1025,10 @@ TextureImporter:
       name: Cat Sprite Sheet_42
       rect:
         serializedVersion: 2
-        x: 0
+        x: 9
         y: 32
-        width: 32
-        height: 32
+        width: 12
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1034,10 +1046,10 @@ TextureImporter:
       name: Cat Sprite Sheet_43
       rect:
         serializedVersion: 2
-        x: 32
+        x: 41
         y: 32
-        width: 32
-        height: 32
+        width: 15
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1055,10 +1067,10 @@ TextureImporter:
       name: Cat Sprite Sheet_44
       rect:
         serializedVersion: 2
-        x: 64
-        y: 32
-        width: 32
-        height: 32
+        x: 73
+        y: 35
+        width: 15
+        height: 14
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1076,10 +1088,10 @@ TextureImporter:
       name: Cat Sprite Sheet_45
       rect:
         serializedVersion: 2
-        x: 96
-        y: 32
-        width: 32
-        height: 32
+        x: 105
+        y: 36
+        width: 14
+        height: 14
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1097,10 +1109,10 @@ TextureImporter:
       name: Cat Sprite Sheet_46
       rect:
         serializedVersion: 2
-        x: 128
+        x: 137
         y: 32
-        width: 32
-        height: 32
+        width: 13
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1118,10 +1130,10 @@ TextureImporter:
       name: Cat Sprite Sheet_47
       rect:
         serializedVersion: 2
-        x: 160
+        x: 169
         y: 32
-        width: 32
-        height: 32
+        width: 13
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1139,10 +1151,10 @@ TextureImporter:
       name: Cat Sprite Sheet_48
       rect:
         serializedVersion: 2
-        x: 192
+        x: 201
         y: 32
-        width: 32
-        height: 32
+        width: 13
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1160,10 +1172,10 @@ TextureImporter:
       name: Cat Sprite Sheet_49
       rect:
         serializedVersion: 2
-        x: 0
+        x: 10
         y: 0
-        width: 32
-        height: 32
+        width: 13
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1181,10 +1193,10 @@ TextureImporter:
       name: Cat Sprite Sheet_50
       rect:
         serializedVersion: 2
-        x: 32
+        x: 41
         y: 0
-        width: 32
-        height: 32
+        width: 15
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1202,10 +1214,10 @@ TextureImporter:
       name: Cat Sprite Sheet_51
       rect:
         serializedVersion: 2
-        x: 64
+        x: 73
         y: 0
-        width: 32
-        height: 32
+        width: 15
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1223,10 +1235,10 @@ TextureImporter:
       name: Cat Sprite Sheet_52
       rect:
         serializedVersion: 2
-        x: 96
+        x: 105
         y: 0
-        width: 32
-        height: 32
+        width: 15
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1244,10 +1256,10 @@ TextureImporter:
       name: Cat Sprite Sheet_53
       rect:
         serializedVersion: 2
-        x: 128
+        x: 135
         y: 0
-        width: 32
-        height: 32
+        width: 17
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1265,10 +1277,10 @@ TextureImporter:
       name: Cat Sprite Sheet_54
       rect:
         serializedVersion: 2
-        x: 160
+        x: 167
         y: 0
-        width: 32
-        height: 32
+        width: 17
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1286,10 +1298,10 @@ TextureImporter:
       name: Cat Sprite Sheet_55
       rect:
         serializedVersion: 2
-        x: 192
+        x: 201
         y: 0
-        width: 32
-        height: 32
+        width: 15
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1307,10 +1319,10 @@ TextureImporter:
       name: Cat Sprite Sheet_56
       rect:
         serializedVersion: 2
-        x: 224
+        x: 234
         y: 0
-        width: 32
-        height: 32
+        width: 13
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

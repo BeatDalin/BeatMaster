@@ -330,7 +330,7 @@ public abstract class Game : MonoBehaviour
         //LeaderboardData leaderboard=DataCenter.Instance.GetLeaderboardData(stageIdx, levelIdx);
 
         Achievement achieve = DataCenter.Instance.GetAchievementData();
-
+#if !UNITY_EDITOR
         if (achieve.playCount <= 10)
         {
             if ((achieve.playCount += 1) == 1)
@@ -342,6 +342,7 @@ public abstract class Game : MonoBehaviour
                 GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_clear_10_times, success => print("achievement_clear_10_times"));
             }
         }
+#endif
         // Push data into current level's data
         if (_finalSummary[2] == totalNoteCount)
         {
@@ -351,11 +352,12 @@ public abstract class Game : MonoBehaviour
 
             // Unlock Character
             DataCenter.Instance.GetStoreData().characterData[curLevelData.unlockCharNum].isUnlocked = true;
-
+#if !UNITY_EDITOR
             if (achieve.isMaster == false)
             {
                 GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_master, success => achieve.isMaster = true);
             }
+#endif
         }
 
         // generous condition for test: _finalSummary[2] >= totalNoteCount / 3
@@ -368,26 +370,31 @@ public abstract class Game : MonoBehaviour
             // Unlock Character
             Debug.Log(curLevelData.unlockCharNum);
             DataCenter.Instance.GetStoreData().characterData[curLevelData.unlockCharNum].isUnlocked = true;
+#if !UNITY_EDITOR
             if (achieve.isGrown == false)
             {
                 GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_grown, success => achieve.isGrown = true);
             }
+#endif
         }
         else
         {
             curLevelData.star = curLevelData.star > 1 ? curLevelData.star : 1;
             //curLevelData.alpha = 1 / 3f;
             gameUI.ShowStar(1);
-
+#if !UNITY_EDITOR
             if (achieve.isStarted == false)
             {
                 GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_first_one_star, success => achieve.isStarted = true);
             }
+#endif
         }
 
         //leaderboard.score = _leaderboardManager.CalculateScore(curLevelData.star, deathCount);
         int score = _leaderboardManager.CalculateScore(curLevelData.star, deathCount);
+#if !UNITY_EDITOR
         _leaderboardManager.ReportScore(stageIdx, levelIdx, score);
+#endif
 
         // Save updated level data into json file
         //DataCenter.Instance.SaveData(curLevelData, stageIdx, levelIdx, leaderboard);
