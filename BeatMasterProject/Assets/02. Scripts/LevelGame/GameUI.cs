@@ -157,7 +157,9 @@ public abstract class GameUI : MonoBehaviour
         showLeaderboardBtn.onClick.AddListener(() =>
         {
             int stageIdx = (int)SceneLoadManager.Instance.Scene - 2;
+#if !UNITY_EDITOR
             GPGSBinder.Instance.ShowTargetLeaderboardUI(GPGSBinder.Instance.CheckStageIdx(stageIdx));
+#endif
         });
     }
 
