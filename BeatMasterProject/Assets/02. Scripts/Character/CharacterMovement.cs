@@ -254,9 +254,16 @@ public class CharacterMovement : MonoBehaviour
 
             if (_isAttack)
             {
-                if (lastBeatTime >= _attackBeatTime + 0.7f)
+                if (lastBeatTime >= _attackBeatTime + 0.5f)
                 {
-                    PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                    if (isLongNote)
+                    {
+                        PlayerStatus.Instance.ChangeStatus(CharacterStatus.FastIdle);
+                    }
+                    else
+                    {
+                        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                    }
                     _isAttack = false;
                 }
             }

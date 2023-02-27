@@ -158,7 +158,7 @@ public class StageInformation : MonoBehaviour
             _mainCam.transform.position = 
                 Vector3.Lerp(current, target, elapsedTime/time);
             _mainCam.orthographicSize =
-                Mathf.Lerp(currentSize, targetSize, elapsedTime / time);
+                Mathf.SmoothStep(currentSize, targetSize, elapsedTime / time);
             
             yield return null;
         }
@@ -188,7 +188,7 @@ public class StageInformation : MonoBehaviour
             _mainCam.transform.position = 
                 Vector3.Lerp(current, target, elapsedTime / time);
             _mainCam.orthographicSize =
-                Mathf.Lerp(currentSize, targetSize, elapsedTime / time);
+                Mathf.SmoothStep(currentSize, targetSize, elapsedTime / time);
             
             yield return null;
         }

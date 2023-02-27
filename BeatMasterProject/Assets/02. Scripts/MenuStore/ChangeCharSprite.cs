@@ -37,7 +37,7 @@ public class ChangeCharSprite : MonoBehaviour
         return _itemSprite;
     }
     
-    public Sprite ChangeItemSprite(StoreData.PaidItemName paidItemName)
+    public Sprite ChangePaidItemSprite(StoreData.PaidItemName paidItemName)
     {
         string _key = paidItemName.ToString();
         if (_spriteDic.TryGetValue(_key, out _charSprite))
