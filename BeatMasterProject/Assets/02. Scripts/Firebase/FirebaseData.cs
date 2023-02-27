@@ -8,14 +8,16 @@ public class ProductInfo
 {
     public string id;
     public string title;
+    public string description;
     public string price;
     public bool isConsumable;
     public int increaseAmount;
 
-    public ProductInfo(string id, string title, string price, bool isConsumable, int increaseAmount)
+    public ProductInfo(string id, string title, string description, string price, bool isConsumable, int increaseAmount)
     {
         this.id = id;
         this.title = title;
+        this.description = description;
         this.price = price;
         this.isConsumable = isConsumable;
         this.increaseAmount = increaseAmount; // Set amount and never change
@@ -42,8 +44,8 @@ public class UserInfo
     // To create UserInfo
     public UserInfo CreateUserInfo(string userId, string email, string name)
     {
-        this.userId = userId;   
         this.email = email;
+        this.userId = userId;   
         this.name = name;
         this.wallet = new Dictionary<string, int>();
         this.walletString = ConvertDictionaryToString(wallet);
@@ -124,8 +126,8 @@ public class UserInfo
 
         return true;
     }
-    
-    
+
+
     public static string ConvertDictionaryToString<DKey, DValue> (Dictionary<DKey, DValue> dict)
     {
         if (dict == null)

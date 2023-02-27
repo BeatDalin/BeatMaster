@@ -30,12 +30,12 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
     [SerializeField] private bool _isUserSkimEnd;
     private WaitUntil _waitUntilUserSkim; 
     [SerializeField] private bool _isUserSearchEnd;
-    private WaitUntil _waitForSearchEnd;
+    public WaitUntil waitForSearchEnd;
     [SerializeField] private UserInfo _myUserInfo;
     
     [Space]
-    [Header("Catalogue")]
-    private Dictionary<string, ProductInfo> _productCatalogue = new Dictionary<string, ProductInfo>();
+    [Header("Catalog")]
+    public Dictionary<string, ProductInfo> productCatalog = new Dictionary<string, ProductInfo>();
     private bool _isCatalogueLoaded;
     private WaitUntil _waitForCatalogueLoad;
 
@@ -56,7 +56,7 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
         // Set WaitUntils : Wait Until boolean variables become true
         _waitUntilAuthenticated = new WaitUntil(() => isAuthenticated);
         _waitUntilUserSkim = new WaitUntil(() => _isUserSkimEnd);
-        _waitForSearchEnd = new WaitUntil(() => _isUserSearchEnd);
+        waitForSearchEnd = new WaitUntil(() => _isUserSearchEnd);
         _waitForCatalogueLoad = new WaitUntil(() => _isCatalogueLoaded);
         
         // Get Catalogue from Firebase Database
@@ -236,7 +236,7 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
     
     private IEnumerator CoBuyConsumeTest()
     {
-        yield return _waitForSearchEnd;
+        yield return waitForSearchEnd;
         _isUserSearchEnd = false;
         
         Debug.Log("User From Database: " + JsonUtility.ToJson(_myUserInfo));
@@ -244,12 +244,12 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
         
         Debug.Log("########### Buy Product Test ###########");
         // #################### Buy product Test #######################
-        bool resultCoin = _myUserInfo.BuyProduct("coin500", _productCatalogue);
+        bool resultCoin = _myUserInfo.BuyProduct("coin500", productCatalog);
         //  coin 생겼는지 확인
         Debug.Log("Coin : " + _myUserInfo.wallet["coin500"]);
         Debug.Log($"User after buy coin: {resultCoin} "+JsonUtility.ToJson(_myUserInfo));
         
-        bool result = _myUserInfo.BuyProduct("fancySunglasses", _productCatalogue);
+        bool result = _myUserInfo.BuyProduct("fancySunglasses", productCatalog);
         Debug.Log("Fancy Sunglasses : " + _myUserInfo.wallet["fancySunglasses"]);
         Debug.Log($"User after buy sunglasses: {result} "+JsonUtility.ToJson(_myUserInfo));
         // UpdateUserInfo(_userIDToTest, _myUserInfo);
@@ -257,10 +257,10 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
 
 
         // ################# Consume Test #####################
-        _myUserInfo.ConsumeProduct("sunglasses", 1, _productCatalogue);
-        _myUserInfo.ConsumeProduct("fancySunglasses", 1, _productCatalogue);
+        _myUserInfo.ConsumeProduct("sunglasses", 1, productCatalog);
+        _myUserInfo.ConsumeProduct("fancySunglasses", 1, productCatalog);
         
-        _myUserInfo.ConsumeProduct("coin500", 500, _productCatalogue);
+        _myUserInfo.ConsumeProduct("coin500", 500, productCatalog);
         // UpdateUserInfo(_userIDToTest, _myUserInfo);
         UpdateUserInfo(_userInFirebase.UserId, _myUserInfo);
     }
@@ -281,7 +281,7 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
         //     .SetRawJsonValueAsync(JsonUtility.ToJson(userInfo.wallet));
     }
  
-    public void UpdateUserInfo(string uID, UserInfo userInfo)
+    private void UpdateUserInfo(string userID, UserInfo userInfo)
     {
         // Data가 새로 추가 되어서 이건 못 쓰겠다.
         // _dbReference.Child("users").Child(userId).SetRawJsonValueAsync(JsonUtility.ToJson(userInfo)).ContinueWith(
@@ -300,7 +300,22 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
         //다른 자식 노드를 덮어쓰지 않고 노드의 특정 자식에 동시에 쓰려면 UpdateChildrenAsync() 메서드를 사용합니다.
         // UpdateChildrenAsync() 를 호출할 때 키의 경로를 지정하여 하위 수준 자식 값을 업데이트할 수 있습니다. 
         Debug.Log("################ UPDATE INFO IN FIREBASE #################");
-        _dbReference.Child(_userDataKey).Child(uID).UpdateChildrenAsync(userInfo.ToDictionary());
+        _dbReference.Child(_userDataKey).Child(userID).UpdateChildrenAsync(userInfo.ToDictionary());
+    }
+
+    public bool UpdateInfo()
+    {
+        try
+        {
+            _dbReference.Child(_userDataKey).Child(_myUserInfo.userId).UpdateChildrenAsync(_myUserInfo.ToDictionary());
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return true;
     }
 
     // public void PushUserInfo(UserInfo userInfo)
@@ -325,7 +340,7 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
     #region FirebaseAuth
 
     // Handle initialization of the necessary firebase modules:
-    void InitializeFirebaseAuth() {
+    private void InitializeFirebaseAuth() {
         Debug.Log("Setting up Firebase Auth");
         _auth = FirebaseAuth.DefaultInstance;
         _auth.StateChanged += AuthStateChanged;
@@ -334,7 +349,7 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
     
 
     // Track state changes of the auth object.
-    void AuthStateChanged(object sender, System.EventArgs eventArgs)
+    private void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
         if (_auth.CurrentUser != _userInFirebase) {
             bool signedIn = _userInFirebase != _auth.CurrentUser && _auth.CurrentUser != null;
@@ -350,7 +365,7 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
 
     // Handle removing subscription and reference to the Auth instance.
     // Automatically called by a Monobehaviour after Destroy is called on it.
-    void OnDestroy() {
+    private void OnDestroy() {
         _auth.StateChanged -= AuthStateChanged;
         _auth = null;
     }
@@ -363,13 +378,27 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
     /// <summary>
     /// Execute only when you want to add new items.
     /// </summary>
-    private void InitProductInfo()
+    public void InitProductInfo()
     {
-        var product = new ProductInfo("coin500", "Coins 100", "100", true, 100);
-        _dbReference.Child("productCatalogue").Child(product.id).SetRawJsonValueAsync(JsonUtility.ToJson(product));
+        // var product = new ProductInfo("coin100", "Coins 100", "You can buy more stuff using these special coins....", "0.99", true, 100);
+        // _dbReference.Child("productCatalogue").Child(product.id).SetRawJsonValueAsync(JsonUtility.ToJson(product));
 
-        product = new ProductInfo("fancySunglasses", "Fancy Sunglasses", "300", false, 1);
-        _dbReference.Child("productCatalogue").Child(product.id).SetRawJsonValueAsync(JsonUtility.ToJson(product));
+        
+        // var product = new ProductInfo("starterPack", "Starter Pack", "You will get fancy sunglasses and a cute pet.", "2.99", true, 100);
+        // _dbReference.Child("productCatalogue").Child(product.id).SetRawJsonValueAsync(JsonUtility.ToJson(product));
+
+        // var product = new ProductInfo("petCat", "Pet Cat", "Your tiny pet, Kitty.", "0.99", false, 1);
+        // _dbReference.Child("productCatalogue").Child(product.id).SetRawJsonValueAsync(JsonUtility.ToJson(product));
+        //
+        // product = new ProductInfo("petFox", "Pet Fox", "Your tiny pet, Fox.", "0.99", false, 1);
+        // _dbReference.Child("productCatalogue").Child(product.id).SetRawJsonValueAsync(JsonUtility.ToJson(product));
+        
+        // product = new ProductInfo("effectCapybara", "Capybara Effect", "Capybara will be with you.", "0.99", false, 1);
+        // _dbReference.Child("productCatalogue").Child(product.id).SetRawJsonValueAsync(JsonUtility.ToJson(product));
+
+        
+        // product = new ProductInfo("fancySunglasses", "Fancy Sunglasses", "What a super fancy sunglasses!","0.99", false, 1);
+        // _dbReference.Child("productCatalogue").Child(product.id).SetRawJsonValueAsync(JsonUtility.ToJson(product));
     }
 
     private void GetProductCatalogue()
@@ -387,9 +416,7 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
                     {
                         Debug.Log(data.GetRawJsonValue());
                         ProductInfo info = JsonUtility.FromJson<ProductInfo>(data.GetRawJsonValue());
-                        _productCatalogue.Add(info.id, info);
-                        
-                        Debug.Log($"Increase Amount of {_productCatalogue[info.id].id}: {_productCatalogue[info.id].increaseAmount}");
+                        productCatalog.Add(info.id, info);
                     }
                     Debug.Log("######## GET PRODUCT CATALOGUE Ended ########");
                     _isCatalogueLoaded = true;
@@ -404,9 +431,26 @@ public class FirebaseDataManager : Singleton<FirebaseDataManager>
         
         // ############## Product ################
         // If products are loaded in the inspector, the product catalogue has been created well
-        _mySunglasses = _productCatalogue["fancySunglasses"];
-        _coins = _productCatalogue["coin500"];
-    } 
+        _mySunglasses = productCatalog["fancySunglasses"];
+        _coins = productCatalog["coin500"];
+    }
+
+    public bool Purchase(string productId)
+    {
+        bool result = _myUserInfo.BuyProduct(productId, productCatalog);
+        return result;
+    }
+
+    public bool Consume(string productId, int amountToConsume)
+    {
+        bool result = _myUserInfo.ConsumeProduct(productId, amountToConsume, productCatalog);
+        return result;
+    }
+    
+    public bool CheckProductInWallet(string productId)
+    {
+        return _myUserInfo.wallet.TryGetValue(productId, out int count);
+    }
 
     #endregion
 
