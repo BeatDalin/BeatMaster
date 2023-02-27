@@ -19,6 +19,14 @@ public class Store : MonoBehaviour
     [SerializeField]
     private GameObject[] _popupPanel; //panels 0:_purchasePanel, 1:_noMoneyPanel, 2: _lockedPanel
 
+    [Header("Product Info")] 
+    [SerializeField]
+    private Sprite[] _moneySprite;
+    [SerializeField] 
+    private Text _productTitle;
+    [SerializeField] 
+    private Text _productDescription;
+    
 
     [Header("Popup Buttons")]
     [SerializeField]
@@ -181,7 +189,7 @@ public class Store : MonoBehaviour
 
             _paidItem[index] = Instantiate(_paidItemBtn, _paidItemContent.transform);
             _paidItem[index].transform.GetChild(0).GetComponent<Image>().sprite =
-                _changeChar.ChangeItemSprite((StoreData.PaidItemName)index);
+                _changeChar.ChangePaidItemSprite((StoreData.PaidItemName)index);
             _paidItem[index].transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
                 _storeData.paidItemData[index].price.ToString();
             if (_storeData.paidItemData[index].isPurchased)
@@ -269,19 +277,25 @@ public class Store : MonoBehaviour
     // 해금되었을 때만 호출
     private void SetPurchasePopup(int charNum)
     {
-        _popupPanel[0].transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+        _popupPanel[0].transform.GetChild(0).GetChild(1).gameObject.SetActive(false); // Item image
 
         _popupPanel[0].transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite =
-            ((Image)_character[charNum].targetGraphic).sprite;
-        _popupPanel[0].transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
-
+            ((Image)_character[charNum].targetGraphic).sprite; // Square sprite
+        _popupPanel[0].transform.GetChild(0).GetChild(0).gameObject.SetActive(true); // Square
+        _productTitle.text = _storeData.characterData[charNum].characterName.ToString(); // CharacterName
+        _productDescription.text = _storeData.characterData[charNum].characterDescription; // CharacterDescription
+        
         // 구매 안 한 상태일 때 구매하기 버튼 노출
         if (!_storeData.characterData[charNum].isPurchased && _storeData.characterData[charNum].isUnlocked)
         {
             _ifPurchased.transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
-                _storeData.characterData[charNum].price.ToString();
-            _ifPurchased.transform.GetChild(1).gameObject.SetActive(true);
-
+                _storeData.characterData[charNum].price.ToString(); // price text
+            
+            _ifPurchased.transform.GetChild(1).GetChild(1).GetComponent<Image>().sprite =
+                _moneySprite[_storeData.characterData[charNum].isPaidItem ? 1 : 0]; // Money sprite
+            
+            _ifPurchased.transform.GetChild(1).gameObject.SetActive(true); // SetActive price text, purchaseBtn
+            
             _popupBtn[0].onClick.AddListener(delegate { PurchaseCharacter(charNum); });
         }
 
@@ -343,18 +357,23 @@ public class Store : MonoBehaviour
     private void SetItemPopup(StoreData.ItemPart itemPart, StoreData.ItemName itemName)
     {
         int itemNum = (int)itemName;
-        _popupPanel[0].transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-
+        _popupPanel[0].transform.GetChild(0).GetChild(0).gameObject.SetActive(false); // Character image
         _popupPanel[0].transform.GetChild(0).GetChild(1).GetComponent<Image>().sprite =
-            _item[itemNum].transform.GetChild(0).GetComponent<Image>().sprite;
+            _item[itemNum].transform.GetChild(0).GetComponent<Image>().sprite; // Item Sprite
         _popupPanel[0].transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
-
+        _productTitle.text = _storeData.itemData[itemNum].itemName.ToString(); // Item Name
+        _productDescription.text = _storeData.itemData[itemNum].itemDescription; // Item Description
+        
         // 구매 안 한 상태일 때 구매하기 버튼 노출
         if (!_storeData.itemData[itemNum].isPurchased && _storeData.itemData[itemNum].isUnlocked)
         {
             _ifPurchased.transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
-                _storeData.itemData[itemNum].price.ToString();
-            _ifPurchased.transform.GetChild(1).gameObject.SetActive(true);
+                _storeData.itemData[itemNum].price.ToString(); // price text
+            
+            _ifPurchased.transform.GetChild(1).GetChild(1).GetComponent<Image>().sprite =
+                _moneySprite[_storeData.itemData[itemNum].isPaidItem ? 1 : 0]; // Money sprite
+            
+            _ifPurchased.transform.GetChild(1).gameObject.SetActive(true); // SetActive price text, purchaseBtn
 
             _popupBtn[0].onClick.AddListener(delegate { PurchaseItem(itemPart, itemName); });
         }
@@ -431,17 +450,25 @@ public class Store : MonoBehaviour
     private void SetPaidItemPopup(StoreData.PaidItemName paidItemName)
     {
         int itemNum = (int)paidItemName;
-        _popupPanel[0].transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-
+        _popupPanel[0].transform.GetChild(0).GetChild(0).gameObject.SetActive(false); // Character image 
         _popupPanel[0].transform.GetChild(0).GetChild(1).GetComponent<Image>().sprite =
-            _paidItem[itemNum].transform.GetChild(0).GetComponent<Image>().sprite;
-        _popupPanel[0].transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+            _paidItem[itemNum].transform.GetChild(0).GetComponent<Image>().sprite; // Item Sprite
+        _popupPanel[0].transform.GetChild(0).GetChild(1).gameObject.SetActive(true); // Item 
+        _productTitle.text = _storeData.paidItemData[itemNum].paidItemName.ToString(); // paid Item Name
+        _productDescription.text = _storeData.paidItemData[itemNum].paidItemDescription; // paid Item Description
 
         // 구매 안 한 상태일 때 구매하기 버튼 노출
         if (!_storeData.paidItemData[itemNum].isPurchased)
         {
             _ifPurchased.transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
-                _storeData.paidItemData[itemNum].price.ToString();
+                _storeData.paidItemData[itemNum].price.ToString(); // price text
+            
+            _ifPurchased.transform.GetChild(1).GetChild(1).GetComponent<Image>().sprite =
+                _moneySprite[1]; // Money sprite
+            
+            _ifPurchased.transform.GetChild(1).gameObject.SetActive(true); // SetActive price text, purchaseBtn
+
+            
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(true);
 
             _popupBtn[0].onClick.AddListener(delegate { PurchasePaidItem(paidItemName); });
