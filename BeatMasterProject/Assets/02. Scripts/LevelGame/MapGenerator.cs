@@ -420,7 +420,6 @@ public class MapGenerator : MonoBehaviour
                         }
                     }
 
-                    //Debug.DrawRay(new Vector2(startXPosition + startXOffset, 100f), Vector2.down * 1000, Color.red, 100f);
                     RaycastHit2D longStartHit = Physics2D.Raycast(new Vector2(startXPosition + startXOffset, 100f), Vector2.down, 1000, _tileLayer);
 
                     if (longStartHit)
@@ -432,7 +431,6 @@ public class MapGenerator : MonoBehaviour
                         _objectGenerator.RecordLongPos(new Vector3(startXPosition + startXOffset, startYPosition, 0));
                     }
 
-                    //Debug.DrawRay(new Vector2(endXPosition + endXOffset, 100f), Vector2.down * 1000, Color.blue, 100f);
                     RaycastHit2D longEndHit = Physics2D.Raycast(new Vector2(endXPosition + endXOffset, 100f), Vector2.down, 1000, _tileLayer);
 
                     if (longEndHit)
@@ -480,15 +478,12 @@ public class MapGenerator : MonoBehaviour
         // 투명하게 할 롱 노트 구간의 시작점과 끝점을 찾는다.
         int startXCeil = Mathf.CeilToInt(startXPosition + startXOffset);
 
-        //Debug.Log($"{startXPosition}  {startXOffset}  {(Mathf.Round(startXOffset * 100) / 100)}  {startXCeil}");
-
         if ((Mathf.Round(startXOffset * 100) / 100) % 1 >= 0.199f || (Mathf.Round(startXOffset * 100) / 100) == 1)
         {
             startXCeil += 1;
         }
 
         int endXFloor = Mathf.FloorToInt(endXPosition + endXOffset);
-        //Debug.Log($"{endXPosition}  {endXOffset}  {(Mathf.Round(endXOffset * 100) / 100)}  {endXFloor}");
 
         if ((Mathf.Round(endXOffset * 100) / 100) % 1 <= 0.801f)
         {
@@ -498,59 +493,67 @@ public class MapGenerator : MonoBehaviour
         // 시작과 끝 사이 구간을 투명하게 한다.
         for (int k = startXCeil; k <= endXFloor; k++)
         {
-            float y = 0;
-            RaycastHit2D hit = Physics2D.Raycast(new Vector2(k, 100f), Vector2.down, 1000, _tileLayer);
+            float midY = 0;
+            RaycastHit2D midHit = Physics2D.Raycast(new Vector2(k, 100f), Vector2.down, 1000, _tileLayer);
             
-            //Debug.DrawRay(new Vector2(k, 100f), Vector2.down * 200f, Color.red, 100f);
-            if (hit)
+            if (midHit)
             {
-                y = hit.point.y;
+                midY = midHit.point.y;
             }
 
-            for (float l = y + 1; l >= _minTileY - 1; l--)
+            for (float l = midY + 3; l >= _minTileY - 1; l--)
             {
-                Vector3Int tilePosition = _groundTilemap.WorldToCell(new Vector3(k, l, 0f));
-                Color color = new Color(1f, 1f, 1f, 0f);
+                Vector3Int midPosition = _groundTilemap.WorldToCell(new Vector3(k, l, 0f));
+                Color midColor = new Color(1f, 1f, 1f, 0f);
 
-                _groundTilemap.SetTileFlags(tilePosition, TileFlags.None);
-                _groundTilemap.SetColor(tilePosition, color);
+                _groundTilemap.SetTileFlags(midPosition, TileFlags.None);
+                _groundTilemap.SetColor(midPosition, midColor);
             }
         }
 
         // 롱 노트 시작의 전 타일과 끝의 뒤 타일을 사이드 타일로 바꿔 준다.
         // 시작
-        float sideTileY = 0;
-        RaycastHit2D sideTileHit = Physics2D.Raycast(new Vector2(startXCeil - 1, 100f), Vector2.down, 1000, _tileLayer);
+        float sideY = 0;
+        float sideYOffset = 0f;
+        RaycastHit2D sideHit = Physics2D.Raycast(new Vector2(startXCeil - 1, 100f), Vector2.down, 1000, _tileLayer);
 
-        if (sideTileHit)
+        if (sideHit)
         {
-            sideTileY = sideTileHit.point.y;
+            sideY = sideHit.point.y;
+            sideYOffset = sideY - (int)sideY;
+            sideYOffset = (sideYOffset < 0) ? (sideYOffset + 0.5f) : (sideYOffset - 0.5f);
         }
 
-        Vector3Int sideTilePosition = _groundTilemap.WorldToCell(new Vector3(startXCeil - 1, sideTileY, 0f));
-        _groundTilemap.SetTile(sideTilePosition, _topTiles[(int)_GroundType.RightSide]);
+        Vector3Int sidePosition = _groundTilemap.WorldToCell(new Vector3(startXCeil - 1, sideY, 0f));
 
-        for (float k = sideTileY - 1; k >= _minTileY - 1; k--)
+        _groundTilemap.SetTile(GetTileChangeData(_TileType.GroundTop, (int)_GroundType.RightSide,
+                sidePosition, new Vector3(0f, sideYOffset, 0f)), false);
+
+        for (float k = sideY - 1; k >= _minTileY - 1; k--)
         {
-            sideTilePosition = _groundTilemap.WorldToCell(new Vector3(startXCeil - 1, k, 0f));
-            _groundTilemap.SetTile(sideTilePosition, _underTiles[(int)_GroundType.RightSide]);
+            sidePosition = _groundTilemap.WorldToCell(new Vector3(startXCeil - 1, k, 0f));
+            _groundTilemap.SetTile(sidePosition, _underTiles[(int)_GroundType.RightSide]);
         }
 
         // 끝
-        sideTileHit = Physics2D.Raycast(new Vector2(endXFloor + 1, 100f), Vector2.down, 1000, _tileLayer);
+        sideHit = Physics2D.Raycast(new Vector2(endXFloor + 1, 100f), Vector2.down, 1000, _tileLayer);
 
-        if (sideTileHit)
+        if (sideHit)
         {
-            sideTileY = sideTileHit.point.y;
+            sideY = sideHit.point.y;
+            sideYOffset = sideY - (int)sideY;
+            sideYOffset = (sideYOffset < 0) ? (sideYOffset + 0.5f) : (sideYOffset - 0.5f);
         }
 
-        sideTilePosition = _groundTilemap.WorldToCell(new Vector3(endXFloor + 1, sideTileY, 0f));
-        _groundTilemap.SetTile(sideTilePosition, _topTiles[(int)_GroundType.LeftSide]);
+        sidePosition = _groundTilemap.WorldToCell(new Vector3(endXFloor + 1, sideY, 0f));
 
-        for (float k = sideTileY - 1; k >= _minTileY - 1; k--)
+        _groundTilemap.SetTile(GetTileChangeData(_TileType.GroundTop, (int)_GroundType.LeftSide,
+                sidePosition, new Vector3(0f, sideYOffset, 0f)), false);
+
+        for (float k = sideY - 1; k >= _minTileY - 1; k--)
         {
-            sideTilePosition = _groundTilemap.WorldToCell(new Vector3(endXFloor + 1, k, 0f));
-            _groundTilemap.SetTile(sideTilePosition, _underTiles[(int)_GroundType.LeftSide]);
+            sidePosition = _groundTilemap.WorldToCell(new Vector3(endXFloor + 1, k, 0f));
+            _groundTilemap.SetTile(sidePosition, _underTiles[(int)_GroundType.LeftSide]);
         }
     }
 
