@@ -44,8 +44,8 @@ public class BackgroundController : MonoBehaviour
         Vector2 totalSize = new Vector2(defaultSize.x * _defaultScale.x, defaultSize.y * _defaultScale.y);
         
         int currentWidth = _mySpriteRenderers[0].sprite.texture.width;
-        int currenthHeight = _mySpriteRenderers[0].sprite.texture.height;
-        transform.localScale = new Vector2(totalSize.x / currentWidth, totalSize.y / currenthHeight) *
+        int currentHeight = _mySpriteRenderers[0].sprite.texture.height;
+        transform.localScale = new Vector2(totalSize.x / currentWidth, totalSize.y / currentHeight) *
                                (_characterMovement.MoveSpeed / _defaultSpeed);
     }
 
