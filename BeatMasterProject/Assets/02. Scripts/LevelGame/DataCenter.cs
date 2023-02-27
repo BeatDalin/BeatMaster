@@ -113,7 +113,7 @@ public class DataCenter : MonoBehaviour
                 temp.level = j + 1;
                 temp.isUnlocked = j == 0;
                 temp.unlockCharNum = j <= 1 ? j + 1 : 2; // 레벨 번호대로 캐릭터 해금, 또는 마지막 character index 부여)
-                
+
                 _gameData.stageData[i].levelData[j] = temp;
 
                 /*leaderboard.score = 0;
@@ -121,14 +121,14 @@ public class DataCenter : MonoBehaviour
             }
         }
 
-/*        _gameData.leaderboardData = new LeaderboardData[_gameData.stageData.Length];
-        for(int i=0; i<_gameData.leaderboardData.Length; i++)
-        {
-            _gameData.leaderboardData[i].deathCount = 0;
-            _gameData.leaderboardData[i].playTime = 0;
-            _gameData.leaderboardData[i].mapClearedCount=0;
-            _gameData.leaderboardData[i].starCount = 0;
-        }*/
+        /*        _gameData.leaderboardData = new LeaderboardData[_gameData.stageData.Length];
+                for(int i=0; i<_gameData.leaderboardData.Length; i++)
+                {
+                    _gameData.leaderboardData[i].deathCount = 0;
+                    _gameData.leaderboardData[i].playTime = 0;
+                    _gameData.leaderboardData[i].mapClearedCount=0;
+                    _gameData.leaderboardData[i].starCount = 0;
+                }*/
 
         _achievement.isFirstPurchased = false;
         _achievement.isStarted = false;
@@ -303,7 +303,7 @@ public class DataCenter : MonoBehaviour
         {
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_first_item, success => _gameData.achievement.isFirstItem = true);
         }
-        if (!_gameData.achievement.isCrownItem && (int)itemName==5)
+        if (!_gameData.achievement.isCrownItem && (int)itemName == 5)
         {
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_crown_item, success => _gameData.achievement.isCrownItem = true);
         }
@@ -332,8 +332,8 @@ public class DataCenter : MonoBehaviour
         return _gameData.achievement;
     }
 
-/*    public LeaderboardData GetLeaderboardData(int stageIdx, int levelIdx)
-    {
-        return _gameData.stageData[stageIdx].leaderboardData[levelIdx];
-    }*/
+    /*    public LeaderboardData GetLeaderboardData(int stageIdx, int levelIdx)
+        {
+            return _gameData.stageData[stageIdx].leaderboardData[levelIdx];
+        }*/
 }

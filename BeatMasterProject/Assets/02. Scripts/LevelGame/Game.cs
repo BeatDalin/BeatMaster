@@ -70,15 +70,15 @@ public abstract class Game : MonoBehaviour
     protected RewindTime rewindTime;
     protected MapGenerator mapGenerator;
 
-    [Header("Event Tracks")] 
-    [SerializeField] [EventID] protected string shortID;
-    [SerializeField] [EventID] protected string longID;
-    [SerializeField] [EventID] protected string jumpCheckID;
-    [SerializeField] [EventID] protected string attackCheckID;
-    [SerializeField] [EventID] protected string longCheckMiddleID;
-    [SerializeField] [EventID] protected string longCheckStartID;
-    [SerializeField] [EventID] protected string longCheckEndID;
-    
+    [Header("Event Tracks")]
+    [SerializeField][EventID] protected string shortID;
+    [SerializeField][EventID] protected string longID;
+    [SerializeField][EventID] protected string jumpCheckID;
+    [SerializeField][EventID] protected string attackCheckID;
+    [SerializeField][EventID] protected string longCheckMiddleID;
+    [SerializeField][EventID] protected string longCheckStartID;
+    [SerializeField][EventID] protected string longCheckEndID;
+
     protected virtual void Awake()
     {
         mapGenerator = FindObjectOfType<MapGenerator>();
@@ -386,7 +386,7 @@ public abstract class Game : MonoBehaviour
         }
 
         //leaderboard.score = _leaderboardManager.CalculateScore(curLevelData.star, deathCount);
-        int score= _leaderboardManager.CalculateScore(curLevelData.star, deathCount);
+        int score = _leaderboardManager.CalculateScore(curLevelData.star, deathCount);
         _leaderboardManager.ReportScore(stageIdx, levelIdx, score);
 
         // Save updated level data into json file
@@ -415,7 +415,7 @@ public abstract class Game : MonoBehaviour
         //     DataCenter.Instance.UpdatePlayerData(stageIdx + 2, 1, coinCount);
         // }
         DataCenter.Instance.UpdatePlayerData(stageIdx + 1, levelIdx + 2, coinCount);
-        
+
 
     }
 
