@@ -26,7 +26,10 @@ public abstract class Game : MonoBehaviour
     [SerializeField] protected GameUI gameUI; // LevelGameUI or BossGameUI will come in.
     protected CharacterMovement characterMovement;
     protected MonsterPooling monsterPooling;
-    protected EffectAnim _playerAnim;
+    protected EffectAnim playerAnim;
+
+    private bool _isFeverTime;
+    protected FeverTimeController feverTimeController;
 
     [Header("Game Play")]
     public GameState curState = GameState.Idle;
@@ -82,11 +85,13 @@ public abstract class Game : MonoBehaviour
     {
         mapGenerator = FindObjectOfType<MapGenerator>();
         rewindTime = FindObjectOfType<RewindTime>();
-        _playerAnim = FindObjectOfType<EffectAnim>();
+        playerAnim = FindObjectOfType<EffectAnim>();
         characterMovement = FindObjectOfType<CharacterMovement>();
         monsterPooling = FindObjectOfType<MonsterPooling>();
         objectGenerator = FindObjectOfType<ObjectGenerator>();
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
+        feverTimeController = FindObjectOfType<FeverTimeController>();
+        
         Koreographer.Instance.ClearEventRegister(); // Initialize Koreographer Event Regiser
         // Save Point Event Track
         Koreographer.Instance.RegisterForEventsWithTime(_checkPointID, SaveCheckPoint);
@@ -124,7 +129,7 @@ public abstract class Game : MonoBehaviour
 
     protected IEnumerator CoStartWithDelay(int startSample = 0)
     {
-        _playerAnim.SetEffectBool(false);
+        playerAnim.SetEffectBool(false);
         // UI Timer
         // gameUI.timePanel.SetActive(true);
         // // Wait for Scene Transition to end
@@ -185,10 +190,12 @@ public abstract class Game : MonoBehaviour
         {
             // Entered new check point
             Debug.Log($"SaveCheckPoint: Sample {sampleTime} > Rewind {rewindSampleTime}");
+
             // DisableMonster Clear
             if (evt.StartSample != 0)
             {
                 monsterPooling.ResetPool();
+                feverTimeController.ResetDecreasingAmount();
                 //rewindTime.ClearRewindList();
             }
             // Record sample time to play music
@@ -248,6 +255,8 @@ public abstract class Game : MonoBehaviour
             else if (pressedTime <= eventRange[idx, 1])
             {
                 tempResult = BeatResult.Perfect;
+                // TODO FeverTimeController에서 무언가 실행
+                feverTimeController.IncreaseFeverGage();
             }
             else
             {
