@@ -32,6 +32,7 @@ public class Coin : MonoBehaviour
     {
         if (col.gameObject.tag.Equals("Player"))
         {
+            SoundManager.instance.PlaySFX("Coin");
             MoveCoin(_monsterPooling._coinScreenPos, _monsterPooling.coinParent);
         }
     }

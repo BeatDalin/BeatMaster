@@ -347,6 +347,7 @@ public abstract class Game : MonoBehaviour
         {
             curLevelData.star = 3;
             //curLevelData.alpha = 1f;
+            gameUI.ShowStar(3);
 
             // Unlock Character
             DataCenter.Instance.GetStoreData().characterData[curLevelData.unlockCharNum].isUnlocked = true;
@@ -362,7 +363,7 @@ public abstract class Game : MonoBehaviour
         {
             curLevelData.star = curLevelData.star > 2 ? curLevelData.star : 2;
             //curLevelData.alpha = 2 / 3f;
-
+            gameUI.ShowStar(2);
 
             // Unlock Character
             Debug.Log(curLevelData.unlockCharNum);
@@ -376,6 +377,8 @@ public abstract class Game : MonoBehaviour
         {
             curLevelData.star = curLevelData.star > 1 ? curLevelData.star : 1;
             //curLevelData.alpha = 1 / 3f;
+            gameUI.ShowStar(1);
+
             if (achieve.isStarted == false)
             {
                 GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_first_one_star, success => achieve.isStarted = true);

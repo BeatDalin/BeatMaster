@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class StageInfo
 {
@@ -13,7 +14,6 @@ public class StageInfo
     
     public Vector3 mapPos; // StageUI에서 보여줄 map 영역
     public Vector3 camPos; // StageUI BG에서 보여줄 map 영역
-
     public StageInfo(int stageIdx, string stageDescription, Vector3 mapPos, Vector3 camPos)
     {
         this.stageIdx = stageIdx;
@@ -52,6 +52,10 @@ public class StageInformation : MonoBehaviour
     [SerializeField] private GameObject[] _camPos;
     // [SerializeField] private GameObject _clearImg;
     // [SerializeField] private GameObject[] _starImg;
+
+    [SerializeField] private string _descriptionString;
+    [SerializeField] private DOTweenAnimation _descriptionDoTweenAnimation;
+    
     private readonly String[] _stageDescription =
     {
         "\"Exciting first adventure!\"", "\"What will happen in the city?\"",
@@ -106,6 +110,7 @@ public class StageInformation : MonoBehaviour
     
     private void SetStageInfo(int stageIdx)
     {
+        _description.text = "";   
         SoundManager.instance.PlaySFX("Touch");
         _stageBtns.SetActive(false);
         
@@ -130,11 +135,11 @@ public class StageInformation : MonoBehaviour
         _maskTarget.GetComponent<RectTransform>().localPosition = _stageInfo[stageIdx].mapPos;
         
         // description Txt
-        _description.text = _stageInfo[stageIdx].stageDescription;
-
+        _descriptionString = _stageInfo[stageIdx].stageDescription;
+        
         uiStage = _stageInfo[stageIdx].stageIdx;
         
-        // Toggles
+        // Toggle
         SetToggleStatus(_levelToggles, uiStage);
         
         // Camera
@@ -163,6 +168,9 @@ public class StageInformation : MonoBehaviour
 
         yield return new WaitForSeconds(0.3f);  
         _stagePanel.SetActive(currentSize > targetSize);
+        _description.DOText(_descriptionString, 2f);
+        _descriptionDoTweenAnimation.DORestart();
+        
         _stageBtns.SetActive(!(currentSize > targetSize));
     }
     
@@ -201,6 +209,7 @@ public class StageInformation : MonoBehaviour
             
             toggles[i].GetComponent<Toggle>().interactable = levelData.isUnlocked; // 클릭 막기
             toggles[i].transform.GetChild(0).GetComponent<Image>().sprite = _toggleSprite[levelData.isUnlocked ? 0 : 1]; // 잠금 여부에 따라 toggle sprite 변경
+            toggles[i].transform.GetChild(0).GetComponent<Image>().type = Image.Type.Sliced;
             toggles[i].transform.GetChild(2).gameObject.SetActive(levelData.isUnlocked); // Text 영역
 
             if (levelData.isUnlocked)
@@ -267,18 +276,20 @@ public class StageInformation : MonoBehaviour
         else
         {
             _notYetPopup.SetActive(true);
+            _notYetPopup.GetComponent<DOTweenAnimation>().DORestart();
+
         }
     }
 
     public void OnClickLeftBtn()
     {
-        // SoundManager.instance.PlaySFX("Touch");
+        SoundManager.instance.PlaySFX("Touch");
         SetStageInfo(uiStage-1);
     }
 
     public void OnClickRightBtn()
     { 
-        // SoundManager.instance.PlaySFX("Touch");
+        SoundManager.instance.PlaySFX("Touch");
         SetStageInfo(uiStage+1);
     }
 
