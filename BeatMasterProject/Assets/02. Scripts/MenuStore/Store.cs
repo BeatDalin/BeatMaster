@@ -181,7 +181,7 @@ public class Store : MonoBehaviour
 
             _paidItem[index] = Instantiate(_paidItemBtn, _paidItemContent.transform);
             _paidItem[index].transform.GetChild(0).GetComponent<Image>().sprite =
-                _changeChar.ChangeItemSprite((StoreData.PaidItemName)index);
+                _changeChar.ChangePaidItemSprite((StoreData.PaidItemName)index);
             _paidItem[index].transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
                 _storeData.paidItemData[index].price.ToString();
             if (_storeData.paidItemData[index].isPurchased)
