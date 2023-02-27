@@ -72,10 +72,10 @@ public class BuildingManager : MonoBehaviour
             Building building = _buildings[i].GetComponent<Building>();
             
             bool isClear = currStageData[i].levelClear;
-            float alpha = currStageData[i].alpha;
+            //float alpha = currStageData[i].alpha;
             int star = currStageData[i].star;
 
-            building.ShowBuilding(isStageClear, isClear, alpha, star);
+            //building.ShowBuilding(isStageClear, isClear, alpha, star);
         }
     }
 
