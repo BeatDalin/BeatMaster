@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -422,7 +422,7 @@ MonoBehaviour:
   monsterList: []
   coinParent: {fileID: 970478227}
   _mapEventID: Stage4_Level1_Map
-  _shortEventID: Stage4_Level1_Short
+  _shortEventID: Stage4_Level1_Convert_MIDI_Short
   _mapEventList: []
   _shortEventList: []
   _monsterPrefabList:
@@ -447,7 +447,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &270507030
 GameObject:
@@ -878,8 +878,8 @@ MonoBehaviour:
   gameUI: {fileID: 0}
   curState: 0
   curSample: 0
-  _spdEventID: Stage4_Level1_Spd
-  _checkPointID: Stage4_Level1_CheckPoint
+  _spdEventID: Stage4_Level1_MIDI_Spd
+  _checkPointID: Stage4_Level1_MIDI_Spd
   rewindShortIdx: 0
   rewindLongIdx: 0
   rewindSampleTime: -1
@@ -891,14 +891,15 @@ MonoBehaviour:
   _stageIdx: 3
   _levelIdx: 0
   coinCount: 0
-  shortID: Stage4_Level1_Short
+  shortID: Stage4_Level1_Convert_MIDI_Short
   longID: Stage4_Level1_Long
-  jumpCheckID: Stage4_Level1_JumpCheck
-  attackCheckID: Stage4_Level1_AttackCheck
-  longCheckMiddleID: Stage4_Level1_LongCheckMiddle
-  longCheckStartID: Stage4_Level1_LongCheckStart
-  longCheckEndID: Stage4_Level1_LongCheckEnd
+  jumpCheckID: Stage4_Level1_Convert_MIDI_JumpCheck
+  attackCheckID: Stage4_Level1_Convert_MIDI_AttackCheck
+  longCheckMiddleID: Stage4_Level1_MIDI_LongCheckMiddle
+  longCheckStartID: Stage4_Level1_MIDI_LongCheckStart
+  longCheckEndID: Stage4_Level1_MIDI_LongCheckEnd
   _changeChar: {fileID: 18329012}
+  isPress: 0
 --- !u!4 &612035090
 Transform:
   m_ObjectHideFlags: 0
@@ -6551,6 +6552,63 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1504597419
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6026521773323550228, guid: 406212101a8e34359be0dadf71063b43, type: 3}
+      propertyPath: m_Name
+      value: ResoucesChanger
+      objectReference: {fileID: 0}
+    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
+      propertyPath: m_RootOrder
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 406212101a8e34359be0dadf71063b43, type: 3}
 --- !u!198 &1516532131 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 7686366972295778540, guid: efac86a02cddd4c58899360b00d58930, type: 3}
@@ -7268,80 +7326,6 @@ MonoBehaviour:
     height: 0
   _scaleHeight: 0
   _scaleWidth: 0
---- !u!1 &1811512135
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1811512137}
-  - component: {fileID: 1811512136}
-  m_Layer: 0
-  m_Name: ResoucesChanger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1811512136
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1811512135}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7df77eeb86c55c947bf044f6c5e623b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _changingResources:
-  - {fileID: 11400000, guid: 5894df63c24b48947a9429d9e5dae341, type: 2}
-  - {fileID: 11400000, guid: 0ba22824d8e8eb34bac6a55a9b8c21cb, type: 2}
-  - {fileID: 11400000, guid: 2caf4524f9d43984f80657f6fd53a5e9, type: 2}
-  - {fileID: 11400000, guid: d331cc4ffe2d1dc4eb9a0dfdef1c1cbd, type: 2}
-  _hueCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _lerpTime: 1
---- !u!4 &1811512137
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1811512135}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 18
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &1816595897 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 7686366973065561528, guid: efac86a02cddd4c58899360b00d58930, type: 3}
@@ -7566,10 +7550,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   theme: 3
   _isEditMode: 0
-  _mapEventID: Stage4_Level1_Map
-  _shortEventID: Stage4_Level1_Short
+  _mapEventID: Stage4_Level1_MIDI_Map
+  _shortEventID: Stage4_Level1_Convert_MIDI_Short
   _longEventID: Stage4_Level1_Long
-  _spdEventID: Stage4_Level1_Spd
+  _spdEventID: Stage4_Level1_MIDI_Spd
   _groundTilemap: {fileID: 1828062194}
   _interactionTilemap: {fileID: 1912302631}
   shortTileParticleList: []
@@ -7601,10 +7585,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dabd7d5bc70bae2499f342adb8dbe61e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapEventID: Stage4_Level1_Map
+  _mapEventID: Stage4_Level1_MIDI_Map
   _starObj: {fileID: 7397218863573384310, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
   _itemContainer: {fileID: 39094806}
-  _checkPointEventID: Stage4_Level1_CheckPoint
+  _checkPointEventID: Stage4_Level1_MIDI_Spd
   _checkPointList: []
   _checkPointPrefab: {fileID: 7384471502369270403, guid: 068390efa75ccce49a3cb31d7915638b, type: 3}
   checkPointPos: []
@@ -8126,11 +8110,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: checkpointID
-      value: Stage4_Level1_CheckPoint
+      value: Stage4_Level1_MIDI_Spd
       objectReference: {fileID: 0}
     - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: speedEventID
-      value: Stage4_Level1_Spd
+      value: Stage4_Level1_MIDI_Spd
       objectReference: {fileID: 0}
     - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: _rayDistanceOffset
