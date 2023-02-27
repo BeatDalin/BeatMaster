@@ -12,6 +12,10 @@ public class ScrollViewExtension : MonoBehaviour, IBeginDragHandler, IDragHandle
     private Vector2 _nowVector2 = new Vector2(0, 0);
     private int _preVector2X = 0;
 
+    private void OnEnable()
+    {
+        _scrollRect.SetHorizontalNormalizedPosition(0);
+    }
     private void Awake()
     {
         _scrollRect = GetComponent<CustomScrollRect>();
