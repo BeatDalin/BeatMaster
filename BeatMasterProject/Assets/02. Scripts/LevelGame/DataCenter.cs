@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -202,6 +203,10 @@ public class DataCenter : MonoBehaviour
         _gameData.storeData.itemCount = Enum.GetValues(typeof(StoreData.ItemName)).Length;
         _gameData.storeData.itemData = new ItemData[_gameData.storeData.itemCount];
         CreateItemData();
+
+        _gameData.storeData.paidItemCount = Enum.GetValues(typeof(StoreData.PaidItemName)).Length;
+        _gameData.storeData.paidItemData = new PaidItemData[_gameData.storeData.paidItemCount];
+        CreatePaidItemData();
     }
 
     private void CreateCharacterData()
@@ -209,6 +214,7 @@ public class DataCenter : MonoBehaviour
         CharacterData[] tempCharacterData = _gameData.storeData.characterData;
 
         int[] charPrice = { 0, 150, 150 };
+        bool[] charIsPaidItem = { false, false, true };
 
         for (int i = 0; i < _gameData.storeData.charCount; i++)
         {
@@ -218,6 +224,7 @@ public class DataCenter : MonoBehaviour
             tempCharacterData[i].unlockLevel = i == 0 ? -1 : i - 1;
             tempCharacterData[i].isPurchased = i == 0;
             tempCharacterData[i].isUnlocked = i == 0;
+            tempCharacterData[i].isPaidItem = charIsPaidItem[i];
         }
 
         _gameData.storeData.characterData = tempCharacterData;
@@ -232,17 +239,19 @@ public class DataCenter : MonoBehaviour
         {
             StoreData.ItemPart.Background,
             StoreData.ItemPart.Attach,
-            StoreData.ItemPart.Face,
             StoreData.ItemPart.Head,
             StoreData.ItemPart.Head,
             StoreData.ItemPart.Attach,
-            StoreData.ItemPart.Head,
+            StoreData.ItemPart.Face,
+            StoreData.ItemPart.Attach,
             StoreData.ItemPart.Background,
             StoreData.ItemPart.Head,
             StoreData.ItemPart.Background,
             StoreData.ItemPart.Background,
+            StoreData.ItemPart.Background
         };
-        int[] itemPrice = { 50, 50, 90, 70, 70, 150 };
+        int[] itemPrice = { 50, 50, 70, 70, 150, 0};
+        bool[] isPaidItem = { false, false, false, false, false, true, false, false, false, true, true, false };
 
         for (int i = 0; i < _gameData.storeData.itemCount; i++)
         {
@@ -251,9 +260,35 @@ public class DataCenter : MonoBehaviour
             tempItemData[i].isUnlocked = (int)tempItemData[i].itemName < (int)StoreData.ItemName.Crown; // crown전까지 unlocked true
             tempItemData[i].price = tempItemData[i].isUnlocked ? itemPrice[i] : 0;
             tempItemData[i].isPurchased = false;
+            tempItemData[i].isPaidItem = isPaidItem[i];
         }
 
         _gameData.storeData.itemData = tempItemData;
+    }
+
+    private void CreatePaidItemData()
+    {
+        StoreData.PaidItemName[] paidItemList = (StoreData.PaidItemName[])Enum.GetValues(typeof(StoreData.PaidItemName));
+        int[] paidItemPrice = { 3000, 1000 };
+
+        Dictionary<int, StoreData.ItemName[]> dicPackageItem = new Dictionary<int, StoreData.ItemName[]>();
+        dicPackageItem.Add(0, new StoreData.ItemName[]{StoreData.ItemName.Sunglasses, StoreData.ItemName.Pet1});
+        dicPackageItem.Add(1, new StoreData.ItemName[]{StoreData.ItemName.Pet2});
+
+        Dictionary<int, int[]> dicPackageChar = new Dictionary<int, int[]>();
+        dicPackageChar.Add(0, new int[] {0});
+        dicPackageChar.Add(1, new int[] {0});
+
+        
+        PaidItemData[] tempPaidItemData = _gameData.storeData.paidItemData;
+        for (int i = 0; i < _gameData.storeData.paidItemCount; i++)
+        {
+            tempPaidItemData[i].paidItemName = paidItemList[i];
+            tempPaidItemData[i].price = paidItemPrice[i];
+            tempPaidItemData[i].isPurchased = false; // 앱 삭제 후 다시 받은 경우 고려해야. 서버에서 받아와야할지도
+            tempPaidItemData[i].packageCharacterNum = dicPackageChar[i].ToArray();
+            tempPaidItemData[i].packageItemName = dicPackageItem[i];
+        }
     }
 
     public StoreData GetStoreData()
@@ -274,10 +309,12 @@ public class DataCenter : MonoBehaviour
     {
         _gameData.storeData.characterData[charNum].isPurchased = true;
         _gameData.playerData.playerItem -= _gameData.storeData.characterData[charNum].price;
+#if !UNITY_EDITOR
         if (!_gameData.achievement.isFirstPurchased)
         {
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_first_character, success => _gameData.achievement.isFirstPurchased = true);
         }
+#endif
         SaveData();
     }
 
@@ -299,6 +336,7 @@ public class DataCenter : MonoBehaviour
     {
         _gameData.storeData.itemData[(int)itemName].isPurchased = true;
         _gameData.playerData.playerItem -= _gameData.storeData.itemData[(int)itemName].price;
+#if !UNITY_EDITOR
         if (!_gameData.achievement.isFirstItem)
         {
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_first_item, success => _gameData.achievement.isFirstItem = true);
@@ -307,6 +345,7 @@ public class DataCenter : MonoBehaviour
         {
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_purchase_crown_item, success => _gameData.achievement.isCrownItem = true);
         }
+#endif
         SaveData();
     }
 
@@ -319,6 +358,18 @@ public class DataCenter : MonoBehaviour
     {
         Debug.Log((int)itemPart);
         _gameData.playerData.itemData[(int)itemPart] = (int)itemName;
+        SaveData();
+    }
+    
+    /// <summary>
+    /// 유료 아이템 구매 후 PaidItemData의 isPurchased 업데이트
+    /// 유료 아이템 구매 후 각 상품의 isPurchased, isUnlocked 업데이트
+    /// </summary>
+    /// <param name="paidItemName"></param>
+    public void UpdatePaidItemPurchaseData(StoreData.PaidItemName paidItemName)
+    {
+        _gameData.storeData.paidItemData[(int)paidItemName].isPurchased = true;
+        // To do : link achievement
         SaveData();
     }
 
