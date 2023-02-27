@@ -19,6 +19,7 @@ public struct PlayerData
     public int playerItem; // Player's item(coin) count
     public int playerChar; // Player's current Character index
     public int[] itemData; // equipped items [itemPart(enum), itemNum -1 == nothing] 
+    //public int mapClearedCount;
 }
 
 [Serializable]
@@ -27,6 +28,7 @@ public struct StageData
     public int stage;
     //public bool bossClear;
     public LevelData[] levelData; // contains four LevelData
+    //public LeaderboardData[] leaderboardData;
 }
 
 [Serializable]
@@ -38,7 +40,7 @@ public struct LevelData
     public int slowCount;
 
     public int star;
-    public float alpha;
+    //public float alpha;
     public int unlockCharNum; // 일단은 level 하나 당 한 캐릭터만 해금
     public bool levelClear;
     public bool isUnlocked;
@@ -59,21 +61,30 @@ public struct StoreData
     {
         Balloon = 0,
         Ribbon,
-        Sunglasses,
         SantaHat,
         MagicianHat,
         Crown,
+        Sunglasses,
         RabbitBand,
         Medal,
         FlowerCrown,
-        Pet,
+        Pet1,
+        Pet2,
         Empty = 99,
+    }
+
+    public enum PaidItemName
+    {
+        StarterPack = 0,
+        AdorablePet
     }
 
     public int charCount; // 상점 내 모든 캐릭터 수
     public int itemCount; // 상점 내 모든 아이템 수
+    public int paidItemCount; // 모든 유료 아이템 수
     public CharacterData[] characterData; // 모든 캐릭터 목록(해금 체크를 위함)
     public ItemData[] itemData; // 모든 아이템 목록
+    public PaidItemData[] paidItemData;
 }
 
 [Serializable]
@@ -85,6 +96,7 @@ public struct CharacterData
     public int unlockLevel;
     public bool isPurchased;
     public bool isUnlocked;
+    public bool isPaidItem;
 }
 
 [Serializable]
@@ -95,6 +107,17 @@ public struct ItemData
     public int price;
     public bool isPurchased;
     public bool isUnlocked;
+    public bool isPaidItem;
+}
+
+[Serializable]
+public struct PaidItemData
+{
+    public StoreData.PaidItemName paidItemName;
+    public int price;
+    public bool isPurchased;
+    public int[] packageCharacterNum;
+    public StoreData.ItemName[] packageItemName;
 }
 
 [Serializable]
@@ -120,3 +143,9 @@ public struct Achievement
     public bool isFirstPayment;
     public int playCount;
 }
+
+/*[Serializable]
+public struct LeaderboardData
+{
+    public int score;
+}*/

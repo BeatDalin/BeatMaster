@@ -339,10 +339,12 @@ public class NormalGame : Game
         // Post Processing
         _resourcesChanger.ResetPostProcessing();
         Achievement achieve = DataCenter.Instance.GetAchievementData();
+#if !UNITY_EDITOR
         if ((_rewindCount += 1) == 100)
         {
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_restart_over_hundred, success => achieve.isRestartedOverHundred = true);
         }
+#endif
     }
 
     private void IncreaseItem()

@@ -876,6 +876,7 @@ GameObject:
   m_Component:
   - component: {fileID: 612035090}
   - component: {fileID: 612035089}
+  - component: {fileID: 612035091}
   m_Layer: 0
   m_Name: NormalGame
   m_TagString: Untagged
@@ -934,6 +935,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &612035091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612035085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86814d98a44c81e409c8ba8763a80a1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &764350025
 GameObject:
   m_ObjectHideFlags: 0
@@ -6463,10 +6476,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelGameCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 6676748891086764741, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6676748891086764742, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
       propertyPath: m_Camera
       value: 
@@ -6548,22 +6557,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1430247609 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6676748891058336034, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
-  m_PrefabInstance: {fileID: 1430247605}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &1430247610 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6676748890495626811, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
-  m_PrefabInstance: {fileID: 1430247605}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1430247611 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6676748890748035021, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
@@ -9377,6 +9370,10 @@ PrefabInstance:
     - target: {fileID: 2393273947163370404, guid: 8616b69a768114632a773562203b0002, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5812677365129018890, guid: 8616b69a768114632a773562203b0002, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6894169135177945391, guid: 8616b69a768114632a773562203b0002, type: 3}
       propertyPath: m_Name
@@ -13251,6 +13248,7 @@ MonoBehaviour:
   successColor: {r: 1, g: 0.85882354, b: 0, a: 1}
   goLevelAfterGameBtn: {fileID: 1430247624}
   restartAfterGameBtn: {fileID: 1430247623}
+  showLeaderboardBtn: {fileID: 0}
   _perfectParticle: {fileID: 1036794419}
   _fastParticle: {fileID: 414589723}
   _slowParticle: {fileID: 1816595897}
@@ -13271,14 +13269,15 @@ MonoBehaviour:
   restartBtn: {fileID: 1430247613}
   goSettingsBtn: {fileID: 1430247612}
   goLevelMenuBtn: {fileID: 1430247611}
-  settingsPanel: {fileID: 1430247610}
-  settingsCloseBtn: {fileID: 1430247609}
+  settingsPanel: {fileID: 0}
+  settingsCloseBtn: {fileID: 0}
   _particleSystemsList:
   - {fileID: 1036794419}
   - {fileID: 414589723}
   - {fileID: 1816595897}
   - {fileID: 1516532131}
   character: {fileID: 3864058064846310904}
+  _pauseBtnDOT: {fileID: 0}
   _itemText: {fileID: 1430247608}
   _deathText: {fileID: 1430247607}
 --- !u!1 &6676748891477006904
@@ -13701,14 +13700,6 @@ PrefabInstance:
     - target: {fileID: 7686366973799714471, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
-      propertyPath: checkpointID
-      value: Stage1_Level1_CheckPoint
-      objectReference: {fileID: 0}
-    - target: {fileID: 7686366973799714491, guid: efac86a02cddd4c58899360b00d58930, type: 3}
-      propertyPath: speedEventID
-      value: Stage1_Level1_Spd
       objectReference: {fileID: 0}
     - target: {fileID: 7686366973799714492, guid: efac86a02cddd4c58899360b00d58930, type: 3}
       propertyPath: m_Name
