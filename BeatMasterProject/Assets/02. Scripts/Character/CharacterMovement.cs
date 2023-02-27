@@ -340,6 +340,7 @@ public class CharacterMovement : MonoBehaviour
         
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isCheckCheckPoint)
         {
+            SoundManager.instance.PlaySFX("CheckPoint");
             _isCheckCheckPoint = true;
         }
     }
