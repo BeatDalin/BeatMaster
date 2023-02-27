@@ -62,6 +62,8 @@ public class Store : MonoBehaviour
 
     private Button[] _character;
     private Button[] _item;
+    
+    [SerializeField]
     private Button[] _paidItem;
 
     [Header("Data")]
@@ -95,7 +97,7 @@ public class Store : MonoBehaviour
         _playerData = DataCenter.Instance.GetPlayerData();
         SetCharBtn();
         SetItemBtn();
-        SetPaidItemBtn();
+        // SetPaidItemBtn();
 
         ShowStoreList(0);
         _toggles[0].onValueChanged.AddListener(delegate { ShowStoreList(0); });
@@ -198,8 +200,7 @@ public class Store : MonoBehaviour
             }
             
             _paidItem[index].transform.GetChild(2).gameObject.SetActive(false);
-            _paidItem[index].onClick.AddListener(() =>
-                SetPaidItemPopup(_storeData.paidItemData[index].paidItemName));
+            // _paidItem[index].onClick.AddListener(() => SetPaidItemPopup(_storeData.paidItemData[index].paidItemName));
         }
     }
 
@@ -471,7 +472,7 @@ public class Store : MonoBehaviour
             
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(true);
 
-            _popupBtn[0].onClick.AddListener(delegate { PurchasePaidItem(paidItemName); });
+            // _popupBtn[0].onClick.AddListener(delegate { PurchasePaidItem(enumPaidItemName); });
         }
         
         // 구매했을 때.. 
@@ -486,10 +487,23 @@ public class Store : MonoBehaviour
         _popupPanel[0].SetActive(true);
         _popUpDOTweens[0].DORestart();
     }
-    
-    private void PurchasePaidItem(StoreData.PaidItemName paidItemName)
+
+    public void OnClickStartepackPurchaseBtn()
     {
-        int itemNum = (int)paidItemName;
+        _popupPanel[3].SetActive(true);
+        // PurchasePaidItem(StoreData.PaidItemName.StarterPack);
+    }
+
+    public void OnClickPet2PurchaseBtn()
+    {
+        _popupPanel[4].SetActive(true);
+        // PurchasePaidItem(StoreData.PaidItemName.Pet2);
+    }
+
+    public void PurchasePaidItem(string paidItemName)
+    {
+       var enumPaidItemName = (StoreData.PaidItemName)Enum.Parse(typeof(StoreData.PaidItemName), paidItemName);
+        int itemNum = (int)enumPaidItemName;
         // int price = _storeData.paidItemData[itemNum].price;
         
         // To do : IAP 연결..
@@ -512,7 +526,7 @@ public class Store : MonoBehaviour
             }
         }
         
-        DataCenter.Instance.UpdatePaidItemPurchaseData(paidItemName);
+        DataCenter.Instance.UpdatePaidItemPurchaseData(enumPaidItemName);
 
         UpdatePlayersDataInScene();
 

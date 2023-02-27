@@ -81,8 +81,8 @@ public struct StoreData
 
     public enum PaidItemName
     {
-        StarterPack = 0,
-        AdorablePet
+        starterPack = 0,
+        petFox
     }
 
     public int charCount; // 상점 내 모든 캐릭터 수
