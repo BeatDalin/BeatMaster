@@ -284,12 +284,14 @@ public class StageInformation : MonoBehaviour
     public void OnClickLeftBtn()
     {
         SoundManager.instance.PlaySFX("Touch");
+        _notYetPopup.SetActive(false);
         SetStageInfo(uiStage-1);
     }
 
     public void OnClickRightBtn()
     { 
         SoundManager.instance.PlaySFX("Touch");
+        _notYetPopup.SetActive(false);
         SetStageInfo(uiStage+1);
     }
 
