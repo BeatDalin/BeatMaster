@@ -19,6 +19,7 @@ public struct PlayerData
     public int playerItem; // Player's item(coin) count
     public int playerChar; // Player's current Character index
     public int[] itemData; // equipped items [itemPart(enum), itemNum -1 == nothing] 
+    //public int mapClearedCount;
 }
 
 [Serializable]
@@ -27,6 +28,7 @@ public struct StageData
     public int stage;
     //public bool bossClear;
     public LevelData[] levelData; // contains four LevelData
+    //public LeaderboardData[] leaderboardData;
 }
 
 [Serializable]
@@ -38,7 +40,7 @@ public struct LevelData
     public int slowCount;
 
     public int star;
-    public float alpha;
+    //public float alpha;
     public int unlockCharNum; // 일단은 level 하나 당 한 캐릭터만 해금
     public bool levelClear;
     public bool isUnlocked;
@@ -120,3 +122,9 @@ public struct Achievement
     public bool isFirstPayment;
     public int playCount;
 }
+
+/*[Serializable]
+public struct LeaderboardData
+{
+    public int score;
+}*/
