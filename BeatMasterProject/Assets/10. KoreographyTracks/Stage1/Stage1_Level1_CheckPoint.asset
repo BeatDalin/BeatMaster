@@ -15,21 +15,15 @@ MonoBehaviour:
   mEventID: Stage1_Level1_CheckPoint
   mEventList:
   - mStartSample: 0
-    mEndSample: 2000
-  - mStartSample: 315520
-    mEndSample: 319520
-  - mStartSample: 527200
-    mEndSample: 531200
-  - mStartSample: 818260
-    mEndSample: 822260
-  - mStartSample: 1691440
-    mEndSample: 1695440
-  - mStartSample: 2114800
-    mEndSample: 2118800
-  - mStartSample: 2538160
-    mEndSample: 2542160
-  - mStartSample: 2987980
-    mEndSample: 2991980
+    mEndSample: 6000
+  - mStartSample: 526200
+    mEndSample: 532200
+  - mStartSample: 1320000
+    mEndSample: 1326000
+  - mStartSample: 2025600
+    mEndSample: 2031600
+  - mStartSample: 2665050
+    mEndSample: 2671050
   _SerializedPayloadTypes:
   - SonicBloom.Koreo.CurvePayload
   _AssetPayloads: []
@@ -157,79 +151,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  - mCurveData:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  - mCurveData:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  - mCurveData:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  _CurvePayloadIdxs: 0000000001000000020000000300000004000000050000000600000007000000
+  _CurvePayloadIdxs: 0000000001000000020000000300000004000000
   _FloatPayloads: []
   _FloatPayloadIdxs: 
   _GradientPayloads: []
