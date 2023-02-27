@@ -10,6 +10,7 @@ public class ChangeCharSprite : MonoBehaviour
 
     private Sprite _charSprite;
     private Sprite _itemSprite;
+    private Sprite _paidItemSprite;
     private Dictionary<string, Sprite> _spriteDic = new Dictionary<string, Sprite>();
 
     public Sprite ChangeCharacterSprite(int charNum)
@@ -34,6 +35,18 @@ public class ChangeCharSprite : MonoBehaviour
         _itemSprite = Resources.Load<Sprite>("Sprite/" + _key);
         _spriteDic.Add(_key, _itemSprite);
         return _itemSprite;
+    }
+    
+    public Sprite ChangeItemSprite(StoreData.PaidItemName paidItemName)
+    {
+        string _key = paidItemName.ToString();
+        if (_spriteDic.TryGetValue(_key, out _charSprite))
+        {
+            return _spriteDic[_key];
+        }
+        _paidItemSprite = Resources.Load<Sprite>("Sprite/" + _key);
+        _spriteDic.Add(_key, _paidItemSprite);
+        return _paidItemSprite;
     }
 
     public void ChangeItemInItemScroll(PlayerData _playerData)
