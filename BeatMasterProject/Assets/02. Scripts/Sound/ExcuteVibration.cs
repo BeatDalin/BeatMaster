@@ -1,4 +1,3 @@
-
 using System;
 using UnityEngine;
 
@@ -14,9 +13,9 @@ public class ExcuteVibration : MonoBehaviour
     public static int defaultAmplitude;
 
     private AndroidJavaObject vibrationLibrary;
-    
-    public int vibrationPower = 100;
-    
+
+    public int vibrationPower = 50;
+
     public static ExcuteVibration Instance
     {
         get
@@ -30,7 +29,8 @@ public class ExcuteVibration : MonoBehaviour
             return instance;
         }
     }
-    
+
+//#if UNITY_ANDROID && !UNITY_EDITOR
     void Awake()
     {
         if (instance == null)
@@ -50,7 +50,7 @@ public class ExcuteVibration : MonoBehaviour
         unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
         vibrator = currentActivity.Call<AndroidJavaObject>("getSystemService", "vibrator");
-        
+
         if (getSDKInt() >= 26)
         {
             vibrationEffectClass = new AndroidJavaClass("android.os.VibrationEffect");
@@ -84,6 +84,16 @@ public class ExcuteVibration : MonoBehaviour
         }
     }
 
+    public void FastOrSlow()
+    {
+        if (vibrationPower != 0)
+        {
+            int fastOrSlowPower = Mathf.Clamp(vibrationPower, 20, 40);
+            Debug.Log($"fastOrSlow {fastOrSlowPower}");
+            vibrationLibrary.CallStatic("VibrationFast", context, fastOrSlowPower);
+        }
+    }
+
     public void Touch()
     {
         if (vibrationPower != 0)
@@ -93,7 +103,7 @@ public class ExcuteVibration : MonoBehaviour
             vibrationLibrary.CallStatic("TouchVibrate", context, touchPower);
         }
     }
-    
+
     static int getSDKInt()
     {
         using (var version = new AndroidJavaClass("android.os.Build$VERSION"))
@@ -101,4 +111,6 @@ public class ExcuteVibration : MonoBehaviour
             return version.GetStatic<int>("SDK_INT");
         }
     }
+
+//#endif
 }
