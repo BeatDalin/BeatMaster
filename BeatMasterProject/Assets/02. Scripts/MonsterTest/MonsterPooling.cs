@@ -107,7 +107,6 @@ public class MonsterPooling : MonoBehaviour
         for (int i = _count; i < _monsterIdx; i++)
         {
             monsterList[i].GetComponent<Monster>().ChangeAlpha(true);
-            //monsterList[i].SetActive(true);
         }
 
         _monsterIdx = _count;
@@ -119,9 +118,7 @@ public class MonsterPooling : MonoBehaviour
         {
             if (_shortEventList[i].GetIntValue() == 1)
             {
-                int monsterType;
-
-                _monsterInfos.TryGetValue(_tilePos[i], out monsterType);
+                _monsterInfos.TryGetValue(_tilePos[i], out int monsterType);
 
                 GameObject g = Instantiate(_monsterPrefabList[monsterType], new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 1f), Quaternion.identity, transform);
                 Instantiate(_coinPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 1f), Quaternion.identity, transform);
