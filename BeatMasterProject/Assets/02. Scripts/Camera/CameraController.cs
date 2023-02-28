@@ -6,7 +6,6 @@ using SonicBloom.Koreo;
 public class CameraController : MonoBehaviour
 {
     private CharacterMovement _characterMovement;
-    // private CinemachineVirtualCamera _virtualCamera;
     private CinemachineVirtualCamera[] _virtualCameras;
     private ResourcesChanger _resourcesChanger;
 
@@ -15,6 +14,9 @@ public class CameraController : MonoBehaviour
     
     [SerializeField] private Vector3 _offset = new Vector3(0f, 2f, -10f);
     [SerializeField] [EventID] private string _speedEventID;
+    [SerializeField] private float _minOrthoSize = 4.1f;
+    [SerializeField] private float _maxOrthoSize = 5.7f;
+    [SerializeField] private AnimationCurve _lerpCurve;
     private float _fromOrthoSize;
     private float _toOrthoSize;
     private float _prevCharacterSpeed;
@@ -27,7 +29,7 @@ public class CameraController : MonoBehaviour
         foreach (var virtualCamera in _virtualCameras)
         {
             virtualCamera.transform.position = virtualCamera.Follow.position + _offset;
-            virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(3f, 8f, (2f * _characterMovement.MoveSpeed - 3f) / 5f);
+            virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(_minOrthoSize, _maxOrthoSize, (_characterMovement.MoveSpeed - 1.5f) / 2f);
         }
         _prevCharacterSpeed = _characterMovement.MoveSpeed;
 
@@ -48,8 +50,8 @@ public class CameraController : MonoBehaviour
             return;
         }
         
-        _fromOrthoSize = Mathf.Lerp(3f, 8f, (2f * _prevCharacterSpeed - 3f) / 5f);
-        _toOrthoSize = Mathf.Lerp(3f, 8f, (2f * newCharacterSpeed - 3f) / 5f);
+        _fromOrthoSize = Mathf.Lerp(_minOrthoSize, _maxOrthoSize, (_prevCharacterSpeed - 1.5f) / 2f);
+        _toOrthoSize = Mathf.Lerp(_minOrthoSize, _maxOrthoSize, (newCharacterSpeed - 1.5f) / 2f);
         
         StartCoroutine(CoChangeOrthoSize(_fromOrthoSize, _toOrthoSize));
         _resourcesChanger.OnSpeedChanged(newCharacterSpeed);
@@ -59,13 +61,14 @@ public class CameraController : MonoBehaviour
     private IEnumerator CoChangeOrthoSize(float from, float to)
     {
         float time = 0f;
-        
-        while (time <= 1f)
+
+        while (time <= 0.7f)
         {
             foreach (var virtualCamera in _virtualCameras)
             {
-                virtualCamera.m_Lens.OrthographicSize = Mathf.SmoothStep(from, to, time);
+                virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(from, to, _lerpCurve.Evaluate(time));
             }
+
             time += Time.deltaTime;
             
             yield return null;
