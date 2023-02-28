@@ -142,6 +142,7 @@ public class NormalGame : Game
             mapGenerator.shortTileParticleList[shortIdx].beatResult = shortResult[shortIdx].ToString();
             rewindTime.RecordRewindPoint(characterMovement.transform.position, shortResult[shortIdx].ToString());
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
+            Vibration(shortResult[shortIdx]);
             //gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             shortIdx++;
             if (!isShortKeyCorrect)
@@ -176,6 +177,7 @@ public class NormalGame : Game
             {
                 _pressedTime = sampleTime; // record the sample time when the button was pressed
                 SoundManager.instance.PlaySFX("Hit");
+                ShortNoteComplete();
             }
         }
 
@@ -192,6 +194,7 @@ public class NormalGame : Game
             
             mapGenerator.shortTileParticleList[shortIdx].beatResult = shortResult[shortIdx].ToString();
             rewindTime.RecordRewindPoint(characterMovement.transform.position, shortResult[shortIdx].ToString());
+            Vibration(shortResult[shortIdx]);
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
             monsterPooling.DisableMonster();
             _isShortVisited[shortIdx] = true;
@@ -372,6 +375,7 @@ public class NormalGame : Game
 
             mapGenerator.longTileParticleList[longIdx].beatResult = longResult[longIdx].ToString();
             rewindTime.RecordRewindPoint(characterMovement.transform.position, longResult[longIdx].ToString(), false);
+            Vibration(longResult[longIdx]);
             _isLongVisited[longIdx] = true;
             if (!isRewinding)
             {
@@ -428,6 +432,22 @@ public class NormalGame : Game
             GPGSBinder.Instance.UnlockAchievement(GPGSIds.achievement_restart_over_hundred, success => achieve.isRestartedOverHundred = true);
         }
 #endif
+    }
+
+    private void Vibration(BeatResult beatResult)
+    {
+        if (beatResult.Equals(BeatResult.Perfect))
+        {
+            ExcuteVibration.Instance.Perfect();
+        }
+        else if (beatResult.Equals(BeatResult.Fail))
+        {
+            ExcuteVibration.Instance.Fail();
+        }
+        else
+        {
+            ExcuteVibration.Instance.FastOrSlow();
+        }
     }
 
     private void IncreaseItem()

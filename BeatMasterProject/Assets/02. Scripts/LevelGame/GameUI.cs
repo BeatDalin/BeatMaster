@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public enum TextType
@@ -27,7 +30,7 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected Color successColor;
     private float _delay = 0f;
     [SerializeField] protected Button goLevelAfterGameBtn;
-    [SerializeField] protected Button restartAfterGameBtn;
+    [SerializeField] protected Button restartGameBtn;
     [SerializeField] protected Button showLeaderboardBtn;
 
     [Header("Result Visualize")]
@@ -99,6 +102,7 @@ public abstract class GameUI : MonoBehaviour
         if (game.curState.Equals(GameState.Play))
         {
             _pauseBtnDOT.DORestart();
+            ExcuteVibration.Instance.Touch();
             SoundManager.instance.PlaySFX("Touch");
             UIManager.instance.OpenPanel(pausePanel);
             game.PauseGame();
@@ -124,6 +128,7 @@ public abstract class GameUI : MonoBehaviour
         pauseBtn.onClick.AddListener(() => OpenPause());
         continueBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
             SoundManager.instance.PlaySFX("Touch");
             character.SetActive(true);
             UIManager.instance.ClosePanel(pausePanel);
@@ -131,36 +136,63 @@ public abstract class GameUI : MonoBehaviour
         });
         restartBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
             SoundManager.instance.PlaySFX("Touch");
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
         });
         goLevelMenuBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
             SoundManager.instance.PlaySFX("Touch");
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
         //settings
-        goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPanel(settingsPanel));
-        settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePanel(settingsPanel); });
+        goSettingsBtn.onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
+            UIManager.instance.OpenPanel(settingsPanel);
+        });
+        settingsCloseBtn.onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
+            UIManager.instance.ClosePanel(settingsPanel);
+        });
 
         goLevelAfterGameBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
 
-        restartAfterGameBtn.onClick.AddListener(() =>
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene));
+        restartGameBtn.onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
+        });
 
         showLeaderboardBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
             int stageIdx = (int)SceneLoadManager.Instance.Scene - 2;
 #if !UNITY_EDITOR
             GPGSBinder.Instance.ShowTargetLeaderboardUI(GPGSBinder.Instance.CheckStageIdx(stageIdx));
 #endif
         });
+    }
+
+    private void Update()
+    {
+        if (game.curState == GameState.End)
+        {
+            restartGameBtn.interactable = true;
+        }
+        else
+        {
+            restartGameBtn.interactable = false;
+        }
     }
 
     public void ChangeOutLineColor(BeatResult result)
