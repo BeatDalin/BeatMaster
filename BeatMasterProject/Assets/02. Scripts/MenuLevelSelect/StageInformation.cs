@@ -247,6 +247,7 @@ public class StageInformation : MonoBehaviour
 
     public void OnToggleValueChange()
     {
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
         SetToggleStatus(_levelToggles, uiStage);
     }
@@ -266,8 +267,9 @@ public class StageInformation : MonoBehaviour
 
     public void OnClickStartBtn()
     {
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
-
+        
         string sceneName = $"Stage{uiStage + 1}_Level{GetSelectedToggle(_levelToggles) + 1}";
         if (Enum.IsDefined(typeof(SceneLoadManager.SceneType), sceneName))
         {
@@ -283,18 +285,21 @@ public class StageInformation : MonoBehaviour
 
     public void OnClickLeftBtn()
     {
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
         SetStageInfo(uiStage-1);
     }
 
     public void OnClickRightBtn()
     { 
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
         SetStageInfo(uiStage+1);
     }
 
     public void OnClickCloseBtn()
     {
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
         StartCoroutine(
             CoZoomOut(_mainCam.transform.position, _camPos[0].transform.position, _mainCam.orthographicSize, 8));
@@ -302,6 +307,7 @@ public class StageInformation : MonoBehaviour
 
     public void OnClickTitleBtn()
     {
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
         // StartCoroutine(CoFadeOut());
         SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Title);

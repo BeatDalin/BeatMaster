@@ -7,6 +7,10 @@ public class PanelController : MonoBehaviour
 {
     public void ClosePanel(GameObject panelName)
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
+                ExcuteVibration.Instance.Touch();
+
+#endif
         panelName.GetComponent<RectTransform>().DOLocalMove(new Vector3(Screen.width, 0, 0), 0.4f).onComplete +=
             () => { panelName.SetActive(false); };
     }
