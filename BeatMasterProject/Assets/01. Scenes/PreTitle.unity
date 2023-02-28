@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -540,6 +540,10 @@ PrefabInstance:
       value: SoundManager
       objectReference: {fileID: 0}
     - target: {fileID: 1735572402370116573, guid: cae8134d38f5dcf49a9d45b9c53a6fda, type: 3}
+      propertyPath: _mixer
+      value: 
+      objectReference: {fileID: 24100000, guid: 433ef1d309daef74abcf22a35f8fbe03, type: 2}
+    - target: {fileID: 1735572402370116573, guid: cae8134d38f5dcf49a9d45b9c53a6fda, type: 3}
       propertyPath: _sfx.Array.data[3].clip
       value: 
       objectReference: {fileID: 8300000, guid: 45142f22d3cc48848b4da27ec4f4ff46, type: 3}
@@ -707,7 +711,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1868571253
 GameObject:
