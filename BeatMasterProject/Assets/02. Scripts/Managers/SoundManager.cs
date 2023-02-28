@@ -6,6 +6,7 @@ using SonicBloom.Koreo.Players;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 [Serializable]
@@ -19,11 +20,14 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
 
+    [Header("Clips")]
     [SerializeField] private Sound[] _bgm; // BGM 클립들
     [SerializeField] private Sound[] _sfx; // SFX 클립들
 
+    [Header("Audio")]
     [SerializeField] private AudioSource _bgmPlayer; // BGM 플레이어
     [SerializeField] private AudioSource[] _sfxPlayer; // SFX 플레이어. 여러 개 재생될 수 있게 배열로 선언
+    [SerializeField] private AudioMixer _mixer;
 
     [Header("Koreography")]
     public Koreography playingKoreo;
@@ -49,6 +53,43 @@ public class SoundManager : MonoBehaviour
         if (audioSource)
         {
             _bgmPlayer = audioSource as AudioSource;
+        }
+    }
+
+    private void Start()
+    {
+        CheckAudioSetting();
+    }
+
+    private void CheckAudioSetting()
+    {
+        if (PlayerPrefs.HasKey("Music"))
+        {
+            _mixer.SetFloat("BGMVolume", Mathf.Log10(PlayerPrefs.GetFloat("Music")) * 20);
+        }
+        else
+        {
+            _mixer.SetFloat("BGMVolume", 0);
+        }
+
+        if (PlayerPrefs.HasKey("Sfx"))
+        {
+            _mixer.SetFloat("SFXVolume", Mathf.Log10(PlayerPrefs.GetFloat("Sfx")) * 20);
+
+        }
+        else
+        {
+            _mixer.SetFloat("SFXVolume", 0);
+        }
+
+        if (PlayerPrefs.HasKey("Vibrator"))
+        {
+            float v_temp = PlayerPrefs.GetFloat("Vibrator");
+            ExcuteVibration.Instance.vibrationPower = (int)(v_temp * 100f);            
+        }
+        else
+        {
+            ExcuteVibration.Instance.vibrationPower = 100;
         }
     }
 

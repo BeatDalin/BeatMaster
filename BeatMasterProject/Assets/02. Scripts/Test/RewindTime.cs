@@ -57,6 +57,7 @@ public class RewindTime : MonoBehaviour
         if (!isStart)
         {
             // Long End
+            _rewindData.rewindPos = rewindList[_countBtwStartEnd - 1].rewindPos;
             rewindList[_countBtwStartEnd - 1] = _rewindData;
             _countBtwStartEnd = 0;
             return;
