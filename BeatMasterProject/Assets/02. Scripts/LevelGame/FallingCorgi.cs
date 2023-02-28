@@ -11,11 +11,18 @@ public class FallingCorgi : MonoBehaviour
 
     private Camera _defaultCam;
     private float _speed;
+    private Action<GameObject> _returnAction;
 
     private void Awake()
     {
         _defaultCam = GameObject.FindWithTag("Main").GetComponent<Camera>();
         _speed = Random.Range(_minSpeed, _maxSpeed);
+        
+    }
+
+    public void SetPoolComponent(Action<GameObject> action)
+    {
+        _returnAction = action;
     }
 
     void Update()
@@ -24,7 +31,7 @@ public class FallingCorgi : MonoBehaviour
         pos.z = 0f;
         if (pos.x < -1f || pos.y < -1f)
         {
-            Destroy(gameObject);
+            _returnAction?.Invoke(gameObject);
         }
         
         transform.Translate(transform.right * (-1f * (Time.deltaTime * _speed)));        

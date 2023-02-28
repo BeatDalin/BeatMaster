@@ -37,7 +37,7 @@ public class NormalGame : Game
     private ChangeCharSprite _changeChar;
 
     private int _rewindCount=0;
-
+    
     protected override void Awake()
     {
         base.Awake();
@@ -48,7 +48,8 @@ public class NormalGame : Game
         playerAnim = FindObjectOfType<EffectAnim>();
         _comboSystem = FindObjectOfType<ComboSystem>();
         _touchInputManager = FindObjectOfType<TouchInputManager>();
-        feverTimeController = FindObjectOfType<FeverTimeController>();
+        
+        isTutorial = SceneLoadManager.Instance.Scene == SceneLoadManager.SceneType.Stage1_Level1; 
         
         // Short Note Event Track
         Koreographer.Instance.RegisterForEventsWithTime(jumpCheckID, CheckJumpEnd);
@@ -68,6 +69,11 @@ public class NormalGame : Game
         _playerDatas = DataCenter.Instance.GetPlayerData();
 
         playerAnim.ChangeCharacterAnim(_playerDatas.playerChar);
+        if (!isTutorial)
+        {
+            feverTimeController.SetPlayerIndex(_playerDatas.playerChar);
+        }
+        
         _changeChar.ChangeItemInItemScroll(_playerDatas);
     }
 
@@ -127,6 +133,12 @@ public class NormalGame : Game
         {
             _isCheckedShort = true;
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
+
+            if (!isTutorial)
+            {
+                CompareFeverTime(shortResult, shortIdx);
+            }
+            
             mapGenerator.shortTileParticleList[shortIdx].beatResult = shortResult[shortIdx].ToString();
             rewindTime.RecordRewindPoint(characterMovement.transform.position, shortResult[shortIdx].ToString());
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
@@ -136,7 +148,10 @@ public class NormalGame : Game
             {
                 // ================Rewind 자리================
                 Rewind();
-                feverTimeController.Reset();
+                if (!isTutorial)
+                {
+                    feverTimeController.Reset();
+                }
             }
             isShortKeyCorrect = false;
         }
@@ -169,6 +184,12 @@ public class NormalGame : Game
         {
             _isCheckedAttack = true;
             CheckBeatResult(shortResult, shortIdx, isShortKeyCorrect, _pressedTime, _eventRangeShort);
+
+            if (!isTutorial)
+            {
+                CompareFeverTime(shortResult ,shortIdx);
+            }
+            
             mapGenerator.shortTileParticleList[shortIdx].beatResult = shortResult[shortIdx].ToString();
             rewindTime.RecordRewindPoint(characterMovement.transform.position, shortResult[shortIdx].ToString());
             gameUI.ChangeOutLineColor(shortResult[shortIdx]);
@@ -183,7 +204,10 @@ public class NormalGame : Game
             {
                 // ================Rewind 자리================
                 Rewind();
-                feverTimeController.Reset();
+                if (!isTutorial)
+                {
+                    feverTimeController.Reset();
+                }
             }
             isShortKeyCorrect = false;
         }
@@ -235,21 +259,27 @@ public class NormalGame : Game
 #if UNITY_EDITOR
                 Debug.Log("Long Key Up during CheckLongStart");
 #endif
-            playerAnim.SetEffectBool(false);
+                playerAnim.SetEffectBool(false);
+            }
         }
-
+        
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1f && !_isCheckedLong)
         {
             _isCheckedLong = true;
-            rewindTime.RecordRewindPoint(characterMovement.transform.position, longResult[longIdx].ToString(), true);
+            rewindTime.RecordRewindPoint(characterMovement.transform.position, longResult[longIdx].ToString(),
+                true);
             if (!isLongPressed) // Failed to press at the start of the long note
             {
                 //==============Rewind 자리==============
                 Rewind();
-                feverTimeController.Reset();
+                if (!isTutorial)
+                {
+                    feverTimeController.Reset();
+                }
             }
         }
     }
+
     private void CheckLongMiddle(KoreographyEvent evt)
     {
         // if action key is released during long note
@@ -270,7 +300,10 @@ public class NormalGame : Game
                 playerAnim.SetEffectBool(false);
                 //==============Rewind 자리==============
                 Rewind();
-                feverTimeController.Reset();
+                if (!isTutorial)
+                {
+                    feverTimeController.Reset();
+                }
             }
         }
     }
@@ -322,7 +355,7 @@ public class NormalGame : Game
                     gameUI.UpdateText(TextType.Item, coinCount);
                 }
                 _pressedTimeLong = sampleTime;
-                _playerAnim.SetEffectBool(false);
+                playerAnim.SetEffectBool(false);
             }
         }
 
@@ -331,6 +364,12 @@ public class NormalGame : Game
         {
             _isCheckedLong = true;
             CheckBeatResult(longResult, longIdx, isLongKeyCorrect, _pressedTimeLong, _eventRangeLong); // Record Result
+            
+            if (!isTutorial)
+            {
+                CompareFeverTime(longResult, longIdx);
+            }
+
             mapGenerator.longTileParticleList[longIdx].beatResult = longResult[longIdx].ToString();
             rewindTime.RecordRewindPoint(characterMovement.transform.position, longResult[longIdx].ToString(), false);
             _isLongVisited[longIdx] = true;
@@ -347,7 +386,10 @@ public class NormalGame : Game
 #endif
                 // ===============Rewind==============
                 Rewind();
-                feverTimeController.Reset();
+                if (!isTutorial)
+                {
+                    feverTimeController.Reset();
+                }
             }
             isLongPressed = false;
             isLongKeyCorrect = false;
@@ -402,6 +444,17 @@ public class NormalGame : Game
         }
         return coinCount;
     }
+    
+    private void CompareFeverTime(BeatResult[] beatResults, int index)
+    {
+        if (feverTimeController.IsFeverTime)
+        {
+            if (beatResults[index] == BeatResult.Perfect)
+            {
+                IncreaseItem();
+            }
+        }
+    }
 
 
     private void Update()
@@ -409,7 +462,10 @@ public class NormalGame : Game
         if (Input.GetKeyDown(KeyCode.R))
         {
             Rewind();
-            feverTimeController.Reset();
+            if (!isTutorial)
+            {
+                feverTimeController.Reset();
+            }
         }
     }
 }

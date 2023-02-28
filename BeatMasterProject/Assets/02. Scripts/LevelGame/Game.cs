@@ -28,7 +28,6 @@ public abstract class Game : MonoBehaviour
     protected MonsterPooling monsterPooling;
     protected EffectAnim playerAnim;
 
-    private bool _isFeverTime;
     protected FeverTimeController feverTimeController;
     private LeaderboardManager _leaderboardManager;
 
@@ -83,6 +82,9 @@ public abstract class Game : MonoBehaviour
     [SerializeField][EventID] protected string longCheckMiddleID;
     [SerializeField][EventID] protected string longCheckStartID;
     [SerializeField][EventID] protected string longCheckEndID;
+    
+    protected bool isTutorial;
+
 
     protected virtual void Awake()
     {
@@ -196,7 +198,10 @@ public abstract class Game : MonoBehaviour
             if (evt.StartSample != 0)
             {
                 monsterPooling.ResetPool();
-                feverTimeController.ResetDecreasingAmount();
+                if (!isTutorial)
+                {
+                    feverTimeController.ResetDecreasingAmount();
+                }
                 //rewindTime.ClearRewindList();
             }
             // Record sample time to play music
@@ -237,6 +242,10 @@ public abstract class Game : MonoBehaviour
             RateResult(_stageIdx, _levelIdx);
             gameUI.UpdateText(TextType.Death, deathCount); // increase death count
             gameUI.ShowFinalResult(_finalSummary, totalNoteCount, _stageIdx, _levelIdx); // final result
+            if (!isTutorial)
+            {
+                feverTimeController.Reset();
+            }
         }
         else if (message == "Stop")
         {
@@ -256,8 +265,11 @@ public abstract class Game : MonoBehaviour
             else if (pressedTime <= eventRange[idx, 1])
             {
                 tempResult = BeatResult.Perfect;
-                // TODO FeverTimeController에서 무언가 실행
-                feverTimeController.IncreaseFeverGage();
+                if (!isTutorial)
+                {
+                    feverTimeController.IncreaseFeverGage();
+                }
+                
             }
             else
             {

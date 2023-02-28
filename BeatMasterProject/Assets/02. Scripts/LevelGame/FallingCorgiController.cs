@@ -2,15 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class FallingCorgiController : MonoBehaviour
+public class FallingCorgiController : ObjectPooling
 {
     [SerializeField] private Sprite[] _corgiSprites;
-    [SerializeField] private GameObject _corgiprefab;
-    [SerializeField] private float _minPosAmount = 1.1f;
-    [SerializeField] private float _maxPosAmount = 1.3f;
+    [SerializeField] private float _minPosYAmount = 1.1f;
+    [SerializeField] private float _maxPosYAmount = 1.3f;
+    [SerializeField] private float _minPosXAmount = 0.5f;
+    [SerializeField] private float _maxPosXAmount = 1.1f;
     [SerializeField] private float _minRotation = 30f;
     [SerializeField] private float _maxRotation = 60f;
     [SerializeField] private float _minDealy = 0.5f;
@@ -20,15 +20,21 @@ public class FallingCorgiController : MonoBehaviour
 
     private Camera _defaultCamera;
     private Coroutine _currentCoroutine;
+    private List<GameObject> _currentList = new List<GameObject>();
 
-    private void Awake()
+    protected override void Init()
     {
         _defaultCamera = GameObject.FindWithTag("Main").GetComponent<Camera>();
+
+        for (int i = 0; i < initCount; i++)
+        {
+            CreateNewObject().GetComponent<FallingCorgi>().SetPoolComponent(ReturnObject);
+        }
     }
 
     public void InstantiateFallingCorgi()
     {
-        StartCoroutine(CoInstantiateCorgi());
+        _currentCoroutine = StartCoroutine(CoInstantiateCorgi());
     }
 
     public void StopFallingCorgi()
@@ -37,19 +43,30 @@ public class FallingCorgiController : MonoBehaviour
         {
             StopCoroutine(_currentCoroutine);
         }
+
+        if (_currentList.Count > 0)
+        {
+            DestroyObjects();
+        }
+    }
+
+    public int GetSpritesLength()
+    {
+        return _corgiSprites.Length;
     }
 
     private IEnumerator CoInstantiateCorgi()
     {
-        float posX = Random.Range(_minPosAmount, _maxPosAmount);
-        float posY = Random.Range(_minPosAmount, _maxPosAmount);
+        float posX = Random.Range(_minPosXAmount, _maxPosXAmount);
+        float posY = Random.Range(_minPosYAmount, _maxPosYAmount);
 
         Vector3 afterPos = _defaultCamera.ViewportToWorldPoint(new Vector3(posX, posY, 0f));
         afterPos.z = 0f;
         float randomRotation = Random.Range(_minRotation, _maxRotation);
         
-        GameObject go = Instantiate(_corgiprefab, afterPos, Quaternion.Euler(0f, 0f, randomRotation));
-        go.transform.SetParent(transform);
+        GameObject go = GetObject(afterPos);
+        go.transform.rotation = Quaternion.Euler(0f, 0f, randomRotation);
+        _currentList.Add(go);
         
         SpriteRenderer[] spriteRenderer = go.GetComponentsInChildren<SpriteRenderer>();
         int layer = Random.Range(_minLayer, _maxLayer);
@@ -58,15 +75,28 @@ public class FallingCorgiController : MonoBehaviour
             renderer.sortingOrder = layer;
         }
         
-        // 0번 코기
-        // 1번 부스터
+        // 0번 부스터
+        // 1번 코기
         int index = Random.Range(0, _corgiSprites.Length);
-        spriteRenderer[0].sprite = _corgiSprites[index];
+        spriteRenderer[1].sprite = _corgiSprites[index];
         
         float delay = Random.Range(_minDealy, _maxDelay);
 
         yield return new WaitForSeconds(delay);
 
         _currentCoroutine = StartCoroutine(CoInstantiateCorgi());
+    }
+
+    private void DestroyObjects()
+    {
+        foreach (var go in _currentList)
+        {
+            if (go.activeSelf)
+            {
+                ReturnObject(go);
+            }
+        }
+        
+        _currentList.Clear();
     }
 }
