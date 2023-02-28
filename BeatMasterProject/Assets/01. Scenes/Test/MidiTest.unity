@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &212964978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,7 +157,7 @@ MonoBehaviour:
   longCheckStart: {fileID: 0}
   longCheckEnd: {fileID: 0}
   longCheckMiddle: {fileID: 0}
-  shortTrack: {fileID: 11400000, guid: 694d11a6f8c48419bb1c774f8ede0e43, type: 2}
+  shortTrack: {fileID: 11400000, guid: f1e2954eb1a6c42718bd175f4b775846, type: 2}
   _jumpCheckTrack: {fileID: 11400000, guid: 997fb890131fb421080e493a775b5b7d, type: 2}
   _attackCheckTrack: {fileID: 11400000, guid: 44026b6b8138341bbba619dd358f2a9a, type: 2}
   _shortEventList: []
@@ -529,7 +529,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spectrumSize: 256
   _audioSource: {fileID: 798942507}
-  targetTime: 1
+  targetTime: 0.5
   track: {fileID: 11400000, guid: 694d11a6f8c48419bb1c774f8ede0e43, type: 2}
   offset: 50000
 --- !u!4 &798942506

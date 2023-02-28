@@ -90,8 +90,8 @@ public class SpectrumData : MonoBehaviour
 
             if (trackSampleTime.Count > 0)
             {
-                if ((Mathf.Abs(trackSampleTime[^1].sample - collectSpectrumList[0].sample) >= offset) 
-                    && (Mathf.Abs(averageSpectrumSize) < Mathf.Abs(collectSpectrumList[0].spectrumData))) 
+                if (collectSpectrumList[0].sample - trackSampleTime[^1].sample > offset
+                    && (Mathf.Abs(averageSpectrumSize) < Mathf.Abs(collectSpectrumList[0].spectrumData)))
                 { // offset 이하로는 생기지 않도록(겹침 방지), 평균보다 작으면 생성 x
                     KoreographyEvent koreographyEvent = new KoreographyEvent();
                     koreographyEvent.Payload = new IntPayload();
@@ -107,7 +107,6 @@ public class SpectrumData : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("건너뜀");
                     currentTime = 0f;
                     collectSpectrumList.Clear();
             

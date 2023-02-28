@@ -421,8 +421,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterList: []
   coinParent: {fileID: 970478227}
-  _mapEventID: Stage3_Level1_Map
-  _shortEventID: Stage3_Level1_Spectrum_ShortCopy
+  _mapEventID: Stage3_Level1_Spectrum_Map
+  _shortEventID: Stage3_Level1_Spectrum_Short
   _mapEventList: []
   _shortEventList: []
   _monsterPrefabList:
@@ -948,7 +948,7 @@ MonoBehaviour:
   _stageIdx: 2
   _levelIdx: 0
   coinCount: 0
-  shortID: Stage3_Level1_Spectrum_ShortCopy
+  shortID: Stage3_Level1_Spectrum_Short
   longID: Stage3_Level1_Long
   jumpCheckID: Stage3_Level1_Spectrum_JumpCheck
   attackCheckID: Stage3_Level1_Spectrum_AttackCheck
@@ -1232,7 +1232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dabd7d5bc70bae2499f342adb8dbe61e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapEventID: Stage3_Level1_Map
+  _mapEventID: Stage3_Level1_Spectrum_Map
   _starObj: {fileID: 7397218863573384310, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
   _itemContainer: {fileID: 39094806}
   _checkPointEventID: Stage3_Level1_CheckPoint
@@ -1261,8 +1261,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   theme: 2
   _isEditMode: 0
-  _mapEventID: Stage3_Level1_Map
-  _shortEventID: Stage3_Level1_Spectrum_ShortCopy
+  _mapEventID: Stage3_Level1_Spectrum_Map
+  _shortEventID: Stage3_Level1_Spectrum_Short
   _longEventID: Stage3_Level1_Long
   _spdEventID: Stage3_Level1_Spd
   _groundTilemap: {fileID: 1828062194}
@@ -6389,6 +6389,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1816595897}
     - target: {fileID: 6676748891086764736, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
+      propertyPath: restartGameBtn
+      value: 
+      objectReference: {fileID: 1430247607}
+    - target: {fileID: 6676748891086764736, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
       propertyPath: _perfectParticle
       value: 
       objectReference: {fileID: 1036794419}
@@ -6555,6 +6559,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6676748889830466105, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
   m_PrefabInstance: {fileID: 1430247605}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1430247607 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6676748890392230852, guid: a5ea908d1efb07841ba6c75886412a40, type: 3}
+  m_PrefabInstance: {fileID: 1430247605}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1463771643
 GameObject:
   m_ObjectHideFlags: 0
