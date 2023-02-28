@@ -16,10 +16,14 @@ MonoBehaviour:
   mEventList:
   - mStartSample: 0
     mEndSample: 3000
+  - mStartSample: 590495
+    mEndSample: 596495
   - mStartSample: 1109803
     mEndSample: 1115803
-  - mStartSample: 1976317
-    mEndSample: 1980317
+  - mStartSample: 1975317
+    mEndSample: 1981317
+  - mStartSample: 2457530
+    mEndSample: 2463530
   - mStartSample: 3212766
     mEndSample: 3216766
   - mStartSample: 3978364
@@ -151,7 +155,55 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  _CurvePayloadIdxs: 0000000001000000020000000300000004000000
+  - mCurveData:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  - mCurveData:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  _CurvePayloadIdxs: 00000000010000000200000003000000040000000500000006000000
   _FloatPayloads: []
   _FloatPayloadIdxs: 
   _GradientPayloads: []

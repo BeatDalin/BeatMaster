@@ -64,8 +64,8 @@ public class MapGenerator : MonoBehaviour
     private MonsterPooling _monsterPooling;
     private ObjectGenerator _objectGenerator;
 
-    [HideInInspector] public List<GameObject> shortTileParticleList = new List<GameObject>();
-    [HideInInspector] public List<GameObject> longTileParticleList = new List<GameObject>();
+    [HideInInspector] public List<Note> shortTileParticleList = new List<Note>();
+    [HideInInspector] public List<Note> longTileParticleList = new List<Note>();
     private WaitForSeconds _waitForSec;
 
     private void Awake()
@@ -345,9 +345,8 @@ public class MapGenerator : MonoBehaviour
             if (shortHit)
             {
                 yPosition = shortHit.point.y;
-
-                shortTileParticleList.Add(Instantiate(_noteObjects[_shortEventList[i].GetIntValue()],
-                    new Vector3(xPosition + xOffset, yPosition, 0f), Quaternion.identity, transform));
+                var noteObj = Instantiate(_noteObjects[_shortEventList[i].GetIntValue()], new Vector3(xPosition + xOffset, yPosition, 0f), Quaternion.identity, transform);
+                shortTileParticleList.Add(noteObj.GetComponent<Note>());
                 
                 // 몬스터 위치와 타입 저장
                 // Default는 지상 몬스터
@@ -436,9 +435,8 @@ public class MapGenerator : MonoBehaviour
                     if (longEndHit)
                     {
                         endYPosition = longEndHit.point.y;
-
-                        longTileParticleList.Add(Instantiate(_noteObjects[(int)_NoteType.Long],
-                            new Vector3(endXPosition + endXOffset, endYPosition, 0f), Quaternion.identity, transform));
+                        var noteObj = Instantiate(_noteObjects[(int)_NoteType.Long], new Vector3(endXPosition + endXOffset, endYPosition, 0f), Quaternion.identity, transform);
+                        longTileParticleList.Add(noteObj.GetComponent<Note>());
                         _objectGenerator.RecordLongPos(new Vector3(endXPosition + endXOffset, endYPosition, 0));
                     }
 
