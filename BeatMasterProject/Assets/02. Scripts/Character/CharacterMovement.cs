@@ -408,7 +408,7 @@ public class CharacterMovement : MonoBehaviour
             
             while (elapseTime <= targetTime)
             {
-                transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
+                transform.position = Vector3.Lerp(lastPosition, new Vector3(_characterPosition.x, y, 0f), elapseTime / targetTime);
                 transform.DORotate(new Vector3(0, 0, 0), targetTime);
                 elapseTime += Time.fixedDeltaTime;
                 yield return null;
@@ -418,7 +418,7 @@ public class CharacterMovement : MonoBehaviour
         {
             while (elapseTime <= targetTime)
             {
-                transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
+                transform.position = Vector3.Lerp(lastPosition, new Vector3(_characterPosition.x, y, 0f), elapseTime / targetTime);
                 transform.DORotate(new Vector3(0, 0, 0), targetTime);
                 elapseTime += Time.fixedDeltaTime;
                 yield return null;
