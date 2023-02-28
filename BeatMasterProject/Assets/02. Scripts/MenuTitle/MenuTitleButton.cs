@@ -94,8 +94,8 @@ public class MenuTitleButton : MonoBehaviour
         #region MenuGroup의 버튼들 (Settings, MyInfo, Quit)
 
         // Menu - Settings 버튼 (Setting, MyInfo, Quit)
-        _menuButtons[(int)MenuButtonName.Setting].onClick.AddListener(() => { OpenPanel(_menuPanels[(int)MenuButtonName.Setting]); });
-        _menuButtons[(int)MenuButtonName.Quit].onClick.AddListener(() => { OpenPanel(_menuPanels[(int)MenuButtonName.Quit]); });
+        _menuButtons[(int)MenuButtonName.Setting].onClick.AddListener(() => { UIManager.instance.OpenPanel(_menuPanels[(int)MenuButtonName.Setting]); });
+        _menuButtons[(int)MenuButtonName.Quit].onClick.AddListener(() => { UIManager.instance.OpenPanel(_menuPanels[(int)MenuButtonName.Quit]); });
         
         #endregion
         

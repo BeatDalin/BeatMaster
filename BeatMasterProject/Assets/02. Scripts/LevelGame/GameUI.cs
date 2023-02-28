@@ -95,7 +95,7 @@ public abstract class GameUI : MonoBehaviour
     {
         if (game.curState.Equals(GameState.Play))
         {
-            UIManager.instance.OpenPopUp(pausePanel);
+            UIManager.instance.OpenPanel(pausePanel);
             game.PauseGame();
             character.SetActive(false);
         }
@@ -125,7 +125,7 @@ public abstract class GameUI : MonoBehaviour
         {
             ExcuteVibration.Instance.Touch();
             character.SetActive(true);
-            UIManager.instance.ClosePopUp();
+            UIManager.instance.ClosePanel(pausePanel);
             game.ContinueGame();
         });
         restartBtn.onClick.AddListener(() =>
@@ -144,12 +144,12 @@ public abstract class GameUI : MonoBehaviour
         goSettingsBtn.onClick.AddListener(() =>
         {
             ExcuteVibration.Instance.Touch();
-            UIManager.instance.OpenPopUp(settingsPanel);
+            UIManager.instance.OpenPanel(settingsPanel);
         });
         settingsCloseBtn.onClick.AddListener(() =>
         {
             ExcuteVibration.Instance.Touch();
-            UIManager.instance.ClosePopUp();
+            UIManager.instance.ClosePanel(settingsPanel);
         });
 
         goLevelAfterGameBtn.onClick.AddListener(() =>
