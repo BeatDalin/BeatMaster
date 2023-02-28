@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -15,6 +16,7 @@ public class InAppPurchase : MonoBehaviour
     [SerializeField] private IAPButton[] _IAPButtons;
     private Dictionary<string, IAPButton> _IAPDict = new Dictionary<string, IAPButton>();
     private ProductCatalog _catalog;
+    [SerializeField] private Store _store;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +31,7 @@ public class InAppPurchase : MonoBehaviour
             Debug.Log($"Key {pair.Key} // Value {pair.Value.id}");
             Debug.Log($"Title {pair.Value.title}");
         }
-
+        
         StartCoroutine(CoWaitWalletReady());
     }
 
@@ -70,7 +72,7 @@ public class InAppPurchase : MonoBehaviour
     public void OnPurchaseCompleted(Product product)
     {
         string id = product.definition.id.Split('.')[^1];
-        bool resultFromDatabase = false;
+        bool resultFromDatabase = true;
         // if (product.definition.type == ProductType.NonConsumable)
         // {
         //     // Non consumable product which is already purchased
@@ -79,17 +81,23 @@ public class InAppPurchase : MonoBehaviour
         if (id.Equals(_idStarterPack))
         {
             // Starter Pack buy => Give Sunglasses and Pet Cat
-            bool resultFromDatabase1 = FirebaseDataManager.Instance.Purchase(_idSunglasses);
-            bool resultFromDatabase2 = FirebaseDataManager.Instance.Purchase(_idPetCat);
+            // bool resultFromDatabase1 = FirebaseDataManager.Instance.Purchase(_idSunglasses);
+            // bool resultFromDatabase2 = FirebaseDataManager.Instance.Purchase(_idPetCat);
 
-            resultFromDatabase = resultFromDatabase1 && resultFromDatabase2;
+            // resultFromDatabase = resultFromDatabase1 && resultFromDatabase2;
+            
         }
         else
         {
             resultFromDatabase = FirebaseDataManager.Instance.Purchase(id);
         }
 
-        FirebaseDataManager.Instance.UpdateInfo();
+        if (resultFromDatabase)
+        {
+            _store.PurchasePaidItem(id);            
+        }
+
+        // FirebaseDataManager.Instance.UpdateInfo();
         // Notify result
         Debug.Log($"On Purchase {id} : {resultFromDatabase}");
         if (product.definition.type.Equals(ProductType.NonConsumable))

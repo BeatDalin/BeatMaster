@@ -110,10 +110,11 @@ public class StageInformation : MonoBehaviour
     
     private void SetStageInfo(int stageIdx)
     {
+        _description.DOKill();
         _description.text = "";   
         SoundManager.instance.PlaySFX("Touch");
         _stageBtns.SetActive(false);
-        
+
         // levelNum 최댓 최솟값 한정
         stageIdx = stageIdx > _maxStageNum ? _maxStageNum : stageIdx;
         stageIdx = stageIdx < 0 ? 0 : stageIdx;
@@ -144,6 +145,13 @@ public class StageInformation : MonoBehaviour
         
         // Camera
         StartCoroutine(CoZoomIn(_mainCam.transform.position, _stageInfo[stageIdx].camPos, 8, 3));
+        
+        _description.DOText(_descriptionString, 2f);
+
+        if (!_stagePanel.activeSelf)
+        {
+            _stagePanel.SetActive(true);
+        }
     }
 
     private IEnumerator CoZoomIn(Vector3 current, Vector3 target, float currentSize, float targetSize)
@@ -167,16 +175,14 @@ public class StageInformation : MonoBehaviour
         _mainCam.orthographicSize = targetSize;
 
         yield return new WaitForSeconds(0.3f);  
-        _stagePanel.SetActive(currentSize > targetSize);
-        _description.DOText(_descriptionString, 2f);
-        _descriptionDoTweenAnimation.DORestart();
+        // _stagePanel.SetActive(currentSize > targetSize);
         
         _stageBtns.SetActive(!(currentSize > targetSize));
     }
     
     private IEnumerator CoZoomOut(Vector3 current, Vector3 target, float currentSize, float targetSize)
     {
-        _stagePanel.SetActive(currentSize > targetSize);
+        // _stagePanel.SetActive(currentSize > targetSize);
         
         float time = 0.5f;
         float elapsedTime = 0.0f;
@@ -247,6 +253,7 @@ public class StageInformation : MonoBehaviour
 
     public void OnToggleValueChange()
     {
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
         SetToggleStatus(_levelToggles, uiStage);
     }
@@ -266,8 +273,9 @@ public class StageInformation : MonoBehaviour
 
     public void OnClickStartBtn()
     {
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
-
+        
         string sceneName = $"Stage{uiStage + 1}_Level{GetSelectedToggle(_levelToggles) + 1}";
         if (Enum.IsDefined(typeof(SceneLoadManager.SceneType), sceneName))
         {
@@ -283,25 +291,30 @@ public class StageInformation : MonoBehaviour
 
     public void OnClickLeftBtn()
     {
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
         SetStageInfo(uiStage-1);
     }
 
     public void OnClickRightBtn()
     { 
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
         SetStageInfo(uiStage+1);
     }
 
     public void OnClickCloseBtn()
     {
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
         StartCoroutine(
             CoZoomOut(_mainCam.transform.position, _camPos[0].transform.position, _mainCam.orthographicSize, 8));
+        _stagePanel.SetActive(false);
     }
 
     public void OnClickTitleBtn()
     {
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
         // StartCoroutine(CoFadeOut());
         SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Title);
