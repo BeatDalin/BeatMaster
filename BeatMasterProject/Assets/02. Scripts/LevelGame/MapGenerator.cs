@@ -274,7 +274,7 @@ public class MapGenerator : MonoBehaviour
                         _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0,
                             new Vector3Int(_tileX, _tileY + 1, 0), new Vector3(0f, _groundYOffset, 0f)), false);
                         // Record CheckPoint Animation
-                        _objectGenerator.RecordCheckPoint(_tileX, _tileY + 1);
+                        _objectGenerator.RecordCheckPoint(_tileX, _tileY + _groundYOffset + 1f);
                     }
                 }
             }

@@ -131,7 +131,7 @@ public class ObjectGenerator : MonoBehaviour
     /// </summary>
     /// <param name="xPos"></param>
     /// <param name="yPos"></param>
-    public void RecordCheckPoint(int xPos, int yPos)
+    public void RecordCheckPoint(float xPos, float yPos)
     {
         checkPointPos.Add(new Vector3(xPos, yPos, 0)); // Record position
     }
