@@ -377,7 +377,7 @@ public class CharacterMovement : MonoBehaviour
         
         if (_rewindTime.rewindList.Count != 0)
         {
-            while (_rewindTime.rewindList.Count != 0)
+            while (_rewindTime.rewindList.Count > 0)
             {
                 elapseTime = 0f;
                 Vector2 targetRewindPos = _rewindTime.rewindList[0].rewindPos;
