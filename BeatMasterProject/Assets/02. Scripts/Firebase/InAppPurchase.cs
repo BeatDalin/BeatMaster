@@ -24,85 +24,109 @@ public class InAppPurchase : MonoBehaviour
     
     private ProductCatalog _catalog;
     [SerializeField] private Store _store;
-    // Start is called before the first frame update
+    private WaitForSecondsRealtime _waitForHalfSec;
+    
+    
     void Start()
     {
+        SetDict();
         _catalog = ProductCatalog.LoadDefaultCatalog();
         foreach (var productCatalogItem in _catalog.allProducts)
         {
-            Debug.Log(productCatalogItem.id);
             var id = productCatalogItem.id.Split('.')[^1];
-            productCatalogItem.defaultDescription.Title = FirebaseDataManager.Instance.productCatalog[id].title;
-            productCatalogItem.defaultDescription.Description = FirebaseDataManager.Instance.productCatalog[id].description;
-            productCatalogItem.googlePrice.value = decimal.Parse(FirebaseDataManager.Instance.productCatalog[id].price);
-            
 
+            if (FirebaseDataManager.Instance.productCatalog.TryGetValue(id, out ProductInfo foundProductInfo))
+            {
+                SetIAPCatalog(id, foundProductInfo, productCatalogItem);
+            }
+            else
+            {
+                // Product Id Key Not Found -> Reload Items
+                StartCoroutine(CoWaitCatalog(id, productCatalogItem));
+            }
         }
-        Debug.Log("================ Product Catalog From Firebase ===================");
-        foreach (KeyValuePair<string, ProductInfo> pair in FirebaseDataManager.Instance.productCatalog)
-        {
-            Debug.Log($"Title {pair.Value.title} // Key {pair.Key} // Value {pair.Value.id}");
-        }
-#if UNITY_EDITOR
-        for (int i = 0; i < _IAPButtons.Length; i++)
-        {
-            Debug.Log(_IAPButtons[i].productId);
-            var id = _IAPButtons[i].productId.Split('.')[^1];
-            _IAPDict.Add(id, _IAPButtons[i]);
-            Button outerBtn = _outerBtnParent.GetChild(i).GetComponent<Button>();
-            _outerBtnDict.Add(id, outerBtn);
-            _outerPriceDict.Add(id, outerBtn.transform.GetChild(1).GetChild(0).GetComponent<Text>());
-            
-        
-            _IAPButtons[i].titleText.text = FirebaseDataManager.Instance.productCatalog[id].title;
-            _IAPButtons[i].descriptionText.text = FirebaseDataManager.Instance.productCatalog[id].description;
-            _IAPButtons[i].priceText.text = FirebaseDataManager.Instance.productCatalog[id].price;
-            _outerPriceDict[id].text = FirebaseDataManager.Instance.productCatalog[id].price;
-            
-            
-            Debug.Log("================ Dictionary Check ===================");
-            Debug.Log(id);
-            Debug.Log("Outer Button "+_outerBtnDict[id].name);
-            Debug.Log("Outer PriceText "+ _outerPriceDict[id].text);
-            Debug.Log($"Title {_IAPButtons[i].titleText.text}");
-            
-            Debug.Log("================ IAP Button Check ==================");
-            Debug.Log($"Title {_IAPButtons[i].titleText.text}");
-            Debug.Log($"Description {_IAPButtons[i].descriptionText.text}");
-            Debug.Log($"Price {_IAPButtons[i].priceText.text}");
-            
-        }
-        
-#endif
+        _waitForHalfSec = new WaitForSecondsRealtime(0.3f);
         StartCoroutine(CoWaitWalletReady());
-        
     }
 
-    private IEnumerator CoWaitWalletReady()
+    /// <summary>
+    /// Reload product info from Firebase. Try to set IAP Catalog after reloading product.
+    /// </summary>
+    /// <param name="productId">Product Id to access Catalog Dictionary</param>
+    /// <param name="eachCatalogItem">Each item registered in IAP Catalog</param>
+    /// <returns>FirebaseDataManager.Instance._waitForCatalogLoad (wait until catalog is loaded)</returns>
+    private IEnumerator CoWaitCatalog(string productId, ProductCatalogItem eachCatalogItem)
     {
-        yield return FirebaseDataManager.Instance.waitForSearchEnd;
-        Debug.Log("+++++++++ Wallet Ready! ++++++++");
-        Debug.Log(_IAPButtons[0].productId);
-        Debug.Log(_IAPButtons[1].productId);
+        // Catalog Reload when product id was not found in the Catalog Dictionary
+        FirebaseDataManager.Instance.ReloadCatalog();
+        yield return FirebaseDataManager.Instance.waitForCatalogLoad;
+
+        if (FirebaseDataManager.Instance.productCatalog.TryGetValue(productId, out ProductInfo foundProductInfo))
+        {
+            SetIAPCatalog(productId, foundProductInfo, eachCatalogItem);
+        }
+        else
+        {
+            StartCoroutine(CoWaitCatalog(productId, eachCatalogItem));
+        }
+    }
+
+    private void SetIAPCatalog(string productId, ProductInfo productInfo, ProductCatalogItem eachCatalogItem)
+    {
+        // ProductInfo foundProductInfo = FirebaseDataManager.Instance.productCatalog[id];
+        eachCatalogItem.defaultDescription.Title = productInfo.title;
+        eachCatalogItem.defaultDescription.Description = productInfo.description;
+        eachCatalogItem.googlePrice.value = decimal.Parse(productInfo.price);
+
+        if (!_IAPDict.ContainsKey(productId))
+        {
+            return;
+        }
+        IAPButton iapBtn = _IAPDict[productId];
+        iapBtn.titleText.text = productInfo.title;
+        iapBtn.descriptionText.text = productInfo.description;
+        iapBtn.priceText.text = $"{productInfo.price}";
+    }
+
+    /// <summary>
+    /// Set up IAP Button, Outer Button, Outer Price Text dictionaries to access each components fast and easy.
+    /// </summary>
+    private void SetDict()
+    {
         for (int i = 0; i < _IAPButtons.Length; i++)
         {
-            int index = i;
-            var id = _IAPButtons[index].productId.Split('.')[^1];
+            // Check IAPButton's Product Id -> Debug.Log(_IAPButtons[i].productId);
+            var id = _IAPButtons[i].productId.Split('.')[^1];
             _IAPDict.Add(id, _IAPButtons[i]);
-            LoadProductInfoFromFirebase(_IAPButtons[i]);
             
             // Outer buttons to see detailed info of products
             Button outerBtn = _outerBtnParent.GetChild(i).GetComponent<Button>();
             _outerBtnDict.Add(id, outerBtn);
             _outerPriceDict.Add(id, outerBtn.transform.GetChild(1).GetChild(0).GetComponent<Text>());
-            
-            Debug.Log("================ Dictionary Check ===================");
-            Debug.Log(id);
-            Debug.Log("Outer Button "+_outerBtnDict[id].name);
-            Debug.Log("Outer PriceText "+ _outerPriceDict[id].name);
         }
     }
-    private void LoadProductInfoFromFirebase(IAPButton button)
+
+    /// <summary>
+    /// Wait until user's wallet info is ready. Check each In-App Purchase items were purchased and block buttons.
+    /// </summary>
+    /// <returns>FirebaseDataManager.Instance.waitForSearchEnd (wait until user info is found in firebase)</returns>
+    private IEnumerator CoWaitWalletReady()
+    {
+        yield return FirebaseDataManager.Instance.waitForSearchEnd;
+        // ####### Wallet Ready! #######
+        for (int i = 0; i < _IAPButtons.Length; i++)
+        {
+            // Check whether each non-consumable product is already puchased
+            LoadPurchasedFromWallet(_IAPButtons[i]);
+        }
+    }
+    
+    /// <summary>
+    /// If IAP Button's id is found in product catalog and the product is non-consumable, prevent double purchase.
+    /// Otherwise, show price in the outer button's price text.
+    /// </summary>
+    /// <param name="button">IAP Button to be investigated</param>
+    private void LoadPurchasedFromWallet(IAPButton button)
     {
         // Get Product Id From IAP Button's ProductId
         string[] s = button.productId.Split('.');
@@ -111,64 +135,69 @@ public class InAppPurchase : MonoBehaviour
         {
             return;
         }
-        button.titleText.text = FirebaseDataManager.Instance.productCatalog[id].title;
-        button.descriptionText.text = FirebaseDataManager.Instance.productCatalog[id].description;
-        button.priceText.text = FirebaseDataManager.Instance.productCatalog[id].price;
-        _outerPriceDict[id].text = FirebaseDataManager.Instance.productCatalog[id].price;
-        if (!FirebaseDataManager.Instance.productCatalog[id].isConsumable 
-            && FirebaseDataManager.Instance.CheckProductInWallet(id))
-        {
-            // Non consumable which is already purchased
-            // button.priceText.text = _purchasedText;
-            // button.gameObject.GetComponent<Button>().interactable = false; // Block Button
-            _outerBtnDict[id].interactable = false;
-            _outerPriceDict[id].text = _purchasedText;
-            button.enabled = false; // Block IAP Button
-            return;
-        }
         
+        // Non consumable which is already purchased
+        if (!FirebaseDataManager.Instance.productCatalog[id].isConsumable)
+        {
+            if (FirebaseDataManager.Instance.CheckProductInWallet(id))
+            {
+                _outerBtnDict[id].interactable = false;
+                _outerPriceDict[id].text = _purchasedText;
+                button.enabled = false; // Block IAP Button
+                return;
+            }
+            _outerPriceDict[id].text = button.priceText.text;
+        }
     }
 
+    /// <summary>
+    /// When IAP Button is pressed and the In-App Purchase was successful, push product data in user's wallet and update the wallet data to firebase.
+    /// </summary>
+    /// <param name="product"></param>
     public void OnPurchaseCompleted(Product product)
     {
         string id = product.definition.id.Split('.')[^1];
-        bool resultFromDatabase = true;
-        // if (product.definition.type == ProductType.NonConsumable)
-        // {
-        //     // Non consumable product which is already purchased
-        //     return;
-        // }
+        bool resultFromDatabase = false;
+        
         if (id.Equals(_idStarterPack))
         {
-            // Starter Pack buy => Give Sunglasses and Pet Cat
+            // Starter pack -> give two products
             bool resultFromDatabase1 = FirebaseDataManager.Instance.Purchase(_idSunglasses);
             bool resultFromDatabase2 = FirebaseDataManager.Instance.Purchase(_idPetCat);
 
             resultFromDatabase = resultFromDatabase1 && resultFromDatabase2;
-            
         }
         else
         {
             resultFromDatabase = FirebaseDataManager.Instance.Purchase(id);
         }
 
+        // When updating wallet data in Firebase Database was successful... 
         if (resultFromDatabase)
         {
-            _store.PurchasePaidItem(id);      
+            StartCoroutine(CoSendProducts(id));
             FirebaseDataManager.Instance.UpdateInfo();      
+            // Notify result
+            if (product.definition.type.Equals(ProductType.NonConsumable))
+            {
+                // Buttons should be disabled after OnCompletePurchase function has ended to prevent InvalidOperationException: Collection was modified; 
+                StartCoroutine(CoDisableButtons(id));
+            } 
         }
 
-        // Notify result
-        Debug.Log($"On Purchase {id} : {resultFromDatabase}");
-        if (product.definition.type.Equals(ProductType.NonConsumable))
-        {
-            _IAPDict[product.definition.id].priceText.text = _purchasedText;
-            // _IAPDict[product.definition.id].gameObject.GetComponent<Button>().interactable = false; // Block Button
-            _IAPDict[product.definition.id].enabled = false; // Block IAP Button
+    }
 
-            _outerBtnDict[product.definition.id].interactable = false;
-            _outerPriceDict[product.definition.id].text = _purchasedText;
-        }
+    private IEnumerator CoSendProducts(string id)
+    {
+        yield return _waitForHalfSec;
+        _store.PurchasePaidItem(id);
+    }
+    private IEnumerator CoDisableButtons(string idKey)
+    {
+        yield return _waitForHalfSec;
+        _IAPDict[idKey].enabled = false;
+        _outerBtnDict[idKey].enabled = false;
+        _outerPriceDict[idKey].text = _purchasedText;
     }
 
     public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)

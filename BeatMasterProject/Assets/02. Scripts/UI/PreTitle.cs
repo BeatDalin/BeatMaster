@@ -14,7 +14,7 @@ public class PreTitle : MonoBehaviour
 
     private IEnumerator CoWaitStart()
     {
-        yield return FirebaseDataManager.Instance._waitForCatalogueLoad;
+        yield return FirebaseDataManager.Instance.waitForCatalogLoad;
         yield return new WaitUntil(() => _loadingPanelGroup.alpha <= 0.3f);
         SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Title);
         yield return new WaitForSeconds(1f);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -281,6 +282,12 @@ public class DataCenter : MonoBehaviour
         _gameData.storeData.itemData = tempItemData;
     }
 
+    private IEnumerator CoWaitToCreatePaidItemData()
+    {
+        // Wait user's wallet to be created.
+        yield return FirebaseDataManager.Instance.waitForSearchEnd;
+        CreatePaidItemData();
+    }
     private void CreatePaidItemData()
     {
         StoreData.PaidItemName[] paidItemList = (StoreData.PaidItemName[])Enum.GetValues(typeof(StoreData.PaidItemName));
@@ -288,8 +295,8 @@ public class DataCenter : MonoBehaviour
         string[] paidItemDescription = { "Ultimate package for beginner", "Cute and smart fox" };
 
         Dictionary<int, StoreData.ItemName[]> dicPackageItem = new Dictionary<int, StoreData.ItemName[]>();
-        dicPackageItem.Add(0, new StoreData.ItemName[]{StoreData.ItemName.Sunglasses, StoreData.ItemName.Pet1});
-        dicPackageItem.Add(1, new StoreData.ItemName[]{StoreData.ItemName.Pet2});
+        dicPackageItem.Add(0, new StoreData.ItemName[]{StoreData.ItemName.fancySunglasses, StoreData.ItemName.petCat});
+        dicPackageItem.Add(1, new StoreData.ItemName[]{StoreData.ItemName.petFox});
 
         Dictionary<int, int[]> dicPackageChar = new Dictionary<int, int[]>();
         dicPackageChar.Add(0, new int[] {0});
@@ -301,11 +308,34 @@ public class DataCenter : MonoBehaviour
         {
             tempPaidItemData[i].paidItemName = paidItemList[i];
             tempPaidItemData[i].price = paidItemPrice[i];
-            tempPaidItemData[i].isPurchased = false; // 앱 삭제 후 다시 받은 경우 고려해야. 서버에서 받아와야할지도
+            // tempPaidItemData[i].isPurchased = false; // 앱 삭제 후 다시 받은 경우 고려해야. 서버에서 받아와야할지도
+            tempPaidItemData[i].isPurchased = FirebaseDataManager.Instance.CheckProductInWallet(tempPaidItemData[i].paidItemName.ToString()); // 앱 삭제 후 다시 받은 경우 고려해야. 서버에서 받아와야할지도
             tempPaidItemData[i].packageCharacterNum = dicPackageChar[i].ToArray();
             tempPaidItemData[i].packageItemName = dicPackageItem[i];
             tempPaidItemData[i].paidItemDescription = paidItemDescription[i];
         }
+    }
+
+    public void CheckPaidItemPurchase()
+    {
+        ItemData[] tempItemData = _gameData.storeData.itemData;
+        PaidItemData[] tempPaidItemData = _gameData.storeData.paidItemData;
+        for (int i = 0; i < _gameData.storeData.paidItemCount; i++)
+        {
+            // tempPaidItemData[i].isPurchased = false; // 앱 삭제 후 다시 받은 경우 고려해야. 서버에서 받아와야할지도
+            bool searchWalletResult = FirebaseDataManager.Instance.CheckProductInWallet(tempPaidItemData[i].paidItemName.ToString());
+            tempPaidItemData[i].isPurchased = searchWalletResult; // 앱 삭제 후 다시 받은 경우 고려해야. 서버에서 받아와야할지도
+            for (int j = 0; j < tempPaidItemData[i].packageItemName.Length; j++)
+            {
+                var index = (int)tempPaidItemData[i].packageItemName[j];
+                tempItemData[index].isPurchased = searchWalletResult;
+                tempItemData[index].isUnlocked = searchWalletResult;
+            }
+        }
+
+        _gameData.storeData.itemData = tempItemData;
+        _gameData.storeData.paidItemData = tempPaidItemData;
+        SaveData();
     }
 
     public StoreData GetStoreData()
