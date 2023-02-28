@@ -7,9 +7,9 @@ using SonicBloom.Koreo;
 public class CharacterMovement : MonoBehaviour
 {
     private Game _game;
-    private ResourcesChanger _resourcesChanger;
     private Rigidbody2D _rigidbody;
     private TouchInputManager _touchInputManager;
+    private ObjectGenerator _objectGenerator;
     [SerializeField] private Vector3 _characterPosition;
     [SerializeField] private float _checkPointBeatTime;
     private float _gravityScale;
@@ -18,6 +18,10 @@ public class CharacterMovement : MonoBehaviour
     private float _previousBeatTime = 0;
     private float _currentBeatTime = 0;
     private bool _isFailed;
+    private bool _isAttack;
+    [SerializeField] private float _attackBeatTime;
+    [SerializeField] private int _rewindIdx;
+    private bool _isCheckCheckPoint = true;
 
     [Header("Move")] 
     [EventID] public string speedEventID;
@@ -45,8 +49,8 @@ public class CharacterMovement : MonoBehaviour
 
     [Header("Ray")] 
     [SerializeField] private Transform _rayOriginPoint;
-    [SerializeField] private float _minRayDistance = 0.5f;
-    private float _maxRayDistance;
+    [SerializeField] private float _minRayDistance = 0.8f;
+    [SerializeField] private float _maxRayDistance = 1.1f;
     private float _rayDistance;
     [SerializeField] private float _positionYOffset;
     private LayerMask _tileLayer;
@@ -62,13 +66,6 @@ public class CharacterMovement : MonoBehaviour
     private const string UnTag = "Untagged";
     private const string PlayerTag = "Player";
 
-    private bool _isAttack;
-    [SerializeField] private float _attackBeatTime;
-
-    private ObjectGenerator _objectGenerator;
-    [SerializeField] private int _rewindIdx;
-    private bool _isCheckCheckPoint = true;
-    
     private void Start()
     {
         Init();
@@ -110,7 +107,6 @@ public class CharacterMovement : MonoBehaviour
         _gameUI = FindObjectOfType<GameUI>();
         _rewindTime = FindObjectOfType<RewindTime>();
         _game = FindObjectOfType<Game>();
-        _resourcesChanger = FindObjectOfType<ResourcesChanger>();
         _touchInputManager = FindObjectOfType<TouchInputManager>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _rigidbody.bodyType = RigidbodyType2D.Kinematic;
@@ -119,8 +115,7 @@ public class CharacterMovement : MonoBehaviour
         _tileLayer = LayerMask.GetMask("Ground");
 
         _characterPosition = transform.position;
-        _maxRayDistance = _minRayDistance + 0.2f;
-        _rayDistance = Mathf.Lerp(_minRayDistance, _maxRayDistance, (MoveSpeed - 2f) / 2f);
+        _rayDistance = Mathf.Lerp(_minRayDistance, _maxRayDistance, 2 * (MoveSpeed - 2f) / 3f);
         
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
         Koreographer.Instance.RegisterForEventsWithTime(checkpointID, CheckPoint);
@@ -128,7 +123,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void GetInput()
     {
-        if (_touchInputManager.CheckRightTouch())
+        if (_touchInputManager.CheckRightTouch() || Input.GetKeyDown(KeyCode.RightArrow))
         {
             PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
             SoundManager.instance.PlaySFX("Attack");
@@ -146,7 +141,7 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-    private void Jump()
+    public void Jump()
     {
         SoundManager.instance.PlaySFX("Jump");
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);
@@ -259,9 +254,16 @@ public class CharacterMovement : MonoBehaviour
 
             if (_isAttack)
             {
-                if (lastBeatTime >= _attackBeatTime + 0.7f)
+                if (lastBeatTime >= _attackBeatTime + 0.5f)
                 {
-                    PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                    if (isLongNote)
+                    {
+                        PlayerStatus.Instance.ChangeStatus(CharacterStatus.FastIdle);
+                    }
+                    else
+                    {
+                        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                    }
                     _isAttack = false;
                 }
             }
@@ -316,7 +318,7 @@ public class CharacterMovement : MonoBehaviour
             _checkPointBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
             _rewindTime.ClearRewindList();
             MoveSpeed = evt.GetFloatValue();
-            _rayDistance = Mathf.Lerp(_minRayDistance, _maxRayDistance, (MoveSpeed - 2f) / 2f);
+            _rayDistance = Mathf.Lerp(_minRayDistance, _maxRayDistance, 2 * (MoveSpeed - 2f) / 3f);
         }
 
         if (evt.HasTextPayload())

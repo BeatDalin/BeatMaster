@@ -34,10 +34,10 @@ public class CheckTrackCreator : MonoBehaviour
         // If you want to create check events, call functions here
         // ConvertMapToText();
         // GenerateJumpCheckEvent();
+        // GenerateAttackCheckEvent();
         // GenerateLongCheckEvent();
         // GenerateCheckPointEvent();
         // SyncAttackLong();
-        // GenerateAttackCheckEvent();
     }
 
     private void ConvertMapToText()
@@ -66,20 +66,20 @@ public class CheckTrackCreator : MonoBehaviour
             var end = allEvents[i].EndSample;
             // Long Check Start
             var koreoEventStart = new KoreographyEvent();
-            koreoEventStart.StartSample = start - 5000;
-            koreoEventStart.EndSample = start + 5000;
+            koreoEventStart.StartSample = start - 8000;
+            koreoEventStart.EndSample = start + 8000;
             longCheckStart.AddEvent(koreoEventStart);
 
             // Long Check End
             var koreoEventEnd = new KoreographyEvent();
-            koreoEventEnd.StartSample = end - 5000;
-            koreoEventEnd.EndSample = end + 5000;
+            koreoEventEnd.StartSample = end - 8000;
+            koreoEventEnd.EndSample = end + 8000;
             longCheckEnd.AddEvent(koreoEventEnd);
 
             // Long Check Middle
             var koreoEventMiddle = new KoreographyEvent();
-            koreoEventMiddle.StartSample = start + 5001;
-            koreoEventMiddle.EndSample = end - 5001;
+            koreoEventMiddle.StartSample = start + 8001;
+            koreoEventMiddle.EndSample = end - 8001;
             longCheckMiddle.AddEvent(koreoEventMiddle);
         }
     }
@@ -129,10 +129,22 @@ public class CheckTrackCreator : MonoBehaviour
         for (int i = 0; i < spdEvents.Count - 1; i++)
         {
             KoreographyEvent koreoEvent = new KoreographyEvent();
-            koreoEvent.Payload = new IntPayload();
-            koreoEvent.StartSample = spdEvents[i].StartSample;
-            koreoEvent.EndSample = spdEvents[i].EndSample;
+            koreoEvent.Payload = new CurvePayload();
+            koreoEvent.StartSample = spdEvents[i].StartSample - 3000;
+            koreoEvent.EndSample = spdEvents[i].StartSample + 3000;
             checkPointTrack.AddEvent(koreoEvent);
+        }
+    }
+
+    private void VerifyShortNote()
+    {
+        shortEvents = shortTrack.GetAllEvents();
+        for (int i = shortEvents.Count-1; i >= 1 ; i++)
+        {
+            if (shortEvents[i - 1].StartSample == shortEvents[i].StartSample)
+            {
+                shortEvents.Remove(shortEvents[i]);
+            }
         }
     }
 
