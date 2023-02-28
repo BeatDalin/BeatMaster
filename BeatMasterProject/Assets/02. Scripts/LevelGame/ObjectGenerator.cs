@@ -81,7 +81,7 @@ public class ObjectGenerator : MonoBehaviour
         }
     }
     
-    public void PositItems(int xPos, int yPos)
+    public void PositItems(float xPos, float yPos)
     {
         var item = Instantiate(_starObj, new Vector3(xPos, yPos, 0), Quaternion.identity);
         item.transform.SetParent(_itemContainer);
