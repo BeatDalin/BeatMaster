@@ -70,19 +70,19 @@ public struct StoreData
         SantaHat,
         MagicianHat,
         Crown,
-        Sunglasses,
+        fancySunglasses,
         RabbitBand,
         Medal,
         FlowerCrown,
-        Pet1,
-        Pet2,
+        petCat,
+        petFox,
         Empty = 99,
     }
 
     public enum PaidItemName
     {
-        StarterPack = 0,
-        AdorablePet
+        starterPack = 0,
+        petFox,
     }
 
     public int charCount; // 상점 내 모든 캐릭터 수

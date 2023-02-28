@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,7 +114,19 @@ public class DataCenter : MonoBehaviour
             {
                 temp.level = j + 1;
                 temp.isUnlocked = j == 0;
-                temp.unlockCharNum = j <= 1 ? j + 1 : 2; // 레벨 번호대로 캐릭터 해금, 또는 마지막 character index 부여)
+                
+                if (i == 0 && j == 0)
+                {
+                    temp.unlockCharNum = 1;
+                }
+                else if (i == 1 && j == 0)
+                {
+                    temp.unlockCharNum = 2;
+                }
+                else
+                {
+                    temp.unlockCharNum = 0;
+                }
 
                 _gameData.stageData[i].levelData[j] = temp;
 
@@ -216,9 +229,10 @@ public class DataCenter : MonoBehaviour
         StoreData.CharacterName[] characterList =
             (StoreData.CharacterName[])Enum.GetValues(typeof(StoreData.CharacterName));
         
-
-        int[] charPrice = { 0, 150, 150 };
-        bool[] charIsPaidItem = { false, false, true };
+        int[] charPrice = { 0, 500, 500 };
+        bool[] charIsPaidItem = { false, false, false };
+        int[] unlockStages = { 0, 0, 1 };
+        int[] unlockLevels = { -1, 0, 0 };
         string[] charDescription = { "Cheerful Corgi", "Awesome Corgi", "Cute Duck" };
 
         for (int i = 0; i < _gameData.storeData.charCount; i++)
@@ -226,8 +240,8 @@ public class DataCenter : MonoBehaviour
             tempCharacterData[i].characterName = characterList[i];
             tempCharacterData[i].characterNum = i;
             tempCharacterData[i].price = charPrice[i];
-            tempCharacterData[i].unlockStage = 0;
-            tempCharacterData[i].unlockLevel = i == 0 ? -1 : i - 1;
+            tempCharacterData[i].unlockStage = unlockStages[i];
+            tempCharacterData[i].unlockLevel = unlockLevels[i];
             tempCharacterData[i].isPurchased = i == 0;
             tempCharacterData[i].isUnlocked = i == 0;
             tempCharacterData[i].isPaidItem = charIsPaidItem[i];
@@ -281,6 +295,12 @@ public class DataCenter : MonoBehaviour
         _gameData.storeData.itemData = tempItemData;
     }
 
+    private IEnumerator CoWaitToCreatePaidItemData()
+    {
+        // Wait user's wallet to be created.
+        yield return FirebaseDataManager.Instance.waitForSearchEnd;
+        CreatePaidItemData();
+    }
     private void CreatePaidItemData()
     {
         StoreData.PaidItemName[] paidItemList = (StoreData.PaidItemName[])Enum.GetValues(typeof(StoreData.PaidItemName));
@@ -288,8 +308,8 @@ public class DataCenter : MonoBehaviour
         string[] paidItemDescription = { "Ultimate package for beginner", "Cute and smart fox" };
 
         Dictionary<int, StoreData.ItemName[]> dicPackageItem = new Dictionary<int, StoreData.ItemName[]>();
-        dicPackageItem.Add(0, new StoreData.ItemName[]{StoreData.ItemName.Sunglasses, StoreData.ItemName.Pet1});
-        dicPackageItem.Add(1, new StoreData.ItemName[]{StoreData.ItemName.Pet2});
+        dicPackageItem.Add(0, new StoreData.ItemName[]{StoreData.ItemName.fancySunglasses, StoreData.ItemName.petCat});
+        dicPackageItem.Add(1, new StoreData.ItemName[]{StoreData.ItemName.petFox});
 
         Dictionary<int, int[]> dicPackageChar = new Dictionary<int, int[]>();
         dicPackageChar.Add(0, new int[] {0});
@@ -301,11 +321,34 @@ public class DataCenter : MonoBehaviour
         {
             tempPaidItemData[i].paidItemName = paidItemList[i];
             tempPaidItemData[i].price = paidItemPrice[i];
-            tempPaidItemData[i].isPurchased = false; // 앱 삭제 후 다시 받은 경우 고려해야. 서버에서 받아와야할지도
+            // tempPaidItemData[i].isPurchased = false; // 앱 삭제 후 다시 받은 경우 고려해야. 서버에서 받아와야할지도
+            tempPaidItemData[i].isPurchased = FirebaseDataManager.Instance.CheckProductInWallet(tempPaidItemData[i].paidItemName.ToString()); // 앱 삭제 후 다시 받은 경우 고려해야. 서버에서 받아와야할지도
             tempPaidItemData[i].packageCharacterNum = dicPackageChar[i].ToArray();
             tempPaidItemData[i].packageItemName = dicPackageItem[i];
             tempPaidItemData[i].paidItemDescription = paidItemDescription[i];
         }
+    }
+
+    public void CheckPaidItemPurchase()
+    {
+        ItemData[] tempItemData = _gameData.storeData.itemData;
+        PaidItemData[] tempPaidItemData = _gameData.storeData.paidItemData;
+        for (int i = 0; i < _gameData.storeData.paidItemCount; i++)
+        {
+            // tempPaidItemData[i].isPurchased = false; // 앱 삭제 후 다시 받은 경우 고려해야. 서버에서 받아와야할지도
+            bool searchWalletResult = FirebaseDataManager.Instance.CheckProductInWallet(tempPaidItemData[i].paidItemName.ToString());
+            tempPaidItemData[i].isPurchased = searchWalletResult; // 앱 삭제 후 다시 받은 경우 고려해야. 서버에서 받아와야할지도
+            for (int j = 0; j < tempPaidItemData[i].packageItemName.Length; j++)
+            {
+                var index = (int)tempPaidItemData[i].packageItemName[j];
+                tempItemData[index].isPurchased = searchWalletResult;
+                tempItemData[index].isUnlocked = searchWalletResult;
+            }
+        }
+
+        _gameData.storeData.itemData = tempItemData;
+        _gameData.storeData.paidItemData = tempPaidItemData;
+        SaveData();
     }
 
     public StoreData GetStoreData()
