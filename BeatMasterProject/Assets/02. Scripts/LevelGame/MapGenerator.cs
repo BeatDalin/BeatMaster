@@ -177,7 +177,7 @@ public class MapGenerator : MonoBehaviour
             if (groundType == _GroundType.Empty)
             {
                 _tileX += 1;
-                _objectGenerator.PositItems(_tileX, _tileY + 2); // posit star item
+                _objectGenerator.PositItems(_tileX, _tileY + _groundYOffset + 2); // posit star item
                 prevGroundType = groundType;
 
                 continue;
@@ -187,28 +187,31 @@ public class MapGenerator : MonoBehaviour
             // 완경사일 때
             if ((groundType == _GroundType.GentleUp || prevGroundType == _GroundType.GentleDown))
             {
-                gentleSlopeCount++;
-
                 if (groundType == _GroundType.GentleUp)
                 {
+                    gentleSlopeCount++;
+
                     if (gentleSlopeCount == 1)
                     {
-                        groundYDelta = 1;
+                        groundYDelta += 1;
                     }
-                    else // gradualTileCount == 2
+                    else // gentleSlopeCount == 2
                     {
                         groundIndex = (int)groundType + 4;
                     }
                 }
-                else // prevGroundType == _GroundType.GentleDown
+
+                if (prevGroundType == _GroundType.GentleDown)
                 {
+                    gentleSlopeCount++;
+
                     if (gentleSlopeCount == 2)
                     {
-                        groundYDelta = -1;
+                        groundYDelta += -1;
                     }
-                    else // gradualTileCount == 1
+                    else // gentleSlopeCount == 1
                     {
-                        groundIndex = (int)groundType + 4;
+                        groundIndex = groundType == _GroundType.GentleUp ? (int)groundType : (int)groundType + 4;
                     }
                 }
 
@@ -274,7 +277,7 @@ public class MapGenerator : MonoBehaviour
                         _interactionTilemap.SetTile(GetTileChangeData(_TileType.Interaction, 0,
                             new Vector3Int(_tileX, _tileY + 1, 0), new Vector3(0f, _groundYOffset, 0f)), false);
                         // Record CheckPoint Animation
-                        _objectGenerator.RecordCheckPoint(_tileX, _tileY + 1);
+                        _objectGenerator.RecordCheckPoint(_tileX, _tileY + _groundYOffset + 1);
                     }
                 }
             }
