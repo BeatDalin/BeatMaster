@@ -44,14 +44,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11bfd3dce10ed09479384dcd7ba9b56b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolingPrefab: {fileID: 6122911594590392190, guid: 6c2254359afea7749962b6c499fbff99, type: 3}
+  initCount: 30
   _corgiSprites:
   - {fileID: -1006679913, guid: 54f8146826d40d4489f94187a327da2f, type: 3}
-  - {fileID: -1904161309, guid: 497318e58850fef46a2623438316f245, type: 3}
   - {fileID: 480714444, guid: 665ff579d7d71224fad3511f57fe5311, type: 3}
-  - {fileID: -1264630028, guid: ca7e015e695c46f408ab8e459319397a, type: 3}
-  _corgiprefab: {fileID: 6122911594590392190, guid: 6c2254359afea7749962b6c499fbff99, type: 3}
-  _minPosAmount: 1.1
-  _maxPosAmount: 1.3
+  - {fileID: -428861444, guid: 778e50a5d02d843868110ed3a1f5e833, type: 3}
+  _minPosYAmount: 1.1
+  _maxPosYAmount: 1.3
+  _minPosXAmount: 0.5
+  _maxPosXAmount: 1.1
   _minRotation: 30
   _maxRotation: 60
   _minDealy: 0.5

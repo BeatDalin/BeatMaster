@@ -154,6 +154,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7454798990431742625, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 270507031}
+    - target: {fileID: 7454798990431742626, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
+      propertyPath: _feverStandard
+      value: 70
+      objectReference: {fileID: 0}
     - target: {fileID: 7454798990431742653, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
       propertyPath: m_Name
       value: FeverCanvas
@@ -1118,6 +1126,7 @@ MonoBehaviour:
   longCheckMiddleID: Stage3_Level1_LongCheckMiddle
   longCheckStartID: Stage3_Level1_LongCheckStart
   longCheckEndID: Stage3_Level1_LongCheckEnd
+  _isAutoPlay: 0
   _changeChar: {fileID: 18329012}
 --- !u!4 &612035090
 Transform:

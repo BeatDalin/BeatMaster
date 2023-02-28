@@ -775,6 +775,7 @@ GameObject:
   m_Component:
   - component: {fileID: 612035090}
   - component: {fileID: 612035089}
+  - component: {fileID: 612035091}
   m_Layer: 0
   m_Name: NormalGame
   m_TagString: Untagged
@@ -817,6 +818,7 @@ MonoBehaviour:
   longCheckMiddleID: Stage1_Level1_LongCheckMiddle
   longCheckStartID: Stage1_Level1_LongCheckStart
   longCheckEndID: Stage1_Level1_LongCheckEnd
+  _isAutoPlay: 0
   _changeChar: {fileID: 18329012}
 --- !u!4 &612035090
 Transform:
@@ -833,6 +835,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &612035091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612035085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86814d98a44c81e409c8ba8763a80a1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &764350025
 GameObject:
   m_ObjectHideFlags: 0
@@ -6557,6 +6571,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 0.55, z: -10}
   _speedEventID: Stage1_Level1_Spd
+  _minOrthoSize: 4.1
+  _maxOrthoSize: 5.7
+  _lerpCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1550472947
 GameObject:
   m_ObjectHideFlags: 0
@@ -8016,10 +8038,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TutorialCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 6475142706769421960, guid: ab81e55793eb6284fb399d8befbb88b3, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6475142706769421961, guid: ab81e55793eb6284fb399d8befbb88b3, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -8104,10 +8122,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6475142706769421965, guid: ab81e55793eb6284fb399d8befbb88b3, type: 3}
-      propertyPath: _changeAmount
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 6475142706965252290, guid: ab81e55793eb6284fb399d8befbb88b3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -8139,18 +8153,6 @@ PrefabInstance:
     - target: {fileID: 6475142707101356516, guid: ab81e55793eb6284fb399d8befbb88b3, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6475142707101356517, guid: ab81e55793eb6284fb399d8befbb88b3, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6475142707101356517, guid: ab81e55793eb6284fb399d8befbb88b3, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6475142707101356517, guid: ab81e55793eb6284fb399d8befbb88b3, type: 3}
-      propertyPath: m_Color.r
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6475142707326012703, guid: ab81e55793eb6284fb399d8befbb88b3, type: 3}
       propertyPath: m_AnchorMax.y
@@ -8209,13 +8211,33 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 167400548}
     m_Modifications:
+    - target: {fileID: 820976646931918734, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 820976647268916944, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -346824255, guid: 54f8146826d40d4489f94187a327da2f, type: 3}
+    - target: {fileID: 820976647302791950, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 552868331, guid: 54f8146826d40d4489f94187a327da2f, type: 3}
+    - target: {fileID: 820976647402451751, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -312058122, guid: 54f8146826d40d4489f94187a327da2f, type: 3}
+    - target: {fileID: 820976648239630104, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -510452979, guid: 54f8146826d40d4489f94187a327da2f, type: 3}
     - target: {fileID: 5003443901932235547, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5003443902550924369, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7454798990431742625, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
       propertyPath: m_Camera
@@ -8224,6 +8246,10 @@ PrefabInstance:
     - target: {fileID: 7454798990431742653, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
       propertyPath: m_Name
       value: FeverCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454798990431742653, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7454798990431742654, guid: 6bb4673ed2e792546b4297038ba9c100, type: 3}
       propertyPath: m_Pivot.x
@@ -8436,9 +8462,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7746274805836887253, guid: 92ecebe6c7aa73b428cedf532d906542, type: 3}
+      propertyPath: poolingPrefab
+      value: 
+      objectReference: {fileID: 6122911594590392190, guid: 6c2254359afea7749962b6c499fbff99, type: 3}
     - target: {fileID: 7746274805836887258, guid: 92ecebe6c7aa73b428cedf532d906542, type: 3}
       propertyPath: m_Name
       value: FallingCorgiController
+      objectReference: {fileID: 0}
+    - target: {fileID: 7746274805836887258, guid: 92ecebe6c7aa73b428cedf532d906542, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92ecebe6c7aa73b428cedf532d906542, type: 3}
