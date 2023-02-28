@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7746274805836887258
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7746274805836887252}
+  - component: {fileID: 7746274805836887253}
+  m_Layer: 0
+  m_Name: FallingCorgiController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7746274805836887252
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7746274805836887258}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7746274805836887253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7746274805836887258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11bfd3dce10ed09479384dcd7ba9b56b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _corgiSprites:
+  - {fileID: -1006679913, guid: 54f8146826d40d4489f94187a327da2f, type: 3}
+  - {fileID: -1904161309, guid: 497318e58850fef46a2623438316f245, type: 3}
+  - {fileID: 480714444, guid: 665ff579d7d71224fad3511f57fe5311, type: 3}
+  - {fileID: -1264630028, guid: ca7e015e695c46f408ab8e459319397a, type: 3}
+  _corgiprefab: {fileID: 6122911594590392190, guid: 6c2254359afea7749962b6c499fbff99, type: 3}
+  _minPosAmount: 1.1
+  _maxPosAmount: 1.3
+  _minRotation: 30
+  _maxRotation: 60
+  _minDealy: 0.5
+  _maxDelay: 1.5
+  _minLayer: -9
+  _maxLayer: -5
