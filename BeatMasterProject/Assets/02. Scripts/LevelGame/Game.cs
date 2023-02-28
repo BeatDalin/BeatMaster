@@ -26,7 +26,9 @@ public abstract class Game : MonoBehaviour
     [SerializeField] protected GameUI gameUI; // LevelGameUI or BossGameUI will come in.
     protected CharacterMovement characterMovement;
     protected MonsterPooling monsterPooling;
-    protected EffectAnim _playerAnim;
+    protected EffectAnim playerAnim;
+
+    protected FeverTimeController feverTimeController;
     private LeaderboardManager _leaderboardManager;
 
     [Header("Game Play")]
@@ -80,16 +82,21 @@ public abstract class Game : MonoBehaviour
     [SerializeField][EventID] protected string longCheckMiddleID;
     [SerializeField][EventID] protected string longCheckStartID;
     [SerializeField][EventID] protected string longCheckEndID;
+    
+    protected bool isTutorial;
+
 
     protected virtual void Awake()
     {
         mapGenerator = FindObjectOfType<MapGenerator>();
         rewindTime = FindObjectOfType<RewindTime>();
-        _playerAnim = FindObjectOfType<EffectAnim>();
+        playerAnim = FindObjectOfType<EffectAnim>();
         characterMovement = FindObjectOfType<CharacterMovement>();
         monsterPooling = FindObjectOfType<MonsterPooling>();
         objectGenerator = FindObjectOfType<ObjectGenerator>();
         gameUI = FindObjectOfType<GameUI>(); // This will get LevelGameUI or BossGameUI object
+        feverTimeController = FindObjectOfType<FeverTimeController>();
+        
         _leaderboardManager = FindObjectOfType<LeaderboardManager>();
         
         _waitWhileSceneLoad = new WaitWhile(() => !SceneLoadManager.Instance.GetTransitionEnd());
@@ -130,7 +137,7 @@ public abstract class Game : MonoBehaviour
 
     protected IEnumerator CoStartWithDelay(int startSample = 0)
     {
-        _playerAnim.SetEffectBool(false);
+        playerAnim.SetEffectBool(false);
         // UI Timer
         // gameUI.timePanel.SetActive(true);
         // // Wait for Scene Transition to end
@@ -186,10 +193,15 @@ public abstract class Game : MonoBehaviour
         {
             // Entered new check point
             Debug.Log($"SaveCheckPoint: Sample {sampleTime} > Rewind {rewindSampleTime}");
+
             // DisableMonster Clear
             if (evt.StartSample != 0)
             {
                 monsterPooling.ResetPool();
+                if (!isTutorial)
+                {
+                    feverTimeController.ResetDecreasingAmount();
+                }
                 //rewindTime.ClearRewindList();
             }
             // Record sample time to play music
@@ -230,6 +242,10 @@ public abstract class Game : MonoBehaviour
             RateResult(_stageIdx, _levelIdx);
             gameUI.UpdateText(TextType.Death, deathCount); // increase death count
             gameUI.ShowFinalResult(_finalSummary, totalNoteCount, _stageIdx, _levelIdx); // final result
+            if (!isTutorial)
+            {
+                feverTimeController.Reset();
+            }
         }
         else if (message == "Stop")
         {
@@ -249,6 +265,11 @@ public abstract class Game : MonoBehaviour
             else if (pressedTime <= eventRange[idx, 1])
             {
                 tempResult = BeatResult.Perfect;
+                if (!isTutorial)
+                {
+                    feverTimeController.IncreaseFeverGage();
+                }
+                
             }
             else
             {
