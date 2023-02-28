@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SonicBloom.Koreo;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class ObjectGenerator : MonoBehaviour
 {
@@ -13,11 +13,19 @@ public class ObjectGenerator : MonoBehaviour
     [Header("Item")]
     [SerializeField] private GameObject _starObj; // Item
     [SerializeField] private Transform _itemContainer;
-    [Header("Check Point")] 
+    [Header("Check Point")]
     [SerializeField] [EventID] private string _checkPointEventID;
     [SerializeField] private List<KoreographyEvent> _checkPointList;
+    [Header("Check Point - Prefabs")] 
     [Tooltip("Prefab object that contains Animator component.")]
-    [SerializeField] private GameObject _checkPointPrefab; 
+    [SerializeField] private GameObject _checkPointPrefab;
+    [Tooltip("An array of particle prefabs. Random colors will appear.")]
+    [SerializeField] private ParticleSystem[] _checkPointParticleSystems;
+    [SerializeField] private ParticleSystem[] _checkPointParticleFlicks;
+    [SerializeField] private ParticleSystem[] _checkPointParticleGlow;
+    [SerializeField] private ParticleSystem[] _checkPointParticleSmoke;
+    [SerializeField] private int[] _randomParticleNums;
+    [SerializeField] private Transform _particleContainer;
     private GameObject _checkPointObj; // Check point object to be placed
     private Animator _checkPointAnim;
     public List<Vector3> checkPointPos;
@@ -37,9 +45,6 @@ public class ObjectGenerator : MonoBehaviour
     [SerializeField] private Transform _longObjContainer;
     [SerializeField] private List<Vector3> _longObjPosList;
 
-    // private CharacterMovement _characterMovement;
-    // private Game _game;
-    
     private static readonly int IsPlay = Animator.StringToHash("isPlay");
 
     private void Awake()
@@ -53,6 +58,15 @@ public class ObjectGenerator : MonoBehaviour
         _checkPointAnim = _checkPointObj.GetComponent<Animator>();
         // Check Point Initialize
         _checkPointIdx = -1;
+        // Check Point Particle Systems
+        _randomParticleNums = new int[_checkPointList.Count];
+        InitParticles();
+        // Record random particle nums
+        for (int i = 0; i < _checkPointList.Count; i++)
+        {
+            _randomParticleNums[i] = Random.Range(0, _checkPointParticleSystems.Length);
+        }
+
         // ObstacleCount array to count the number of obstacles before checkPoints
         _obsIdx = 0;
         _obstacleCounts = new int[_checkPointList.Count];
@@ -135,9 +149,26 @@ public class ObjectGenerator : MonoBehaviour
     {
         checkPointPos.Add(new Vector3(xPos, yPos, 0)); // Record position
     }
+
+    private void InitParticles()
+    {
+        int particleCounts = _particleContainer.childCount;
+        _checkPointParticleSystems = new ParticleSystem[particleCounts];
+        _checkPointParticleFlicks = new ParticleSystem[particleCounts];
+        _checkPointParticleGlow = new ParticleSystem[particleCounts];
+        _checkPointParticleSmoke = new ParticleSystem[particleCounts];
+        for (int i = 0; i < particleCounts; i++)
+        {
+            Transform child = _particleContainer.GetChild(i);
+            _checkPointParticleSystems[i] = child.GetComponent<ParticleSystem>();
+            _checkPointParticleFlicks[i] = child.GetChild(0).GetComponent<ParticleSystem>();
+            _checkPointParticleGlow[i] = child.GetChild(2).GetComponent<ParticleSystem>();
+            _checkPointParticleSmoke[i] = child.GetChild(3).GetComponent<ParticleSystem>();
+        }
+    }
     
     /// <summary>
-    /// Increase an index to access List of position and boolean values.
+    /// Increase an index to access List of positions and boolean values.
     /// Move the check point object to current check point position. Record current check point as visited. Play an Animation.
     /// </summary>
     /// <returns>Start sample of current check point, which will be rewindSampleTime in NormalGame.cs</returns>
@@ -145,6 +176,12 @@ public class ObjectGenerator : MonoBehaviour
     {
         _checkPointIdx++;
         _checkPointObj.transform.position = checkPointPos[_checkPointIdx];
+        _particleContainer.position = checkPointPos[_checkPointIdx] + Vector3.down;
+        int randIdx = _randomParticleNums[_checkPointIdx];
+        _checkPointParticleSystems[randIdx].Play();
+        _checkPointParticleFlicks[randIdx].Play();
+        _checkPointParticleGlow[randIdx].Play();
+        _checkPointParticleSmoke[randIdx].Play();
         // _checkPointVisited[_checkPointIdx] = true;
         _checkPointAnim.SetTrigger(IsPlay); // Play Animation
         return _checkPointList[_checkPointIdx].StartSample;
