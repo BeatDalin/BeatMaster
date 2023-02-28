@@ -149,10 +149,7 @@ public class NormalGame : Game
             {
                 // ================Rewind 자리================
                 Rewind();
-                if (!isTutorial)
-                {
-                    feverTimeController.Reset();
-                }
+                
             }
             isShortKeyCorrect = false;
         }
@@ -207,10 +204,7 @@ public class NormalGame : Game
             {
                 // ================Rewind 자리================
                 Rewind();
-                if (!isTutorial)
-                {
-                    feverTimeController.Reset();
-                }
+                
             }
             isShortKeyCorrect = false;
         }
@@ -275,10 +269,7 @@ public class NormalGame : Game
             {
                 //==============Rewind 자리==============
                 Rewind();
-                if (!isTutorial)
-                {
-                    feverTimeController.Reset();
-                }
+                
             }
         }
     }
@@ -303,10 +294,7 @@ public class NormalGame : Game
                 playerAnim.SetEffectBool(false);
                 //==============Rewind 자리==============
                 Rewind();
-                if (!isTutorial)
-                {
-                    feverTimeController.Reset();
-                }
+                
             }
         }
     }
@@ -390,10 +378,7 @@ public class NormalGame : Game
 #endif
                 // ===============Rewind==============
                 Rewind();
-                if (!isTutorial)
-                {
-                    feverTimeController.Reset();
-                }
+                
             }
             isLongPressed = false;
             isLongKeyCorrect = false;
@@ -426,6 +411,12 @@ public class NormalGame : Game
         // Post Processing
         _resourcesChanger.ResetPostProcessing();
         Achievement achieve = DataCenter.Instance.GetAchievementData();
+        
+        if (!isTutorial)
+        {
+            feverTimeController.Reset();
+        }
+        
 #if !UNITY_EDITOR
         if ((_rewindCount += 1) == 100)
         {
