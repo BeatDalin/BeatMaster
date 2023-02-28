@@ -224,8 +224,10 @@ public class FeverTimeController : MonoBehaviour
     public void SetPlayerIndex(int index)
     {
         _currentPlayerIndex = index;
-        int length = _fallingCorgiController.GetSpritesLength();
+        int length = _fallingCorgiController.GetSpritesLength() - 1;
         float pixelPerUnit = _currentPlayerIndex < length ? 1f : _pixelMultiplier;
+        Debug.Log($"length : {length} _currentPlayerIndex : {_currentPlayerIndex} pixelPerUnit : {pixelPerUnit}");
+        
         
         foreach (var image in _playerImages)
         {
