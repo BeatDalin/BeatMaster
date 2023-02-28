@@ -114,7 +114,19 @@ public class DataCenter : MonoBehaviour
             {
                 temp.level = j + 1;
                 temp.isUnlocked = j == 0;
-                temp.unlockCharNum = j <= 1 ? j + 1 : 2; // 레벨 번호대로 캐릭터 해금, 또는 마지막 character index 부여)
+                
+                if (i == 0 && j == 0)
+                {
+                    temp.unlockCharNum = 1;
+                }
+                else if (i == 1 && j == 0)
+                {
+                    temp.unlockCharNum = 2;
+                }
+                else
+                {
+                    temp.unlockCharNum = 0;
+                }
 
                 _gameData.stageData[i].levelData[j] = temp;
 
@@ -217,9 +229,10 @@ public class DataCenter : MonoBehaviour
         StoreData.CharacterName[] characterList =
             (StoreData.CharacterName[])Enum.GetValues(typeof(StoreData.CharacterName));
         
-
-        int[] charPrice = { 0, 150, 150 };
-        bool[] charIsPaidItem = { false, false, true };
+        int[] charPrice = { 0, 500, 500 };
+        bool[] charIsPaidItem = { false, false, false };
+        int[] unlockStages = { 0, 0, 1 };
+        int[] unlockLevels = { -1, 0, 0 };
         string[] charDescription = { "Cheerful Corgi", "Awesome Corgi", "Cute Duck" };
 
         for (int i = 0; i < _gameData.storeData.charCount; i++)
@@ -227,8 +240,8 @@ public class DataCenter : MonoBehaviour
             tempCharacterData[i].characterName = characterList[i];
             tempCharacterData[i].characterNum = i;
             tempCharacterData[i].price = charPrice[i];
-            tempCharacterData[i].unlockStage = 0;
-            tempCharacterData[i].unlockLevel = i == 0 ? -1 : i - 1;
+            tempCharacterData[i].unlockStage = unlockStages[i];
+            tempCharacterData[i].unlockLevel = unlockLevels[i];
             tempCharacterData[i].isPurchased = i == 0;
             tempCharacterData[i].isUnlocked = i == 0;
             tempCharacterData[i].isPaidItem = charIsPaidItem[i];
