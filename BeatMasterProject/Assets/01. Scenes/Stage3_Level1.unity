@@ -422,7 +422,7 @@ MonoBehaviour:
   monsterList: []
   coinParent: {fileID: 970478227}
   _mapEventID: Stage3_Level1_Map
-  _shortEventID: Stage3_Level1_Midi
+  _shortEventID: Stage3_Level1_Spectrum_ShortCopy
   _mapEventList: []
   _shortEventList: []
   _monsterPrefabList:
@@ -948,15 +948,15 @@ MonoBehaviour:
   _stageIdx: 2
   _levelIdx: 0
   coinCount: 0
-  shortID: Stage3_Level1_Midi
+  shortID: Stage3_Level1_Spectrum_ShortCopy
   longID: Stage3_Level1_Long
-  jumpCheckID: Stage3_Level1_MidiJumpCheck
-  attackCheckID: Stage3_Level1_MidiAttackCheck
+  jumpCheckID: Stage3_Level1_Spectrum_JumpCheck
+  attackCheckID: Stage3_Level1_Spectrum_AttackCheck
   longCheckMiddleID: Stage3_Level1_LongCheckMiddle
   longCheckStartID: Stage3_Level1_LongCheckStart
   longCheckEndID: Stage3_Level1_LongCheckEnd
+  _isAutoPlay: 1
   _changeChar: {fileID: 18329012}
-  isPress: 0
 --- !u!4 &612035090
 Transform:
   m_ObjectHideFlags: 0
@@ -972,63 +972,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &855460175
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 6026521773323550228, guid: 406212101a8e34359be0dadf71063b43, type: 3}
-      propertyPath: m_Name
-      value: ResoucesChanger
-      objectReference: {fileID: 0}
-    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
-      propertyPath: m_RootOrder
-      value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6026521773323550234, guid: 406212101a8e34359be0dadf71063b43, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 406212101a8e34359be0dadf71063b43, type: 3}
 --- !u!1 &925814930
 GameObject:
   m_ObjectHideFlags: 0
@@ -1319,7 +1262,7 @@ MonoBehaviour:
   theme: 2
   _isEditMode: 0
   _mapEventID: Stage3_Level1_Map
-  _shortEventID: Stage3_Level1_Midi
+  _shortEventID: Stage3_Level1_Spectrum_ShortCopy
   _longEventID: Stage3_Level1_Long
   _spdEventID: Stage3_Level1_Spd
   _groundTilemap: {fileID: 1828062194}
@@ -6749,6 +6692,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _offset: {x: 0, y: 2, z: -10}
   _speedEventID: Stage3_Level1_Spd
+  _minOrthoSize: 4.1
+  _maxOrthoSize: 5.7
+  _lerpCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1550472947
 GameObject:
   m_ObjectHideFlags: 0
