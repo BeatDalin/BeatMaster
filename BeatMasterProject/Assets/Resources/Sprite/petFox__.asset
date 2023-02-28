@@ -6,13 +6,13 @@ Sprite:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Pet2
+  m_Name: petFox__
   m_Rect:
     serializedVersion: 2
     x: 6
-    y: 191
+    y: 192
     width: 20
-    height: 20
+    height: 15
   m_Offset: {x: 0, y: 0}
   m_Border: {x: 0, y: 0, z: 0, w: 0}
   m_PixelsToUnits: 3
@@ -103,18 +103,18 @@ Sprite:
         format: 0
         dimension: 0
       m_DataSize: 80
-      _typelessdata: 555555c05555554000000000555555405555554000000000555555c0555555c00000000055555540555555c000000000b76d5b3c9224713fdbb66d3d9224713fb76d5b3c25495a3fdbb66d3d25495a3f
+      _typelessdata: 555555c00000204000000000555555400000204000000000555555c0000020c00000000055555540000020c000000000b76d5b3c49926c3fdbb66d3d49926c3fb76d5b3cb76d5b3fdbb66d3db76d5b3f
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
       x: 6
-      y: 191
+      y: 192
       width: 20
-      height: 20
+      height: 15
     textureRectOffset: {x: 0, y: 0}
     atlasRectOffset: {x: -1, y: -1}
     settingsRaw: 64
-    uvTransform: {x: 3, y: 16, z: 3, w: 201}
+    uvTransform: {x: 3, y: 16, z: 3, w: 199.5}
     downscaleMultiplier: 1
   m_AtlasRD:
     serializedVersion: 3
@@ -194,25 +194,24 @@ Sprite:
         format: 0
         dimension: 0
       m_DataSize: 80
-      _typelessdata: 555555c05555554000000000555555405555554000000000555555c0555555c00000000055555540555555c000000000b76d5b3c9224713fdbb66d3d9224713fb76d5b3c25495a3fdbb66d3d25495a3f
+      _typelessdata: 555555c00000204000000000555555400000204000000000555555c0000020c00000000055555540000020c000000000b76d5b3c49926c3fdbb66d3d49926c3fb76d5b3cb76d5b3fdbb66d3db76d5b3f
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
       x: 6
-      y: 191
+      y: 192
       width: 20
-      height: 20
+      height: 15
     textureRectOffset: {x: 0, y: 0}
     atlasRectOffset: {x: -1, y: -1}
     settingsRaw: 64
-    uvTransform: {x: 3, y: 16, z: 3, w: 201}
+    uvTransform: {x: 3, y: 16, z: 3, w: 199.5}
     downscaleMultiplier: 1
   m_PhysicsShape:
-  - - {x: -1, y: 2.6666667}
-    - {x: -3.3333335, y: 1.6666667}
-    - {x: -3.3333335, y: -1.3333334}
-    - {x: -2.3333335, y: -3.3333335}
-    - {x: 3.3333335, y: -3.3333335}
-    - {x: 3.3333335, y: 2.6666667}
+  - - {x: -3.3333335, y: 2.5}
+    - {x: -3.3333335, y: -1.1666667}
+    - {x: -2.3333335, y: -2.5}
+    - {x: 3.3333335, y: -2.5}
+    - {x: 3.3333335, y: 2.5}
   m_Bones: []
   m_SpriteID: 06c1ab275051d440db7cf15dd8f3024d
