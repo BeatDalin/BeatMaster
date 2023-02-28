@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+
 
 public class CameraResolution : MonoBehaviour
 {
@@ -33,7 +35,34 @@ public class CameraResolution : MonoBehaviour
         }
         _camera.rect = _rect;
     }
-    void OnPreCull() => GL.Clear(true, true, Color.black);
+
+    // public void OnReset()
+    // {
+    //     Camera camera = GetComponent<Camera>();
+    //     camera.rect = new Rect(0, 0, 1, 1);
+    // }
+    //
+    // private void OnEnable()
+    // {
+    //     RenderPipelineManager.beginCameraRendering += RenderPipelineManager_endCameraRendering;
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     RenderPipelineManager.beginCameraRendering -= RenderPipelineManager_endCameraRendering;
+    // }
+    //
+    // private void RenderPipelineManager_endCameraRendering(ScriptableRenderContext context, Camera camera)
+    // {
+    //     GL.Clear(true, true, Color.black);
+    // }
+    void OnPreCull()
+    {
+        GL.Clear(true, true, Color.black);
+    }
+    
+
+    //void OnPreCull() => GL.Clear(true, true, Color.black);
     
     
     

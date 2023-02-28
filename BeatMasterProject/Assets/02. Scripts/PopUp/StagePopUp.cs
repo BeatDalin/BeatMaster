@@ -12,7 +12,7 @@ public class StagePopUp : MonoBehaviour
     {
         _exitBtn.onClick.AddListener(() =>
         {
-            UIManager.instance.popUpStack.Pop();
+            //UIManager.instance.popUpStack.Pop();
             
             _exitBtn.transform.DOScale(new Vector3(0.9f, 0.9f, 0), 0.1f).onComplete += () =>
             {

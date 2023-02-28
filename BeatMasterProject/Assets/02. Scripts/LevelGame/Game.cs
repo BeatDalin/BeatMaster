@@ -233,6 +233,7 @@ public abstract class Game : MonoBehaviour
         }
         else if (message == "Stop")
         {
+            gameUI.ShowButtonGroup();
             PlayerStatus.Instance.ChangeStatus(CharacterStatus.Idle);
         }
     }

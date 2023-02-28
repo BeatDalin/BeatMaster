@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SonicBloom.Koreo;
 using SonicBloom.Koreo.Players;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -40,7 +41,6 @@ public class SoundManager : MonoBehaviour
         }
         else
         {
-            
             Destroy(this.gameObject);
         }
 
@@ -81,62 +81,23 @@ public class SoundManager : MonoBehaviour
     // SFX
     public void PlaySFX(string sfxName)
     {
-        switch (sfxName)
+        for (int i = 0; i < _sfx.Length; i++)
         {
-            case "Jump":
-                _sfxPlayer[0].clip = _sfx[0].clip;
-                _sfxPlayer[0].volume = 0.5f;
-                _sfxPlayer[0].PlayOneShot(_sfxPlayer[0].clip);
-                break;
-            case "Attack":
-                _sfxPlayer[1].clip = _sfx[1].clip;
-                _sfxPlayer[1].volume = 0.5f;
-                _sfxPlayer[1].PlayOneShot(_sfxPlayer[1].clip);
-                break;
-            case "Hit":
-                _sfxPlayer[2].clip = _sfx[2].clip;
-                _sfxPlayer[2].volume = 0.5f;
-                _sfxPlayer[2].PlayOneShot(_sfxPlayer[2].clip);
-                break;
-            case "Touch":
-                _sfxPlayer[3].clip = _sfx[3].clip;
-                _sfxPlayer[3].volume = 1f;
-                _sfxPlayer[3].PlayOneShot(_sfxPlayer[3].clip);
-                break;
-            case "Rewind":
-                _sfxPlayer[4].clip = _sfx[4].clip;
-                _sfxPlayer[4].volume = 0.5f;
-                _sfxPlayer[4].PlayOneShot(_sfxPlayer[4].clip);
-                break;
-            case "CheckPoint":
-                _sfxPlayer[5].clip = _sfx[5].clip;
-                _sfxPlayer[5].volume = 0.5f;
-                _sfxPlayer[5].PlayOneShot(_sfxPlayer[5].clip);
-                break;
-            case "Coin":
-                _sfxPlayer[6].clip = _sfx[6].clip;
-                _sfxPlayer[6].volume = 0.2f;
-                _sfxPlayer[6].PlayOneShot(_sfxPlayer[6].clip);
-                break;            
+            if (sfxName == _sfx[i].name) // SFX 배열에서 이름이 같은 곡 검사
+            {
+                for (int x = 0; x < _sfxPlayer.Length; x++)
+                {
+                    if (!_sfxPlayer[x].isPlaying) // 재생 중이지 않은 sfxPlayer 검사
+                    {
+                        _sfxPlayer[x].clip = _sfx[i].clip;
+                        _sfxPlayer[x].volume = 0.5f;
+                        _sfxPlayer[x].PlayOneShot(_sfxPlayer[x].clip);
+                        
+                        return;
+                    }
+                }
+            }
         }
-        
-        
-        
-        // for (int i = 0; i < _sfx.Length; i++)
-        // {
-        //     if (sfxName == _sfx[i].name) // SFX 배열에서 이름이 같은 곡 검사
-        //     {
-        //         for (int x = 0; i < _sfxPlayer.Length; x++)
-        //         {
-        //             if (!_sfxPlayer[x].isPlaying) // 재생 중이지 않은 sfxPlayer 검사
-        //             {
-        //                 _sfxPlayer[x].clip = _sfx[i].clip;
-        //                 _sfxPlayer[x].PlayOneShot(_sfxPlayer[x].clip);
-        //                 return;
-        //             }
-        //         }
-        //     }
-        // }
     }
 
     /// <summary>

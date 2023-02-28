@@ -26,13 +26,13 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected GameObject startPos;
     [SerializeField] protected Color successColor;
     private float _delay = 0f;
-    [SerializeField] protected Button goLevelAfterGameBtn;
-    [SerializeField] protected Button restartAfterGameBtn;
+    [SerializeField] protected GameObject btnGroupPanel;
+    [SerializeField] protected Button goToMenuBtn;
+    [SerializeField] protected Button playAgainBtn;
     [SerializeField] protected Button showLeaderboardBtn;
 
     [Header("Result Visualize")]
     [SerializeField] private ParticleSystem _perfectParticle;
-
     [SerializeField] private ParticleSystem _fastParticle;
     [SerializeField] private ParticleSystem _slowParticle;
     [SerializeField] private ParticleSystem _failParticle;
@@ -145,13 +145,13 @@ public abstract class GameUI : MonoBehaviour
         goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPanel(settingsPanel));
         settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePanel(settingsPanel); });
 
-        goLevelAfterGameBtn.onClick.AddListener(() =>
+        goToMenuBtn.onClick.AddListener(() =>
         {
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
 
-        restartAfterGameBtn.onClick.AddListener(() =>
+        playAgainBtn.onClick.AddListener(() =>
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene));
 
         showLeaderboardBtn.onClick.AddListener(() =>
@@ -227,9 +227,14 @@ public abstract class GameUI : MonoBehaviour
         };
     }
 
+    public void ShowButtonGroup()
+    {
+        btnGroupPanel.SetActive(true);
+    }
     public void ShowFinalResult(int[] finalResultSummary, int total, int stageIdx, int levelIdx)
     {
         finalPanel.SetActive(true);
+        btnGroupPanel.SetActive(false);
         pauseBtn.interactable = false;
         finalSlow.DOCounter(0, finalResultSummary[3], 1).onComplete += () =>
         {
@@ -328,7 +333,7 @@ public abstract class GameUI : MonoBehaviour
             {
                 star[1].SetActive(true);
                 star[1].GetComponent<Image>().color = successColor;
-                star[1].transform.DORotate(new Vector3(0, 180, 0), 0.5f).onComplete += () =>
+                star[1].transform.DORotate(new Vector3(0, 180, 0),0.5f).onComplete += () =>
                 {
                     star[2].SetActive(true);
                     star[2].transform.DORotate(new Vector3(0, 180, 0), 0.5f);
