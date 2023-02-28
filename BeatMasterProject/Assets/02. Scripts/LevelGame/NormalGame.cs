@@ -149,10 +149,6 @@ public class NormalGame : Game
             {
                 // ================Rewind 자리================
                 Rewind();
-                if (!isTutorial)
-                {
-                    feverTimeController.Reset();
-                }
             }
             isShortKeyCorrect = false;
         }
@@ -207,10 +203,6 @@ public class NormalGame : Game
             {
                 // ================Rewind 자리================
                 Rewind();
-                if (!isTutorial)
-                {
-                    feverTimeController.Reset();
-                }
             }
             isShortKeyCorrect = false;
         }
@@ -275,10 +267,6 @@ public class NormalGame : Game
             {
                 //==============Rewind 자리==============
                 Rewind();
-                if (!isTutorial)
-                {
-                    feverTimeController.Reset();
-                }
             }
         }
     }
@@ -303,10 +291,6 @@ public class NormalGame : Game
                 playerAnim.SetEffectBool(false);
                 //==============Rewind 자리==============
                 Rewind();
-                if (!isTutorial)
-                {
-                    feverTimeController.Reset();
-                }
             }
         }
     }
@@ -390,10 +374,6 @@ public class NormalGame : Game
 #endif
                 // ===============Rewind==============
                 Rewind();
-                if (!isTutorial)
-                {
-                    feverTimeController.Reset();
-                }
             }
             isLongPressed = false;
             isLongKeyCorrect = false;
@@ -413,11 +393,15 @@ public class NormalGame : Game
         characterMovement.RewindPosition(); // Relocate player
         characterMovement.isLongNote = false;
         ContinueGame(); // wait 3 sec and start
-        // Item, Death, Combo
+        // Item, Death, Combo, Fever time
         gameUI.UpdateText(TextType.Item, DecreaseItem(5));
         IncreaseDeath(); // increase death count
         _comboSystem.ResetCombo();
         _comboSystem.ResetCurrentAmount();
+        if (!isTutorial)
+        {
+            feverTimeController.Reset();
+        }
         // Reset Array Index
         shortIdx = rewindShortIdx;
         longIdx = rewindLongIdx;
@@ -472,19 +456,6 @@ public class NormalGame : Game
             if (beatResults[index] == BeatResult.Perfect)
             {
                 IncreaseItem();
-            }
-        }
-    }
-
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Rewind();
-            if (!isTutorial)
-            {
-                feverTimeController.Reset();
             }
         }
     }
