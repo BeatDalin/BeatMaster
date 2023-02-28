@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public enum TextType
@@ -15,7 +18,7 @@ public abstract class GameUI : MonoBehaviour
 {
     [Header("Game")] protected Game game;
 
-    [Header("Result UI")] 
+    [Header("Result UI")]
     [SerializeField] protected GameObject finalPanel;
     [SerializeField] protected Text finalFast;
     [SerializeField] protected Text finalPerfect;
@@ -27,9 +30,10 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected Color successColor;
     private float _delay = 0f;
     [SerializeField] protected Button goLevelAfterGameBtn;
-    [SerializeField] protected Button restartAfterGameBtn;
+    [SerializeField] protected Button restartGameBtn;
+    [SerializeField] protected Button showLeaderboardBtn;
 
-    [Header("Result Visualize")] 
+    [Header("Result Visualize")]
     [SerializeField] private ParticleSystem _perfectParticle;
 
     [SerializeField] private ParticleSystem _fastParticle;
@@ -45,12 +49,12 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] private Color _slowColor;
     [SerializeField] private Color _failColor;
 
-    [Header("Time Count UI")] 
+    [Header("Time Count UI")]
     public GameObject timePanel;
 
     [SerializeField] public Text timeCount;
 
-    [Header("Pause UI")] 
+    [Header("Pause UI")]
     [SerializeField] protected Button pauseBtn;
     [SerializeField] protected GameObject pausePanel;
     [SerializeField] protected Button continueBtn;
@@ -58,7 +62,7 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected Button goSettingsBtn;
     [SerializeField] protected Button goLevelMenuBtn;
 
-    [Header("Settings UI")] 
+    [Header("Settings UI")]
     [SerializeField] protected GameObject settingsPanel;
 
     [SerializeField] protected Button settingsCloseBtn;
@@ -66,9 +70,11 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] private List<ParticleSystem> _particleSystemsList = new List<ParticleSystem>();
 
 
-    [Header("Player Character")] 
+    [Header("Player Character")]
     [SerializeField] protected GameObject character;
 
+    [Header("DOTween Animations")]
+    [SerializeField] private DOTweenAnimation _pauseBtnDOT;
     #region Abstract Function
 
     public abstract void UpdateText(TextType type, int number);
@@ -95,6 +101,9 @@ public abstract class GameUI : MonoBehaviour
     {
         if (game.curState.Equals(GameState.Play))
         {
+            _pauseBtnDOT.DORestart();
+            ExcuteVibration.Instance.Touch();
+            SoundManager.instance.PlaySFX("Touch");
             UIManager.instance.OpenPanel(pausePanel);
             game.PauseGame();
             character.SetActive(false);
@@ -116,14 +125,11 @@ public abstract class GameUI : MonoBehaviour
         }
 
         // Button Events
-        pauseBtn.onClick.AddListener(() =>
-        {
-            ExcuteVibration.Instance.Touch();
-            OpenPause();
-        });
+        pauseBtn.onClick.AddListener(() => OpenPause());
         continueBtn.onClick.AddListener(() =>
         {
             ExcuteVibration.Instance.Touch();
+            SoundManager.instance.PlaySFX("Touch");
             character.SetActive(true);
             UIManager.instance.ClosePanel(pausePanel);
             game.ContinueGame();
@@ -131,12 +137,14 @@ public abstract class GameUI : MonoBehaviour
         restartBtn.onClick.AddListener(() =>
         {
             ExcuteVibration.Instance.Touch();
+            SoundManager.instance.PlaySFX("Touch");
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
         });
         goLevelMenuBtn.onClick.AddListener(() =>
         {
             ExcuteVibration.Instance.Touch();
+            SoundManager.instance.PlaySFX("Touch");
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
@@ -159,11 +167,32 @@ public abstract class GameUI : MonoBehaviour
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
 
-        restartAfterGameBtn.onClick.AddListener(() =>
+        restartGameBtn.onClick.AddListener(() =>
         {
             ExcuteVibration.Instance.Touch();
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
         });
+
+        showLeaderboardBtn.onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
+            int stageIdx = (int)SceneLoadManager.Instance.Scene - 2;
+#if !UNITY_EDITOR
+            GPGSBinder.Instance.ShowTargetLeaderboardUI(GPGSBinder.Instance.CheckStageIdx(stageIdx));
+#endif
+        });
+    }
+
+    private void Update()
+    {
+        if (game.curState == GameState.End)
+        {
+            restartGameBtn.interactable = true;
+        }
+        else
+        {
+            restartGameBtn.interactable = false;
+        }
     }
 
     public void ChangeOutLineColor(BeatResult result)
@@ -172,7 +201,6 @@ public abstract class GameUI : MonoBehaviour
         {
             case BeatResult.Perfect:
                 TextMove("Perfect");
-                ExcuteVibration.Instance.Perfect();
                 _judgeText.DOColor(_perfectColor, 0.1f);
                 break;
 
@@ -192,7 +220,7 @@ public abstract class GameUI : MonoBehaviour
                 break;
         }
     }
-    
+
     public void ReverseTextColor(string result)
     {
         switch (result)
@@ -230,7 +258,7 @@ public abstract class GameUI : MonoBehaviour
             _judgeText.DOFade(0, 0.3f).onComplete += () => { _textRect.localPosition = _textStart.localPosition; };
         };
     }
-    
+
     public void ShowFinalResult(int[] finalResultSummary, int total, int stageIdx, int levelIdx)
     {
         finalPanel.SetActive(true);

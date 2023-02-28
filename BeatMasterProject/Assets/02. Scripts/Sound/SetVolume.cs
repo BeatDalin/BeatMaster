@@ -12,11 +12,43 @@ public class SetVolume : MonoBehaviour
     [SerializeField] private Slider _vibationPower;
     [SerializeField] private Slider _musicVolume;
     [SerializeField] private Slider _sfxVolume;
+
     private void OnEnable()
     {
-        _musicVolume.value = GetBgmVolume();
-        _sfxVolume.value = GetSfxVolume();
-        _vibationPower.value = ExcuteVibration.Instance.vibrationPower;
+        CheckPlayerPrefs();
+    }
+
+    private void CheckPlayerPrefs()
+    {
+        if (PlayerPrefs.HasKey("Music"))
+        {
+            _musicVolume.value = PlayerPrefs.GetFloat("Music");
+        }
+        else
+        {
+            _musicVolume.value = GetBgmVolume();
+            PlayerPrefs.SetFloat("Music", _musicVolume.value);
+        }
+
+        if (PlayerPrefs.HasKey("Sfx"))
+        {
+            _sfxVolume.value = PlayerPrefs.GetFloat("Sfx");
+        }
+        else
+        {
+            _sfxVolume.value = GetSfxVolume();
+            PlayerPrefs.SetFloat("Sfx", _sfxVolume.value);
+        }
+
+        if (PlayerPrefs.HasKey("Vibrator"))
+        {
+            _vibationPower.value = PlayerPrefs.GetFloat("Vibrator");
+        }
+        else
+        {
+            _vibationPower.value = GetVibrationPower();
+            PlayerPrefs.GetFloat("Vibrator", _vibationPower.value);
+        }
     }
 
     public float GetBgmVolume()
@@ -54,6 +86,21 @@ public class SetVolume : MonoBehaviour
             return 0f;
         }
     }
+    
+    public int GetVibrationPower()
+    {
+        return ExcuteVibration.Instance.vibrationPower;
+    }
+
+    private void OnDisable()
+    {
+        PlayerPrefs.SetFloat("Music", GetBgmVolume());
+        Debug.Log($"Music {PlayerPrefs.GetFloat("Music")}");
+        PlayerPrefs.SetFloat("Sfx", GetSfxVolume());
+        Debug.Log($"Sfx {PlayerPrefs.GetFloat("Sfx")}");
+        PlayerPrefs.SetFloat("Vibrator", _vibationPower.value);
+        Debug.Log($"Vibrator {PlayerPrefs.GetFloat("Vibrator")}");
+    }
 
     // Slider 오브젝트의 최소~최대값은 0.0001 ~ 1
     // 최소값 0.0001을 넣으면 -80, 1을 넣으면 0이 나옴
@@ -70,12 +117,9 @@ public class SetVolume : MonoBehaviour
     {
         _mixer.SetFloat("SFXVolume", Mathf.Log10(sliderValue) * 20);
     }
+
     public void SetVibrationPower()
     {
-        ExcuteVibration.Instance.vibrationPower = (int)_vibationPower.value;
-    }
-    public int GetVibrationPower()
-    {
-        return ExcuteVibration.Instance.vibrationPower;
+        ExcuteVibration.Instance.vibrationPower = (int)(_vibationPower.value * 100f);
     }
 }

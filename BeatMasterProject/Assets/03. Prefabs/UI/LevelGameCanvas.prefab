@@ -2884,7 +2884,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 99
+  m_Text: 0
 --- !u!114 &1178559579868945182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4565,7 +4565,7 @@ MonoBehaviour:
   startPos: {fileID: 6676748890652811873}
   successColor: {r: 1, g: 0.85882354, b: 0, a: 1}
   goLevelAfterGameBtn: {fileID: 6676748891421631279}
-  restartAfterGameBtn: {fileID: 6676748890392230852}
+  restartGameBtn: {fileID: 0}
   showLeaderboardBtn: {fileID: 325269037}
   _perfectParticle: {fileID: 0}
   _fastParticle: {fileID: 0}
@@ -4595,6 +4595,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   character: {fileID: 0}
+  _pauseBtnDOT: {fileID: 3259926732508270253}
   _itemText: {fileID: 6676748890294561052}
   _deathText: {fileID: 7965345376904727008}
 --- !u!1 &6676748891087081312

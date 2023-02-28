@@ -70,23 +70,32 @@ public class MenuTitleButton : MonoBehaviour
         
         _titleButtons[(int)TitleButtonName.Play].onClick.AddListener(() =>
         {
+            #if UNITY_ANDROID && !UNITY_EDITOR
             ExcuteVibration.Instance.Touch();
+            #endif
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });  // Play 버튼
         _titleButtons[(int)TitleButtonName.Menu].onClick.AddListener(() =>
         {
+#if UNITY_ANDROID && !UNITY_EDITOR
             ExcuteVibration.Instance.Touch();
+#endif
             OpenMenu(_menuGroupPanel); 
         });     // Menu 버튼
         _titleButtons[(int)TitleButtonName.Store].onClick.AddListener(() =>
         {
+#if UNITY_ANDROID && !UNITY_EDITOR
             ExcuteVibration.Instance.Touch();
-            OpenPanel(_storePanel); 
+#endif
+            
+            UIManager.instance.OpenPanel(_storePanel); 
         });       // Store 버튼
         _titleButtons[(int)TitleButtonName.Gpgs].onClick.AddListener(() =>
         {
+#if UNITY_ANDROID && !UNITY_EDITOR
             ExcuteVibration.Instance.Touch();
-            OpenPanel(_gpgsPanel);
+#endif
+            UIManager.instance.OpenPanel(_gpgsPanel);
         });
 
         #endregion
