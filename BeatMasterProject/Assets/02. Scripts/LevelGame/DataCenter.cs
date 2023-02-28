@@ -196,7 +196,7 @@ public class DataCenter : MonoBehaviour
     private void CreateStoreData()
     {
         _gameData.storeData = new StoreData();
-        _gameData.storeData.charCount = Enum.GetValues(typeof(CharacterNum)).Length;
+        _gameData.storeData.charCount = Enum.GetValues(typeof(StoreData.CharacterName)).Length;
         _gameData.storeData.characterData = new CharacterData[_gameData.storeData.charCount];
         CreateCharacterData();
 
@@ -213,11 +213,17 @@ public class DataCenter : MonoBehaviour
     {
         CharacterData[] tempCharacterData = _gameData.storeData.characterData;
 
+        StoreData.CharacterName[] characterList =
+            (StoreData.CharacterName[])Enum.GetValues(typeof(StoreData.CharacterName));
+        
+
         int[] charPrice = { 0, 150, 150 };
         bool[] charIsPaidItem = { false, false, true };
+        string[] charDescription = { "Cheerful Corgi", "Awesome Corgi", "Cute Duck" };
 
         for (int i = 0; i < _gameData.storeData.charCount; i++)
         {
+            tempCharacterData[i].characterName = characterList[i];
             tempCharacterData[i].characterNum = i;
             tempCharacterData[i].price = charPrice[i];
             tempCharacterData[i].unlockStage = 0;
@@ -225,6 +231,7 @@ public class DataCenter : MonoBehaviour
             tempCharacterData[i].isPurchased = i == 0;
             tempCharacterData[i].isUnlocked = i == 0;
             tempCharacterData[i].isPaidItem = charIsPaidItem[i];
+            tempCharacterData[i].characterDescription = charDescription[i];
         }
 
         _gameData.storeData.characterData = tempCharacterData;
@@ -252,6 +259,13 @@ public class DataCenter : MonoBehaviour
         };
         int[] itemPrice = { 50, 50, 70, 70, 150, 0};
         bool[] isPaidItem = { false, false, false, false, false, true, false, false, false, true, true, false };
+        string[] itemDescription =
+        {
+            "Red balloon", "Cute ribbon", "Cozy santa hat", "Awesome magician hat", "Shiny crown",
+            "Cool sunglasses", "Adorable rabbit band", "Heavy medal", "Beautiful flower crown",
+            "Powerful cat", "Smart fox", "void"
+        };
+
 
         for (int i = 0; i < _gameData.storeData.itemCount; i++)
         {
@@ -261,6 +275,7 @@ public class DataCenter : MonoBehaviour
             tempItemData[i].price = tempItemData[i].isUnlocked ? itemPrice[i] : 0;
             tempItemData[i].isPurchased = false;
             tempItemData[i].isPaidItem = isPaidItem[i];
+            tempItemData[i].itemDescription = itemDescription[i];
         }
 
         _gameData.storeData.itemData = tempItemData;
@@ -270,6 +285,7 @@ public class DataCenter : MonoBehaviour
     {
         StoreData.PaidItemName[] paidItemList = (StoreData.PaidItemName[])Enum.GetValues(typeof(StoreData.PaidItemName));
         int[] paidItemPrice = { 3000, 1000 };
+        string[] paidItemDescription = { "Ultimate package for beginner", "Cute and smart fox" };
 
         Dictionary<int, StoreData.ItemName[]> dicPackageItem = new Dictionary<int, StoreData.ItemName[]>();
         dicPackageItem.Add(0, new StoreData.ItemName[]{StoreData.ItemName.Sunglasses, StoreData.ItemName.Pet1});
@@ -288,6 +304,7 @@ public class DataCenter : MonoBehaviour
             tempPaidItemData[i].isPurchased = false; // 앱 삭제 후 다시 받은 경우 고려해야. 서버에서 받아와야할지도
             tempPaidItemData[i].packageCharacterNum = dicPackageChar[i].ToArray();
             tempPaidItemData[i].packageItemName = dicPackageItem[i];
+            tempPaidItemData[i].paidItemDescription = paidItemDescription[i];
         }
     }
 

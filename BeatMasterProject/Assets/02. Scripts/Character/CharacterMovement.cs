@@ -146,7 +146,7 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-    private void Jump()
+    public void Jump()
     {
         SoundManager.instance.PlaySFX("Jump");
         PlayerStatus.Instance.ChangeStatus(CharacterStatus.Jump);
@@ -259,9 +259,16 @@ public class CharacterMovement : MonoBehaviour
 
             if (_isAttack)
             {
-                if (lastBeatTime >= _attackBeatTime + 0.7f)
+                if (lastBeatTime >= _attackBeatTime + 0.5f)
                 {
-                    PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                    if (isLongNote)
+                    {
+                        PlayerStatus.Instance.ChangeStatus(CharacterStatus.FastIdle);
+                    }
+                    else
+                    {
+                        PlayerStatus.Instance.ChangeStatus(CharacterStatus.Run);
+                    }
                     _isAttack = false;
                 }
             }
