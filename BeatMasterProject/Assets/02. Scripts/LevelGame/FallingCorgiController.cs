@@ -47,6 +47,7 @@ public class FallingCorgiController : MonoBehaviour
         Vector3 afterPos = _defaultCamera.ViewportToWorldPoint(new Vector3(posX, posY, 0f));
         afterPos.z = 0f;
         float randomRotation = Random.Range(_minRotation, _maxRotation);
+        
         GameObject go = Instantiate(_corgiprefab, afterPos, Quaternion.Euler(0f, 0f, randomRotation));
         go.transform.SetParent(transform);
         
