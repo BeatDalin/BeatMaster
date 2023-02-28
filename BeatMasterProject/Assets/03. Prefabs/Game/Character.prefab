@@ -135,7 +135,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6860269071956357209}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -961,22 +961,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterPosition: {x: 0, y: 0, z: 0}
   _checkPointBeatTime: 0
-  _attackBeatTime: 0
-  _rewindIdx: 0
-  speedEventID: Stage4_Level1_Spd
-  checkpointID: Stage4_Level1_CheckPoint
-  _moveSpeed: 3.5
-  _jumpGapRate: 0.25
+  speedEventID: Stage1_Level1_Spd
+  checkpointID: Stage1_Level1_CheckPoint
+  _moveSpeed: 2
+  _jumpGapRate: 0.5
   _jumpHeight: 1.3
   _graphWidth: 1
   isJumping: 0
   isLongNote: 0
   _rayOriginPoint: {fileID: 6860269071956357210}
-  _minRayDistance: 0.8
-  _maxRayDistance: 1.1
+  _minRayDistance: 0.5
   _positionYOffset: 0.5
   lastPosition: {x: 0, y: 0, z: 0}
   lastBeatTime: 0
+  _attackBeatTime: 0
+  _rewindIdx: 0
 --- !u!114 &7686366973799714488
 MonoBehaviour:
   m_ObjectHideFlags: 0
