@@ -374,7 +374,7 @@ public class CharacterMovement : MonoBehaviour
     public IEnumerator CoRewind(float y)
     {
         float elapseTime = 0f;
-        float targetTime = 0.5f;
+        float targetTime = 0.1f;
         
         _rewindTime.StartRewind();
         
