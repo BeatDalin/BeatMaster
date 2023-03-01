@@ -98,9 +98,9 @@ public class ExcuteVibration : MonoBehaviour
     {
         if (vibrationPower != 0)
         {
-            int touchPower = Math.Clamp(vibrationPower / 4, 5, 100);
-            Debug.Log($"touchPower {touchPower}");
-            vibrationLibrary.CallStatic("TouchVibrate", context, touchPower);
+            // int touchPower = Math.Clamp(vibrationPower / 4, 5, 100);
+            // Debug.Log($"touchPower {touchPower}");
+            vibrationLibrary.CallStatic("TouchVibrate", context, 10);
         }
     }
 
