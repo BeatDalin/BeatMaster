@@ -60,6 +60,7 @@ public class CharacterMovement : MonoBehaviour
     private float rotationSpeed = 1080f;
     private RewindTime _rewindTime;
     private GameUI _gameUI;
+    private WaitForFixedUpdate _waitForFixedUpdate;
 
     [Header("Character Tag")]
     private const string UnTag = "Untagged";
@@ -72,6 +73,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void Update()
     {
+        
         if (SoundManager.instance.musicPlayer.IsPlaying)
         {
             GetInput();
@@ -80,7 +82,6 @@ public class CharacterMovement : MonoBehaviour
 
         if (_isFailed) //실패하고 다시 시작할때
         {
-            //Debug.Log("실패");
             //transform.position = _characterPosition;
             _previousBeatTime = _currentBeatTime;
             _isFailed = false;
@@ -115,7 +116,8 @@ public class CharacterMovement : MonoBehaviour
 
         _characterPosition = transform.position;
         _rayDistance = Mathf.Lerp(_minRayDistance, _maxRayDistance, 2 * (MoveSpeed - 2f) / 3f);
-        
+        _waitForFixedUpdate = new WaitForFixedUpdate();
+
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
         Koreographer.Instance.RegisterForEventsWithTime(checkpointID, CheckPoint);
     }
@@ -391,14 +393,14 @@ public class CharacterMovement : MonoBehaviour
                         transform.position = Vector3.Lerp(lastPosition, _rewindTime.rewindList[0].rewindPos, elapseTime / targetTime);
                         transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
                         elapseTime += Time.fixedDeltaTime;
-                        yield return new WaitForFixedUpdate();
+                        yield return _waitForFixedUpdate;
                     }
                     else
                     {
                         transform.position = Vector3.Lerp(lastPosition, _rewindTime.rewindList[0].rewindPos, elapseTime / targetTime);
                         transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
                         elapseTime += Time.fixedDeltaTime;
-                        yield return new WaitForFixedUpdate();
+                        yield return _waitForFixedUpdate;
                     }
                 }
                 _rewindTime.rewindList.RemoveAt(0);
@@ -412,7 +414,7 @@ public class CharacterMovement : MonoBehaviour
                 transform.position = Vector3.Lerp(lastPosition, new Vector3(_characterPosition.x, y, 0f), elapseTime / targetTime);
                 transform.DORotate(new Vector3(0, 0, 0), targetTime);
                 elapseTime += Time.fixedDeltaTime;
-                yield return new WaitForFixedUpdate();
+                yield return _waitForFixedUpdate;
             }
         }
         else
@@ -422,7 +424,7 @@ public class CharacterMovement : MonoBehaviour
                 transform.position = Vector3.Lerp(lastPosition, new Vector3(_characterPosition.x, y, 0f), elapseTime / targetTime);
                 transform.DORotate(new Vector3(0, 0, 0), targetTime);
                 elapseTime += Time.fixedDeltaTime;
-                yield return new WaitForFixedUpdate();
+                yield return _waitForFixedUpdate;
             }
         }
 
