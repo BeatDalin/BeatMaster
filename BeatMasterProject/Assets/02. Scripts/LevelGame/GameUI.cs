@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public enum TextType
@@ -17,6 +20,7 @@ public abstract class GameUI : MonoBehaviour
 
     [Header("Result UI")]
     [SerializeField] protected GameObject finalPanel;
+    [SerializeField] protected GameObject buttonGroup;
     [SerializeField] protected Text finalFast;
     [SerializeField] protected Text finalPerfect;
     [SerializeField] protected Text finalSlow;
@@ -26,8 +30,8 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected GameObject startPos;
     [SerializeField] protected Color successColor;
     private float _delay = 0f;
-    [SerializeField] protected Button goLevelAfterGameBtn;
-    [SerializeField] protected Button restartAfterGameBtn;
+    [SerializeField] protected Button goToMenuBtn;
+    [SerializeField] protected Button playAgainBtn;
     [SerializeField] protected Button showLeaderboardBtn;
 
     [Header("Result Visualize")]
@@ -99,6 +103,7 @@ public abstract class GameUI : MonoBehaviour
         if (game.curState.Equals(GameState.Play))
         {
             _pauseBtnDOT.DORestart();
+            ExcuteVibration.Instance.Touch();
             SoundManager.instance.PlaySFX("Touch");
             UIManager.instance.OpenPanel(pausePanel);
             game.PauseGame();
@@ -124,6 +129,7 @@ public abstract class GameUI : MonoBehaviour
         pauseBtn.onClick.AddListener(() => OpenPause());
         continueBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
             SoundManager.instance.PlaySFX("Touch");
             character.SetActive(true);
             UIManager.instance.ClosePanel(pausePanel);
@@ -131,31 +137,46 @@ public abstract class GameUI : MonoBehaviour
         });
         restartBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
             SoundManager.instance.PlaySFX("Touch");
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
         });
         goLevelMenuBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
             SoundManager.instance.PlaySFX("Touch");
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
         //settings
-        goSettingsBtn.onClick.AddListener(() => UIManager.instance.OpenPanel(settingsPanel));
-        settingsCloseBtn.onClick.AddListener(() => { UIManager.instance.ClosePanel(settingsPanel); });
-
-        goLevelAfterGameBtn.onClick.AddListener(() =>
+        goSettingsBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
+            UIManager.instance.OpenPanel(settingsPanel);
+        });
+        settingsCloseBtn.onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
+            UIManager.instance.ClosePanel(settingsPanel);
+        });
+
+        goToMenuBtn.onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
 
-        restartAfterGameBtn.onClick.AddListener(() =>
-            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene));
+        playAgainBtn.onClick.AddListener(() =>
+        {
+            ExcuteVibration.Instance.Touch();
+            SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
+        });
 
         showLeaderboardBtn.onClick.AddListener(() =>
         {
+            ExcuteVibration.Instance.Touch();
             int stageIdx = (int)SceneLoadManager.Instance.Scene - 2;
 #if !UNITY_EDITOR
             GPGSBinder.Instance.ShowTargetLeaderboardUI(GPGSBinder.Instance.CheckStageIdx(stageIdx));
@@ -300,8 +321,11 @@ public abstract class GameUI : MonoBehaviour
             };
         };
     }
-
-
+    
+    public void ShowButtonGroup()
+    {
+        buttonGroup.SetActive(true);
+    }
     public void ShowStar(int starCount)
     {
         if (starCount == 3)

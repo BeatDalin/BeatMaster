@@ -24,7 +24,7 @@ public class Coin : MonoBehaviour
 
         transform.DOLocalMove(movePos, 1f).onComplete += () =>
         {
-            Destroy(gameObject);
+            Destroy(gameObject, 1f);
         };
     }
 

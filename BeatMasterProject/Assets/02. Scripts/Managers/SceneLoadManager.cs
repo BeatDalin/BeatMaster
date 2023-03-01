@@ -44,11 +44,11 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         _loadImage.gameObject.SetActive(false);
         _canvas = _loadingCanvas.GetComponent<Canvas>();
         _canvas.worldCamera = Camera.main;
-        Application.targetFrameRate = 30;
+        Application.targetFrameRate = -1;
     }
 
     // 어느 씬에서 Play를 해도 PreTitle 씬부터 시작하도록 하기 위해 사용~
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    // [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void FirstLoad()
     {
 #if UNITY_EDITOR

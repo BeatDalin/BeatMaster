@@ -62,6 +62,8 @@ public class Store : MonoBehaviour
 
     private Button[] _character;
     private Button[] _item;
+    
+    [SerializeField]
     private Button[] _paidItem;
 
     [Header("Data")]
@@ -93,14 +95,28 @@ public class Store : MonoBehaviour
         UpdatePlayersDataInScene();
         _storeData = DataCenter.Instance.GetStoreData();
         _playerData = DataCenter.Instance.GetPlayerData();
+        
+        DataCenter.Instance.CheckPaidItemPurchase(); // Load isPurchased from Firebase Database
         SetCharBtn();
         SetItemBtn();
-        SetPaidItemBtn();
+        // SetPaidItemBtn();
 
         ShowStoreList(0);
-        _toggles[0].onValueChanged.AddListener(delegate { ShowStoreList(0); });
-        _toggles[1].onValueChanged.AddListener(delegate { ShowStoreList(1); });
-        _toggles[2].onValueChanged.AddListener(delegate { ShowStoreList(2); });
+        _toggles[0].onValueChanged.AddListener(delegate
+        {
+            ExcuteVibration.Instance.Touch();
+            ShowStoreList(0);
+        });
+        _toggles[1].onValueChanged.AddListener(delegate
+        {
+            ExcuteVibration.Instance.Touch();
+            ShowStoreList(1);
+        });
+        _toggles[2].onValueChanged.AddListener(delegate
+        {
+            ExcuteVibration.Instance.Touch();
+            ShowStoreList(2);
+        });
 
         ClosePanel();
     }
@@ -164,11 +180,12 @@ public class Store : MonoBehaviour
                 _changeChar.ChangeItemSprite((StoreData.ItemName)index);
             _item[index].transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
                 _storeData.itemData[index].price.ToString();
-            if (_storeData.itemData[index].isPurchased)
-            {
-                _item[index].transform.GetChild(1).gameObject.SetActive(false);
-            }
-
+            // if (_storeData.itemData[index].isPurchased)
+            // {
+            //     _item[index].transform.GetChild(1).gameObject.SetActive(false);
+            // }
+            _item[index].transform.GetChild(1).gameObject.SetActive(!_storeData.itemData[index].isPurchased);
+            
             if (_storeData.itemData[index].isUnlocked)
             {
                 _item[index].transform.GetChild(2).gameObject.SetActive(false);
@@ -198,8 +215,7 @@ public class Store : MonoBehaviour
             }
 
             _paidItem[index].transform.GetChild(2).gameObject.SetActive(false);
-            _paidItem[index].onClick.AddListener(() =>
-                SetPaidItemPopup(_storeData.paidItemData[index].paidItemName));
+            // _paidItem[index].onClick.AddListener(() => SetPaidItemPopup(_storeData.paidItemData[index].paidItemName));
         }
     }
 
@@ -214,6 +230,7 @@ public class Store : MonoBehaviour
     {
         if (!_selectArea[toggleNum].activeSelf)
         {
+            ExcuteVibration.Instance.Touch();
             SoundManager.instance.PlaySFX("Touch");
             _toggleDOTweens[toggleNum].DORestart();
             _selectAreaDOTweens[toggleNum].DORestart();
@@ -230,6 +247,7 @@ public class Store : MonoBehaviour
     private void InitStorePopup()
     {
         _closeStoreBtn.interactable = true;
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
         _storeData = DataCenter.Instance.GetStoreData();
         _playerData = DataCenter.Instance.GetPlayerData();
@@ -253,6 +271,20 @@ public class Store : MonoBehaviour
         }
         for (int i = 0; i < _storeData.itemData.Length - 1; i++) // empty 제외하기 위해 Length - 1
         {
+            // if (_storeData.itemData[i].isPaidItem)
+            // {
+            //     // wallet에 있는지 확인
+            //     if (FirebaseDataManager.Instance.CheckProductInWallet(_storeData.itemData[i].itemName.ToString()))
+            //     {
+            //         // Product exists in Wallet
+            //         int index = i;
+            //         _item[index].onClick.RemoveAllListeners();
+            //         _item[index].onClick.AddListener(() =>
+            //             SetItemPopup(_storeData.itemData[index].itemPart, _storeData.itemData[index].itemName));
+            //         _item[i].transform.GetChild(1).gameObject.SetActive(false);
+            //         _item[i].transform.GetChild(2).gameObject.SetActive(false);
+            //     }
+            // }
             if (_storeData.itemData[i].isPurchased)
             {
                 int index = i;
@@ -263,13 +295,13 @@ public class Store : MonoBehaviour
                 _item[i].transform.GetChild(2).gameObject.SetActive(false);
             }
         }
-        for (int i = 0; i < _storeData.paidItemData.Length; i++)
-        {
-            if (_storeData.paidItemData[i].isPurchased)
-            {
-                _paidItem[i].transform.GetChild(1).gameObject.SetActive(false);
-            }
-        }
+        // for (int i = 0; i < _storeData.paidItemData.Length; i++)
+        // {
+        //     if (_storeData.paidItemData[i].isPurchased)
+        //     {
+        //         _paidItem[i].transform.GetChild(1).gameObject.SetActive(false);
+        //     }
+        // }
     }
 
     #region Character
@@ -295,8 +327,14 @@ public class Store : MonoBehaviour
                 _moneySprite[_storeData.characterData[charNum].isPaidItem ? 1 : 0]; // Money sprite
 
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(true); // SetActive price text, purchaseBtn
-
-            _popupBtn[0].onClick.AddListener(delegate { PurchaseCharacter(charNum); });
+            
+            _popupBtn[0].onClick.AddListener(delegate
+            {
+                #if UNITY_ANDROID && !UNITY_EDITOR
+                ExcuteVibration.Instance.Touch();
+                #endif
+                PurchaseCharacter(charNum);
+            });
         }
 
         // 구매했는데 미장착 상태일 때 장착하기 버튼
@@ -306,7 +344,11 @@ public class Store : MonoBehaviour
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
             _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _equip;
 
-            _popupBtn[0].onClick.AddListener(delegate { EquipCharacter(charNum); });
+            _popupBtn[0].onClick.AddListener(delegate
+            {
+                ExcuteVibration.Instance.Touch();
+                EquipCharacter(charNum);
+            });
         }
 
         // 구매했는데 장착 상태일 때
@@ -318,6 +360,7 @@ public class Store : MonoBehaviour
         }
 
         _closeStoreBtn.interactable = false;
+        ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
         _popupPanel[0].SetActive(true);
         _popUpDOTweens[0].DORestart();
@@ -330,6 +373,7 @@ public class Store : MonoBehaviour
         if (price > DataCenter.Instance.GetPlayerData().playerItem)
         {
             _closeStoreBtn.interactable = false;
+            ExcuteVibration.Instance.Touch();
             SoundManager.instance.PlaySFX("Touch");
             _popupPanel[1].SetActive(true);
             _popUpDOTweens[1].DORestart();
@@ -375,7 +419,11 @@ public class Store : MonoBehaviour
 
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(true); // SetActive price text, purchaseBtn
 
-            _popupBtn[0].onClick.AddListener(delegate { PurchaseItem(itemPart, itemName); });
+            _popupBtn[0].onClick.AddListener(delegate
+            {
+                ExcuteVibration.Instance.Touch();
+                PurchaseItem(itemPart, itemName);
+            });
         }
 
         // 구매했는데 미장착 상태일 때 장착하기 버튼
@@ -385,7 +433,11 @@ public class Store : MonoBehaviour
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
             _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _equip;
 
-            _popupBtn[0].onClick.AddListener(delegate { EquipItem(itemPart, itemName); });
+            _popupBtn[0].onClick.AddListener(delegate
+            {
+                ExcuteVibration.Instance.Touch();
+                EquipItem(itemPart, itemName);
+            });
         }
 
         // 구매했는데 장착 상태일 때
@@ -394,7 +446,11 @@ public class Store : MonoBehaviour
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
             _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _unEquip;
 
-            _popupBtn[0].onClick.AddListener(delegate { EquipItem(itemPart, (StoreData.ItemName)(-1)); });
+            _popupBtn[0].onClick.AddListener(delegate
+            {
+                ExcuteVibration.Instance.Touch();
+                EquipItem(itemPart, (StoreData.ItemName)(-1));
+            });
         }
 
         _closeStoreBtn.interactable = false;
@@ -439,7 +495,11 @@ public class Store : MonoBehaviour
     {
         foreach (var button in _popupBtn)
         {
-            button.onClick.AddListener(() => InitStorePopup());
+            button.onClick.AddListener(() =>
+            {
+                ExcuteVibration.Instance.Touch();
+                InitStorePopup();
+            });
         }
     }
 
@@ -471,7 +531,7 @@ public class Store : MonoBehaviour
 
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(true);
 
-            _popupBtn[0].onClick.AddListener(delegate { PurchasePaidItem(paidItemName); });
+            // _popupBtn[0].onClick.AddListener(delegate { PurchasePaidItem(enumPaidItemName); });
         }
 
         // 구매했을 때.. 
@@ -487,32 +547,49 @@ public class Store : MonoBehaviour
         _popUpDOTweens[0].DORestart();
     }
 
-    private void PurchasePaidItem(StoreData.PaidItemName paidItemName)
+    public void OnClickStartepackPurchaseBtn()
     {
-        int itemNum = (int)paidItemName;
+        _popupPanel[3].SetActive(true);
+        // PurchasePaidItem(StoreData.PaidItemName.StarterPack);
+    }
+
+    public void OnClickPet2PurchaseBtn()
+    {
+        _popupPanel[4].SetActive(true);
+        // PurchasePaidItem(StoreData.PaidItemName.Pet2);
+    }
+
+    public void PurchasePaidItem(string paidItemName)
+    {
+       var enumPaidItemName = (StoreData.PaidItemName)Enum.Parse(typeof(StoreData.PaidItemName), paidItemName);
+        int itemNum = (int)enumPaidItemName;
         // int price = _storeData.paidItemData[itemNum].price;
 
         // To do : IAP 연결..
 
         if (_storeData.paidItemData[itemNum].packageCharacterNum[0] != 0) // package에 character가 있을 경우
         {
+            StoreData.CharacterName characterName = (StoreData.CharacterName)_storeData.paidItemData[itemNum].packageCharacterNum[0];
             for (int i = 0; i < _storeData.paidItemData[itemNum].packageCharacterNum.Length; i++)
             {
                 _storeData.characterData[_storeData.paidItemData[itemNum].packageCharacterNum[i]].isPurchased = true;
+                // _storeData.characterData[_storeData.paidItemData[itemNum].packageCharacterNum[i]].isPurchased = FirebaseDataManager.Instance.CheckProductInWallet(characterName.ToString());
                 _storeData.characterData[_storeData.paidItemData[itemNum].packageCharacterNum[i]].isUnlocked = true;
             }
         }
 
         if (_storeData.paidItemData[itemNum].packageItemName[0] != (StoreData.ItemName)99) // package에 item이 있을 경우
         {
+            StoreData.ItemName itemName = _storeData.paidItemData[itemNum].packageItemName[0];
             for (int i = 0; i < _storeData.paidItemData[itemNum].packageItemName.Length; i++)
             {
                 _storeData.itemData[(int)_storeData.paidItemData[itemNum].packageItemName[i]].isPurchased = true;
+                // _storeData.itemData[(int)_storeData.paidItemData[itemNum].packageItemName[i]].isPurchased = FirebaseDataManager.Instance.CheckProductInWallet(itemName.ToString());
                 _storeData.itemData[(int)_storeData.paidItemData[itemNum].packageItemName[i]].isUnlocked = true;
             }
         }
-
-        DataCenter.Instance.UpdatePaidItemPurchaseData(paidItemName);
+        
+        DataCenter.Instance.UpdatePaidItemPurchaseData(enumPaidItemName);
 
         UpdatePlayersDataInScene();
 

@@ -72,13 +72,40 @@ public class MenuTitleButton : MonoBehaviour
         
         _titleButtons[(int)TitleButtonName.Play].onClick.AddListener(() =>
         {
-            SoundManager.instance.PlaySFX("Touch");
+            #if UNITY_ANDROID && !UNITY_EDITOR
+            ExcuteVibration.Instance.Touch();
+            #endif
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });  // Play 버튼
-        _titleButtons[(int)TitleButtonName.Menu].onClick.AddListener(() => { OpenMenu(_menuGroupPanel); });     // Menu 버튼
-        _titleButtons[(int)TitleButtonName.Store].onClick.AddListener(() => { UIManager.instance.OpenPanel(_storePanel); });       // Store 버튼
-        _titleButtons[(int)TitleButtonName.Gpgs].onClick.AddListener(() => { UIManager.instance.OpenPanel(_gpgsPanel);});
-        _titleButtons[(int)TitleButtonName.Announce].onClick.AddListener(() => { UIManager.instance.OpenPanel(_announcePanel); });
+        _titleButtons[(int)TitleButtonName.Menu].onClick.AddListener(() =>
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            ExcuteVibration.Instance.Touch();
+#endif
+            OpenMenu(_menuGroupPanel); 
+        });     // Menu 버튼
+        _titleButtons[(int)TitleButtonName.Store].onClick.AddListener(() =>
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            ExcuteVibration.Instance.Touch();
+#endif
+            
+            UIManager.instance.OpenPanel(_storePanel); 
+        });       // Store 버튼
+        _titleButtons[(int)TitleButtonName.Gpgs].onClick.AddListener(() =>
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            ExcuteVibration.Instance.Touch();
+#endif
+            UIManager.instance.OpenPanel(_gpgsPanel);
+        });
+
+        _titleButtons[(int)TitleButtonName.Announce].onClick.AddListener(() => { 
+            #if UNITY_ANDROID && !UNITY_EDITOR
+            ExcuteVibration.Instance.Touch();
+            #endif
+            UIManager.instance.OpenPanel(_announcePanel); 
+            });
 
         #endregion
 
@@ -123,7 +150,6 @@ public class MenuTitleButton : MonoBehaviour
             
             panelName.SetActive(true);
             panelName.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
-            
             
         }
     }

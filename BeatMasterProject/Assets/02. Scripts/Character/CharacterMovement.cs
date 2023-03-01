@@ -7,9 +7,9 @@ using SonicBloom.Koreo;
 public class CharacterMovement : MonoBehaviour
 {
     private Game _game;
-    private ResourcesChanger _resourcesChanger;
     private Rigidbody2D _rigidbody;
     private TouchInputManager _touchInputManager;
+    private ObjectGenerator _objectGenerator;
     [SerializeField] private Vector3 _characterPosition;
     [SerializeField] private float _checkPointBeatTime;
     private float _gravityScale;
@@ -18,6 +18,10 @@ public class CharacterMovement : MonoBehaviour
     private float _previousBeatTime = 0;
     private float _currentBeatTime = 0;
     private bool _isFailed;
+    private bool _isAttack;
+    [SerializeField] private float _attackBeatTime;
+    [SerializeField] private int _rewindIdx;
+    private bool _isCheckCheckPoint = true;
 
     [Header("Move")]
     [EventID] public string speedEventID;
@@ -32,7 +36,6 @@ public class CharacterMovement : MonoBehaviour
     [Header("Jump")]
     [SerializeField] private float _jumpGapRate = 0.25f;
     [SerializeField] private float _jumpHeight = 1.3f;
-    [SerializeField] private float _graphWidth = 1f;
     private int _jumpTileCount = 2;
     private const int _maxJumpCount = 1;
     private int _jumpCount;
@@ -45,8 +48,8 @@ public class CharacterMovement : MonoBehaviour
 
     [Header("Ray")]
     [SerializeField] private Transform _rayOriginPoint;
-    [SerializeField] private float _minRayDistance = 0.5f;
-    private float _maxRayDistance;
+    [SerializeField] private float _minRayDistance = 0.8f;
+    [SerializeField] private float _maxRayDistance = 1.1f;
     private float _rayDistance;
     [SerializeField] private float _positionYOffset;
     private LayerMask _tileLayer;
@@ -61,13 +64,6 @@ public class CharacterMovement : MonoBehaviour
     [Header("Character Tag")]
     private const string UnTag = "Untagged";
     private const string PlayerTag = "Player";
-
-    private bool _isAttack;
-    [SerializeField] private float _attackBeatTime;
-
-    private ObjectGenerator _objectGenerator;
-    [SerializeField] private int _rewindIdx;
-    private bool _isCheckCheckPoint = true;
 
     private void Start()
     {
@@ -110,7 +106,6 @@ public class CharacterMovement : MonoBehaviour
         _gameUI = FindObjectOfType<GameUI>();
         _rewindTime = FindObjectOfType<RewindTime>();
         _game = FindObjectOfType<Game>();
-        _resourcesChanger = FindObjectOfType<ResourcesChanger>();
         _touchInputManager = FindObjectOfType<TouchInputManager>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _rigidbody.bodyType = RigidbodyType2D.Kinematic;
@@ -119,9 +114,8 @@ public class CharacterMovement : MonoBehaviour
         _tileLayer = LayerMask.GetMask("Ground");
 
         _characterPosition = transform.position;
-        _maxRayDistance = _minRayDistance + 0.2f;
-        _rayDistance = Mathf.Lerp(_minRayDistance, _maxRayDistance, (MoveSpeed - 2f) / 2f);
-
+        _rayDistance = Mathf.Lerp(_minRayDistance, _maxRayDistance, 2 * (MoveSpeed - 2f) / 3f);
+        
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
         Koreographer.Instance.RegisterForEventsWithTime(checkpointID, CheckPoint);
     }
@@ -154,7 +148,6 @@ public class CharacterMovement : MonoBehaviour
         _jumpMidY = _jumpHeight;
         _jumpEndY = transform.position.y;
         _jumpStartPosition = transform.position;
-        _graphWidth = 1f;
         _canJump = ++_jumpCount < _maxJumpCount;
         isJumping = true;
         _canGroundCheck = false;
@@ -165,9 +158,9 @@ public class CharacterMovement : MonoBehaviour
         {
             RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down, 1000, _tileLayer);
 
-            //Debug.DrawRay(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down * 1000f, Color.blue, 10f);
             if (jumpEndCheckHit)
             {
+                //Debug.DrawRay(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down * 1000f, Color.blue, 10f);
                 _jumpTileCount = i;
 
                 /// <summary>
@@ -180,15 +173,6 @@ public class CharacterMovement : MonoBehaviour
                 _jumpEndY = (jumpEndCheckHit.point.y + _positionYOffset) - _jumpStartPosition.y;
 
                 _jumpMidY += _jumpEndY * _jumpGapRate;
-
-                //if (_jumpEndY >= 0)
-                //{
-                //    _graphWidth = Mathf.Lerp(1f, 1f, _jumpEndY);
-                //}
-                //else
-                //{
-                //    _graphWidth = Mathf.Lerp(1f, 1f, -_jumpEndY);
-                //}
 
                 break;
             }
@@ -221,7 +205,8 @@ public class CharacterMovement : MonoBehaviour
             lastPosition = newPosition;
             lastBeatTime = beatTime;
 
-            RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, _rayDistance, _tileLayer);
+            RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position,
+                Vector2.down, _rayDistance, _tileLayer);
 
             // 땅 위에 있을 때
             if (positionCheckHit)
@@ -243,7 +228,7 @@ public class CharacterMovement : MonoBehaviour
             if (_canGroundCheck)
             {
                 RaycastHit2D groundCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, _rayDistance, _tileLayer);
-
+                //Debug.DrawRay(_rayOriginPoint.position, Vector2.down * _rayDistance, Color.red, 10f);
                 if (groundCheckHit)
                 {
                     isJumping = false;
@@ -286,35 +271,48 @@ public class CharacterMovement : MonoBehaviour
 
     /// <summary>
     /// 점프 시 캐릭터 Position의 y를 계산하는 메소드
-    /// 이차함수 포물선을 따름(y = ax^2 + bx)
     /// jumpTileCount로 x로 몇 칸만큼을 점프할지 지정(최대 5칸)
+    /// 아래의 이차함수 포물선을 따름(A: start, B: mid, C: End)
+    /// 
+    /// f(x) = ((((x - x(B)) * (x - x(C))) / ((x(A) - x(B)) * (x(A) - x(C)))) * y(A)) +
+    ///        ((((x - x(A)) * (x - x(C))) / ((x(B) - x(A)) * (x(B) - x(C)))) * y(B)) +
+    ///        ((((x - x(A)) * (x - x(B))) / ((x(C) - x(A)) * (x(C) - x(B)))) * y(C))
+    /// 
     /// </summary>
     private float GetJumpingY(float x, int jumpTileCount)
     {
-        float a, b;
+        float n = (float)jumpTileCount;
 
-        switch (jumpTileCount)
-        {
-            case 3:
-                a = ((2f * _jumpEndY) - (4f * _jumpMidY)) / 9f;
-                b = (_jumpEndY - (9f * a)) / 3f;
-                break;
-            case 4:
-                a = (_jumpEndY - (2f * _jumpMidY)) / 8f;
-                b = (_jumpMidY - (4f * a)) / 2f;
-                break;
-            case 5:
-                a = ((2f * _jumpEndY) - (4f * _jumpMidY)) / 25f;
-                b = (_jumpEndY - (25f * a)) / 5f;
-                break;
-            default: // jumpTileCount 2
-                a = (_jumpEndY - (2f * _jumpMidY)) / 2f;
-                b = _jumpMidY - a;
-                break;
-        }
-
-        return (_graphWidth * a * x * x) + (b * x);
+        return ((x * (x - n)) / ((n / 2) * -(n / 2)) * _jumpMidY) +
+            (((x * (x - (n / 2)))) / (n * (n / 2)) * _jumpEndY);
     }
+
+    //private float GetJumpingY(float x, int jumpTileCount)
+    //{
+    //    float a, b;
+
+    //    switch (jumpTileCount)
+    //    {
+    //        case 3:
+    //            a = ((2f * _jumpEndY) - (4f * _jumpMidY)) / 9f;
+    //            b = (_jumpEndY - (9f * a)) / 3f;
+    //            break;
+    //        case 4:
+    //            a = (_jumpEndY - (2f * _jumpMidY)) / 8f;
+    //            b = (_jumpMidY - (4f * a)) / 2f;
+    //            break;
+    //        case 5:
+    //            a = ((2f * _jumpEndY) - (4f * _jumpMidY)) / 25f;
+    //            b = (_jumpEndY - (25f * a)) / 5f;
+    //            break;
+    //        default: // jumpTileCount 2
+    //            a = (_jumpEndY - (2f * _jumpMidY)) / 2f;
+    //            b = _jumpMidY - a;
+    //            break;
+    //    }
+
+    //    return (_graphWidth * a * x * x) + (b * x);
+    //}
 
     private void ChangeMoveSpeed(KoreographyEvent evt)
     {
@@ -323,7 +321,7 @@ public class CharacterMovement : MonoBehaviour
             _checkPointBeatTime = (float)Koreographer.Instance.GetMusicBeatTime();
             _rewindTime.ClearRewindList();
             MoveSpeed = evt.GetFloatValue();
-            _rayDistance = Mathf.Lerp(_minRayDistance, _maxRayDistance, (MoveSpeed - 2f) / 2f);
+            _rayDistance = Mathf.Lerp(_minRayDistance, _maxRayDistance, 2 * (MoveSpeed - 2f) / 3f);
         }
 
         if (evt.HasTextPayload())
@@ -376,13 +374,13 @@ public class CharacterMovement : MonoBehaviour
     public IEnumerator CoRewind(float y)
     {
         float elapseTime = 0f;
-        float targetTime = 0.1f;
-
+        float targetTime = 0.5f;
+        
         _rewindTime.StartRewind();
 
         if (_rewindTime.rewindList.Count != 0)
         {
-            while (_rewindTime.rewindList.Count != 0)
+            while (_rewindTime.rewindList.Count > 0)
             {
                 elapseTime = 0f;
                 Vector2 targetRewindPos = _rewindTime.rewindList[0].rewindPos;
@@ -403,7 +401,7 @@ public class CharacterMovement : MonoBehaviour
                         yield return null;
                     }
                 }
-                if (Mathf.Abs(targetRewindPos.x - transform.position.x) <= 1f)
+                if (Mathf.Abs(targetRewindPos.x - transform.position.x) <= 0.5f)
                 {
                     _gameUI.ReverseTextColor(_rewindTime.rewindList[0].judgeResult);
                     lastPosition = targetRewindPos;
@@ -415,7 +413,7 @@ public class CharacterMovement : MonoBehaviour
 
             while (elapseTime <= targetTime)
             {
-                transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
+                transform.position = Vector3.Lerp(lastPosition, new Vector3(_characterPosition.x, y, 0f), elapseTime / targetTime);
                 transform.DORotate(new Vector3(0, 0, 0), targetTime);
                 elapseTime += Time.fixedDeltaTime;
                 yield return null;
@@ -425,7 +423,7 @@ public class CharacterMovement : MonoBehaviour
         {
             while (elapseTime <= targetTime)
             {
-                transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
+                transform.position = Vector3.Lerp(lastPosition, new Vector3(_characterPosition.x, y, 0f), elapseTime / targetTime);
                 transform.DORotate(new Vector3(0, 0, 0), targetTime);
                 elapseTime += Time.fixedDeltaTime;
                 yield return null;
