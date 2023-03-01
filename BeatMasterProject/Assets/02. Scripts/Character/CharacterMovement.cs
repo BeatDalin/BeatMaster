@@ -391,14 +391,14 @@ public class CharacterMovement : MonoBehaviour
                         transform.position = Vector3.Lerp(lastPosition, _rewindTime.rewindList[0].rewindPos, elapseTime / targetTime);
                         transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
                         elapseTime += Time.fixedDeltaTime;
-                        yield return new WaitForFixedUpdate();;
+                        yield return new WaitForFixedUpdate();
                     }
                     else
                     {
                         transform.position = Vector3.Lerp(lastPosition, _rewindTime.rewindList[0].rewindPos, elapseTime / targetTime);
                         transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
                         elapseTime += Time.fixedDeltaTime;
-                        yield return new WaitForFixedUpdate();;
+                        yield return new WaitForFixedUpdate();
                     }
                 }
                 _rewindTime.rewindList.RemoveAt(0);
