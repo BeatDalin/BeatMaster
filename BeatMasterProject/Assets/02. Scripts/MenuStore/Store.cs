@@ -128,6 +128,7 @@ public class Store : MonoBehaviour
             _toggles[i].isOn = i == 0;
         }
         ShowStoreList(0);
+        _closeStoreBtn.interactable = true;
     }
 
     private void SetCharBtn()
@@ -497,15 +498,17 @@ public class Store : MonoBehaviour
         {
             button.onClick.AddListener(() =>
             {
+#if UNITY_ANDROID && !UNITY_EDITOR
                 ExcuteVibration.Instance.Touch();
+#endif
                 InitStorePopup();
             });
         }
     }
 
-    #endregion
+#endregion
 
-    #region PaidItem
+#region PaidItem
 
     private void SetPaidItemPopup(StoreData.PaidItemName paidItemName)
     {
@@ -588,7 +591,6 @@ public class Store : MonoBehaviour
                 _storeData.itemData[(int)_storeData.paidItemData[itemNum].packageItemName[i]].isUnlocked = true;
             }
         }
-        
         DataCenter.Instance.UpdatePaidItemPurchaseData(enumPaidItemName);
 
         UpdatePlayersDataInScene();
@@ -596,8 +598,13 @@ public class Store : MonoBehaviour
         InitStorePopup();
     }
 
-    #endregion
-    #region ifFix
+    public void Check()
+    {
+        _closeStoreBtn.interactable = !_closeStoreBtn.interactable;
+    }
+
+#endregion
+#region ifFix
 
     /*
      *     private void OnEnable()
@@ -619,5 +626,5 @@ public class Store : MonoBehaviour
             }
         }*/
 
-    #endregion
+#endregion
 }

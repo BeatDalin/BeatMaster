@@ -70,10 +70,6 @@ public class NormalGame : Game
         _playerDatas = DataCenter.Instance.GetPlayerData();
 
         playerAnim.ChangeCharacterAnim(_playerDatas.playerChar);
-        if (!isTutorial)
-        {
-            feverTimeController.SetPlayerIndex(_playerDatas.playerChar);
-        }
         
         _changeChar.ChangeItemInItemScroll(_playerDatas);
     }
@@ -104,6 +100,11 @@ public class NormalGame : Game
         _events = SoundManager.instance.playingKoreo.GetTrackByID(longCheckEndID).GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
         _isLongVisited = new bool[_events.Count];
+
+        if (!isTutorial)
+        {
+            feverTimeController.SetPlayerIndex(_playerDatas.playerChar);
+        }
 
     }
 
