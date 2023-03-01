@@ -71,6 +71,7 @@ public class NormalGame : Game
 
         playerAnim.ChangeCharacterAnim(_playerDatas.playerChar);
         
+        
         _changeChar.ChangeItemInItemScroll(_playerDatas);
     }
 
@@ -83,6 +84,12 @@ public class NormalGame : Game
     protected override void Init()
     {
         base.Init();
+        
+        if (!isTutorial)
+        {
+            feverTimeController.SetPlayerIndex(_playerDatas.playerChar);
+        }
+        
         // Need Curve Event to execute CalculateRange()
         _events = SoundManager.instance.playingKoreo.GetTrackByID(shortID).GetAllEvents();
         _isShortVisited = new bool[_events.Count];

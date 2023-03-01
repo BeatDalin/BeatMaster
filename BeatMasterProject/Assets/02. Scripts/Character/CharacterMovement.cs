@@ -375,7 +375,7 @@ public class CharacterMovement : MonoBehaviour
     {
         float elapseTime = 0f;
         float targetTime = 0.3f;
-        
+
         _rewindTime.StartRewind();
 
         if (_rewindTime.rewindList.Count != 0)
