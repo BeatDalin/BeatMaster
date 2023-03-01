@@ -264,8 +264,7 @@ public class NormalGame : Game
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1f && !_isCheckedLong)
         {
             _isCheckedLong = true;
-            rewindTime.RecordRewindPoint(characterMovement.transform.position, longResult[longIdx].ToString(),
-                true);
+            rewindTime.RecordRewindPoint(characterMovement.transform.position, longResult[longIdx].ToString(), true);
             if (!isLongPressed) // Failed to press at the start of the long note
             {
                 //==============Rewind 자리==============
