@@ -9,7 +9,7 @@ public class BackgroundController : MonoBehaviour
     [SerializeField] private float _moveXAmount = 0.01f;
     [SerializeField] private float _modSpeedY = 5f;
     // Stage1_Level1을 기준으로 정함
-    [SerializeField] private Vector3 _defaultScale = new Vector3(5.5f, 5.5f, 1);
+    [SerializeField] private Vector3 _defaultScale = new Vector3(6.5f, 6.5f, 1);
     [SerializeField] private float _defaultSpeed = 2f;
     
     private SpriteRenderer[] _mySpriteRenderers;
