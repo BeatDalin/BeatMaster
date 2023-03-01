@@ -95,6 +95,8 @@ public class Store : MonoBehaviour
         UpdatePlayersDataInScene();
         _storeData = DataCenter.Instance.GetStoreData();
         _playerData = DataCenter.Instance.GetPlayerData();
+        
+        DataCenter.Instance.CheckPaidItemPurchase(); // Load isPurchased from Firebase Database
         SetCharBtn();
         SetItemBtn();
         // SetPaidItemBtn();
@@ -178,11 +180,12 @@ public class Store : MonoBehaviour
                 _changeChar.ChangeItemSprite((StoreData.ItemName)index);
             _item[index].transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
                 _storeData.itemData[index].price.ToString();
-            if (_storeData.itemData[index].isPurchased)
-            {
-                _item[index].transform.GetChild(1).gameObject.SetActive(false);
-            }
-
+            // if (_storeData.itemData[index].isPurchased)
+            // {
+            //     _item[index].transform.GetChild(1).gameObject.SetActive(false);
+            // }
+            _item[index].transform.GetChild(1).gameObject.SetActive(!_storeData.itemData[index].isPurchased);
+            
             if (_storeData.itemData[index].isUnlocked)
             {
                 _item[index].transform.GetChild(2).gameObject.SetActive(false);
@@ -268,6 +271,20 @@ public class Store : MonoBehaviour
         }
         for (int i = 0; i < _storeData.itemData.Length - 1; i++) // empty 제외하기 위해 Length - 1
         {
+            // if (_storeData.itemData[i].isPaidItem)
+            // {
+            //     // wallet에 있는지 확인
+            //     if (FirebaseDataManager.Instance.CheckProductInWallet(_storeData.itemData[i].itemName.ToString()))
+            //     {
+            //         // Product exists in Wallet
+            //         int index = i;
+            //         _item[index].onClick.RemoveAllListeners();
+            //         _item[index].onClick.AddListener(() =>
+            //             SetItemPopup(_storeData.itemData[index].itemPart, _storeData.itemData[index].itemName));
+            //         _item[i].transform.GetChild(1).gameObject.SetActive(false);
+            //         _item[i].transform.GetChild(2).gameObject.SetActive(false);
+            //     }
+            // }
             if (_storeData.itemData[i].isPurchased)
             {
                 int index = i;
@@ -278,13 +295,13 @@ public class Store : MonoBehaviour
                 _item[i].transform.GetChild(2).gameObject.SetActive(false);
             }
         }
-        for (int i = 0; i < _storeData.paidItemData.Length; i++)
-        {
-            if (_storeData.paidItemData[i].isPurchased)
-            {
-                _paidItem[i].transform.GetChild(1).gameObject.SetActive(false);
-            }
-        }
+        // for (int i = 0; i < _storeData.paidItemData.Length; i++)
+        // {
+        //     if (_storeData.paidItemData[i].isPurchased)
+        //     {
+        //         _paidItem[i].transform.GetChild(1).gameObject.SetActive(false);
+        //     }
+        // }
     }
 
     #region Character
@@ -550,18 +567,22 @@ public class Store : MonoBehaviour
 
         if (_storeData.paidItemData[itemNum].packageCharacterNum[0] != 0) // package에 character가 있을 경우
         {
+            StoreData.CharacterName characterName = (StoreData.CharacterName)_storeData.paidItemData[itemNum].packageCharacterNum[0];
             for (int i = 0; i < _storeData.paidItemData[itemNum].packageCharacterNum.Length; i++)
             {
                 _storeData.characterData[_storeData.paidItemData[itemNum].packageCharacterNum[i]].isPurchased = true;
+                // _storeData.characterData[_storeData.paidItemData[itemNum].packageCharacterNum[i]].isPurchased = FirebaseDataManager.Instance.CheckProductInWallet(characterName.ToString());
                 _storeData.characterData[_storeData.paidItemData[itemNum].packageCharacterNum[i]].isUnlocked = true;
             }
         }
 
         if (_storeData.paidItemData[itemNum].packageItemName[0] != (StoreData.ItemName)99) // package에 item이 있을 경우
         {
+            StoreData.ItemName itemName = _storeData.paidItemData[itemNum].packageItemName[0];
             for (int i = 0; i < _storeData.paidItemData[itemNum].packageItemName.Length; i++)
             {
                 _storeData.itemData[(int)_storeData.paidItemData[itemNum].packageItemName[i]].isPurchased = true;
+                // _storeData.itemData[(int)_storeData.paidItemData[itemNum].packageItemName[i]].isPurchased = FirebaseDataManager.Instance.CheckProductInWallet(itemName.ToString());
                 _storeData.itemData[(int)_storeData.paidItemData[itemNum].packageItemName[i]].isUnlocked = true;
             }
         }
