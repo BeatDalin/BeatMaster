@@ -36,8 +36,9 @@ public abstract class Game : MonoBehaviour
     public int curSample;
     protected bool isRewinding;
     private WaitWhile _waitWhileSceneLoad;
-    
-    [Header("Check Game End")]
+
+    [Header("Check Game End")] 
+    public bool isResultShowing;
     [SerializeField][EventID] private string _spdEventID;
 
     [Header("Check Point")]
@@ -127,6 +128,7 @@ public abstract class Game : MonoBehaviour
         rewindLongIdx = 0;
         rewindSampleTime = -1;
         isRewinding = false;
+        isResultShowing = false;
     }
 
     protected void StartWithDelay(int startSample = 0)
@@ -238,6 +240,7 @@ public abstract class Game : MonoBehaviour
 
         if (message == "End")
         {
+            isResultShowing = true;
             SummarizeResult();
             RateResult(_stageIdx, _levelIdx);
             gameUI.UpdateText(TextType.Death, deathCount); // increase death count
