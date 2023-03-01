@@ -116,7 +116,6 @@ public class MonsterPooling : MonoBehaviour
     {
         for (int i = 0; i < _shortEventList.Count; i++)
         {
-            Debug.Log(i);
             if (_shortEventList[i].GetIntValue() == 1)
             {
                 _monsterInfos.TryGetValue(_tilePos[i], out int monsterType);

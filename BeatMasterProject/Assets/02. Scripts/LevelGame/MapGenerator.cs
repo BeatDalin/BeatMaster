@@ -374,7 +374,6 @@ public class MapGenerator : MonoBehaviour
             {
                 // Record jump position
                 _objectGenerator.RecordJumpPos(new Vector3(xPosition + xOffset, yPosition, 0));
-                Debug.Log(_mapEventList[xPosition].GetTextValue());
                 if (int.Parse(_mapEventList[xPosition + 2].GetTextValue()) != 5)
                 {
                     // Posit object only when next tile is not empty tile
