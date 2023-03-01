@@ -374,7 +374,7 @@ public class CharacterMovement : MonoBehaviour
     public IEnumerator CoRewind(float y)
     {
         float elapseTime = 0f;
-        float targetTime = 0.1f;
+        float targetTime = 0.3f;
         
         _rewindTime.StartRewind();
 
@@ -386,28 +386,23 @@ public class CharacterMovement : MonoBehaviour
                 Vector2 targetRewindPos = _rewindTime.rewindList[0].rewindPos;
                 while (elapseTime <= targetTime)
                 {
-                    if (_rewindTime.rewindList.Count > 1)
+                    if (_rewindTime.rewindList.Count > 0)
                     {
-                        transform.position = Vector3.Lerp(lastPosition, targetRewindPos, elapseTime / targetTime);
+                        transform.position = Vector3.Lerp(lastPosition, _rewindTime.rewindList[0].rewindPos, elapseTime / targetTime);
                         transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
                         elapseTime += Time.fixedDeltaTime;
-                        yield return new WaitForFixedUpdate();
+                        yield return new WaitForFixedUpdate();;
                     }
                     else
                     {
                         transform.position = Vector3.Lerp(lastPosition, _rewindTime.rewindList[0].rewindPos, elapseTime / targetTime);
                         transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
                         elapseTime += Time.fixedDeltaTime;
-                        yield return new WaitForFixedUpdate();
+                        yield return new WaitForFixedUpdate();;
                     }
                 }
-                if (Mathf.Abs(targetRewindPos.x - transform.position.x) <= 0.5f)
-                {
-                    Debug.Log("Rewind");
-                    _gameUI.ReverseTextColor(_rewindTime.rewindList[0].judgeResult);
-                    lastPosition = targetRewindPos;
-                    _rewindTime.rewindList.RemoveAt(0);
-                }
+                _rewindTime.rewindList.RemoveAt(0);
+                lastPosition = targetRewindPos;
             }
             elapseTime = 0f;
             targetTime = 0.3f;
