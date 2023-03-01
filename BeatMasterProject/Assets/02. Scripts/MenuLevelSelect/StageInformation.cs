@@ -232,11 +232,11 @@ public class StageInformation : MonoBehaviour
             // clear Img
             if (levelData.levelClear)
             {
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j <= 2; j++)
                 {
                     GameObject starImg = toggles[i].transform.GetChild(3).GetChild(j).GetChild(1).gameObject;
 
-                    if (i < levelData.star)
+                    if (j < levelData.star)
                     {
                         starImg.SetActive(true);
                     }
