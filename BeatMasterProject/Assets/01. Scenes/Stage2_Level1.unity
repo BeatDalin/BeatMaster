@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -373,8 +373,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterList: []
   coinParent: {fileID: 970478227}
-  _mapEventID: Stage2_Level1_Calibrate_Map
-  _shortEventID: Stage2_Level1_Calibrate_Short
+  _mapEventID: Stage2_Level1_Map
+  _shortEventID: Stage2_Level1_Short
   _mapEventList: []
   _shortEventList: []
   _monsterPrefabList:
@@ -796,14 +796,14 @@ MonoBehaviour:
   _stageIdx: 1
   _levelIdx: 0
   coinCount: 0
-  shortID: Stage2_Level1_Calibrate_Short
+  shortID: Stage2_Level1_Short
   longID: Stage2_Level1_Long
-  jumpCheckID: Stage2_Level1_Calibrate_JumpCheck
-  attackCheckID: Stage2_Level1_Calibrate_AttackCheck
+  jumpCheckID: Stage2_Level1_JumpCheck
+  attackCheckID: Stage2_Level1_AttackCheck
   longCheckMiddleID: Stage2_Level1_LongCheckMiddle
   longCheckStartID: Stage2_Level1_LongCheckStart
   longCheckEndID: Stage2_Level1_LongCheckEnd
-  isAutoPlay: 0
+  _isAutoPlay: 0
   _changeChar: {fileID: 18329012}
 --- !u!4 &612035090
 Transform:
@@ -947,7 +947,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dabd7d5bc70bae2499f342adb8dbe61e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapEventID: Stage2_Level1_Calibrate_Map
+  _mapEventID: Stage2_Level1_Map
   _starObj: {fileID: 7397218863573384310, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
   _itemContainer: {fileID: 39094806}
   _checkPointEventID: Stage2_Level1_CheckPoint
@@ -982,8 +982,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   theme: 0
   _isEditMode: 0
-  _mapEventID: Stage2_Level1_Calibrate_Map
-  _shortEventID: Stage2_Level1_Calibrate_Short
+  _mapEventID: Stage2_Level1_Map
+  _shortEventID: Stage2_Level1_Short
   _longEventID: Stage2_Level1_Long
   _spdEventID: Stage2_Level1_Spd
   _groundTilemap: {fileID: 1828062194}
@@ -2087,9 +2087,9 @@ MonoBehaviour:
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
-  m_XDamping: 0
-  m_YDamping: 0
-  m_ZDamping: 0
+  m_XDamping: 0.1
+  m_YDamping: 0.1
+  m_ZDamping: 0.1
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.55
@@ -2902,9 +2902,9 @@ MonoBehaviour:
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
-  m_XDamping: 0
-  m_YDamping: 0
-  m_ZDamping: 0
+  m_XDamping: 0.1
+  m_YDamping: 0.1
+  m_ZDamping: 0.1
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.55
