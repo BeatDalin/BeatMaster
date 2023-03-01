@@ -27,8 +27,9 @@ public class NormalGame : Game
     private KeyCode _attackNoteKey = KeyCode.RightArrow;
     private KeyCode _longNoteKey = KeyCode.LeftArrow;
     private List<KoreographyEvent> _shortEvent;
-    [SerializeField] private bool _isAutoPlay = false;
-    
+    //[SerializeField] private bool _isAutoPlay = false;
+    public bool isAutoPlay = false;
+
     [Header("Combo System")]
     private ComboSystem _comboSystem;
     private PlayerData _playerDatas;
@@ -36,7 +37,7 @@ public class NormalGame : Game
     [SerializeField]
     private ChangeCharSprite _changeChar;
 
-    private int _rewindCount=0;
+    private int _rewindCount = 0;
 
     protected override void Awake()
     {
@@ -91,7 +92,7 @@ public class NormalGame : Game
             rangeEventList.Add(ev);
         }
         _eventRangeShort = CalculateRange(rangeEventList);
-        
+
         _events = SoundManager.instance.playingKoreo.GetTrackByID(longCheckEndID).GetAllEvents();
         _eventRangeLong = CalculateRange(_events);
         _isLongVisited = new bool[_events.Count];
@@ -112,7 +113,7 @@ public class NormalGame : Game
                 _pressedTime = sampleTime; // record the sample time when the button was pressed
                 ShortNoteComplete();
             }
-            else if (_isAutoPlay && _shortEvent[shortIdx].GetIntValue() == 0 && sampleTime > _eventRangeShort[shortIdx, 0] && sampleTime <= _eventRangeShort[shortIdx,1])
+            else if (isAutoPlay && _shortEvent[shortIdx].GetIntValue() == 0 && sampleTime > _eventRangeShort[shortIdx, 0] && sampleTime <= _eventRangeShort[shortIdx, 1])
             {
                 _pressedTime = sampleTime; // record the sample time when the button was pressed
                 characterMovement.Jump();
@@ -154,7 +155,7 @@ public class NormalGame : Game
                 SoundManager.instance.PlaySFX("Hit");
                 ShortNoteComplete();
             }
-            else if (_isAutoPlay && _shortEvent[shortIdx].GetIntValue() == 1 && sampleTime > _eventRangeShort[shortIdx, 0] && sampleTime <= _eventRangeShort[shortIdx,1])
+            else if (isAutoPlay && _shortEvent[shortIdx].GetIntValue() == 1 && sampleTime > _eventRangeShort[shortIdx, 0] && sampleTime <= _eventRangeShort[shortIdx, 1])
             {
                 _pressedTime = sampleTime; // record the sample time when the button was pressed
                 SoundManager.instance.PlaySFX("Hit");
@@ -183,8 +184,8 @@ public class NormalGame : Game
             }
             isShortKeyCorrect = false;
         }
-    } 
-    
+    }
+
     private void ShortNoteComplete()
     {
         isShortKeyCorrect = true;
@@ -212,7 +213,7 @@ public class NormalGame : Game
             _isCheckedLong = false; // initialize before a curve value becomes 1
         }
 
-        if (_touchInputManager.CheckLeftTouch() || Input.GetKeyDown(_longNoteKey) || _isAutoPlay)
+        if (_touchInputManager.CheckLeftTouch() || Input.GetKeyDown(_longNoteKey) || isAutoPlay)
         {
             isLongPressed = true;
             _comboSystem.IncreaseCombo();
@@ -224,7 +225,7 @@ public class NormalGame : Game
         }
         else if (_touchInputManager.CheckLeftTouchEnd() || Input.GetKeyUp(_longNoteKey))
         {
-            if (!_isAutoPlay)
+            if (!isAutoPlay)
             {
                 isLongPressed = false;
                 _comboSystem.ResetCombo(); // erase it later
@@ -251,7 +252,7 @@ public class NormalGame : Game
         // if action key is released during long note
         if (isLongPressed)
         {
-            if (_touchInputManager.CheckLeftTouching() || Input.GetKey(_longNoteKey) || _isAutoPlay)
+            if (_touchInputManager.CheckLeftTouching() || Input.GetKey(_longNoteKey) || isAutoPlay)
             {
                 // Keep Touching ...
                 _comboSystem.IncreaseComboInProcess(evt.StartSample);
@@ -298,7 +299,7 @@ public class NormalGame : Game
                 _playerAnim.SetEffectBool(false);
             }
         }
-        else if (_isAutoPlay)
+        else if (isAutoPlay)
         {
             if (sampleTime > _eventRangeLong[longIdx, 0] && sampleTime <= _eventRangeLong[longIdx, 1])
             {

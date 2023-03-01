@@ -12,21 +12,21 @@ public class Store : MonoBehaviour
     private Button _characterBtn;
     [SerializeField]
     private Button _itemBtn;
-    [SerializeField] 
+    [SerializeField]
     private Button _paidItemBtn;
 
     [Header("Panels")]
     [SerializeField]
     private GameObject[] _popupPanel; //panels 0:_purchasePanel, 1:_noMoneyPanel, 2: _lockedPanel
 
-    [Header("Product Info")] 
+    [Header("Product Info")]
     [SerializeField]
     private Sprite[] _moneySprite;
-    [SerializeField] 
+    [SerializeField]
     private Text _productTitle;
-    [SerializeField] 
+    [SerializeField]
     private Text _productDescription;
-    
+
 
     [Header("Popup Buttons")]
     [SerializeField]
@@ -45,7 +45,7 @@ public class Store : MonoBehaviour
     private GameObject _charContent;
     [SerializeField]
     private GameObject _itemContent;
-    [SerializeField] 
+    [SerializeField]
     private GameObject _paidItemContent;
 
     [SerializeField]
@@ -69,7 +69,7 @@ public class Store : MonoBehaviour
     [SerializeField] private PlayerData _playerData;
 
 
-    [Header("DOTween Animations")] 
+    [Header("DOTween Animations")]
     [SerializeField] private DOTweenAnimation[] _popUpDOTweens;
     [SerializeField] private DOTweenAnimation[] _toggleDOTweens;
     [SerializeField] private DOTweenAnimation[] _selectAreaDOTweens;
@@ -81,7 +81,7 @@ public class Store : MonoBehaviour
     private readonly string _unEquip = "UnEquip";
     private readonly string _equipped = "Equipped";
     private readonly string _buy = "Buy";
-    
+
     private void Awake()
     {
         DataCenter.Instance.LoadData();
@@ -141,7 +141,7 @@ public class Store : MonoBehaviour
             }
         }
     }
-    
+
     private void SetTextInUnlockChar(int index)
     {
         _closeStoreBtn.interactable = false;
@@ -196,7 +196,7 @@ public class Store : MonoBehaviour
             {
                 _paidItem[index].transform.GetChild(1).gameObject.SetActive(false);
             }
-            
+
             _paidItem[index].transform.GetChild(2).gameObject.SetActive(false);
             _paidItem[index].onClick.AddListener(() =>
                 SetPaidItemPopup(_storeData.paidItemData[index].paidItemName));
@@ -284,18 +284,18 @@ public class Store : MonoBehaviour
         _popupPanel[0].transform.GetChild(0).GetChild(0).gameObject.SetActive(true); // Square
         _productTitle.text = _storeData.characterData[charNum].characterName.ToString(); // CharacterName
         _productDescription.text = _storeData.characterData[charNum].characterDescription; // CharacterDescription
-        
+
         // 구매 안 한 상태일 때 구매하기 버튼 노출
         if (!_storeData.characterData[charNum].isPurchased && _storeData.characterData[charNum].isUnlocked)
         {
             _ifPurchased.transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
                 _storeData.characterData[charNum].price.ToString(); // price text
-            
+
             _ifPurchased.transform.GetChild(1).GetChild(1).GetComponent<Image>().sprite =
                 _moneySprite[_storeData.characterData[charNum].isPaidItem ? 1 : 0]; // Money sprite
-            
+
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(true); // SetActive price text, purchaseBtn
-            
+
             _popupBtn[0].onClick.AddListener(delegate { PurchaseCharacter(charNum); });
         }
 
@@ -363,16 +363,16 @@ public class Store : MonoBehaviour
         _popupPanel[0].transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
         _productTitle.text = _storeData.itemData[itemNum].itemName.ToString(); // Item Name
         _productDescription.text = _storeData.itemData[itemNum].itemDescription; // Item Description
-        
+
         // 구매 안 한 상태일 때 구매하기 버튼 노출
         if (!_storeData.itemData[itemNum].isPurchased && _storeData.itemData[itemNum].isUnlocked)
         {
             _ifPurchased.transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
                 _storeData.itemData[itemNum].price.ToString(); // price text
-            
+
             _ifPurchased.transform.GetChild(1).GetChild(1).GetComponent<Image>().sprite =
                 _moneySprite[_storeData.itemData[itemNum].isPaidItem ? 1 : 0]; // Money sprite
-            
+
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(true); // SetActive price text, purchaseBtn
 
             _popupBtn[0].onClick.AddListener(delegate { PurchaseItem(itemPart, itemName); });
@@ -430,7 +430,7 @@ public class Store : MonoBehaviour
         InitStorePopup();
     }
 
-    private void UpdatePlayersDataInScene()
+    public void UpdatePlayersDataInScene()
     {
         _playerCoin.text = DataCenter.Instance.GetPlayerData().playerItem.ToString();
     }
@@ -446,7 +446,7 @@ public class Store : MonoBehaviour
     #endregion
 
     #region PaidItem
-    
+
     private void SetPaidItemPopup(StoreData.PaidItemName paidItemName)
     {
         int itemNum = (int)paidItemName;
@@ -462,36 +462,36 @@ public class Store : MonoBehaviour
         {
             _ifPurchased.transform.GetChild(1).GetChild(0).GetComponent<Text>().text =
                 _storeData.paidItemData[itemNum].price.ToString(); // price text
-            
+
             _ifPurchased.transform.GetChild(1).GetChild(1).GetComponent<Image>().sprite =
                 _moneySprite[1]; // Money sprite
-            
+
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(true); // SetActive price text, purchaseBtn
 
-            
+
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(true);
 
             _popupBtn[0].onClick.AddListener(delegate { PurchasePaidItem(paidItemName); });
         }
-        
+
         // 구매했을 때.. 
         else
         {
             _ifPurchased.transform.GetChild(1).gameObject.SetActive(false);
             _ifPurchased.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "purchased";
         }
-        
+
         _closeStoreBtn.interactable = false;
         SoundManager.instance.PlaySFX("Touch");
         _popupPanel[0].SetActive(true);
         _popUpDOTweens[0].DORestart();
     }
-    
+
     private void PurchasePaidItem(StoreData.PaidItemName paidItemName)
     {
         int itemNum = (int)paidItemName;
         // int price = _storeData.paidItemData[itemNum].price;
-        
+
         // To do : IAP 연결..
 
         if (_storeData.paidItemData[itemNum].packageCharacterNum[0] != 0) // package에 character가 있을 경우
@@ -511,14 +511,14 @@ public class Store : MonoBehaviour
                 _storeData.itemData[(int)_storeData.paidItemData[itemNum].packageItemName[i]].isUnlocked = true;
             }
         }
-        
+
         DataCenter.Instance.UpdatePaidItemPurchaseData(paidItemName);
 
         UpdatePlayersDataInScene();
 
         InitStorePopup();
     }
-    
+
     #endregion
     #region ifFix
 
