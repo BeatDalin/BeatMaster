@@ -31,12 +31,14 @@ public class MonsterPooling : MonoBehaviour
     [Header("Tile")]
     private Dictionary<Vector3, int> _monsterInfos = new Dictionary<Vector3, int>();
     [SerializeField] private List<Vector3> _tilePos = new List<Vector3>();
+    private LayerMask _tileLayer;
 
     public Vector2 _coinScreenPos;
 
     private int _checkPointIdx = 0;
     private int _deleteMonsterCount;
     private int _count;
+    private const string _airMonsterTag = "AirMonster";
 
     private void Awake()
     {
@@ -49,6 +51,8 @@ public class MonsterPooling : MonoBehaviour
         _shortEventList = SoundManager.instance.playingKoreo.GetTrackByID(_shortEventID).GetAllEvents();
         
         _coinScreenPos = _camera.ScreenToWorldPoint(coinPos.position);
+
+        _tileLayer = LayerMask.GetMask("Ground");
         
         StartCoroutine(CoWaitForList());
         //Invoke("SpawnMonster", 0.3f);
@@ -121,7 +125,11 @@ public class MonsterPooling : MonoBehaviour
                 _monsterInfos.TryGetValue(_tilePos[i], out int monsterType);
 
                 GameObject g = Instantiate(_monsterPrefabList[monsterType], new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 1f), Quaternion.identity, transform);
-                Instantiate(_coinPrefab, new Vector3(_tilePos[i].x + 1f, _tilePos[i].y + 1f), Quaternion.identity, transform);
+                
+                RaycastHit2D groundHit = Physics2D.Raycast(new Vector2(_tilePos[i].x + 1f, 100f), Vector2.down, 1000f, _tileLayer);
+                float yPos = (g.CompareTag(_airMonsterTag) ? _tilePos[i].y + 1f : groundHit.point.y + 0.5f);
+
+                Instantiate(_coinPrefab, new Vector3(_tilePos[i].x + 1f, yPos), Quaternion.identity, transform);
                 
                 monsterList.Add(g);
             }
