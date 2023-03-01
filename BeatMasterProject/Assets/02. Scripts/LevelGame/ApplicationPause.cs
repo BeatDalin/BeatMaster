@@ -20,7 +20,10 @@ public class ApplicationPause : MonoBehaviour
         if (pauseStatus)
         {
             _isPause = true;
-            _gameUI.OpenPause();
+            if (!_game.isResultShowing)
+            {
+                _gameUI.OpenPause();
+            }
             
         }
         // else
