@@ -19,7 +19,7 @@ public class CharacterMovement : MonoBehaviour
     private float _currentBeatTime = 0;
     private bool _isFailed;
 
-    [Header("Move")] 
+    [Header("Move")]
     [EventID] public string speedEventID;
     [EventID] public string checkpointID;
     [SerializeField] private float _moveSpeed;
@@ -28,7 +28,7 @@ public class CharacterMovement : MonoBehaviour
         get => _moveSpeed;
         set => _moveSpeed = value;
     }
-    
+
     [Header("Jump")]
     [SerializeField] private float _jumpGapRate = 0.25f;
     [SerializeField] private float _jumpHeight = 1.3f;
@@ -43,7 +43,7 @@ public class CharacterMovement : MonoBehaviour
     public bool isJumping;
     public bool isLongNote = false; // a variable set as true when CheckLongStart() is called
 
-    [Header("Ray")] 
+    [Header("Ray")]
     [SerializeField] private Transform _rayOriginPoint;
     [SerializeField] private float _minRayDistance = 0.5f;
     private float _maxRayDistance;
@@ -68,7 +68,7 @@ public class CharacterMovement : MonoBehaviour
     private ObjectGenerator _objectGenerator;
     [SerializeField] private int _rewindIdx;
     private bool _isCheckCheckPoint = true;
-    
+
     private void Start()
     {
         Init();
@@ -89,7 +89,7 @@ public class CharacterMovement : MonoBehaviour
             _previousBeatTime = _currentBeatTime;
             _isFailed = false;
         }
-        
+
         if (_game.curState.Equals(GameState.Rewind))
         {
             _isFailed = true;
@@ -121,14 +121,14 @@ public class CharacterMovement : MonoBehaviour
         _characterPosition = transform.position;
         _maxRayDistance = _minRayDistance + 0.2f;
         _rayDistance = Mathf.Lerp(_minRayDistance, _maxRayDistance, (MoveSpeed - 2f) / 2f);
-        
+
         Koreographer.Instance.RegisterForEvents(speedEventID, ChangeMoveSpeed);
         Koreographer.Instance.RegisterForEventsWithTime(checkpointID, CheckPoint);
     }
 
     private void GetInput()
     {
-        if (_touchInputManager.CheckRightTouch() || Input.GetKeyDown(KeyCode.RightArrow))
+        if ((_touchInputManager.CheckRightTouch() || Input.GetKeyDown(KeyCode.RightArrow)) && !isLongNote)
         {
             PlayerStatus.Instance.ChangeStatus(CharacterStatus.Attack);
             SoundManager.instance.PlaySFX("Attack");
@@ -178,7 +178,7 @@ public class CharacterMovement : MonoBehaviour
                 /// </summary>
                 _jumpMidY = Mathf.Lerp(1.3f, 1.9f, (_jumpTileCount - 2) / 3f);
                 _jumpEndY = (jumpEndCheckHit.point.y + _positionYOffset) - _jumpStartPosition.y;
-                
+
                 _jumpMidY += _jumpEndY * _jumpGapRate;
 
                 //if (_jumpEndY >= 0)
@@ -344,7 +344,7 @@ public class CharacterMovement : MonoBehaviour
             _characterPosition = _objectGenerator.checkPointPos[_rewindIdx];
             _rewindIdx++;
         }
-        
+
         if (evt.GetValueOfCurveAtTime(sampleTime) >= 1 && !_isCheckCheckPoint)
         {
             SoundManager.instance.PlaySFX("CheckPoint");
@@ -377,9 +377,9 @@ public class CharacterMovement : MonoBehaviour
     {
         float elapseTime = 0f;
         float targetTime = 0.1f;
-        
+
         _rewindTime.StartRewind();
-        
+
         if (_rewindTime.rewindList.Count != 0)
         {
             while (_rewindTime.rewindList.Count != 0)
@@ -412,7 +412,7 @@ public class CharacterMovement : MonoBehaviour
             }
             elapseTime = 0f;
             targetTime = 0.3f;
-            
+
             while (elapseTime <= targetTime)
             {
                 transform.position = Vector3.Lerp(lastPosition, _characterPosition, elapseTime / targetTime);
@@ -433,7 +433,7 @@ public class CharacterMovement : MonoBehaviour
         }
 
         _rewindTime.StopRewind();
-        
+
         _characterPosition = new Vector3(_characterPosition.x, y, 0f);
         transform.rotation = Quaternion.identity;
         transform.position = _characterPosition;
