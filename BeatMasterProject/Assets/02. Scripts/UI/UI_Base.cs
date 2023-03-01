@@ -1,27 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 /// UI_Base : 모든 UI의 조상. 모든 UI들이 가지고 있는 공통적인 부분들
 public abstract class UI_Base : MonoBehaviour
 {
     // _objects : Key => Type, Value => 오브젝트들이 담긴 배열(Dictionary)  
-    protected Dictionary<Type, UnityEngine.Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
-
-    public abstract void Init();
-
+    Dictionary<Type, Object[]> _objects = new Dictionary<Type, UnityEngine.Object[]>();
+    
     #region Bind
 
     // Bind : UI 오브젝트 이름으로 찾아 바인딩해주기
-    protected void Bind<T>(Type type) where T : UnityEngine.Object
+    protected void Bind<T>(Type type) where T : Object
     {
         string[] names = Enum.GetNames(type);
 
         // objects : _objects Dictionary에 Value로 담기 위한 배열
-        UnityEngine.Object[] objects = new UnityEngine.Object[name.Length];
+        Object[] objects = new Object[name.Length];
         _objects.Add(typeof(T), objects); // Dictionary에 추가
 
 
@@ -45,10 +44,14 @@ public abstract class UI_Base : MonoBehaviour
     #region Get
 
     // Get : : UI 오브젝트 가져오기
-    protected T Get<T>(int idx) where T : UnityEngine.Object
+    // T 컴포넌트를 가지고 있으며(혹은 오브젝트) 파라미터로 넘긴 int(ex, Images.ItemIcon 을 int로 형변환하면 enum답게 정수가 리턴
+    // 인덱스에 해당하는 오브젝트를 T 타입으로 리턴함
+    
+    protected T Get<T>(int idx) where T : Object
     {
-        UnityEngine.Object[] objects = null;
+        Object[] objects = null;
 
+        // _objects Dictionary에 typeof(T) Key가 존재하면 true리턴 + objects 배열에 typeof(T) Key의 Value를 저장
         if (_objects.TryGetValue(typeof(T), out objects) == false)
         {
             return null;
@@ -59,12 +62,44 @@ public abstract class UI_Base : MonoBehaviour
 
     #endregion
 
+    #region Get을 통해 오브젝트 가져오기
 
+
+    protected Text GetText(int idx)
+    {
+        return Get<Text>(idx);
+    }
+
+    protected Button GetButton(int idx)
+    {
+        return Get<Button>(idx);
+    }
+
+    protected Image GetImage(int idx)
+    {
+        return Get<Image>(idx);
+    }
+
+    protected Toggle GetToggle(int idx)
+    {
+        return Get<Toggle>(idx);
+    }
+
+    protected GameObject GetObject(int idx)
+    {
+        return Get<GameObject>(idx);
+    }
+    
+
+    #endregion
+    
+    
+    
     #region AddUIEvent
 
     // AddUIEvent : UI 오브젝트에 이벤트 등록하기
     // go 오브젝트에 UI_EventHandler를 붙여 go 오브젝트가 이벤트 콜백을 받을 수 있게 함
-    // UI_EventHandler에 정의되어 있는 이벤트들이 발생하면, action에 등록된 것들이 실행되도록 한다.
+    // UI_EventHandler에 정의되어 있는 이벤트들이 발생하면, action에 등록된 것들이 실행되도록 한다. (OnClickHandler, OnDragHandler)
     public static void AddUIEvent(GameObject go, Action<PointerEventData> action,
         Define.UIEvent type = Define.UIEvent.Click)
     {
@@ -85,31 +120,24 @@ public abstract class UI_Base : MonoBehaviour
                 break;
         }
     }
+    
+    public static void RemoveUIEvent(GameObject go, Action<PointerEventData> action,
+        Define.UIEvent type = Define.UIEvent.Click)
+    {
+        UI_EventHandler evt = Util.GetOrAddComponent<UI_EventHandler>(go);
+
+        switch (type)
+        {
+            case Define.UIEvent.Click:
+                evt.OnClickHandler -= action;
+                break;
+
+            case Define.UIEvent.Drag:
+                evt.OnDragHandler -= action;
+                break;
+        }
+    }
 
     #endregion
-
-
-    // 오브젝트 가져오기
-    protected GameObject GetObject(int idx)
-    {
-        return Get<GameObject>(idx);
-    }
-
-    // Text 가져오기
-    protected Text GetText(int idx)
-    {
-        return Get<Text>(idx);
-    }
-
-    // Button 가져오기
-    protected Button GetButton(int idx)
-    {
-        return Get<Button>(idx);
-    }
-
-    // Image 가져오기
-    protected Image GetImage(int idx)
-    {
-        return Get<Image>(idx);
-    }
+    
 }
