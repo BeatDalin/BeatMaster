@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -486,8 +486,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterList: []
   coinParent: {fileID: 970478227}
-  _mapEventID: Stage3_Level1_Map
-  _shortEventID: Stage3_Level1_Midi
+  _mapEventID: Stage3_Level1_Spectrum_Map
+  _shortEventID: Stage3_Level1_Spectrum_Short
   _mapEventList: []
   _shortEventList: []
   _monsterPrefabList:
@@ -852,10 +852,10 @@ MonoBehaviour:
   _stageIdx: 2
   _levelIdx: 0
   coinCount: 0
-  shortID: Stage3_Level1_Midi
+  shortID: Stage3_Level1_Spectrum_Short
   longID: Stage3_Level1_Long
-  jumpCheckID: Stage3_Level1_MidiJumpCheck
-  attackCheckID: Stage3_Level1_MidiAttackCheck
+  jumpCheckID: Stage3_Level1_Spectrum_JumpCheck
+  attackCheckID: Stage3_Level1_Spectrum_AttackCheck
   longCheckMiddleID: Stage3_Level1_LongCheckMiddle
   longCheckStartID: Stage3_Level1_LongCheckStart
   longCheckEndID: Stage3_Level1_LongCheckEnd
@@ -1000,7 +1000,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dabd7d5bc70bae2499f342adb8dbe61e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapEventID: Stage3_Level1_Map
+  _mapEventID: Stage3_Level1_Spectrum_Map
   _starObj: {fileID: 7397218863573384310, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
   _itemContainer: {fileID: 39094806}
   _checkPointEventID: Stage3_Level1_CheckPoint
@@ -1035,8 +1035,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   theme: 2
   _isEditMode: 0
-  _mapEventID: Stage3_Level1_Map
-  _shortEventID: Stage3_Level1_Midi
+  _mapEventID: Stage3_Level1_Spectrum_Map
+  _shortEventID: Stage3_Level1_Spectrum_Short
   _longEventID: Stage3_Level1_Long
   _spdEventID: Stage3_Level1_Spd
   _groundTilemap: {fileID: 1828062194}
