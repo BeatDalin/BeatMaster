@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -14,13 +15,13 @@ public class FallingCorgiController : ObjectPooling
     [SerializeField] private float _minRotation = 30f;
     [SerializeField] private float _maxRotation = 60f;
     [SerializeField] private float _minDealy = 0.5f;
-    [SerializeField] private float _maxDelay = 1.5f;
-    [SerializeField] private int _minLayer = -9;
-    [SerializeField] private int _maxLayer = -5;
+    [SerializeField] private float _maxDelay = 0.8f;
+    
 
     private Camera _defaultCamera;
     private Coroutine _currentCoroutine;
-    private List<GameObject> _currentList = new List<GameObject>();
+    private List<FallingCorgi> _preList = new List<FallingCorgi>();
+    private List<FallingCorgi> _currentList = new List<FallingCorgi>();
 
     protected override void Init()
     {
@@ -28,7 +29,10 @@ public class FallingCorgiController : ObjectPooling
 
         for (int i = 0; i < initCount; i++)
         {
-            CreateNewObject().GetComponent<FallingCorgi>().SetPoolComponent(ReturnObject);
+            FallingCorgi fallingCorgi = CreateNewObject().GetComponentInChildren<FallingCorgi>();
+            _currentList.Add(fallingCorgi);
+            fallingCorgi.SetPoolComponent(ReturnObject);
+            fallingCorgi.SetRendererComponent();
         }
     }
 
@@ -37,8 +41,9 @@ public class FallingCorgiController : ObjectPooling
         _currentCoroutine = StartCoroutine(CoInstantiateCorgi());
     }
 
-    public void StopFallingCorgi()
+    public void StopFallingCorgi(bool isFeverEnd)
     {
+        
         if (_currentCoroutine != null)
         {
             StopCoroutine(_currentCoroutine);
@@ -46,7 +51,17 @@ public class FallingCorgiController : ObjectPooling
 
         if (_currentList.Count > 0)
         {
-            DestroyObjects();
+            _preList = _currentList.ToList();
+            _currentList.Clear();
+            
+            if (isFeverEnd)
+            {
+                DieAwayCorgi();
+            }
+            else
+            {
+                DestroyObjects();
+            }
         }
     }
 
@@ -64,21 +79,16 @@ public class FallingCorgiController : ObjectPooling
         afterPos.z = 0f;
         float randomRotation = Random.Range(_minRotation, _maxRotation);
         
-        GameObject go = GetObject(afterPos);
-        go.transform.rotation = Quaternion.Euler(0f, 0f, randomRotation);
-        _currentList.Add(go);
+        FallingCorgi fallingCorgi = GetObject(afterPos).GetComponent<FallingCorgi>();
+        fallingCorgi.transform.rotation = Quaternion.Euler(0f, 0f, randomRotation);
+        _currentList.Add(fallingCorgi);
         
-        SpriteRenderer[] spriteRenderer = go.GetComponentsInChildren<SpriteRenderer>();
-        int layer = Random.Range(_minLayer, _maxLayer);
-        foreach (var renderer in spriteRenderer)
-        {
-            renderer.sortingOrder = layer;
-        }
-        
+        // 초기화
         // 0번 부스터
         // 1번 코기
         int index = Random.Range(0, _corgiSprites.Length);
-        spriteRenderer[1].sprite = _corgiSprites[index];
+        
+        fallingCorgi.SetRendererSprite(_corgiSprites[index]);
         
         float delay = Random.Range(_minDealy, _maxDelay);
 
@@ -86,17 +96,35 @@ public class FallingCorgiController : ObjectPooling
 
         _currentCoroutine = StartCoroutine(CoInstantiateCorgi());
     }
-
-    private void DestroyObjects()
+    
+    private void DieAwayCorgi()
     {
-        foreach (var go in _currentList)
+        if (_preList.Count == 0)
         {
-            if (go.activeSelf)
+            return;
+        }
+        
+        foreach (var fallingCorgi in _preList)
+        {
+            if (fallingCorgi.gameObject.activeSelf)
             {
-                ReturnObject(go);
+                fallingCorgi.DecreaseAlpha();
             }
         }
         
-        _currentList.Clear();
+        _preList.Clear();
+    }
+
+    private void DestroyObjects()
+    {
+        foreach (var fallingCorgi in _preList)
+        {
+            if (fallingCorgi.gameObject.activeSelf)
+            {
+                ReturnObject(fallingCorgi.gameObject);
+            }
+        }
+        
+        _preList.Clear();
     }
 }
