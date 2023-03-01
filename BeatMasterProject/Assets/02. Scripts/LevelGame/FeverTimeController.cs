@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class FeverTimeController : MonoBehaviour
@@ -13,7 +11,7 @@ public class FeverTimeController : MonoBehaviour
     [SerializeField] private int _feverCount;
     [SerializeField] private float _timeMod = 10f;
     [SerializeField] private float _feverTotalTime = 10f;
-    [SerializeField] private int _decreasingAmount = 0;
+    [SerializeField] private int _decreasingAmount;
     [SerializeField] private float _pixelMultiplier = 0.75f;
     
 
@@ -32,9 +30,10 @@ public class FeverTimeController : MonoBehaviour
     
     private ParticleSystem _sliderBarParticle;
     private FallingCorgiController _fallingCorgiController;
-    private int _currentPlayerIndex;
     private Vector3 _offsetPos;
+    private int _currentPlayerIndex;
     private float _feverRatio;
+    private bool _isFeverEnd;
 
     enum AnimatorName
     {
@@ -151,7 +150,7 @@ public class FeverTimeController : MonoBehaviour
         
         _sliderBarParticle.Play();
 
-        StartCoroutine(CoSliderMove());
+        StartCoroutine(CoMoveSlider());
         
         _fallingCorgiController.InstantiateFallingCorgi();
         
@@ -170,6 +169,7 @@ public class FeverTimeController : MonoBehaviour
             yield return null;
         }
 
+        _isFeverEnd = true;
         Reset();
     }
 
@@ -181,13 +181,15 @@ public class FeverTimeController : MonoBehaviour
         {
             IsFeverTime = false;
 
+            _fallingCorgiController.StopFallingCorgi(_isFeverEnd);
+            _isFeverEnd = false;
+
             _feverCount = 0;
             _feverSlider.value = _feverCount;
             ChangeColor(0f, 0f);
             SetCorgiImageDefault();
-            _fallingCorgiController.StopFallingCorgi();
 
-            StartCoroutine(CoSliderMove());
+            StartCoroutine(CoMoveSlider());
 
             if (_feverIncreasingCoroutine != null)
             {
@@ -212,7 +214,9 @@ public class FeverTimeController : MonoBehaviour
             ResetDecreasingAmount();
             float ratio = (float)_feverCount / _feverStandard;
             ChangeColor(ratio, 1f);
+            _fallingCorgiController.StopFallingCorgi(_isFeverEnd);
         }
+        
     }
 
 
@@ -226,8 +230,6 @@ public class FeverTimeController : MonoBehaviour
         _currentPlayerIndex = index;
         int length = _fallingCorgiController.GetSpritesLength() - 1;
         float pixelPerUnit = _currentPlayerIndex < length ? 1f : _pixelMultiplier;
-        Debug.Log($"length : {length} _currentPlayerIndex : {_currentPlayerIndex} pixelPerUnit : {pixelPerUnit}");
-        
         
         foreach (var image in _playerImages)
         {
@@ -258,8 +260,7 @@ public class FeverTimeController : MonoBehaviour
     private IEnumerator CoChangeCorgiAlpha()
     {
         float ratio = 0f;
-        bool isDone = false;
-        while (!isDone)
+        while (true)
         {
             ratio += Time.deltaTime * _timeMod;
             foreach (var image in _playerImages)
@@ -267,11 +268,6 @@ public class FeverTimeController : MonoBehaviour
                 Color color = image.color;
                 color.a = GetCosValue(ratio);
                 image.color = color;
-            }
-
-            if (ratio <= 0.1f)
-            {
-                isDone = true;
             }
 
             yield return null;
@@ -305,13 +301,12 @@ public class FeverTimeController : MonoBehaviour
         }
     }
 
-    private IEnumerator CoSliderMove()
+    private IEnumerator CoMoveSlider()
     {
         float ratio = 0f;
         float increasingPosX = _leftCorgiRectTrans.rect.width / 2f;
-        Debug.Log(increasingPosX);
         Vector3 goalPos = _offsetPos;
-        bool isRight = _sliderRectTrans.anchoredPosition.x > _offsetPos.x;
+        bool isRight = !Mathf.Approximately(_sliderRectTrans.anchoredPosition.x, _offsetPos.x);
         // 오른쪽이면 왼쪽 왼쪽이면 오른쪽으로
         goalPos.x += isRight ? 0 : increasingPosX;
         
