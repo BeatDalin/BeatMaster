@@ -202,7 +202,6 @@ public class CharacterMovement : MonoBehaviour
             float y = newPosition.y;
 
             // 이동한 위치 저장
-            lastPosition = newPosition;
             lastBeatTime = beatTime;
 
             RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position,
@@ -266,6 +265,7 @@ public class CharacterMovement : MonoBehaviour
 
             // 최종적으로 계산된 x, y로 캐릭터 이동
             _rigidbody.MovePosition(new Vector2(x, y));
+            lastPosition = new Vector2(x,y);
         }
     }
 
@@ -374,7 +374,7 @@ public class CharacterMovement : MonoBehaviour
     public IEnumerator CoRewind(float y)
     {
         float elapseTime = 0f;
-        float targetTime = 0.5f;
+        float targetTime = 0.1f;
         
         _rewindTime.StartRewind();
         
@@ -391,18 +391,19 @@ public class CharacterMovement : MonoBehaviour
                         transform.position = Vector3.Lerp(lastPosition, targetRewindPos, elapseTime / targetTime);
                         transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
                         elapseTime += Time.fixedDeltaTime;
-                        yield return null;
+                        yield return new WaitForFixedUpdate();
                     }
                     else
                     {
                         transform.position = Vector3.Lerp(lastPosition, _rewindTime.rewindList[0].rewindPos, elapseTime / targetTime);
                         transform.Rotate(Vector3.forward * Time.fixedDeltaTime * rotationSpeed);
                         elapseTime += Time.fixedDeltaTime;
-                        yield return null;
+                        yield return new WaitForFixedUpdate();
                     }
                 }
                 if (Mathf.Abs(targetRewindPos.x - transform.position.x) <= 0.5f)
                 {
+                    Debug.Log("Rewind");
                     _gameUI.ReverseTextColor(_rewindTime.rewindList[0].judgeResult);
                     lastPosition = targetRewindPos;
                     _rewindTime.rewindList.RemoveAt(0);
@@ -416,7 +417,7 @@ public class CharacterMovement : MonoBehaviour
                 transform.position = Vector3.Lerp(lastPosition, new Vector3(_characterPosition.x, y, 0f), elapseTime / targetTime);
                 transform.DORotate(new Vector3(0, 0, 0), targetTime);
                 elapseTime += Time.fixedDeltaTime;
-                yield return null;
+                yield return new WaitForFixedUpdate();
             }
         }
         else
@@ -426,7 +427,7 @@ public class CharacterMovement : MonoBehaviour
                 transform.position = Vector3.Lerp(lastPosition, new Vector3(_characterPosition.x, y, 0f), elapseTime / targetTime);
                 transform.DORotate(new Vector3(0, 0, 0), targetTime);
                 elapseTime += Time.fixedDeltaTime;
-                yield return null;
+                yield return new WaitForFixedUpdate();
             }
         }
 
