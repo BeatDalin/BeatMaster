@@ -6,6 +6,7 @@ using SonicBloom.Koreo;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public struct Music
 {
@@ -15,28 +16,28 @@ public struct Music
 
 public class SpectrumData : MonoBehaviour
 {
-    [SerializeField] private int spectrumSize;
+    [FormerlySerializedAs("spectrumSize")] [SerializeField] private int _spectrumSize;
     [SerializeField] private AudioSource _audioSource;
-    [SerializeField] private float targetTime;
-    [SerializeField] private KoreographyTrack track;
-    [SerializeField] private List<Music> trackSampleTime;
-    [SerializeField] private int offset;
+    [FormerlySerializedAs("targetTime")] [SerializeField] private float _targetTime;
+    [FormerlySerializedAs("track")] [SerializeField] private KoreographyTrack _track;
+    [SerializeField] private List<Music> _trackSampleTime;
+    [FormerlySerializedAs("offset")] [SerializeField] private int _offset;
 
-    private float[] spectrum;
-    private float currentTime = 0f;
-    private float timer = 0f;
-    private bool isPlayed = false;
+    private float[] _spectrum;
+    private float _currentTime = 0f;
+    private float _timer = 0f;
+    private bool _isPlayed = false;
 
-    private float averageSpectrumSize;
+    private float _averageSpectrumSize;
 
-    private List<Music> collectSpectrumList;
+    private List<Music> _collectSpectrumList;
 
     private void Start()
     {
-        spectrum = new float[spectrumSize];
+        _spectrum = new float[_spectrumSize];
         
-        collectSpectrumList = new List<Music>();
-        trackSampleTime = new List<Music>();
+        _collectSpectrumList = new List<Music>();
+        _trackSampleTime = new List<Music>();
 
         Debug.Log(GetAverageSpectrumSize());
         
@@ -58,57 +59,57 @@ public class SpectrumData : MonoBehaviour
             totalSize += Mathf.Abs(samples[i]);
         }
         
-        return totalSize / samples.Length - 1;
+        return totalSize / samples.Length;
     }
 
     private void Update()
     {
 
-        if (!isPlayed)
+        if (!_isPlayed)
         {
-            currentTime += Time.deltaTime;
+            _currentTime += Time.deltaTime;
         }
 
-        if (!isPlayed && currentTime >= 2f)
+        if (!_isPlayed && _currentTime >= 2f)
         {
-            isPlayed = true;
+            _isPlayed = true;
             _audioSource.Play();
-            currentTime = 0f;
+            _currentTime = 0f;
         }
         
         if (_audioSource.isPlaying)
         {
-            currentTime += Time.deltaTime;
+            _currentTime += Time.deltaTime;
         }
 
-        if (currentTime > targetTime) //데이터 분석해서 큰값만 트랙에 생성
+        if (_currentTime > _targetTime) //데이터 분석해서 큰값만 트랙에 생성
         {
             _audioSource.Pause();
             
-            collectSpectrumList.Sort(((music, music1) => //내림차순 정렬
+            _collectSpectrumList.Sort(((music, music1) => //내림차순 정렬
                 music1.spectrumData.CompareTo(music.spectrumData)));
 
-            if (trackSampleTime.Count > 0)
+            if (_trackSampleTime.Count > 0)
             {
-                if (collectSpectrumList[0].sample - trackSampleTime[^1].sample > offset
-                    && (Mathf.Abs(averageSpectrumSize) < Mathf.Abs(collectSpectrumList[0].spectrumData)))
+                if (_collectSpectrumList[0].sample - _trackSampleTime[^1].sample > _offset
+                    && (Mathf.Abs(_averageSpectrumSize) < Mathf.Abs(_collectSpectrumList[0].spectrumData)))
                 { // offset 이하로는 생기지 않도록(겹침 방지), 평균보다 작으면 생성 x
                     KoreographyEvent koreographyEvent = new KoreographyEvent();
                     koreographyEvent.Payload = new IntPayload();
-                    koreographyEvent.StartSample = collectSpectrumList[0].sample;
-                    koreographyEvent.EndSample = collectSpectrumList[0].sample;
+                    koreographyEvent.StartSample = _collectSpectrumList[0].sample;
+                    koreographyEvent.EndSample = _collectSpectrumList[0].sample;
                     
                     Music music = new Music();
-                    music.spectrumData = collectSpectrumList[0].spectrumData;
-                    music.sample = collectSpectrumList[0].sample;
+                    music.spectrumData = _collectSpectrumList[0].spectrumData;
+                    music.sample = _collectSpectrumList[0].sample;
                 
-                    trackSampleTime.Add(music);
-                    track.AddEvent(koreographyEvent);
+                    _trackSampleTime.Add(music);
+                    _track.AddEvent(koreographyEvent);
                 }
                 else
                 {
-                    currentTime = 0f;
-                    collectSpectrumList.Clear();
+                    _currentTime = 0f;
+                    _collectSpectrumList.Clear();
             
                     _audioSource.Play();
                     return;
@@ -118,32 +119,32 @@ public class SpectrumData : MonoBehaviour
             {
                 KoreographyEvent koreographyEvent = new KoreographyEvent();
                 koreographyEvent.Payload = new IntPayload();
-                koreographyEvent.StartSample = collectSpectrumList[0].sample;
-                koreographyEvent.EndSample = collectSpectrumList[0].sample;
+                koreographyEvent.StartSample = _collectSpectrumList[0].sample;
+                koreographyEvent.EndSample = _collectSpectrumList[0].sample;
                 
                 Music music = new Music();
-                music.spectrumData = collectSpectrumList[0].spectrumData;
-                music.sample = collectSpectrumList[0].sample;
+                music.spectrumData = _collectSpectrumList[0].spectrumData;
+                music.sample = _collectSpectrumList[0].sample;
                 
-                trackSampleTime.Add(music);
-                track.AddEvent(koreographyEvent);
+                _trackSampleTime.Add(music);
+                _track.AddEvent(koreographyEvent);
             }
             
-            currentTime = 0f;
-            collectSpectrumList.Clear();
+            _currentTime = 0f;
+            _collectSpectrumList.Clear();
             
             _audioSource.Play();
         }
         else //스펙트럼 데이터 수집
         {
-            spectrum = _audioSource.GetSpectrumData(spectrumSize, 0, FFTWindow.Hamming);
+            _spectrum = _audioSource.GetSpectrumData(_spectrumSize, 0, FFTWindow.Hamming);
             
             Music music = new Music();
 
             music.sample = _audioSource.timeSamples;
-            music.spectrumData = spectrum.Max();
+            music.spectrumData = _spectrum.Max();
 
-            collectSpectrumList.Add(music);
+            _collectSpectrumList.Add(music);
         }
     }
 }
