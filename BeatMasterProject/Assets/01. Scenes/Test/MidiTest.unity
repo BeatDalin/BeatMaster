@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 212964979}
   - component: {fileID: 212964978}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: MakeJudge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -157,9 +157,9 @@ MonoBehaviour:
   longCheckStart: {fileID: 0}
   longCheckEnd: {fileID: 0}
   longCheckMiddle: {fileID: 0}
-  shortTrack: {fileID: 11400000, guid: f1e2954eb1a6c42718bd175f4b775846, type: 2}
-  _jumpCheckTrack: {fileID: 11400000, guid: 997fb890131fb421080e493a775b5b7d, type: 2}
-  _attackCheckTrack: {fileID: 11400000, guid: 44026b6b8138341bbba619dd358f2a9a, type: 2}
+  shortTrack: {fileID: 11400000, guid: 6a8d4200886b64f1a8939465ebebbfee, type: 2}
+  _jumpCheckTrack: {fileID: 11400000, guid: 638cf16fac0ae4f9783e9895e5c0872b, type: 2}
+  _attackCheckTrack: {fileID: 11400000, guid: 41cb3369d221a45b1a1aee6283163d28, type: 2}
   _shortEventList: []
   spdTrack: {fileID: 0}
   checkPointTrack: {fileID: 0}
@@ -527,11 +527,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8b3f6204b445423dbb7c1b126a2ecc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spectrumSize: 256
+  _spectrumSize: 256
   _audioSource: {fileID: 798942507}
-  targetTime: 0.5
-  track: {fileID: 11400000, guid: 694d11a6f8c48419bb1c774f8ede0e43, type: 2}
-  offset: 50000
+  _targetTime: 0.5
+  _track: {fileID: 11400000, guid: 15c7a228960f2454bb8fcbbe521f3153, type: 2}
+  _offset: 12500
 --- !u!4 &798942506
 Transform:
   m_ObjectHideFlags: 0
@@ -557,7 +557,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 8ad56e5c47b434f1b8426edf62e7cd74, type: 3}
+  m_audioClip: {fileID: 8300000, guid: aff07b1e9489f43388b5344402878dbc, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -758,3 +758,50 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1 &2067815262
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2067815264}
+  - component: {fileID: 2067815263}
+  m_Layer: 0
+  m_Name: CalibrateNote
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &2067815263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067815262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 165ad5b96f5da452e960ee6b5a97adfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _originTrack: {fileID: 11400000, guid: f2acea4ac68b01c4da73923d28b9a552, type: 2}
+  _spectrumTrack: {fileID: 11400000, guid: 15c7a228960f2454bb8fcbbe521f3153, type: 2}
+  _newTrack: {fileID: 11400000, guid: 6a8d4200886b64f1a8939465ebebbfee, type: 2}
+--- !u!4 &2067815264
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067815262}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 737.4559, y: 64.81263, z: 0.9585413}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
