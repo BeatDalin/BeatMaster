@@ -751,7 +751,7 @@ MonoBehaviour:
   longCheckMiddleID: Stage4_Level1_LongCheckMiddle
   longCheckStartID: Stage4_Level1_LongCheckStart
   longCheckEndID: Stage4_Level1_LongCheckEnd
-  _isAutoPlay: 0
+  isAutoPlay: 0
   _changeChar: {fileID: 18329012}
 --- !u!4 &612035090
 Transform:
@@ -1597,7 +1597,7 @@ MonoBehaviour:
   m_Follow: {fileID: 18329010}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 4
+    OrthographicSize: 7
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -1793,7 +1793,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4
+  orthographic size: 7
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -2006,7 +2006,7 @@ MonoBehaviour:
   m_Follow: {fileID: 18329010}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 4
+    OrthographicSize: 7
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -2394,7 +2394,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4
+  orthographic size: 7
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
