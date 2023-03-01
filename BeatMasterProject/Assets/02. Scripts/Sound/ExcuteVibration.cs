@@ -69,7 +69,7 @@ public class ExcuteVibration : MonoBehaviour
         if (vibrationPower != 0)
         {
             int perfectPower = Mathf.Clamp(vibrationPower, 20, 40);
-            Debug.Log($"perfectPower {perfectPower}");
+            // Debug.Log($"perfectPower {perfectPower}");
             vibrationLibrary.CallStatic("VibratePerfect", context, perfectPower);
         }
     }
@@ -79,7 +79,7 @@ public class ExcuteVibration : MonoBehaviour
         if (vibrationPower != 0)
         {
             int failPower = Mathf.Clamp(vibrationPower * 2, 40, 100);
-            Debug.Log($"failPower {failPower}");
+            // Debug.Log($"failPower {failPower}");
             vibrationLibrary.CallStatic("VibrateFail", context, failPower);
         }
     }
