@@ -36,7 +36,6 @@ public class CharacterMovement : MonoBehaviour
     [Header("Jump")]
     [SerializeField] private float _jumpGapRate = 0.25f;
     [SerializeField] private float _jumpHeight = 1.3f;
-    [SerializeField] private float _graphWidth = 1f;
     private int _jumpTileCount = 2;
     private const int _maxJumpCount = 1;
     private int _jumpCount;
@@ -149,7 +148,6 @@ public class CharacterMovement : MonoBehaviour
         _jumpMidY = _jumpHeight;
         _jumpEndY = transform.position.y;
         _jumpStartPosition = transform.position;
-        _graphWidth = 1f;
         _canJump = ++_jumpCount < _maxJumpCount;
         isJumping = true;
         _canGroundCheck = false;
@@ -160,9 +158,9 @@ public class CharacterMovement : MonoBehaviour
         {
             RaycastHit2D jumpEndCheckHit = Physics2D.Raycast(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down, 1000, _tileLayer);
 
-            //Debug.DrawRay(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down * 1000f, Color.blue, 10f);
             if (jumpEndCheckHit)
             {
+                //Debug.DrawRay(new Vector2(_jumpStartPosition.x + i, 100f), Vector2.down * 1000f, Color.blue, 10f);
                 _jumpTileCount = i;
 
                 /// <summary>
@@ -175,15 +173,6 @@ public class CharacterMovement : MonoBehaviour
                 _jumpEndY = (jumpEndCheckHit.point.y + _positionYOffset) - _jumpStartPosition.y;
                 
                 _jumpMidY += _jumpEndY * _jumpGapRate;
-
-                //if (_jumpEndY >= 0)
-                //{
-                //    _graphWidth = Mathf.Lerp(1f, 1f, _jumpEndY);
-                //}
-                //else
-                //{
-                //    _graphWidth = Mathf.Lerp(1f, 1f, -_jumpEndY);
-                //}
 
                 break;
             }
@@ -216,7 +205,8 @@ public class CharacterMovement : MonoBehaviour
             lastPosition = newPosition;
             lastBeatTime = beatTime;
 
-            RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, _rayDistance, _tileLayer);
+            RaycastHit2D positionCheckHit = Physics2D.Raycast(_rayOriginPoint.position,
+                Vector2.down, _rayDistance, _tileLayer);
 
             // 땅 위에 있을 때
             if (positionCheckHit)
@@ -238,7 +228,7 @@ public class CharacterMovement : MonoBehaviour
             if (_canGroundCheck)
             {
                 RaycastHit2D groundCheckHit = Physics2D.Raycast(_rayOriginPoint.position, Vector2.down, _rayDistance, _tileLayer);
-
+                //Debug.DrawRay(_rayOriginPoint.position, Vector2.down * _rayDistance, Color.red, 10f);
                 if (groundCheckHit)
                 {
                     isJumping = false;
@@ -281,35 +271,48 @@ public class CharacterMovement : MonoBehaviour
 
     /// <summary>
     /// 점프 시 캐릭터 Position의 y를 계산하는 메소드
-    /// 이차함수 포물선을 따름(y = ax^2 + bx)
     /// jumpTileCount로 x로 몇 칸만큼을 점프할지 지정(최대 5칸)
+    /// 아래의 이차함수 포물선을 따름(A: start, B: mid, C: End)
+    /// 
+    /// f(x) = ((((x - x(B)) * (x - x(C))) / ((x(A) - x(B)) * (x(A) - x(C)))) * y(A)) +
+    ///        ((((x - x(A)) * (x - x(C))) / ((x(B) - x(A)) * (x(B) - x(C)))) * y(B)) +
+    ///        ((((x - x(A)) * (x - x(B))) / ((x(C) - x(A)) * (x(C) - x(B)))) * y(C))
+    /// 
     /// </summary>
     private float GetJumpingY(float x, int jumpTileCount)
     {
-        float a, b;
+        float n = (float)jumpTileCount;
 
-        switch (jumpTileCount)
-        {
-            case 3:
-                a = ((2f * _jumpEndY) - (4f * _jumpMidY)) / 9f;
-                b = (_jumpEndY - (9f * a)) / 3f;
-                break;
-            case 4:
-                a = (_jumpEndY - (2f * _jumpMidY)) / 8f;
-                b = (_jumpMidY - (4f * a)) / 2f;
-                break;
-            case 5:
-                a = ((2f * _jumpEndY) - (4f * _jumpMidY)) / 25f;
-                b = (_jumpEndY - (25f * a)) / 5f;
-                break;
-            default: // jumpTileCount 2
-                a = (_jumpEndY - (2f * _jumpMidY)) / 2f;
-                b = _jumpMidY - a;
-                break;
-        }
-
-        return (_graphWidth * a * x * x) + (b * x);
+        return ((x * (x - n)) / ((n / 2) * -(n / 2)) * _jumpMidY) +
+            (((x * (x - (n / 2)))) / (n * (n / 2)) * _jumpEndY);
     }
+
+    //private float GetJumpingY(float x, int jumpTileCount)
+    //{
+    //    float a, b;
+
+    //    switch (jumpTileCount)
+    //    {
+    //        case 3:
+    //            a = ((2f * _jumpEndY) - (4f * _jumpMidY)) / 9f;
+    //            b = (_jumpEndY - (9f * a)) / 3f;
+    //            break;
+    //        case 4:
+    //            a = (_jumpEndY - (2f * _jumpMidY)) / 8f;
+    //            b = (_jumpMidY - (4f * a)) / 2f;
+    //            break;
+    //        case 5:
+    //            a = ((2f * _jumpEndY) - (4f * _jumpMidY)) / 25f;
+    //            b = (_jumpEndY - (25f * a)) / 5f;
+    //            break;
+    //        default: // jumpTileCount 2
+    //            a = (_jumpEndY - (2f * _jumpMidY)) / 2f;
+    //            b = _jumpMidY - a;
+    //            break;
+    //    }
+
+    //    return (_graphWidth * a * x * x) + (b * x);
+    //}
 
     private void ChangeMoveSpeed(KoreographyEvent evt)
     {
@@ -371,7 +374,7 @@ public class CharacterMovement : MonoBehaviour
     public IEnumerator CoRewind(float y)
     {
         float elapseTime = 0f;
-        float targetTime = 0.1f;
+        float targetTime = 0.5f;
         
         _rewindTime.StartRewind();
         
