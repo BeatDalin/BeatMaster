@@ -19,6 +19,7 @@ public struct PlayerData
     public int playerItem; // Player's item(coin) count
     public int playerChar; // Player's current Character index
     public int[] itemData; // equipped items [itemPart(enum), itemNum -1 == nothing] 
+    public bool checkAnnounce;
     //public int mapClearedCount;
 }
 

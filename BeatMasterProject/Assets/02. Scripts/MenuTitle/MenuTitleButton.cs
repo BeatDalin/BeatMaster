@@ -11,7 +11,8 @@ public enum TitleButtonName
     Play = 0,
     Menu,
     Store,
-    Gpgs
+    Gpgs,
+    Announce,
 }
 public enum MenuButtonName // 메뉴 버튼들
 {
@@ -35,6 +36,7 @@ public class MenuTitleButton : MonoBehaviour
     [SerializeField] private GameObject _menuGroupPanel; // Menu Group
     [SerializeField] private GameObject _storePanel; // Store Panel
     [SerializeField] private GameObject _gpgsPanel;  // Google Game Service Panel
+    [SerializeField] private GameObject _announcePanel;  // Announce Panel
     [SerializeField] private GameObject[] _menuPanels;  // Menu Panels
 
     [SerializeField] private float _fadeTime = 1f; // Panel Fade 타임
@@ -76,6 +78,7 @@ public class MenuTitleButton : MonoBehaviour
         _titleButtons[(int)TitleButtonName.Menu].onClick.AddListener(() => { OpenMenu(_menuGroupPanel); });     // Menu 버튼
         _titleButtons[(int)TitleButtonName.Store].onClick.AddListener(() => { UIManager.instance.OpenPanel(_storePanel); });       // Store 버튼
         _titleButtons[(int)TitleButtonName.Gpgs].onClick.AddListener(() => { UIManager.instance.OpenPanel(_gpgsPanel);});
+        _titleButtons[(int)TitleButtonName.Announce].onClick.AddListener(() => { UIManager.instance.OpenPanel(_announcePanel); });
 
         #endregion
 
