@@ -98,7 +98,6 @@ public class DataCenter : MonoBehaviour
         _playerData.playerChar = 0; // default character index
         _playerData.itemData = new int[Enum.GetValues(typeof(StoreData.ItemPart)).Length]; // 부위별(index) 현재 장착중인 item(value)
         _playerData.itemData = Enumerable.Repeat(-1, Enum.GetValues(typeof(StoreData.ItemPart)).Length).ToArray(); // 미장착 상태일 때 -1
-        _playerData.checkAnnounce = false;
         //_playerData.mapClearedCount = 0;
 
         _gameData.playerData = _playerData;
@@ -272,7 +271,7 @@ public class DataCenter : MonoBehaviour
             StoreData.ItemPart.Background,
             StoreData.ItemPart.Background
         };
-        int[] itemPrice = { 50, 50, 70, 70, 150, 0 };
+        int[] itemPrice = { 50, 50, 70, 70, 150, 0};
         bool[] isPaidItem = { false, false, false, false, false, true, false, false, false, true, true, false };
         string[] itemDescription =
         {
@@ -313,10 +312,10 @@ public class DataCenter : MonoBehaviour
         dicPackageItem.Add(1, new StoreData.ItemName[]{StoreData.ItemName.petFox});
 
         Dictionary<int, int[]> dicPackageChar = new Dictionary<int, int[]>();
-        dicPackageChar.Add(0, new int[] { 0 });
-        dicPackageChar.Add(1, new int[] { 0 });
+        dicPackageChar.Add(0, new int[] {0});
+        dicPackageChar.Add(1, new int[] {0});
 
-
+        
         PaidItemData[] tempPaidItemData = _gameData.storeData.paidItemData;
         for (int i = 0; i < _gameData.storeData.paidItemCount; i++)
         {
@@ -379,12 +378,6 @@ public class DataCenter : MonoBehaviour
         SaveData();
     }
 
-    public void UpdatePlayerItemInDebuggingMode(int playerItem)
-    {
-        _gameData.playerData.playerItem += playerItem;
-        SaveData();
-    }
-
     /// <summary>
     /// 캐릭터 장착 후 현재 장착 중인 캐릭터 번호 업데이트
     // /// </summary>
@@ -427,7 +420,7 @@ public class DataCenter : MonoBehaviour
         _gameData.playerData.itemData[(int)itemPart] = (int)itemName;
         SaveData();
     }
-
+    
     /// <summary>
     /// 유료 아이템 구매 후 PaidItemData의 isPurchased 업데이트
     /// 유료 아이템 구매 후 각 상품의 isPurchased, isUnlocked 업데이트
@@ -450,9 +443,8 @@ public class DataCenter : MonoBehaviour
         return _gameData.achievement;
     }
 
-    public void UpdateCheckAnnounce(bool isOn)
-    {
-        _gameData.playerData.checkAnnounce = isOn;
-        SaveData();
-    }
+    /*    public LeaderboardData GetLeaderboardData(int stageIdx, int levelIdx)
+        {
+            return _gameData.stageData[stageIdx].leaderboardData[levelIdx];
+        }*/
 }
