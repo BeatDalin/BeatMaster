@@ -365,7 +365,7 @@ public abstract class Game : MonoBehaviour
         }
 #endif
         // Push data into current level's data
-        if (_finalSummary[2] == totalNoteCount)
+        if (_finalSummary[2] >= (int)(totalNoteCount / 5f * 4))
         {
             curLevelData.star = 3;
             //curLevelData.alpha = 1f;
