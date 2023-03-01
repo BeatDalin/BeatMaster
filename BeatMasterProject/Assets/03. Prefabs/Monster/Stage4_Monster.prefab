@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 872915895793271827}
   m_Layer: 6
   m_Name: Stage4_Monster
-  m_TagString: Untagged
+  m_TagString: GroundMonster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -102,10 +102,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c506e6be7de3748c0be672a872501f54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGainCoin: 1
   _originalPos: {x: 0, y: 0, z: 0}
   _rigidbody2D: {fileID: 6571710119711434610}
-  _animator: {fileID: 4653327384783297947}
   _doTweenAnimation: {fileID: 872915895793271827}
 --- !u!50 &6571710119711434610
 Rigidbody2D:
@@ -376,11 +374,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
---- !u!95 &4653327384783297947 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 7397218863573384311, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
-  m_PrefabInstance: {fileID: 2755010858152567276}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7660675573936458001 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5506754590826670333, guid: 1ae44285bc3854a999d806f1a6e4fc26, type: 3}
