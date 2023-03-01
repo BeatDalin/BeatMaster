@@ -20,6 +20,7 @@ public abstract class GameUI : MonoBehaviour
 
     [Header("Result UI")]
     [SerializeField] protected GameObject finalPanel;
+    [SerializeField] protected GameObject buttonGroup;
     [SerializeField] protected Text finalFast;
     [SerializeField] protected Text finalPerfect;
     [SerializeField] protected Text finalSlow;
@@ -29,8 +30,8 @@ public abstract class GameUI : MonoBehaviour
     [SerializeField] protected GameObject startPos;
     [SerializeField] protected Color successColor;
     private float _delay = 0f;
-    [SerializeField] protected Button goLevelAfterGameBtn;
-    [SerializeField] protected Button restartGameBtn;
+    [SerializeField] protected Button goToMenuBtn;
+    [SerializeField] protected Button playAgainBtn;
     [SerializeField] protected Button showLeaderboardBtn;
 
     [Header("Result Visualize")]
@@ -160,14 +161,14 @@ public abstract class GameUI : MonoBehaviour
             UIManager.instance.ClosePanel(settingsPanel);
         });
 
-        goLevelAfterGameBtn.onClick.AddListener(() =>
+        goToMenuBtn.onClick.AddListener(() =>
         {
             ExcuteVibration.Instance.Touch();
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });
 
-        restartGameBtn.onClick.AddListener(() =>
+        playAgainBtn.onClick.AddListener(() =>
         {
             ExcuteVibration.Instance.Touch();
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
@@ -181,18 +182,6 @@ public abstract class GameUI : MonoBehaviour
             GPGSBinder.Instance.ShowTargetLeaderboardUI(GPGSBinder.Instance.CheckStageIdx(stageIdx));
 #endif
         });
-    }
-
-    private void Update()
-    {
-        if (game.curState == GameState.End)
-        {
-            restartGameBtn.interactable = true;
-        }
-        else
-        {
-            restartGameBtn.interactable = false;
-        }
     }
 
     public void ChangeOutLineColor(BeatResult result)
@@ -332,8 +321,11 @@ public abstract class GameUI : MonoBehaviour
             };
         };
     }
-
-
+    
+    public void ShowButtonGroup()
+    {
+        buttonGroup.SetActive(true);
+    }
     public void ShowStar(int starCount)
     {
         if (starCount == 3)
