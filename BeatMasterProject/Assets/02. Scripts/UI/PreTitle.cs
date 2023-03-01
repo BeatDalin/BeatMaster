@@ -6,9 +6,13 @@ using UnityEngine;
 public class PreTitle : MonoBehaviour
 {
     [SerializeField] private CanvasGroup _loadingPanelGroup;
-
+    [SerializeField] private DebuggingMode _debugMode;
     void Start()
     {
+        if (Debug.isDebugBuild)
+        {
+            _debugMode.enabled = true;
+        }
         StartCoroutine(CoWaitStart());
     }
 

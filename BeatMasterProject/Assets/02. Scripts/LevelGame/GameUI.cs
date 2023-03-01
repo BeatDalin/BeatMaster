@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -332,15 +331,15 @@ public abstract class GameUI : MonoBehaviour
         {
             star[0].SetActive(true);
             star[0].GetComponent<Image>().color = successColor;
-            star[0].transform.DORotate(new Vector3(0, 180, 0), 0.5f).onComplete += () =>
+            star[0].transform.DOPunchRotation(new Vector3(0, 180, 0), 1f).onComplete += () =>
             {
                 star[1].SetActive(true);
                 star[1].GetComponent<Image>().color = successColor;
-                star[1].transform.DORotate(new Vector3(0, 180, 0), 0.5f).onComplete += () =>
+                star[1].transform.DOPunchRotation(new Vector3(0, 180, 0), 1f).onComplete += () =>
                 {
                     star[2].SetActive(true);
                     star[2].GetComponent<Image>().color = successColor;
-                    star[2].transform.DORotate(new Vector3(0, 180, 0), 0.5f);
+                    star[2].transform.DOPunchRotation(new Vector3(0, 180, 0), 1f);
                 };
             };
         }
@@ -348,14 +347,14 @@ public abstract class GameUI : MonoBehaviour
         {
             star[0].SetActive(true);
             star[0].GetComponent<Image>().color = successColor;
-            star[0].transform.DORotate(new Vector3(0, 180, 0), 0.5f).onComplete += () =>
+            star[0].transform.DOPunchRotation(new Vector3(0, 180, 0), 1f).onComplete += () =>
             {
                 star[1].SetActive(true);
                 star[1].GetComponent<Image>().color = successColor;
-                star[1].transform.DORotate(new Vector3(0, 180, 0), 0.5f).onComplete += () =>
+                star[1].transform.DOPunchRotation(new Vector3(0, 180, 0), 1f).onComplete += () =>
                 {
                     star[2].SetActive(true);
-                    star[2].transform.DORotate(new Vector3(0, 180, 0), 0.5f);
+                    star[2].transform.DOPunchRotation(new Vector3(0, 180, 0), 1f);
                 };
             };
         }
@@ -363,13 +362,13 @@ public abstract class GameUI : MonoBehaviour
         {
             star[0].SetActive(true);
             star[0].GetComponent<Image>().color = successColor;
-            star[0].transform.DORotate(new Vector3(0, 180, 0), 0.5f).onComplete += () =>
+            star[0].transform.DOPunchRotation(new Vector3(0, 180, 0), 1f).onComplete += () =>
             {
                 star[1].SetActive(true);
-                star[1].transform.DORotate(new Vector3(0, 180, 0), 0.5f).onComplete += () =>
+                star[1].transform.DOPunchRotation(new Vector3(0, 180, 0), 1f).onComplete += () =>
                 {
                     star[2].SetActive(true);
-                    star[2].transform.DORotate(new Vector3(0, 180, 0), 0.5f);
+                    star[2].transform.DOPunchRotation(new Vector3(0, 180, 0), 1f);
                 };
             };
         }
