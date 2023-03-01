@@ -11,35 +11,37 @@ public enum TitleButtonName
     Play = 0,
     Menu,
     Store,
-    Gpgs
+    Gpgs,
 }
 public enum MenuButtonName // 메뉴 버튼들
 {
     Setting = 0,
-    Quit
+    Announce,
+    Quit,
 }
 
 public class MenuTitleButton : MonoBehaviour
 {
-    
+
     [EventID] public string eventID;
 
     [SerializeField] private DOTweenAnimation[] _doTweenAnimations;
 
-    [Header("========= Buttons =========")] 
+    [Header("========= Buttons =========")]
     [SerializeField] private Button[] _titleButtons;    // 플레이, 메뉴, 상점 버튼
     [SerializeField] private Button[] _menuButtons;     // 세팅, 내정보, 게임 종료 버튼
 
 
-    [Header("========= Panels =========")] 
+    [Header("========= Panels =========")]
     [SerializeField] private GameObject _menuGroupPanel; // Menu Group
     [SerializeField] private GameObject _storePanel; // Store Panel
     [SerializeField] private GameObject _gpgsPanel;  // Google Game Service Panel
+    //[SerializeField] private GameObject _announcePanel;  // Announce Panel
     [SerializeField] private GameObject[] _menuPanels;  // Menu Panels
 
     [SerializeField] private float _fadeTime = 1f; // Panel Fade 타임
 
-    
+
     private void Start()
     {
         // Event Register
@@ -67,12 +69,12 @@ public class MenuTitleButton : MonoBehaviour
     private void AddClickListener()
     {
         #region Title 씬의 버튼들 (Play, Menu, Store)
-        
+
         _titleButtons[(int)TitleButtonName.Play].onClick.AddListener(() =>
         {
-            #if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
             ExcuteVibration.Instance.Touch();
-            #endif
+#endif
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });  // Play 버튼
         _titleButtons[(int)TitleButtonName.Menu].onClick.AddListener(() =>
@@ -80,15 +82,15 @@ public class MenuTitleButton : MonoBehaviour
 #if UNITY_ANDROID && !UNITY_EDITOR
             ExcuteVibration.Instance.Touch();
 #endif
-            OpenMenu(_menuGroupPanel); 
+            OpenMenu(_menuGroupPanel);
         });     // Menu 버튼
         _titleButtons[(int)TitleButtonName.Store].onClick.AddListener(() =>
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
             ExcuteVibration.Instance.Touch();
 #endif
-            
-            UIManager.instance.OpenPanel(_storePanel); 
+
+            UIManager.instance.OpenPanel(_storePanel);
         });       // Store 버튼
         _titleButtons[(int)TitleButtonName.Gpgs].onClick.AddListener(() =>
         {
@@ -102,12 +104,13 @@ public class MenuTitleButton : MonoBehaviour
 
         #region MenuGroup의 버튼들 (Settings, MyInfo, Quit)
 
-        // Menu - Settings 버튼 (Setting, MyInfo, Quit)
+        // Menu - Settings 버튼 (Setting, Announce, Quit)
         _menuButtons[(int)MenuButtonName.Setting].onClick.AddListener(() => { UIManager.instance.OpenPanel(_menuPanels[(int)MenuButtonName.Setting]); });
+        _menuButtons[(int)MenuButtonName.Announce].onClick.AddListener(() => { UIManager.instance.OpenPanel(_menuPanels[(int)MenuButtonName.Announce]); });
         _menuButtons[(int)MenuButtonName.Quit].onClick.AddListener(() => { UIManager.instance.OpenPanel(_menuPanels[(int)MenuButtonName.Quit]); });
-        
+
         #endregion
-        
+
     }
     public void OpenMenu(GameObject panelName)
     {
@@ -118,7 +121,7 @@ public class MenuTitleButton : MonoBehaviour
             panelName.SetActive(true);
         }
         else
-        {   
+        {
             panelName.SetActive(false);
         }
     }
@@ -126,7 +129,7 @@ public class MenuTitleButton : MonoBehaviour
     {
         panelName.SetActive(false);
     }
-    
+
     public void OpenPanel(GameObject panelName)
     {
         if (!panelName.activeSelf)
@@ -136,12 +139,12 @@ public class MenuTitleButton : MonoBehaviour
 
             foreach (var titleButton in _titleButtons)
             {
-                ActivateButton(titleButton,false);
+                ActivateButton(titleButton, false);
             }
-            
+
             panelName.SetActive(true);
             panelName.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
-            
+
         }
     }
     public void ClosePanel(GameObject panelName)
@@ -154,7 +157,7 @@ public class MenuTitleButton : MonoBehaviour
 
             foreach (var titleButton in _titleButtons)
             {
-                ActivateButton(titleButton,true);
+                ActivateButton(titleButton, true);
             }
         };
     }
@@ -163,7 +166,7 @@ public class MenuTitleButton : MonoBehaviour
     public void ActivateButton(Button buttonName, bool isInteractable)
     {
         buttonName.interactable = isInteractable;
-    }    
+    }
     private void ChangeScale(KoreographyEvent evt)
     {
         for (int i = 0; i < _doTweenAnimations.Length; i++)
@@ -177,5 +180,5 @@ public class MenuTitleButton : MonoBehaviour
     {
         Application.Quit();
     }
-    
+
 }
