@@ -83,7 +83,6 @@ public class FallingCorgiController : ObjectPooling
         fallingCorgi.transform.rotation = Quaternion.Euler(0f, 0f, randomRotation);
         _currentList.Add(fallingCorgi);
         
-        // 초기화
         // 0번 부스터
         // 1번 코기
         int index = Random.Range(0, _corgiSprites.Length);
