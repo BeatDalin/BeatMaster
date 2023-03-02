@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -726,6 +726,7 @@ MonoBehaviour:
   gameUI: {fileID: 0}
   curState: 0
   curSample: 0
+  isResultShowing: 0
   _spdEventID: Stage2_Level1_Spd
   _checkPointID: Stage2_Level1_CheckPoint
   rewindShortIdx: 0
@@ -785,14 +786,6 @@ PrefabInstance:
     - target: {fileID: 986108237100718113, guid: 654bb20b4349b4e45b120de00e12cae2, type: 3}
       propertyPath: m_Name
       value: ResoucesChanger
-      objectReference: {fileID: 0}
-    - target: {fileID: 986108237100718126, guid: 654bb20b4349b4e45b120de00e12cae2, type: 3}
-      propertyPath: _hueCurve.m_Curve.Array.data[1].inSlope
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 986108237100718126, guid: 654bb20b4349b4e45b120de00e12cae2, type: 3}
-      propertyPath: _hueCurve.m_Curve.Array.data[1].outSlope
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 986108237100718127, guid: 654bb20b4349b4e45b120de00e12cae2, type: 3}
       propertyPath: m_RootOrder
