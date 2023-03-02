@@ -151,17 +151,20 @@ public abstract class GameUI : MonoBehaviour
         //settings
         goSettingsBtn.onClick.AddListener(() =>
         {
+            SoundManager.instance.PlaySFX("Touch");
             ExcuteVibration.Instance.Touch();
             UIManager.instance.OpenPanel(settingsPanel);
         });
         settingsCloseBtn.onClick.AddListener(() =>
         {
+            SoundManager.instance.PlaySFX("Touch");
             ExcuteVibration.Instance.Touch();
             UIManager.instance.ClosePanel(settingsPanel);
         });
 
         goToMenuBtn.onClick.AddListener(() =>
         {
+            SoundManager.instance.PlaySFX("Touch");
             ExcuteVibration.Instance.Touch();
             character.SetActive(false);
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
@@ -169,12 +172,14 @@ public abstract class GameUI : MonoBehaviour
 
         playAgainBtn.onClick.AddListener(() =>
         {
+            SoundManager.instance.PlaySFX("Touch");
             ExcuteVibration.Instance.Touch();
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.Instance.Scene);
         });
 
         showLeaderboardBtn.onClick.AddListener(() =>
         {
+            SoundManager.instance.PlaySFX("Touch");
             ExcuteVibration.Instance.Touch();
             int stageIdx = (int)SceneLoadManager.Instance.Scene - 2;
 #if !UNITY_EDITOR

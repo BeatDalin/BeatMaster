@@ -130,10 +130,12 @@ public class SoundManager : MonoBehaviour
                 break;
             case "Attack":
                 _sfxPlayer[1].clip = _sfx[1].clip;
+                _sfxPlayer[6].volume = 0.7f;
                 _sfxPlayer[1].PlayOneShot(_sfxPlayer[1].clip);
                 break;
             case "Hit":
                 _sfxPlayer[2].clip = _sfx[2].clip;
+                _sfxPlayer[6].volume = 0.7f;
                 _sfxPlayer[2].PlayOneShot(_sfxPlayer[2].clip);
                 break;
             case "Touch":
