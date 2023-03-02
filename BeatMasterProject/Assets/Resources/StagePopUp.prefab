@@ -417,7 +417,6 @@ GameObject:
   - component: {fileID: 3596725277949633319}
   - component: {fileID: 3596725277949633316}
   - component: {fileID: 3596725277949633317}
-  - component: {fileID: 1568688264}
   m_Layer: 5
   m_Name: StagePopUp
   m_TagString: Untagged
@@ -607,17 +606,3 @@ MonoBehaviour:
   optionalRotationMode: 0
   optionalScrambleMode: 0
   optionalString: 
---- !u!114 &1568688264
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3596725277949633315}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49bd51f9ec107a246a8fb71f320d6cb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _exitBtn: {fileID: 17006617}
-  _stageBtn: {fileID: 797440386}
