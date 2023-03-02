@@ -20,6 +20,7 @@ public class IndicatorController : MonoBehaviour
     private int _preIndex;
     private bool _isIndicatorMove;
     private RectTransform _canvasRectTrans;
+    private Game _game;
     // StopCoroutine을 사용하기 위해 이전 코루틴을 받았다
     // -> 특이한 점은 StopCoroutine이 StartCoroutine(); 즉 Coroutine타입을 받는다는 점이다.
     private Coroutine _preCoroutine;
@@ -30,6 +31,7 @@ public class IndicatorController : MonoBehaviour
     private void Awake()
     {
         GetComponent<Canvas>().worldCamera = Camera.main;
+        _game = FindObjectOfType<Game>();
     }
 
     private void Start()
@@ -125,6 +127,11 @@ public class IndicatorController : MonoBehaviour
         while (ratio < 1)
         {
             // currentPos알기
+            while (_game.curState == GameState.Pause)
+            {
+                yield return null;
+            }
+            
             ratio += Time.deltaTime * _moveAmount;
             float currentPosX = Mathf.Lerp(targetTrans.anchoredPosition.x, _goalPosX, ratio);
             targetTrans.anchoredPosition = new Vector2(currentPosX, targetTrans.anchoredPosition.y);
@@ -145,6 +152,11 @@ public class IndicatorController : MonoBehaviour
         float afterTime = 0f;
         while (true)
         {
+            while (_game.curState == GameState.Pause)
+            {
+                yield return null;
+            }
+            
             afterTime += Time.deltaTime;
             float ratio = (Mathf.Cos((Mathf.PI) + afterTime * _changeAmount) + 1) / 2;
             Color color = Color.Lerp(Color.white, goalColor, ratio);

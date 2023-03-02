@@ -61,7 +61,6 @@ public class BackgroundController : MonoBehaviour
 
     public void SetBackgroundSize()
     {
-        // lerp 만들기z
         StartCoroutine(CoSetBackgroundSize());
     }
 
@@ -79,15 +78,6 @@ public class BackgroundController : MonoBehaviour
         while (ratio < 1)
         {
             yield return null;
-            // 4 -> 6
-            // 6   4.1
-            // 1.9
-            // 0.1 목표
-            // 6 -> 4
-            // 6  5.9
-            // 0.1
-            // 0.1 목표
-            // 3.9
             float deltaSize = _cameraController.ToOrthoSize - _characterCamera.m_Lens.OrthographicSize;
             float totalIncrement = isIncreasing ? standardSize - deltaSize : standardSize + deltaSize;
             ratio = totalIncrement / standardSize;
@@ -128,13 +118,10 @@ public class BackgroundController : MonoBehaviour
         int length = changingResources.Backgrounds.Length;
         if (length == 0)
         {
-            Debug.LogError("Backgrounds 리소스 길이가 0입니다");
             return;
         }
-
         // 0번째 인덱스는 안 움직이는 배경이 들어갈 것임 ==> Sprite-Default Material로 함
         _mySpriteRenderers[0].sprite = changingResources.Backgrounds[0];
-
         if (length == 1)
         {
             _mySpriteRenderers[0].material = changingResources.BackgroundMaterials[0];
