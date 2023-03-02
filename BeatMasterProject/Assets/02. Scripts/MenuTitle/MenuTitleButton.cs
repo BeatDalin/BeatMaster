@@ -75,6 +75,7 @@ public class MenuTitleButton : MonoBehaviour
 #if UNITY_ANDROID && !UNITY_EDITOR
             ExcuteVibration.Instance.Touch();
 #endif
+            SoundManager.instance.PlaySFX("Touch");
             SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.LevelSelect);
         });  // Play 버튼
         _titleButtons[(int)TitleButtonName.Menu].onClick.AddListener(() =>
@@ -82,6 +83,7 @@ public class MenuTitleButton : MonoBehaviour
 #if UNITY_ANDROID && !UNITY_EDITOR
             ExcuteVibration.Instance.Touch();
 #endif
+            SoundManager.instance.PlaySFX("Touch");
             OpenMenu(_menuGroupPanel);
         });     // Menu 버튼
         _titleButtons[(int)TitleButtonName.Store].onClick.AddListener(() =>
@@ -90,6 +92,7 @@ public class MenuTitleButton : MonoBehaviour
             ExcuteVibration.Instance.Touch();
 #endif
 
+            SoundManager.instance.PlaySFX("Touch");
             UIManager.instance.OpenPanel(_storePanel);
         });       // Store 버튼
         _titleButtons[(int)TitleButtonName.Gpgs].onClick.AddListener(() =>
@@ -105,9 +108,24 @@ public class MenuTitleButton : MonoBehaviour
         #region MenuGroup의 버튼들 (Settings, MyInfo, Quit)
 
         // Menu - Settings 버튼 (Setting, Announce, Quit)
-        _menuButtons[(int)MenuButtonName.Setting].onClick.AddListener(() => { UIManager.instance.OpenPanel(_menuPanels[(int)MenuButtonName.Setting]); });
-        _menuButtons[(int)MenuButtonName.Announce].onClick.AddListener(() => { UIManager.instance.OpenPanel(_menuPanels[(int)MenuButtonName.Announce]); });
-        _menuButtons[(int)MenuButtonName.Quit].onClick.AddListener(() => { UIManager.instance.OpenPanel(_menuPanels[(int)MenuButtonName.Quit]); });
+        _menuButtons[(int)MenuButtonName.Setting].onClick.AddListener(() =>
+        {
+            ActivateButton(_titleButtons, false);
+            CloseMenu(_menuGroupPanel);
+            UIManager.instance.OpenPanel(_menuPanels[(int)MenuButtonName.Setting]);
+        });
+        _menuButtons[(int)MenuButtonName.Announce].onClick.AddListener(() =>
+        {
+            ActivateButton(_titleButtons, false);
+            CloseMenu(_menuGroupPanel);
+            UIManager.instance.OpenPanel(_menuPanels[(int)MenuButtonName.Announce]);
+        });
+        _menuButtons[(int)MenuButtonName.Quit].onClick.AddListener(() =>
+        {
+            ActivateButton(_titleButtons, false);
+            CloseMenu(_menuGroupPanel);
+            UIManager.instance.OpenPanel(_menuPanels[(int)MenuButtonName.Quit]);
+        });
 
         #endregion
 
@@ -136,12 +154,7 @@ public class MenuTitleButton : MonoBehaviour
         {
             SoundManager.instance.PlaySFX("Touch");
             CloseMenu(_menuGroupPanel);
-
-            foreach (var titleButton in _titleButtons)
-            {
-                ActivateButton(titleButton, false);
-            }
-
+            
             panelName.SetActive(true);
             panelName.GetComponent<RectTransform>().localPosition = new Vector3(Screen.width, 0, 0);
 
@@ -149,23 +162,24 @@ public class MenuTitleButton : MonoBehaviour
     }
     public void ClosePanel(GameObject panelName)
     {
+        ActivateButton(_titleButtons, true);
         SoundManager.instance.PlaySFX("Touch");
 
         panelName.GetComponent<RectTransform>().DOLocalMove(new Vector3(Screen.width, 0, 0), 0.4f).onComplete += () =>
         {
             panelName.SetActive(false);
-
-            foreach (var titleButton in _titleButtons)
-            {
-                ActivateButton(titleButton, true);
-            }
+            
         };
     }
 
     // 다른 UI가 활성/비활성화 되었을 때, 다른 버튼 클릭(터치) 가능/불가능 하도록!
-    public void ActivateButton(Button buttonName, bool isInteractable)
+    public void ActivateButton(Button[] buttonName, bool isInteractable)
     {
-        buttonName.interactable = isInteractable;
+        foreach (var buttons in buttonName)
+        {
+            buttons.interactable = isInteractable;
+        }
+    
     }
     private void ChangeScale(KoreographyEvent evt)
     {

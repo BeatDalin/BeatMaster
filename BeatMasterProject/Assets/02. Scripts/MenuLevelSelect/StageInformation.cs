@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using SonicBloom.Koreo;
 
 public class StageInfo
 {
@@ -55,7 +56,8 @@ public class StageInformation : MonoBehaviour
 
     [SerializeField] private string _descriptionString;
     [SerializeField] private DOTweenAnimation _descriptionDoTweenAnimation;
-    
+
+    [SerializeField] private DOTweenAnimation[] _doTweenAnimations;
     private readonly String[] _stageDescription =
     {
         "\"Exciting first adventure!\"", "\"What will happen in the city?\"",
@@ -79,6 +81,8 @@ public class StageInformation : MonoBehaviour
         }
 
         _stageBtns.SetActive(true);
+        
+        Koreographer.Instance.RegisterForEvents("LevelSelect_Track", ChangeScale);
     }
 
     // private IEnumerator CoFadeIn()
@@ -319,4 +323,14 @@ public class StageInformation : MonoBehaviour
         // StartCoroutine(CoFadeOut());
         SceneLoadManager.Instance.LoadLevelAsync(SceneLoadManager.SceneType.Title);
     }
+
+    private void ChangeScale(KoreographyEvent evt)
+    {
+        for (int i = 0; i < _doTweenAnimations.Length; i++)
+        {
+            _doTweenAnimations[i].DORestart();
+
+        }
+    }
+    
 }
