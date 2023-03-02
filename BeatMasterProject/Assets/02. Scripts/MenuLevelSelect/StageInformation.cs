@@ -114,6 +114,7 @@ public class StageInformation : MonoBehaviour
     
     private void SetStageInfo(int stageIdx)
     {
+        _notYetPopup.SetActive(false);
         _description.DOKill();
         _description.text = "";   
         SoundManager.instance.PlaySFX("Touch");
@@ -309,6 +310,7 @@ public class StageInformation : MonoBehaviour
 
     public void OnClickCloseBtn()
     {
+        _notYetPopup.SetActive(false);
         ExcuteVibration.Instance.Touch();
         SoundManager.instance.PlaySFX("Touch");
         StartCoroutine(
