@@ -79,8 +79,30 @@ public class StageInformation : MonoBehaviour
             var stageNum = i;
             _stageBtn[i].onClick.AddListener(() => SetStageInfo(stageNum));
         }
+        
+        // 한 개의 레벨도 clear하지 않았다면 stage1 패널 띄우기
+        bool isFirstTime = true;
+        
+        StageData[] allStageData = DataCenter.Instance.GetStageData();
+        for (int i = 0; i < allStageData.Length; i++)
+        {
+            for (int j = 0; j < allStageData[i].levelData.Length; j++)
+            {
+                if (allStageData[i].levelData[j].levelClear)
+                {
+                    isFirstTime = false;
+                    break;
+                }
+            }
+        }
+        
+        _stageBtns.SetActive(!isFirstTime);
+        
+        if (isFirstTime)
+        {
+            SetStageInfo(0);
+        }
 
-        _stageBtns.SetActive(true);
         
         Koreographer.Instance.RegisterForEvents("LevelSelect_Track", ChangeScale);
     }
