@@ -76,6 +76,11 @@ public class DataCenter : MonoBehaviour
             SaveData();
         }*/
 
+    public StageData[] GetStageData()
+    {
+        return _gameData.stageData;
+    }
+
     public LevelData GetLevelData(int stageIdx, int levelIdx)
     {
         return _gameData.stageData[stageIdx].levelData[levelIdx];
