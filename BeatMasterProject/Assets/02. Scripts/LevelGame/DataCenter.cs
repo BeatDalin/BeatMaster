@@ -34,7 +34,7 @@ public class DataCenter : MonoBehaviour
     private void Start()
     {
         // if you want to find where the json file is located...
-        Debug.Log(Application.persistentDataPath);
+        // Debug.Log(Application.persistentDataPath);
         // CreateData();
     }
 
